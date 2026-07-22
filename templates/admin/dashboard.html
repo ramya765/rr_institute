@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<title>Admin Dashboard | RR Institute</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+
+<body class="bg-gray-100">
+
+
+<!-- Navbar -->
+
+<nav class="bg-indigo-700 text-white px-8 py-5 flex justify-between">
+
+<h1 class="text-2xl font-bold">
+RR Institute Admin
+</h1>
+
+
+<a href="{{ url_for('auth.logout') }}"
+class="bg-red-500 px-4 py-2 rounded">
+
+Logout
+
+</a>
+
+</nav>
+
+
+
+<div class="p-8">
+
+
+<h2 class="text-4xl font-bold text-gray-800">
+
+Welcome Admin
+
+</h2>
+
+
+<p class="text-gray-500 mt-2">
+
+Manage your institute from here.
+
+</p>
+
+
+
+
+<!-- Cards -->
+
+<div class="grid md:grid-cols-4 gap-6 mt-10">
+
+
+<div class="bg-white p-6 rounded-xl shadow">
+
+<h3 class="text-xl font-bold">
+
+Courses
+
+</h3>
+
+<p class="text-gray-500 mt-2">
+
+Add and manage courses
+
+</p>
+
+<button class="mt-5 bg-indigo-600 text-white px-4 py-2 rounded">
+
+Add Course
+
+</button>
+
+</div>
+
+
+
+
+<div class="bg-white p-6 rounded-xl shadow">
+
+<h3 class="text-xl font-bold">
+
+Companies
+
+</h3>
+
+<p class="text-gray-500 mt-2">
+
+Manage placement companies
+
+</p>
+
+<button class="mt-5 bg-indigo-600 text-white px-4 py-2 rounded">
+
+Add Company
+
+</button>
+
+</div>
+
+
+
+
+
+<div class="bg-white p-6 rounded-xl shadow">
+
+<h3 class="text-xl font-bold">
+
+Students
+
+</h3>
+
+<p class="text-gray-500 mt-2">
+
+View registered students
+
+</p>
+
+<button class="mt-5 bg-indigo-600 text-white px-4 py-2 rounded">
+
+View Students
+
+</button>
+
+</div>
+
+
+
+
+
+<div class="bg-white p-6 rounded-xl shadow">
+
+<h3 class="text-xl font-bold">
+
+Testimonials
+
+</h3>
+
+<p class="text-gray-500 mt-2">
+
+Manage reviews
+
+</p>
+
+<button class="mt-5 bg-indigo-600 text-white px-4 py-2 rounded">
+
+Add Review
+
+</button>
+
+</div>
+
+
+</div>
+
+
+
+<!-- Management Sections -->
+
+
+<div class="grid md:grid-cols-2 gap-8 mt-12">
+
+
+<div class="bg-white rounded-xl shadow p-8">
+
+
+<h2 class="text-2xl font-bold">
+
+Course Management
+
+</h2>
+
+
+<ul class="mt-5 space-y-3 text-gray-600">
+
+<li>
+✔ Add New Course
+</li>
+
+<li>
+✔ Update Course Details
+</li>
+
+<li>
+✔ Delete Course
+</li>
+
+<li>
+✔ Add Course Image
+</li>
+
+
+</ul>
+
+
+</div>
+
+
+
+
+
+<div class="bg-white rounded-xl shadow p-8">
+
+
+<h2 class="text-2xl font-bold">
+
+Placement Management
+
+</h2>
+
+
+<ul class="mt-5 space-y-3 text-gray-600">
+
+<li>
+✔ Add Company
+</li>
+
+<li>
+✔ Add Student Placement
+</li>
+
+<li>
+✔ Upload Company Logo
+</li>
+
+<li>
+✔ Manage Testimonials
+</li>
+
+
+</ul>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+</body>
+
+</html>
