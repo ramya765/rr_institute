@@ -15,6 +15,7 @@
 <body class="bg-gray-100">
 
 <div class="flex min-h-screen">
+    
 
     <!-- ================= SIDEBAR ================= -->
 
@@ -181,7 +182,7 @@
 
                             <input
                                 type="text"
-                                name="student_name"
+                                name="name"
                                 required
                                 class="w-full border rounded-lg px-4 py-3 mt-2">
 
@@ -460,24 +461,19 @@
             </label>
 
             <select
-                name="course"
-                required
-                class="w-full border rounded-lg px-4 py-3 mt-2">
+    name="course"
+    required
+    class="w-full border rounded-lg px-4 py-3 mt-2">
 
-                <option value="">Select Course</option>
+    <option value="">Select Course</option>
 
-                {% for course in courses %}
+    {% for course in courses %}
+        <option value="{{ course.title }}">
+            {{ course.title }}
+        </option>
+    {% endfor %}
 
-                <option value="{{ course.id }}">
-
-                    {{ course.title }}
-
-                </option>
-
-                {% endfor %}
-
-            </select>
-
+</select>
         </div>
 
         <div>
@@ -489,23 +485,21 @@
             </label>
 
             <select
-                name="batch"
-                required
-                class="w-full border rounded-lg px-4 py-3 mt-2">
+    name="batch"
+    required
+    class="w-full border rounded-lg px-4 py-3 mt-2">
 
-                <option value="">Select Batch</option>
+    <option value="">Select Batch</option>
 
-                {% for batch in batches %}
+    <option value="Morning">Morning</option>
 
-                <option value="{{ batch.id }}">
+    <option value="Afternoon">Afternoon</option>
 
-                    {{ batch.name }}
+    <option value="Evening">Evening</option>
 
-                </option>
+    <option value="Weekend">Weekend</option>
 
-                {% endfor %}
-
-            </select>
+</select>
 
         </div>
 

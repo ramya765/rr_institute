@@ -1,5 +1,55 @@
 from datetime import datetime
 from database import db
+from datetime import datetime
+
+
+class Payment(db.Model):
+    __tablename__ = "payments"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    student_id = db.Column(
+        db.Integer,
+        db.ForeignKey("students.id"),
+        nullable=False
+    )
+
+    amount = db.Column(
+        db.Float,
+        nullable=False
+    )
+
+    payment_mode = db.Column(
+        db.String(50),
+        nullable=False
+    )
+
+    transaction_id = db.Column(
+        db.String(100)
+    )
+
+    receipt_number = db.Column(
+        db.String(50),
+        unique=True
+    )
+
+    received_by = db.Column(
+        db.String(100)
+    )
+
+    remarks = db.Column(
+        db.Text
+    )
+
+    payment_date = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
 
 
 # ==========================================
@@ -214,46 +264,78 @@ class Enrollment(db.Model):
     # ==========================================
 # STUDENTS TABLE
 # ==========================================
+# ==========================================
+# STUDENTS TABLE
+# ==========================================
 class Student(db.Model):
     __tablename__ = "students"
 
     id = db.Column(db.Integer, primary_key=True)
 
+    # --------------------------
     # Personal Details
+    # --------------------------
     name = db.Column(db.String(100), nullable=False)
     dob = db.Column(db.Date)
     gender = db.Column(db.String(20))
-    aadhaar = db.Column(db.String(20))
+    aadhaar = db.Column(db.String(20), unique=True)
     qualification = db.Column(db.String(100))
     occupation = db.Column(db.String(100))
 
+    # --------------------------
     # Parent Details
+    # --------------------------
     father_name = db.Column(db.String(100))
     mother_name = db.Column(db.String(100))
     parent_mobile = db.Column(db.String(20))
 
+    # --------------------------
     # Contact Details
-    mobile = db.Column(db.String(20))
+    # --------------------------
+    mobile = db.Column(db.String(20), nullable=False)
     alternate_mobile = db.Column(db.String(20))
     email = db.Column(db.String(120))
     address = db.Column(db.Text)
 
+    # --------------------------
     # Course Details
-    course = db.Column(db.String(100))
-    batch = db.Column(db.String(100))
+    # --------------------------
+    course = db.Column(db.String(100), nullable=False)
+
+    # Morning / Afternoon / Evening / Weekend
+    batch = db.Column(db.String(30), nullable=False)
+
     trainer = db.Column(db.String(100))
     admission_date = db.Column(db.Date)
 
+    # --------------------------
     # Fee Details
+    # --------------------------
     course_fee = db.Column(db.Float, default=0)
     paid_amount = db.Column(db.Float, default=0)
     balance_amount = db.Column(db.Float, default=0)
     payment_mode = db.Column(db.String(50))
 
+    # --------------------------
     # Documents
+    # --------------------------
     photo = db.Column(db.String(255))
     aadhaar_file = db.Column(db.String(255))
     qualification_file = db.Column(db.String(255))
+
+    # --------------------------
+    # Student Status
+    # --------------------------
+    status = db.Column(
+        db.String(30),
+        default="Active"
+    )
+    payments = db.relationship(
+    "Payment",
+    backref="student",
+    lazy=True,
+    cascade="all, delete-orphan"
+)
 
     remarks = db.Column(db.Text)
 

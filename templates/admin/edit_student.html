@@ -133,7 +133,7 @@
 
                             <input
                                 type="text"
-                                name="student_name"
+                                name="name"
                                 value="{{ student.name }}"
                                 class="w-full border rounded-lg px-4 py-3 mt-2">
 
@@ -384,23 +384,25 @@
 
             <label class="font-semibold">Course</label>
 
-            <select
-                name="course"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
+           <select
+    name="course"
+    class="w-full border rounded-lg px-4 py-3 mt-2">
 
-                {% for course in courses %}
+    {% for course in courses %}
 
-                <option
-                    value="{{ course.id }}"
-                    {% if student.course_id == course.id %}selected{% endif %}>
+    <option
+        value="{{ course.title }}"
+        {% if student.course == course.title %}
+        selected
+        {% endif %}>
 
-                    {{ course.title }}
+        {{ course.title }}
 
-                </option>
+    </option>
 
-                {% endfor %}
+    {% endfor %}
 
-            </select>
+</select>
 
         </div>
 
@@ -409,22 +411,24 @@
             <label class="font-semibold">Batch</label>
 
             <select
-                name="batch"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
+    name="batch"
+    class="w-full border rounded-lg px-4 py-3 mt-2">
 
-                {% for batch in batches %}
+    {% for batch in batches %}
 
-                <option
-                    value="{{ batch.id }}"
-                    {% if student.batch_id == batch.id %}selected{% endif %}>
+    <option
+        value="{{ batch }}"
+        {% if student.batch == batch %}
+        selected
+        {% endif %}>
 
-                    {{ batch.name }}
+        {{ batch }}
 
-                </option>
+    </option>
 
-                {% endfor %}
+    {% endfor %}
 
-            </select>
+</select>
 
         </div>
 
@@ -457,76 +461,254 @@
 </div>
 
 
-<!-- ================= FEE DETAILS ================= -->
 
-<div class="bg-white rounded-xl shadow">
+<!-- ================= FEE SUMMARY ================= -->
+
+<div class="bg-white rounded-xl shadow mt-8">
 
     <div class="border-b px-6 py-4">
 
-        <h2 class="text-2xl font-bold text-indigo-600">
+        <h2 class="text-2xl font-bold text-green-600">
 
-            💰 Fee Details
+            💰 Fee Summary
 
         </h2>
 
     </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
 
-        <div>
+        <!-- Course Fee -->
 
-            <label class="font-semibold">Course Fee</label>
+        <div class="bg-blue-50 rounded-xl p-6 border">
 
-            <input
-                type="number"
-                name="course_fee"
-                value="{{ student.course_fee }}"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
+            <p class="text-gray-500 text-sm">
 
-        </div>
+                Course Fee
 
-        <div>
+            </p>
 
-            <label class="font-semibold">Paid Amount</label>
+            <h2 class="text-3xl font-bold text-blue-700 mt-2">
 
-            <input
-                type="number"
-                name="paid_amount"
-                value="{{ student.paid_amount }}"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
+                ₹ {{ student.course_fee }}
+
+            </h2>
 
         </div>
 
-        <div>
+        <!-- Total Paid -->
 
-            <label class="font-semibold">Balance Amount</label>
+        <div class="bg-green-50 rounded-xl p-6 border">
 
-            <input
-                type="number"
-                name="balance_amount"
-                value="{{ student.balance_amount }}"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
+            <p class="text-gray-500 text-sm">
+
+                Total Paid
+
+            </p>
+
+            <h2 class="text-3xl font-bold text-green-700 mt-2">
+
+                ₹ {{ total_paid }}
+
+            </h2>
 
         </div>
 
-        <div>
+        <!-- Remaining Balance -->
 
-            <label class="font-semibold">Payment Mode</label>
+        <div class="bg-red-50 rounded-xl p-6 border">
 
-            <select
-                name="payment_mode"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
+            <p class="text-gray-500 text-sm">
 
-                <option {% if student.payment_mode=="Cash" %}selected{% endif %}>Cash</option>
-                <option {% if student.payment_mode=="UPI" %}selected{% endif %}>UPI</option>
-                <option {% if student.payment_mode=="Card" %}selected{% endif %}>Card</option>
-                <option {% if student.payment_mode=="Bank Transfer" %}selected{% endif %}>Bank Transfer</option>
+                Remaining Balance
 
-            </select>
+            </p>
+
+            <h2 class="text-3xl font-bold text-red-700 mt-2">
+
+                ₹ {{ balance }}
+
+            </h2>
+
+        </div>
+
+        <!-- Payment Status -->
+
+        <div class="bg-yellow-50 rounded-xl p-6 border">
+
+            <p class="text-gray-500 text-sm">
+
+                Payment Status
+
+            </p>
+
+            <h2 class="text-2xl font-bold text-yellow-700 mt-2">
+
+                {{ status }}
+
+            </h2>
 
         </div>
 
     </div>
+
+</div>
+<!-- ================= PAYMENT HISTORY ================= -->
+
+<div class="bg-white rounded-xl shadow mt-8">
+
+    <div class="border-b px-6 py-4">
+
+        <h2 class="text-2xl font-bold text-green-600">
+
+            💳 Payment History
+
+        </h2>
+
+    </div>
+
+    <div class="overflow-x-auto">
+
+        <table class="w-full">
+
+            <thead class="bg-gray-100">
+
+                <tr>
+
+                    <th class="p-3 text-left">Date</th>
+
+                    <th class="p-3 text-left">Amount</th>
+
+                    <th class="p-3 text-left">Mode</th>
+
+                    <th class="p-3 text-left">Receipt</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for payment in payments %}
+
+                <tr class="border-b">
+
+                    <td class="p-3">
+
+                        {{ payment.payment_date.strftime("%d-%m-%Y") }}
+
+                    </td>
+
+                    <td class="p-3">
+
+                        ₹ {{ payment.amount }}
+
+                    </td>
+
+                    <td class="p-3">
+
+                        {{ payment.payment_mode }}
+
+                    </td>
+
+                    <td class="p-3">
+
+                        {{ payment.receipt_number }}
+
+                    </td>
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="4" class="text-center p-6 text-gray-500">
+
+                        No Payments Yet
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+<!-- ================= ADD PAYMENT ================= -->
+
+<div class="bg-white rounded-xl shadow mt-8">
+
+    <div class="border-b px-6 py-4">
+        <h2 class="text-2xl font-bold text-blue-600">
+            ➕ Add New Payment
+        </h2>
+    </div>
+
+    <form method="POST"
+          action="{{ url_for('admin.add_payment', id=student.id) }}">
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+
+            <div>
+                <label class="font-semibold">Amount</label>
+                <input
+                    type="number"
+                    name="amount"
+                    required
+                    class="w-full border rounded-lg px-4 py-3 mt-2">
+            </div>
+
+            <div>
+                <label class="font-semibold">Payment Mode</label>
+                <select
+                    name="payment_mode"
+                    class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                    <option>Cash</option>
+                    <option>UPI</option>
+                    <option>Card</option>
+                    <option>Bank Transfer</option>
+
+                </select>
+            </div>
+
+            <div>
+                <label class="font-semibold">Transaction ID</label>
+                <input
+                    type="text"
+                    name="transaction_id"
+                    class="w-full border rounded-lg px-4 py-3 mt-2">
+            </div>
+
+            <div>
+                <label class="font-semibold">Remarks</label>
+                <input
+                    type="text"
+                    name="remarks"
+                    class="w-full border rounded-lg px-4 py-3 mt-2">
+            </div>
+
+        </div>
+
+        <div class="px-6 pb-6">
+
+            <button
+                type="submit"
+                class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg">
+
+                Save Payment
+
+            </button>
+
+        </div>
+
+    </form>
 
 </div>
 
@@ -555,9 +737,17 @@
 
             </label>
 
-            <img
-                src="{{ url_for('static', filename='uploads/' + student.photo) }}"
-                class="w-40 h-40 object-cover rounded-lg border mt-3">
+           {% if student.photo %}
+    <img
+        src="{{ url_for('static', filename='uploads/photos/' + student.photo) }}"
+        class="w-40 h-40 object-cover rounded-lg border mt-3">
+{% else %}
+    <div class="w-40 h-40 border rounded-lg flex items-center justify-center bg-gray-100 mt-3">
+        <span class="text-gray-500 text-sm">
+            No Photo Uploaded
+        </span>
+    </div>
+{% endif %}
 
         </div>
 
@@ -655,8 +845,9 @@
     </div>
 
 </div>
-
 </form>
+
+
 
 </div>
 
