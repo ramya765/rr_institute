@@ -24,9 +24,19 @@ def course_details(id):
     return render_template("course_details.html", course_id=id)
 
 
+from models import Placement
+
 @main.route("/placements")
 def placements():
-    return render_template("placements.html")
+
+    companies = Placement.query.order_by(
+        Placement.created_at.desc()
+    ).all()
+
+    return render_template(
+        "placements.html",
+        companies=companies
+    )
 
 
 @main.route("/gallery")

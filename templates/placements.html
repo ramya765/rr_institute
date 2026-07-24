@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Placement Companies</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="max-w-7xl mx-auto p-8">
+
+<h1 class="text-4xl font-bold mb-8">
+
+Our Placement Partners
+
+</h1>
+
+<div class="grid md:grid-cols-4 gap-6">
+
+{% for company in companies %}
+
+<div class="bg-white rounded-xl shadow p-5">
+
+    <img
+        src="{{ url_for('static', filename='uploads/companies/' + company.photo) }}"
+        class="h-32 w-full object-contain">
+
+    <h3 class="text-center font-bold mt-4">
+
+        {{ company.company }}
+
+    </h3>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+</body>
+</html>

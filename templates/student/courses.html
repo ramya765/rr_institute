@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Available Courses</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<nav class="bg-indigo-700 text-white px-8 py-5 flex justify-between">
+
+    <h1 class="text-2xl font-bold">
+        RR Institute
+    </h1>
+
+    <a href="{{ url_for('student.dashboard') }}"
+       class="bg-white text-indigo-700 px-4 py-2 rounded">
+
+        Dashboard
+
+    </a>
+
+</nav>
+
+<div class="max-w-7xl mx-auto p-8">
+
+    <h1 class="text-4xl font-bold mb-2">
+
+        Available Courses
+
+    </h1>
+
+    <p class="text-gray-500 mb-8">
+
+        Choose a course and start your career journey.
+
+    </p>
+
+    <div class="grid md:grid-cols-3 gap-8">
+
+        {% for course in courses %}
+
+        <div class="bg-white rounded-xl shadow p-6">
+
+            <h2 class="text-2xl font-bold text-indigo-700">
+
+                {{ course.title }}
+
+            </h2>
+
+            <p class="text-gray-600 mt-4">
+
+                {{ course.description }}
+
+            </p>
+
+            <div class="mt-4 space-y-2">
+
+                <p>
+                    <strong>Duration:</strong>
+                    {{ course.duration }}
+                </p>
+
+                <p>
+                    <strong>Mode:</strong>
+                    {{ course.mode }}
+                </p>
+
+                <p>
+                    <strong>Trainer:</strong>
+                    {{ course.trainer }}
+                </p>
+
+                <p class="text-green-600 font-bold text-xl">
+
+                    ₹{{ course.price }}
+
+                </p>
+
+            </div>
+
+            <a href="https://wa.me/919676250930?text=Hi%20RR%20Institute,%20I%20want%20to%20enroll%20for%20{{ course.title }}"
+               target="_blank"
+               class="block text-center mt-6 bg-green-600 hover:bg-green-700 text-white py-3 rounded">
+
+                Enroll Now
+
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
