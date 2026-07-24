@@ -3,251 +3,193 @@
 
 <head>
 
-<title>Admin Dashboard | RR Institute</title>
+    <title>Admin Dashboard | RR Institute</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
 
-
 <body class="bg-gray-100">
 
+    <!-- Navbar -->
+    <nav class="bg-indigo-700 text-white px-8 py-5 flex justify-between">
 
-<!-- Navbar -->
+        <h1 class="text-2xl font-bold">
+            RR Institute Admin
+        </h1>
 
-<nav class="bg-indigo-700 text-white px-8 py-5 flex justify-between">
+        <a href="{{ url_for('auth.logout') }}"
+           class="bg-red-500 px-4 py-2 rounded">
 
-<h1 class="text-2xl font-bold">
-RR Institute Admin
-</h1>
+            Logout
 
+        </a>
 
-<a href="{{ url_for('auth.logout') }}"
-class="bg-red-500 px-4 py-2 rounded">
+    </nav>
 
-Logout
+    <div class="p-8">
 
-</a>
+        <!-- Welcome -->
+        <h2 class="text-4xl font-bold text-gray-800">
+            Welcome Admin
+        </h2>
 
-</nav>
+        <p class="text-gray-500 mt-2">
+            Manage your institute from here.
+        </p>
 
+        <!-- Dashboard Cards -->
+        <div class="grid md:grid-cols-4 gap-6 mt-10">
 
+            <!-- Courses -->
+            <div class="bg-white p-6 rounded-xl shadow">
 
-<div class="p-8">
+                <h3 class="text-xl font-bold">
+                    Courses
+                </h3>
 
+                <p class="text-gray-500 mt-2">
+                    Add and manage courses
+                </p>
 
-<h2 class="text-4xl font-bold text-gray-800">
+                <div class="flex gap-2 mt-5">
 
-Welcome Admin
+                    <a href="{{ url_for('admin.add_course') }}"
+                       class="bg-indigo-600 text-white px-4 py-2 rounded">
 
-</h2>
+                        Add Course
 
+                    </a>
 
-<p class="text-gray-500 mt-2">
+                    <a href="{{ url_for('admin.courses') }}"
+                       class="bg-green-600 text-white px-4 py-2 rounded">
 
-Manage your institute from here.
+                        View Courses
 
-</p>
+                    </a>
 
+                </div>
 
+            </div>
 
+            <!-- Companies -->
+            <div class="bg-white p-6 rounded-xl shadow">
 
-<!-- Cards -->
+                <h3 class="text-xl font-bold">
+                    Companies
+                </h3>
 
-<div class="grid md:grid-cols-4 gap-6 mt-10">
+                <p class="text-gray-500 mt-2">
+                    Manage placement companies
+                </p>
 
+                <button class="mt-5 bg-indigo-600 text-white px-4 py-2 rounded">
 
-<div class="bg-white p-6 rounded-xl shadow">
+                    Add Company
 
-<h3 class="text-xl font-bold">
+                </button>
 
-Courses
+            </div>
 
-</h3>
+            <!-- Students -->
+            <div class="bg-white p-6 rounded-xl shadow">
 
-<p class="text-gray-500 mt-2">
+                <h3 class="text-xl font-bold">
+                    Students
+                </h3>
 
-Add and manage courses
+                <p class="text-gray-500 mt-2">
+                    View registered students
+                </p>
 
-</p>
+                <button class="mt-5 bg-indigo-600 text-white px-4 py-2 rounded">
 
-<button class="mt-5 bg-indigo-600 text-white px-4 py-2 rounded">
+                    View Students
 
-Add Course
+                </button>
 
-</button>
+            </div>
 
-</div>
+            <!-- Testimonials -->
+            <div class="bg-white p-6 rounded-xl shadow">
 
+                <h3 class="text-xl font-bold">
+                    Testimonials
+                </h3>
 
+                <p class="text-gray-500 mt-2">
+                    Manage reviews
+                </p>
 
+                <button class="mt-5 bg-indigo-600 text-white px-4 py-2 rounded">
 
-<div class="bg-white p-6 rounded-xl shadow">
+                    Add Review
 
-<h3 class="text-xl font-bold">
+                </button>
 
-Companies
+            </div>
 
-</h3>
+        </div>
 
-<p class="text-gray-500 mt-2">
+        <!-- Statistics -->
+        <div class="grid md:grid-cols-1 gap-6 mt-10">
 
-Manage placement companies
+            <div class="bg-white p-6 rounded-xl shadow">
 
-</p>
+                <h3 class="text-xl font-bold">
+                    Total Courses
+                </h3>
 
-<button class="mt-5 bg-indigo-600 text-white px-4 py-2 rounded">
+                <p class="text-4xl text-indigo-600 mt-4">
+                    {{ total_courses }}
+                </p>
 
-Add Company
+            </div>
 
-</button>
+        </div>
 
-</div>
+        <!-- Management Sections -->
+        <div class="grid md:grid-cols-2 gap-8 mt-12">
 
+            <!-- Course Management -->
+            <div class="bg-white rounded-xl shadow p-8">
 
+                <h2 class="text-2xl font-bold">
+                    Course Management
+                </h2>
 
+                <ul class="mt-5 space-y-3 text-gray-600">
 
+                    <li>✔ Add New Course</li>
+                    <li>✔ Update Course Details</li>
+                    <li>✔ Delete Course</li>
+                    <li>✔ Add Course Image</li>
 
-<div class="bg-white p-6 rounded-xl shadow">
+                </ul>
 
-<h3 class="text-xl font-bold">
+            </div>
 
-Students
+            <!-- Placement Management -->
+            <div class="bg-white rounded-xl shadow p-8">
 
-</h3>
+                <h2 class="text-2xl font-bold">
+                    Placement Management
+                </h2>
 
-<p class="text-gray-500 mt-2">
+                <ul class="mt-5 space-y-3 text-gray-600">
 
-View registered students
+                    <li>✔ Add Company</li>
+                    <li>✔ Add Student Placement</li>
+                    <li>✔ Upload Company Logo</li>
+                    <li>✔ Manage Testimonials</li>
 
-</p>
+                </ul>
 
-<button class="mt-5 bg-indigo-600 text-white px-4 py-2 rounded">
+            </div>
 
-View Students
+        </div>
 
-</button>
-
-</div>
-
-
-
-
-
-<div class="bg-white p-6 rounded-xl shadow">
-
-<h3 class="text-xl font-bold">
-
-Testimonials
-
-</h3>
-
-<p class="text-gray-500 mt-2">
-
-Manage reviews
-
-</p>
-
-<button class="mt-5 bg-indigo-600 text-white px-4 py-2 rounded">
-
-Add Review
-
-</button>
-
-</div>
-
-
-</div>
-
-
-
-<!-- Management Sections -->
-
-
-<div class="grid md:grid-cols-2 gap-8 mt-12">
-
-
-<div class="bg-white rounded-xl shadow p-8">
-
-
-<h2 class="text-2xl font-bold">
-
-Course Management
-
-</h2>
-
-
-<ul class="mt-5 space-y-3 text-gray-600">
-
-<li>
-✔ Add New Course
-</li>
-
-<li>
-✔ Update Course Details
-</li>
-
-<li>
-✔ Delete Course
-</li>
-
-<li>
-✔ Add Course Image
-</li>
-
-
-</ul>
-
-
-</div>
-
-
-
-
-
-<div class="bg-white rounded-xl shadow p-8">
-
-
-<h2 class="text-2xl font-bold">
-
-Placement Management
-
-</h2>
-
-
-<ul class="mt-5 space-y-3 text-gray-600">
-
-<li>
-✔ Add Company
-</li>
-
-<li>
-✔ Add Student Placement
-</li>
-
-<li>
-✔ Upload Company Logo
-</li>
-
-<li>
-✔ Manage Testimonials
-</li>
-
-
-</ul>
-
-
-</div>
-
-
-</div>
-
-
-
-</div>
-
-
+    </div>
 
 </body>
-
 </html>
