@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Student | RR Institute</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="flex min-h-screen">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="w-64 bg-gray-900 text-white">
+
+        <div class="text-center py-6 border-b border-gray-700">
+
+            <h1 class="text-2xl font-bold">
+
+                RR Institute
+
+            </h1>
+
+            <p class="text-gray-400 mt-2">
+
+                Admin Panel
+
+            </p>
+
+        </div>
+
+        <nav class="mt-6">
+
+            <a href="{{ url_for('admin.dashboard') }}"
+               class="block px-6 py-3 hover:bg-gray-800">
+
+                🏠 Dashboard
+
+            </a>
+
+            <a href="{{ url_for('admin.students') }}"
+               class="block px-6 py-3 bg-blue-600">
+
+                👨‍🎓 Students
+
+            </a>
+
+            <a href="{{ url_for('admin.courses') }}"
+               class="block px-6 py-3 hover:bg-gray-800">
+
+                📚 Courses
+
+            </a>
+
+            <a href="{{ url_for('admin.companies') }}"
+               class="block px-6 py-3 hover:bg-gray-800">
+
+                🏢 Companies
+
+            </a>
+
+            <a href="{{ url_for('admin.placements') }}"
+               class="block px-6 py-3 hover:bg-gray-800">
+
+                💼 Placements
+
+            </a>
+
+            <a href="{{ url_for('admin.faculty') }}"
+               class="block px-6 py-3 hover:bg-gray-800">
+
+                👨‍🏫 Faculty
+
+            </a>
+
+            <a href="{{ url_for('admin.batches') }}"
+               class="block px-6 py-3 hover:bg-gray-800">
+
+                📅 Batches
+
+            </a>
+
+            <a href="{{ url_for('admin.gallery') }}"
+               class="block px-6 py-3 hover:bg-gray-800">
+
+                🖼 Gallery
+
+            </a>
+
+            <a href="{{ url_for('admin.notifications') }}"
+               class="block px-6 py-3 hover:bg-gray-800">
+
+                📢 Notifications
+
+            </a>
+
+            <a href="{{ url_for('admin.settings') }}"
+               class="block px-6 py-3 hover:bg-gray-800">
+
+                ⚙ Settings
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <div class="flex-1">
+
+        <!-- Header -->
+
+        <div class="bg-white shadow px-8 py-5 flex justify-between items-center">
+
+            <div>
+
+                <h1 class="text-3xl font-bold">
+
+                    Student Admission Form
+
+                </h1>
+
+                <p class="text-gray-500 mt-1">
+
+                    Register a new student into RR Institute
+
+                </p>
+
+            </div>
+
+            <a href="{{ url_for('admin.students') }}"
+               class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg">
+
+                ← Back to Students
+
+            </a>
+
+        </div>
+
+        <!-- Form -->
+
+        <div class="p-8">
+
+            <form method="POST"
+                  enctype="multipart/form-data"
+                  class="space-y-8">
+
+                <!-- ================= PERSONAL INFORMATION ================= -->
+
+                <div class="bg-white rounded-xl shadow">
+
+                    <div class="border-b px-6 py-4">
+
+                        <h2 class="text-2xl font-bold text-indigo-600">
+
+                            👨‍🎓 Student Personal Information
+
+                        </h2>
+
+                    </div>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+
+                        <!-- Student Name -->
+
+                        <div>
+
+                            <label class="font-semibold">
+
+                                Student Name *
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="student_name"
+                                required
+                                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                        </div>
+
+                        <!-- Date of Birth -->
+
+                        <div>
+
+                            <label class="font-semibold">
+
+                                Date of Birth
+
+                            </label>
+
+                            <input
+                                type="date"
+                                name="dob"
+                                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                        </div>
+
+                        <!-- Gender -->
+
+                        <div>
+
+                            <label class="font-semibold">
+
+                                Gender
+
+                            </label>
+
+                            <select
+                                name="gender"
+                                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                                <option value="">Select Gender</option>
+
+                                <option>Male</option>
+
+                                <option>Female</option>
+
+                                <option>Other</option>
+
+                            </select>
+
+                        </div>
+
+                        <!-- Aadhaar -->
+
+                        <div>
+
+                            <label class="font-semibold">
+
+                                Aadhaar Number
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="aadhaar"
+                                maxlength="12"
+                                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                        </div>
+
+                        <!-- Qualification -->
+
+                        <div>
+
+                            <label class="font-semibold">
+
+                                Highest Qualification
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="qualification"
+                                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                        </div>
+
+                        <!-- Occupation -->
+
+                        <div>
+
+                            <label class="font-semibold">
+
+                                Occupation
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="occupation"
+                                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- ================= PARENT DETAILS ================= -->
+
+<div class="bg-white rounded-xl shadow">
+
+    <div class="border-b px-6 py-4">
+
+        <h2 class="text-2xl font-bold text-indigo-600">
+
+            👨‍👩‍👦 Parent / Guardian Details
+
+        </h2>
+
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+
+        <div>
+
+            <label class="font-semibold">
+
+                Father Name *
+
+            </label>
+
+            <input
+                type="text"
+                name="father_name"
+                required
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">
+
+                Mother Name
+
+            </label>
+
+            <input
+                type="text"
+                name="mother_name"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">
+
+                Parent Mobile *
+
+            </label>
+
+            <input
+                type="text"
+                name="parent_mobile"
+                required
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= CONTACT DETAILS ================= -->
+
+<div class="bg-white rounded-xl shadow">
+
+    <div class="border-b px-6 py-4">
+
+        <h2 class="text-2xl font-bold text-indigo-600">
+
+            📞 Contact Information
+
+        </h2>
+
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+
+        <div>
+
+            <label class="font-semibold">
+
+                Student Mobile *
+
+            </label>
+
+            <input
+                type="text"
+                name="mobile"
+                required
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">
+
+                Alternate Mobile
+
+            </label>
+
+            <input
+                type="text"
+                name="alternate_mobile"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">
+
+                Email Address
+
+            </label>
+
+            <input
+                type="email"
+                name="email"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div class="md:col-span-2 lg:col-span-3">
+
+            <label class="font-semibold">
+
+                Full Address
+
+            </label>
+
+            <textarea
+                rows="4"
+                name="address"
+                class="w-full border rounded-lg px-4 py-3 mt-2"></textarea>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= COURSE DETAILS ================= -->
+
+<div class="bg-white rounded-xl shadow">
+
+    <div class="border-b px-6 py-4">
+
+        <h2 class="text-2xl font-bold text-indigo-600">
+
+            📚 Course Details
+
+        </h2>
+
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+
+        <div>
+
+            <label class="font-semibold">
+
+                Course *
+
+            </label>
+
+            <select
+                name="course"
+                required
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                <option value="">Select Course</option>
+
+                {% for course in courses %}
+
+                <option value="{{ course.id }}">
+
+                    {{ course.title }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">
+
+                Batch *
+
+            </label>
+
+            <select
+                name="batch"
+                required
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                <option value="">Select Batch</option>
+
+                {% for batch in batches %}
+
+                <option value="{{ batch.id }}">
+
+                    {{ batch.name }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">
+
+                Admission Date
+
+            </label>
+
+            <input
+                type="date"
+                name="admission_date"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">
+
+                Trainer
+
+            </label>
+
+            <input
+                type="text"
+                name="trainer"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= FEE DETAILS ================= -->
+
+<div class="bg-white rounded-xl shadow">
+
+    <div class="border-b px-6 py-4">
+
+        <h2 class="text-2xl font-bold text-indigo-600">
+
+            💰 Fee Details
+
+        </h2>
+
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+
+        <div>
+
+            <label class="font-semibold">
+
+                Course Fee
+
+            </label>
+
+            <input
+                type="number"
+                name="course_fee"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">
+
+                Paid Amount
+
+            </label>
+
+            <input
+                type="number"
+                name="paid_amount"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">
+
+                Balance Amount
+
+            </label>
+
+            <input
+                type="number"
+                name="balance_amount"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">
+
+                Payment Mode
+
+            </label>
+
+            <select
+                name="payment_mode"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                <option>Cash</option>
+
+                <option>UPI</option>
+
+                <option>Card</option>
+
+                <option>Bank Transfer</option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ================= DOCUMENT UPLOADS ================= -->
+
+<div class="bg-white rounded-xl shadow">
+
+    <div class="border-b px-6 py-4">
+
+        <h2 class="text-2xl font-bold text-indigo-600">
+
+            📄 Document Uploads
+
+        </h2>
+
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+
+        <div>
+
+            <label class="font-semibold">
+
+                Student Photo
+
+            </label>
+
+            <input
+                type="file"
+                name="student_photo"
+                accept="image/*"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">
+
+                Aadhaar Card
+
+            </label>
+
+            <input
+                type="file"
+                name="aadhaar_file"
+                accept=".pdf,.jpg,.jpeg,.png"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">
+
+                Qualification Certificates
+
+            </label>
+
+            <input
+                type="file"
+                name="qualification_files"
+                multiple
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= REMARKS ================= -->
+
+<div class="bg-white rounded-xl shadow">
+
+    <div class="border-b px-6 py-4">
+
+        <h2 class="text-2xl font-bold text-indigo-600">
+
+            📝 Additional Remarks
+
+        </h2>
+
+    </div>
+
+    <div class="p-6">
+
+        <textarea
+            name="remarks"
+            rows="5"
+            placeholder="Enter any additional remarks..."
+            class="w-full border rounded-lg px-4 py-3"></textarea>
+
+    </div>
+
+</div>
+
+
+<!-- ================= BUTTONS ================= -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+    <div class="flex flex-wrap gap-4 justify-end">
+
+        <button
+            type="reset"
+            class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg">
+
+            🔄 Reset
+
+        </button>
+
+        <a href="{{ url_for('admin.students') }}"
+           class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg">
+
+            ❌ Cancel
+
+        </a>
+
+        <button
+            type="submit"
+            class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold">
+
+            💾 Save Student
+
+        </button>
+
+    </div>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

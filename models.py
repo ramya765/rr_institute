@@ -211,3 +211,56 @@ class Enrollment(db.Model):
         db.DateTime,
         default=datetime.utcnow
     )
+    # ==========================================
+# STUDENTS TABLE
+# ==========================================
+class Student(db.Model):
+    __tablename__ = "students"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    # Personal Details
+    name = db.Column(db.String(100), nullable=False)
+    dob = db.Column(db.Date)
+    gender = db.Column(db.String(20))
+    aadhaar = db.Column(db.String(20))
+    qualification = db.Column(db.String(100))
+    occupation = db.Column(db.String(100))
+
+    # Parent Details
+    father_name = db.Column(db.String(100))
+    mother_name = db.Column(db.String(100))
+    parent_mobile = db.Column(db.String(20))
+
+    # Contact Details
+    mobile = db.Column(db.String(20))
+    alternate_mobile = db.Column(db.String(20))
+    email = db.Column(db.String(120))
+    address = db.Column(db.Text)
+
+    # Course Details
+    course = db.Column(db.String(100))
+    batch = db.Column(db.String(100))
+    trainer = db.Column(db.String(100))
+    admission_date = db.Column(db.Date)
+
+    # Fee Details
+    course_fee = db.Column(db.Float, default=0)
+    paid_amount = db.Column(db.Float, default=0)
+    balance_amount = db.Column(db.Float, default=0)
+    payment_mode = db.Column(db.String(50))
+
+    # Documents
+    photo = db.Column(db.String(255))
+    aadhaar_file = db.Column(db.String(255))
+    qualification_file = db.Column(db.String(255))
+
+    remarks = db.Column(db.Text)
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+    def __repr__(self):
+        return f"<Student {self.name}>"

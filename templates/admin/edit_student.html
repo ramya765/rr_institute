@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Student | RR Institute</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+
+    <aside class="w-64 bg-gray-900 text-white">
+
+        <div class="text-center py-6 border-b border-gray-700">
+
+            <h1 class="text-2xl font-bold">
+
+                RR Institute
+
+            </h1>
+
+            <p class="text-gray-400 mt-2">
+
+                Admin Panel
+
+            </p>
+
+        </div>
+
+        <nav class="mt-6">
+
+            <a href="{{ url_for('admin.dashboard') }}" class="block px-6 py-3 hover:bg-gray-800">
+                🏠 Dashboard
+            </a>
+
+            <a href="{{ url_for('admin.students') }}" class="block px-6 py-3 bg-blue-600">
+                👨‍🎓 Students
+            </a>
+
+            <a href="{{ url_for('admin.courses') }}" class="block px-6 py-3 hover:bg-gray-800">
+                📚 Courses
+            </a>
+
+            <a href="{{ url_for('admin.companies') }}" class="block px-6 py-3 hover:bg-gray-800">
+                🏢 Companies
+            </a>
+
+            <a href="{{ url_for('admin.placements') }}" class="block px-6 py-3 hover:bg-gray-800">
+                💼 Placements
+            </a>
+
+            <a href="{{ url_for('admin.faculty') }}" class="block px-6 py-3 hover:bg-gray-800">
+                👨‍🏫 Faculty
+            </a>
+
+            <a href="{{ url_for('admin.batches') }}" class="block px-6 py-3 hover:bg-gray-800">
+                📅 Batches
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <div class="flex-1">
+
+        <div class="bg-white shadow px-8 py-5 flex justify-between items-center">
+
+            <div>
+
+                <h1 class="text-3xl font-bold">
+
+                    Edit Student
+
+                </h1>
+
+                <p class="text-gray-500 mt-1">
+
+                    Update Student Information
+
+                </p>
+
+            </div>
+
+            <a href="{{ url_for('admin.students') }}"
+               class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg">
+
+                ← Back
+
+            </a>
+
+        </div>
+
+        <div class="p-8">
+
+            <form method="POST"
+                  enctype="multipart/form-data"
+                  class="space-y-8">
+
+                <!-- Personal Information -->
+
+                <div class="bg-white rounded-xl shadow">
+
+                    <div class="border-b px-6 py-4">
+
+                        <h2 class="text-2xl font-bold text-indigo-600">
+
+                            👨‍🎓 Student Information
+
+                        </h2>
+
+                    </div>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+
+                        <div>
+
+                            <label class="font-semibold">
+
+                                Student Name
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="student_name"
+                                value="{{ student.name }}"
+                                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                        </div>
+
+                        <div>
+
+                            <label class="font-semibold">
+
+                                Date of Birth
+
+                            </label>
+
+                            <input
+                                type="date"
+                                name="dob"
+                                value="{{ student.dob }}"
+                                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                        </div>
+
+                        <div>
+
+                            <label class="font-semibold">
+
+                                Gender
+
+                            </label>
+
+                            <select
+                                name="gender"
+                                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                                <option {% if student.gender=="Male" %}selected{% endif %}>Male</option>
+
+                                <option {% if student.gender=="Female" %}selected{% endif %}>Female</option>
+
+                                <option {% if student.gender=="Other" %}selected{% endif %}>Other</option>
+
+                            </select>
+
+                        </div>
+
+                        <div>
+
+                            <label class="font-semibold">
+
+                                Aadhaar Number
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="aadhaar"
+                                value="{{ student.aadhaar }}"
+                                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                        </div>
+
+                        <div>
+
+                            <label class="font-semibold">
+
+                                Qualification
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="qualification"
+                                value="{{ student.qualification }}"
+                                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                        </div>
+
+                        <div>
+
+                            <label class="font-semibold">
+
+                                Occupation
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="occupation"
+                                value="{{ student.occupation }}"
+                                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Parent Details -->
+
+                <div class="bg-white rounded-xl shadow">
+
+                    <div class="border-b px-6 py-4">
+
+                        <h2 class="text-2xl font-bold text-indigo-600">
+
+                            👨‍👩‍👦 Parent Details
+
+                        </h2>
+
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-6 p-6">
+
+                        <div>
+
+                            <label class="font-semibold">
+
+                                Father Name
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="father_name"
+                                value="{{ student.father_name }}"
+                                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                        </div>
+
+                        <div>
+
+                            <label class="font-semibold">
+
+                                Mother Name
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="mother_name"
+                                value="{{ student.mother_name }}"
+                                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                        </div>
+
+                        <div>
+
+                            <label class="font-semibold">
+
+                                Parent Mobile
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="parent_mobile"
+                                value="{{ student.parent_mobile }}"
+                                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- ================= CONTACT DETAILS ================= -->
+
+<div class="bg-white rounded-xl shadow">
+
+    <div class="border-b px-6 py-4">
+
+        <h2 class="text-2xl font-bold text-indigo-600">
+
+            📞 Contact Information
+
+        </h2>
+
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+
+        <div>
+
+            <label class="font-semibold">Student Mobile</label>
+
+            <input
+                type="text"
+                name="mobile"
+                value="{{ student.mobile }}"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">Alternate Mobile</label>
+
+            <input
+                type="text"
+                name="alternate_mobile"
+                value="{{ student.alternate_mobile }}"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">Email</label>
+
+            <input
+                type="email"
+                name="email"
+                value="{{ student.email }}"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div class="md:col-span-2 lg:col-span-3">
+
+            <label class="font-semibold">Address</label>
+
+            <textarea
+                rows="4"
+                name="address"
+                class="w-full border rounded-lg px-4 py-3 mt-2">{{ student.address }}</textarea>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= COURSE DETAILS ================= -->
+
+<div class="bg-white rounded-xl shadow">
+
+    <div class="border-b px-6 py-4">
+
+        <h2 class="text-2xl font-bold text-indigo-600">
+
+            📚 Course Details
+
+        </h2>
+
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+
+        <div>
+
+            <label class="font-semibold">Course</label>
+
+            <select
+                name="course"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                {% for course in courses %}
+
+                <option
+                    value="{{ course.id }}"
+                    {% if student.course_id == course.id %}selected{% endif %}>
+
+                    {{ course.title }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">Batch</label>
+
+            <select
+                name="batch"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                {% for batch in batches %}
+
+                <option
+                    value="{{ batch.id }}"
+                    {% if student.batch_id == batch.id %}selected{% endif %}>
+
+                    {{ batch.name }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">Admission Date</label>
+
+            <input
+                type="date"
+                name="admission_date"
+                value="{{ student.admission_date }}"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">Trainer</label>
+
+            <input
+                type="text"
+                name="trainer"
+                value="{{ student.trainer }}"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= FEE DETAILS ================= -->
+
+<div class="bg-white rounded-xl shadow">
+
+    <div class="border-b px-6 py-4">
+
+        <h2 class="text-2xl font-bold text-indigo-600">
+
+            💰 Fee Details
+
+        </h2>
+
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+
+        <div>
+
+            <label class="font-semibold">Course Fee</label>
+
+            <input
+                type="number"
+                name="course_fee"
+                value="{{ student.course_fee }}"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">Paid Amount</label>
+
+            <input
+                type="number"
+                name="paid_amount"
+                value="{{ student.paid_amount }}"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">Balance Amount</label>
+
+            <input
+                type="number"
+                name="balance_amount"
+                value="{{ student.balance_amount }}"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">Payment Mode</label>
+
+            <select
+                name="payment_mode"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                <option {% if student.payment_mode=="Cash" %}selected{% endif %}>Cash</option>
+                <option {% if student.payment_mode=="UPI" %}selected{% endif %}>UPI</option>
+                <option {% if student.payment_mode=="Card" %}selected{% endif %}>Card</option>
+                <option {% if student.payment_mode=="Bank Transfer" %}selected{% endif %}>Bank Transfer</option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= DOCUMENTS ================= -->
+
+<div class="bg-white rounded-xl shadow">
+
+    <div class="border-b px-6 py-4">
+
+        <h2 class="text-2xl font-bold text-indigo-600">
+
+            📄 Documents
+
+        </h2>
+
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6 p-6">
+
+        <div>
+
+            <label class="font-semibold">
+
+                Current Photo
+
+            </label>
+
+            <img
+                src="{{ url_for('static', filename='uploads/' + student.photo) }}"
+                class="w-40 h-40 object-cover rounded-lg border mt-3">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">
+
+                Replace Photo
+
+            </label>
+
+            <input
+                type="file"
+                name="student_photo"
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold">
+
+                Upload New Documents
+
+            </label>
+
+            <input
+                type="file"
+                name="documents"
+                multiple
+                class="w-full border rounded-lg px-4 py-3 mt-2">
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= REMARKS ================= -->
+
+<div class="bg-white rounded-xl shadow">
+
+    <div class="border-b px-6 py-4">
+
+        <h2 class="text-2xl font-bold text-indigo-600">
+
+            📝 Remarks
+
+        </h2>
+
+    </div>
+
+    <div class="p-6">
+
+        <textarea
+            rows="5"
+            name="remarks"
+            class="w-full border rounded-lg px-4 py-3">{{ student.remarks }}</textarea>
+
+    </div>
+
+</div>
+
+
+<!-- ================= ACTION BUTTONS ================= -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+    <div class="flex justify-end gap-4">
+
+        <a href="{{ url_for('admin.students') }}"
+           class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg">
+
+            Cancel
+
+        </a>
+
+        <button
+            type="reset"
+            class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg">
+
+            Reset
+
+        </button>
+
+        <button
+            type="submit"
+            class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold">
+
+            💾 Update Student
+
+        </button>
+
+    </div>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

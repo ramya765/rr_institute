@@ -1,97 +1,197 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from models import Course, User
-from database import db
-import os
-from werkzeug.utils import secure_filename
-from models import Placement
 
+
+from models import Course
+from database import db
+from models import Student
 
 admin = Blueprint("admin", __name__, url_prefix="/admin")
 
 
+# Dashboard
 @admin.route("/dashboard")
 def dashboard():
+    return render_template("admin/dashboard.html")
 
-    all_courses = Course.query.order_by(Course.created_at.desc()).all()
 
-    total_courses = Course.query.count()
+# =========================
+# Students
+# =========================
 
-    total_students = User.query.filter_by(role="student").count()
+@admin.route("/students")
+def students():
+
+    students = Student.query.all()
 
     return render_template(
-        "admin/dashboard.html",
-        courses=all_courses,
-        total_courses=total_courses,
-        total_students=total_students
+        "admin/students.html",
+        students=students
     )
 
+@admin.route("/students/add", methods=["GET", "POST"])
+def add_student():
+
+    if request.method == "POST":
+
+        student = Student(
+            name=request.form.get("name"),
+            email=request.form.get("email"),
+            mobile=request.form.get("mobile"),
+            course=request.form.get("course"),
+            batch=request.form.get("batch")
+        )
+
+        db.session.add(student)
+        db.session.commit()
+
+        flash("Student added successfully!", "success")
+
+        return redirect(url_for("admin.students"))
+
+    return render_template("admin/add_student.html")
+
+
+@admin.route("/students/edit/<int:id>")
+def edit_student(id):
+    return render_template("admin/edit_student.html")
+
+
+# =========================
+# Courses
+# =========================
 
 @admin.route("/courses")
 def courses():
-
-    all_courses = Course.query.all()
-
-    return render_template(
-        "admin/courses.html",
-        courses=all_courses
-    )
+    courses = Course.query.all()
+    return render_template("admin/courses.html", courses=courses)
 
 
-@admin.route("/course/add", methods=["GET", "POST"])
+@admin.route("/courses/add", methods=["GET", "POST"])
 def add_course():
 
     if request.method == "POST":
 
         course = Course(
-            title=request.form["title"],
-            description=request.form["description"],
-            duration=request.form["duration"],
-            mode=request.form["mode"],
-            trainer=request.form["trainer"],
-            price=request.form["price"]
+            title=request.form.get("title"),
+            description=request.form.get("description"),
+            duration=request.form.get("duration"),
+            mode=request.form.get("mode"),
+            trainer=request.form.get("trainer"),
+            price=float(request.form.get("price") or 0),
+            featured=True if request.form.get("featured") else False
         )
 
         db.session.add(course)
         db.session.commit()
 
-        flash("Course Added Successfully", "success")
+        flash("Course added successfully!", "success")
 
-        return redirect(url_for("admin.dashboard"))
+        return redirect(url_for("admin.courses"))
 
     return render_template("admin/add_course.html")
 
-@admin.route("/company/add", methods=["GET", "POST"])
+
+@admin.route("/courses/edit/<int:id>")
+def edit_course(id):
+    return render_template("admin/edit_course.html")
+
+
+# =========================
+# Companies
+# =========================
+
+@admin.route("/companies")
+def companies():
+    return render_template("admin/companies.html")
+
+
+@admin.route("/companies/add")
 def add_company():
-
-    if request.method == "POST":
-
-        company_name = request.form["company"]
-
-        photo_file = request.files["photo"]
-
-        filename = ""
-
-        if photo_file:
-
-            filename = secure_filename(photo_file.filename)
-
-            photo_file.save(
-                os.path.join(
-                    "static/uploads/companies",
-                    filename
-                )
-            )
-
-        company = Placement(
-            company=company_name,
-            photo=filename
-        )
-
-        db.session.add(company)
-        db.session.commit()
-
-        flash("Company Added Successfully", "success")
-
-        return redirect(url_for("admin.dashboard"))
-
     return render_template("admin/add_company.html")
+
+
+# =========================
+# Placements
+# =========================
+
+@admin.route("/placements")
+def placements():
+    return render_template("admin/placements.html")
+
+
+@admin.route("/placements/add")
+def add_placement():
+    return render_template("admin/add_placement.html")
+
+
+# =========================
+# Faculty
+# =========================
+
+@admin.route("/faculty")
+def faculty():
+    return render_template("admin/faculty.html")
+
+
+@admin.route("/faculty/add")
+def add_faculty():
+    return render_template("admin/add_faculty.html")
+
+
+# =========================
+# Batches
+# =========================
+
+@admin.route("/batches")
+def batches():
+    return render_template("admin/batches.html")
+
+
+@admin.route("/batches/add")
+def add_batch():
+    return render_template("admin/add_batch.html")
+
+
+# =========================
+# Enquiries
+# =========================
+
+@admin.route("/enquiries")
+def enquiries():
+    return render_template("admin/enquiries.html")
+
+
+# =========================
+# Gallery
+# =========================
+
+@admin.route("/gallery")
+def gallery():
+    return render_template("admin/gallery.html")
+
+
+# =========================
+# Testimonials
+# =========================
+
+@admin.route("/testimonials")
+def testimonials():
+    return render_template("admin/testimonials.html")
+
+
+# =========================
+# Notifications
+# =========================
+
+@admin.route("/notifications")
+def notifications():
+    return render_template("admin/notifications.html")
+
+
+# =========================
+# Settings
+# =========================
+
+@admin.route("/settings")
+def settings():
+    return render_template("admin/settings.html")

@@ -3,194 +3,836 @@
 
 <head>
 
-    <title>Admin Dashboard | RR Institute</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+<title>RR Institute | Admin Dashboard</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
 
 </head>
 
 <body class="bg-gray-100">
 
-    <!-- Navbar -->
-    <nav class="bg-indigo-700 text-white px-8 py-5 flex justify-between">
+<div class="flex min-h-screen">
 
-        <h1 class="text-2xl font-bold">
-            RR Institute Admin
-        </h1>
+<!-- ===================== SIDEBAR ===================== -->
 
-        <a href="{{ url_for('auth.logout') }}"
-           class="bg-red-500 px-4 py-2 rounded">
+<aside class="w-72 bg-indigo-900 text-white">
 
-            Logout
+<div class="p-6 border-b border-indigo-700">
 
-        </a>
+<h1 class="text-3xl font-bold">
 
-    </nav>
+RR Institute
 
-    <div class="p-8">
+</h1>
 
-        <!-- Welcome -->
-        <h2 class="text-4xl font-bold text-gray-800">
-            Welcome Admin
-        </h2>
+<p class="text-indigo-200 mt-2">
 
-        <p class="text-gray-500 mt-2">
-            Manage your institute from here.
-        </p>
+Institute Management System
 
-        <!-- Dashboard Cards -->
-        <div class="grid md:grid-cols-4 gap-6 mt-10">
+</p>
 
-            <!-- Courses -->
-            <div class="bg-white p-6 rounded-xl shadow">
+</div>
 
-                <h3 class="text-xl font-bold">
-                    Courses
-                </h3>
+<nav class="mt-5">
 
-                <p class="text-gray-500 mt-2">
-                    Add and manage courses
-                </p>
+<a href="{{ url_for('admin.dashboard') }}"
+class="block px-6 py-3 hover:bg-indigo-700">
 
-                <div class="flex gap-2 mt-5">
+📊 Dashboard
 
-                    <a href="{{ url_for('admin.add_course') }}"
-                       class="bg-indigo-600 text-white px-4 py-2 rounded">
+</a>
 
-                        Add Course
+<a href="{{ url_for('admin.courses') }}"
+class="block px-6 py-3 hover:bg-indigo-700">
 
-                    </a>
+📚 Courses
 
-                    <a href="{{ url_for('admin.courses') }}"
-                       class="bg-green-600 text-white px-4 py-2 rounded">
+</a>
 
-                        View Courses
+<a href="{{ url_for('admin.students') }}"
+class="block px-6 py-3 hover:bg-indigo-700">
 
-                    </a>
+👨‍🎓 Students
 
-                </div>
+</a>
 
-            </div>
+<a href="{{ url_for('admin.batches') }}"
+class="block px-6 py-3 hover:bg-indigo-700">
 
-            <!-- Companies -->
-            <div class="bg-white p-6 rounded-xl shadow">
+📅 Batches
 
-                <h3 class="text-xl font-bold">
-                    Companies
-                </h3>
+</a>
 
-                <p class="text-gray-500 mt-2">
-                    Manage placement companies
-                </p>
+<a href="{{ url_for('admin.faculty') }}"
+class="block px-6 py-3 hover:bg-indigo-700">
 
-                <a href="{{ url_for('admin.add_company') }}" 
-                    class="mt-5 inline-block bg-indigo-600 text-white px-4 py-2 rounded">
+👨‍🏫 Faculty
 
-                    Add Company
+</a>
 
-            </a>
+<a href="{{ url_for('admin.enquiries') }}"
+class="block px-6 py-3 hover:bg-indigo-700">
 
-            </div>
+📝 Enquiries
 
-            <!-- Students -->
-            <div class="bg-white p-6 rounded-xl shadow">
+</a>
 
-                <h3 class="text-xl font-bold">
-                    Students
-                </h3>
+<a href="{{ url_for('admin.companies') }}"
+class="block px-6 py-3 hover:bg-indigo-700">
 
-                <p class="text-gray-500 mt-2">
-                    View registered students
-                </p>
+🏢 Companies
 
-                <button class="mt-5 bg-indigo-600 text-white px-4 py-2 rounded">
+</a>
 
-                    View Students
+<a href="{{ url_for('admin.placements') }}"
+class="block px-6 py-3 hover:bg-indigo-700">
 
-                </button>
+💼 Placements
 
-            </div>
+</a>
 
-            <!-- Testimonials -->
-            <div class="bg-white p-6 rounded-xl shadow">
+<a href="{{ url_for('admin.gallery') }}"
+class="block px-6 py-3 hover:bg-indigo-700">
 
-                <h3 class="text-xl font-bold">
-                    Testimonials
-                </h3>
+🖼 Gallery
 
-                <p class="text-gray-500 mt-2">
-                    Manage reviews
-                </p>
+</a>
 
-                <button class="mt-5 bg-indigo-600 text-white px-4 py-2 rounded">
+<a href="{{ url_for('admin.testimonials') }}"
+class="block px-6 py-3 hover:bg-indigo-700">
 
-                    Add Review
+⭐ Testimonials
 
-                </button>
+</a>
 
-            </div>
+<a href="{{ url_for('admin.notifications') }}"
+class="block px-6 py-3 hover:bg-indigo-700">
+
+📢 Notifications
+
+</a>
+
+<a href="{{ url_for('admin.settings') }}"
+class="block px-6 py-3 hover:bg-indigo-700">
+
+⚙ Settings
+
+</a>
+
+<a href="{{ url_for('auth.logout') }}"
+class="block mt-10 mx-4 bg-red-600 text-center rounded-lg py-3 hover:bg-red-700">
+
+Logout
+
+</a>
+
+</nav>
+
+</aside>
+
+<!-- ===================== MAIN CONTENT ===================== -->
+
+<div class="flex-1">
+
+<!-- Top Navbar -->
+
+<div class="bg-white shadow flex justify-between items-center px-8 py-5">
+
+<div>
+
+<h2 class="text-3xl font-bold text-gray-800">
+
+Welcome Admin 👋
+
+</h2>
+
+<p class="text-gray-500 mt-1">
+
+Manage your institute efficiently.
+
+</p>
+
+</div>
+
+<div class="text-right">
+
+<h3 class="font-bold">
+
+{{ admin_name }}
+
+</h3>
+
+<p class="text-sm text-gray-500">
+
+{{ current_date }}
+
+</p>
+
+</div>
+
+</div>
+
+<!-- Main Body -->
+
+<div class="p-8">
+
+<!-- Dashboard Statistics -->
+
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+<!-- Students -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+<p class="text-gray-500">
+
+Total Students
+
+</p>
+
+<h2 class="text-4xl font-bold text-indigo-600 mt-3">
+
+{{ total_students }}
+
+</h2>
+
+<p class="text-green-600 mt-2">
+
+Active Admissions
+
+</p>
+
+</div>
+
+<!-- Courses -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+<p class="text-gray-500">
+
+Courses
+
+</p>
+
+<h2 class="text-4xl font-bold text-green-600 mt-3">
+
+{{ total_courses }}
+
+</h2>
+
+<p class="text-green-600 mt-2">
+
+Available Courses
+
+</p>
+
+</div>
+
+<!-- Companies -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+<p class="text-gray-500">
+
+Hiring Companies
+
+</p>
+
+<h2 class="text-4xl font-bold text-blue-600 mt-3">
+
+{{ total_companies }}
+
+</h2>
+
+<p class="text-green-600 mt-2">
+
+Placement Partners
+
+</p>
+
+</div>
+
+<!-- Placements -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+<p class="text-gray-500">
+
+Placed Students
+
+</p>
+
+<h2 class="text-4xl font-bold text-red-600 mt-3">
+
+{{ total_placements }}
+
+</h2>
+
+<p class="text-green-600 mt-2">
+
+Successful Placements
+
+</p>
+
+</div>
+
+</div>
+<!-- ===================== QUICK ACTIONS ===================== -->
+
+<div class="bg-white rounded-xl shadow mt-8 p-6">
+
+<h2 class="text-2xl font-bold">
+
+Quick Actions
+
+</h2>
+
+<div class="grid md:grid-cols-4 gap-5 mt-6">
+
+<a href="{{ url_for('admin.add_student') }}"
+class="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg p-5 text-center">
+
+➕ Add Student
+
+</a>
+
+<a href="{{ url_for('admin.add_course') }}"
+class="bg-green-600 hover:bg-green-700 text-white rounded-lg p-5 text-center">
+
+📚 Add Course
+
+</a>
+
+<a href="{{ url_for('admin.add_company') }}"
+class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-5 text-center">
+
+🏢 Add Company
+
+</a>
+
+<a href="{{ url_for('admin.add_placement') }}"
+class="bg-red-600 hover:bg-red-700 text-white rounded-lg p-5 text-center">
+
+💼 Add Placement
+
+</a>
+
+</div>
+
+</div>
+
+<!-- ===================== MANAGEMENT MODULES ===================== -->
+
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+
+<!-- Student -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+<h2 class="text-xl font-bold">
+
+👨‍🎓 Student Management
+
+</h2>
+
+<ul class="mt-4 space-y-2 text-gray-600">
+
+<li>✔ Add Student</li>
+<li>✔ Edit Student</li>
+<li>✔ Delete Student</li>
+<li>✔ Search Student</li>
+<li>✔ Admission Details</li>
+
+</ul>
+
+</div>
+
+<!-- Courses -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+<h2 class="text-xl font-bold">
+
+📚 Course Management
+
+</h2>
+
+<ul class="mt-4 space-y-2 text-gray-600">
+
+<li>✔ Add Course</li>
+<li>✔ Edit Course</li>
+<li>✔ Delete Course</li>
+<li>✔ Upload Course Image</li>
+<li>✔ Course Pricing</li>
+
+</ul>
+
+</div>
+
+<!-- Placements -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+<h2 class="text-xl font-bold">
+
+💼 Placement Management
+
+</h2>
+
+<ul class="mt-4 space-y-2 text-gray-600">
+
+<li>✔ Add Placement</li>
+<li>✔ Offer Letter</li>
+<li>✔ Placement Status</li>
+<li>✔ Package Details</li>
+<li>✔ Company Mapping</li>
+
+</ul>
+
+</div>
+
+<!-- Companies -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+<h2 class="text-xl font-bold">
+
+🏢 Company Management
+
+</h2>
+
+<ul class="mt-4 space-y-2 text-gray-600">
+
+<li>✔ Add Company</li>
+<li>✔ Edit Company</li>
+<li>✔ Upload Logo</li>
+<li>✔ Hiring Status</li>
+<li>✔ Company Profile</li>
+
+</ul>
+
+</div>
+
+<!-- Faculty -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+<h2 class="text-xl font-bold">
+
+👨‍🏫 Faculty Management
+
+</h2>
+
+<ul class="mt-4 space-y-2 text-gray-600">
+
+<li>✔ Add Faculty</li>
+<li>✔ Assign Course</li>
+<li>✔ Batch Allocation</li>
+<li>✔ Contact Details</li>
+<li>✔ Active Status</li>
+
+</ul>
+
+</div>
+
+<!-- Batches -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+<h2 class="text-xl font-bold">
+
+📅 Batch Management
+
+</h2>
+
+<ul class="mt-4 space-y-2 text-gray-600">
+
+<li>✔ Morning Batch</li>
+<li>✔ Evening Batch</li>
+<li>✔ Assign Trainer</li>
+<li>✔ Assign Students</li>
+<li>✔ Batch Schedule</li>
+
+</ul>
+
+</div>
+
+<!-- Gallery -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+<h2 class="text-xl font-bold">
+
+🖼 Gallery
+
+</h2>
+
+<ul class="mt-4 space-y-2 text-gray-600">
+
+<li>✔ Upload Photos</li>
+<li>✔ Upload Videos</li>
+<li>✔ Delete Media</li>
+
+</ul>
+
+</div>
+
+<!-- Testimonials -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+<h2 class="text-xl font-bold">
+
+⭐ Testimonials
+
+</h2>
+
+<ul class="mt-4 space-y-2 text-gray-600">
+
+<li>✔ Add Review</li>
+<li>✔ Edit Review</li>
+<li>✔ Delete Review</li>
+
+</ul>
+
+</div>
+
+<!-- Notifications -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+<h2 class="text-xl font-bold">
+
+📢 Notifications
+
+</h2>
+
+<ul class="mt-4 space-y-2 text-gray-600">
+
+<li>✔ Send Notice</li>
+<li>✔ Website Alert</li>
+<li>✔ Student Notification</li>
+
+</ul>
+
+</div>
+
+<!-- Enquiries -->
+
+<div class="bg-white rounded-xl shadow p-6">
+
+<h2 class="text-xl font-bold">
+
+📝 Enquiry Management
+
+</h2>
+
+<ul class="mt-4 space-y-2 text-gray-600">
+
+<li>✔ Website Enquiries</li>
+<li>✔ WhatsApp Enquiries</li>
+<li>✔ Follow Up</li>
+
+</ul>
+
+</div>
+
+</div>
+<!-- ===================== RECENT STUDENTS & ENQUIRIES ===================== -->
+
+<div class="grid lg:grid-cols-2 gap-8 mt-10">
+
+    <!-- Recent Students -->
+
+    <div class="bg-white rounded-xl shadow">
+
+        <div class="border-b px-6 py-4">
+
+            <h2 class="text-2xl font-bold">
+
+                👨‍🎓 Recent Students
+
+            </h2>
 
         </div>
 
-        <!-- Statistics -->
-        <div class="grid md:grid-cols-1 gap-6 mt-10">
+        <div class="overflow-x-auto">
 
-            <div class="bg-white p-6 rounded-xl shadow">
+            <table class="w-full">
 
-                <h3 class="text-xl font-bold">
-                    Total Courses
-                </h3>
+                <thead class="bg-gray-100">
 
-                <p class="text-4xl text-indigo-600 mt-4">
-                    {{ total_courses }}
-                </p>
+                    <tr>
 
-            </div>
+                        <th class="p-4 text-left">Student</th>
+                        <th class="p-4 text-left">Course</th>
+                        <th class="p-4 text-left">Batch</th>
 
-        </div>
+                    </tr>
 
-        <!-- Management Sections -->
-        <div class="grid md:grid-cols-2 gap-8 mt-12">
+                </thead>
 
-            <!-- Course Management -->
-            <div class="bg-white rounded-xl shadow p-8">
+                <tbody>
 
-                <h2 class="text-2xl font-bold">
-                    Course Management
-                </h2>
+                {% for student in recent_students %}
 
-                <ul class="mt-5 space-y-3 text-gray-600">
+                    <tr class="border-t hover:bg-gray-50">
 
-                    <li>✔ Add New Course</li>
-                    <li>✔ Update Course Details</li>
-                    <li>✔ Delete Course</li>
-                    <li>✔ Add Course Image</li>
+                        <td class="p-4">
 
-                </ul>
+                            {{ student.name }}
 
-            </div>
+                        </td>
 
-            <!-- Placement Management -->
-            <div class="bg-white rounded-xl shadow p-8">
+                        <td class="p-4">
 
-                <h2 class="text-2xl font-bold">
-                    Placement Management
-                </h2>
+                            {{ student.course.title }}
 
-                <ul class="mt-5 space-y-3 text-gray-600">
+                        </td>
 
-                    <li>✔ Add Company</li>
-                    <li>✔ Add Student Placement</li>
-                    <li>✔ Upload Company Logo</li>
-                    <li>✔ Manage Testimonials</li>
+                        <td class="p-4">
 
-                </ul>
+                            {{ student.batch.name }}
 
-            </div>
+                        </td>
+
+                    </tr>
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="3"
+                            class="text-center text-gray-500 p-6">
+
+                            No Students Found
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
 
         </div>
 
     </div>
 
+
+
+    <!-- Recent Enquiries -->
+
+    <div class="bg-white rounded-xl shadow">
+
+        <div class="border-b px-6 py-4">
+
+            <h2 class="text-2xl font-bold">
+
+                📝 Recent Enquiries
+
+            </h2>
+
+        </div>
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full">
+
+                <thead class="bg-gray-100">
+
+                    <tr>
+
+                        <th class="p-4 text-left">
+
+                            Name
+
+                        </th>
+
+                        <th class="p-4 text-left">
+
+                            Course
+
+                        </th>
+
+                        <th class="p-4 text-left">
+
+                            Status
+
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for enquiry in recent_enquiries %}
+
+                    <tr class="border-t hover:bg-gray-50">
+
+                        <td class="p-4">
+
+                            {{ enquiry.name }}
+
+                        </td>
+
+                        <td class="p-4">
+
+                            {{ enquiry.course }}
+
+                        </td>
+
+                        <td class="p-4">
+
+                            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">
+
+                                {{ enquiry.status }}
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="3"
+                            class="text-center text-gray-500 p-6">
+
+                            No Enquiries
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ===================== PLACEMENT SUMMARY ===================== -->
+
+<div class="bg-white rounded-xl shadow mt-10 p-8">
+
+    <h2 class="text-2xl font-bold mb-6">
+
+        💼 Placement Summary
+
+    </h2>
+
+    <div class="grid md:grid-cols-4 gap-6">
+
+        <div>
+
+            <p class="text-gray-500">
+
+                Highest Package
+
+            </p>
+
+            <h2 class="text-3xl font-bold text-green-600 mt-2">
+
+                ₹{{ highest_package }} LPA
+
+            </h2>
+
+        </div>
+
+        <div>
+
+            <p class="text-gray-500">
+
+                Average Package
+
+            </p>
+
+            <h2 class="text-3xl font-bold text-indigo-600 mt-2">
+
+                ₹{{ average_package }} LPA
+
+            </h2>
+
+        </div>
+
+        <div>
+
+            <p class="text-gray-500">
+
+                Hiring Companies
+
+            </p>
+
+            <h2 class="text-3xl font-bold text-blue-600 mt-2">
+
+                {{ hiring_companies }}
+
+            </h2>
+
+        </div>
+
+        <div>
+
+            <p class="text-gray-500">
+
+                Placement Rate
+
+            </p>
+
+            <h2 class="text-3xl font-bold text-red-600 mt-2">
+
+                {{ placement_percentage }}%
+
+            </h2>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ===================== FOOTER ===================== -->
+
+<div class="mt-12 text-center text-gray-500">
+
+    <p>
+
+        © {{ current_year }} RR Institute Management System
+
+    </p>
+
+    <p class="mt-2">
+
+        Developed using Flask • SQLAlchemy • Tailwind CSS
+
+    </p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </body>
+
 </html>
