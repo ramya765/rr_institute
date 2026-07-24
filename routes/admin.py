@@ -1,6 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models import Course, User
 from database import db
+import os
+from werkzeug.utils import secure_filename
+from models import Placement
+
 
 admin = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -55,3 +59,39 @@ def add_course():
         return redirect(url_for("admin.dashboard"))
 
     return render_template("admin/add_course.html")
+
+@admin.route("/company/add", methods=["GET", "POST"])
+def add_company():
+
+    if request.method == "POST":
+
+        company_name = request.form["company"]
+
+        photo_file = request.files["photo"]
+
+        filename = ""
+
+        if photo_file:
+
+            filename = secure_filename(photo_file.filename)
+
+            photo_file.save(
+                os.path.join(
+                    "static/uploads/companies",
+                    filename
+                )
+            )
+
+        company = Placement(
+            company=company_name,
+            photo=filename
+        )
+
+        db.session.add(company)
+        db.session.commit()
+
+        flash("Company Added Successfully", "success")
+
+        return redirect(url_for("admin.dashboard"))
+
+    return render_template("admin/add_company.html")
