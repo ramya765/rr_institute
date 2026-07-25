@@ -3,16 +3,57 @@
 
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Edit Student | RR Institute</title>
+<title>Edit Student | RR ORIGIN</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+
+body{
+    background:#f3f4f6;
+}
+
+.tab-btn{
+    transition:.3s;
+}
+
+.tab-btn:hover{
+    background:#eff6ff;
+}
+
+.tab-btn.active{
+    background:#2563eb;
+    color:white;
+}
+
+.tab-content{
+    display:none;
+}
+
+.tab-content.active{
+    display:block;
+}
+
+.card{
+    background:white;
+    border-radius:14px;
+    box-shadow:0 6px 16px rgba(0,0,0,.08);
+}
+
+.section-title{
+    font-size:24px;
+    font-weight:bold;
+    color:#2563eb;
+}
+
+</style>
 
 </head>
 
-<body class="bg-gray-100">
+<body>
 
 <div class="flex min-h-screen">
 
@@ -20,17 +61,17 @@
 
     <aside class="w-64 bg-gray-900 text-white">
 
-        <div class="text-center py-6 border-b border-gray-700">
+        <div class="py-6 border-b border-gray-700 text-center">
 
             <h1 class="text-2xl font-bold">
 
-                RR Institute
+                RR ORIGIN
 
             </h1>
 
             <p class="text-gray-400 mt-2">
 
-                Admin Panel
+                Admin Dashboard
 
             </p>
 
@@ -38,271 +79,447 @@
 
         <nav class="mt-6">
 
-            <a href="{{ url_for('admin.dashboard') }}" class="block px-6 py-3 hover:bg-gray-800">
+            <a href="{{ url_for('admin.dashboard') }}"
+               class="block px-6 py-3 hover:bg-gray-800">
+
                 🏠 Dashboard
+
             </a>
 
-            <a href="{{ url_for('admin.students') }}" class="block px-6 py-3 bg-blue-600">
+            <a href="{{ url_for('admin.students') }}"
+               class="block px-6 py-3 bg-blue-600">
+
                 👨‍🎓 Students
+
             </a>
 
-            <a href="{{ url_for('admin.courses') }}" class="block px-6 py-3 hover:bg-gray-800">
+            <a href="{{ url_for('admin.courses') }}"
+               class="block px-6 py-3 hover:bg-gray-800">
+
                 📚 Courses
+
             </a>
 
-            <a href="{{ url_for('admin.companies') }}" class="block px-6 py-3 hover:bg-gray-800">
+            <a href="{{ url_for('admin.companies') }}"
+               class="block px-6 py-3 hover:bg-gray-800">
+
                 🏢 Companies
+
             </a>
 
-            <a href="{{ url_for('admin.placements') }}" class="block px-6 py-3 hover:bg-gray-800">
+            <a href="{{ url_for('admin.placements') }}"
+               class="block px-6 py-3 hover:bg-gray-800">
+
                 💼 Placements
+
             </a>
 
-            <a href="{{ url_for('admin.faculty') }}" class="block px-6 py-3 hover:bg-gray-800">
+            <a href="{{ url_for('admin.faculty') }}"
+               class="block px-6 py-3 hover:bg-gray-800">
+
                 👨‍🏫 Faculty
+
             </a>
 
-            <a href="{{ url_for('admin.batches') }}" class="block px-6 py-3 hover:bg-gray-800">
+            <a href="{{ url_for('admin.batches') }}"
+               class="block px-6 py-3 hover:bg-gray-800">
+
                 📅 Batches
+
             </a>
 
         </nav>
 
     </aside>
 
-    <!-- Main Content -->
+    <!-- Main -->
 
     <div class="flex-1">
 
-        <div class="bg-white shadow px-8 py-5 flex justify-between items-center">
+        <!-- Student Header -->
 
-            <div>
+        <div class="bg-white shadow">
 
-                <h1 class="text-3xl font-bold">
+            <div class="flex justify-between items-center p-8">
 
-                    Edit Student
+                <div class="flex items-center gap-6">
 
-                </h1>
+                    <div
+                        class="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center text-5xl">
 
-                <p class="text-gray-500 mt-1">
+                        👨‍🎓
 
-                    Update Student Information
+                    </div>
 
-                </p>
+                    <div>
+
+                        <h1 class="text-4xl font-bold text-gray-800">
+
+                            {{ student.id }} - {{ student.name }}
+
+                        </h1>
+
+                        <div class="flex gap-3 mt-3">
+
+                            <span class="bg-indigo-100 text-indigo-700 px-4 py-1 rounded-full">
+
+                                {{ student.course }}
+
+                            </span>
+
+                            <span class="bg-green-100 text-green-700 px-4 py-1 rounded-full">
+
+                                {{ student.batch }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="text-right">
+
+                    <p class="font-semibold text-gray-500">
+
+                        Fee Status
+
+                    </p>
+
+                    {% if status=="Paid" %}
+
+                        <span class="text-green-600 text-xl font-bold">
+
+                            🟢 Paid
+
+                        </span>
+
+                    {% elif status=="Partially Paid" %}
+
+                        <span class="text-yellow-600 text-xl font-bold">
+
+                            🟡 Partial
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="text-red-600 text-xl font-bold">
+
+                            🔴 Pending
+
+                        </span>
+
+                    {% endif %}
+
+                    <br><br>
+
+                    <a
+                        href="{{ url_for('admin.students') }}"
+                        class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg">
+
+                        ← Back
+
+                    </a>
+
+                </div>
 
             </div>
 
-            <a href="{{ url_for('admin.students') }}"
-               class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg">
+        </div>
 
-                ← Back
+        <!-- Tabs -->
 
-            </a>
+        <div class="bg-white rounded-xl shadow mt-6 mx-8">
+
+            <div class="flex">
+
+                <button
+                    type="button"
+                    class="tab-btn active flex-1 py-4 font-semibold"
+                    onclick="openTab(event,'personal')">
+
+                    👤 Personal
+
+                </button>
+
+                <button
+                    type="button"
+                    class="tab-btn flex-1 py-4 font-semibold"
+                    onclick="openTab(event,'academic')">
+
+                    🎓 Academic
+
+                </button>
+
+                <button
+                    type="button"
+                    class="tab-btn flex-1 py-4 font-semibold"
+                    onclick="openTab(event,'documents')">
+
+                    📂 Documents
+
+                </button>
+
+                <button
+                    type="button"
+                    class="tab-btn flex-1 py-4 font-semibold"
+                    onclick="openTab(event,'fee')">
+
+                    💰 Fee Details
+
+                </button>
+
+                <button
+                    type="button"
+                    class="tab-btn flex-1 py-4 font-semibold"
+                    onclick="openTab(event,'payments')">
+
+                    💳 Payments
+
+                </button>
+
+            </div>
 
         </div>
 
+        <!-- Main Content -->
+
         <div class="p-8">
 
-            <form method="POST"
-                  enctype="multipart/form-data"
-                  class="space-y-8">
+            <!-- Student Update Form -->
 
-                <!-- Personal Information -->
+            <form
+                method="POST"
+                enctype="multipart/form-data">
+                <!-- ================= PERSONAL TAB ================= -->
 
-                <div class="bg-white rounded-xl shadow">
+<div id="personal" class="tab-content active space-y-8">
 
-                    <div class="border-b px-6 py-4">
+    <!-- ================= STUDENT INFORMATION ================= -->
 
-                        <h2 class="text-2xl font-bold text-indigo-600">
+    <div class="card">
 
-                            👨‍🎓 Student Information
+        <div class="border-b px-6 py-4">
 
-                        </h2>
+            <h2 class="section-title">
 
-                    </div>
+                👨‍🎓 Student Information
 
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+            </h2>
 
-                        <div>
+        </div>
 
-                            <label class="font-semibold">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
 
-                                Student Name
+            <!-- Student Name -->
 
-                            </label>
+            <div>
 
-                            <input
-                                type="text"
-                                name="name"
-                                value="{{ student.name }}"
-                                class="w-full border rounded-lg px-4 py-3 mt-2">
+                <label class="font-semibold text-gray-700">
 
-                        </div>
+                    Student Name
 
-                        <div>
+                </label>
 
-                            <label class="font-semibold">
+                <input
+                    type="text"
+                    name="name"
+                    value="{{ student.name }}"
+                    class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400">
 
-                                Date of Birth
+            </div>
 
-                            </label>
+            <!-- Date of Birth -->
 
-                            <input
-                                type="date"
-                                name="dob"
-                                value="{{ student.dob }}"
-                                class="w-full border rounded-lg px-4 py-3 mt-2">
+            <div>
 
-                        </div>
+                <label class="font-semibold text-gray-700">
 
-                        <div>
+                    Date of Birth
 
-                            <label class="font-semibold">
+                </label>
 
-                                Gender
+                <input
+                    type="date"
+                    name="dob"
+                    value="{{ student.dob }}"
+                    class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400">
 
-                            </label>
+            </div>
 
-                            <select
-                                name="gender"
-                                class="w-full border rounded-lg px-4 py-3 mt-2">
+            <!-- Gender -->
 
-                                <option {% if student.gender=="Male" %}selected{% endif %}>Male</option>
+            <div>
 
-                                <option {% if student.gender=="Female" %}selected{% endif %}>Female</option>
+                <label class="font-semibold text-gray-700">
 
-                                <option {% if student.gender=="Other" %}selected{% endif %}>Other</option>
+                    Gender
 
-                            </select>
+                </label>
 
-                        </div>
+                <select
+                    name="gender"
+                    class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400">
 
-                        <div>
+                    <option {% if student.gender=="Male" %}selected{% endif %}>
+                        Male
+                    </option>
 
-                            <label class="font-semibold">
+                    <option {% if student.gender=="Female" %}selected{% endif %}>
+                        Female
+                    </option>
 
-                                Aadhaar Number
+                    <option {% if student.gender=="Other" %}selected{% endif %}>
+                        Other
+                    </option>
 
-                            </label>
+                </select>
 
-                            <input
-                                type="text"
-                                name="aadhaar"
-                                value="{{ student.aadhaar }}"
-                                class="w-full border rounded-lg px-4 py-3 mt-2">
+            </div>
 
-                        </div>
+            <!-- Aadhaar -->
 
-                        <div>
+            <div>
 
-                            <label class="font-semibold">
+                <label class="font-semibold text-gray-700">
 
-                                Qualification
+                    Aadhaar Number
 
-                            </label>
+                </label>
 
-                            <input
-                                type="text"
-                                name="qualification"
-                                value="{{ student.qualification }}"
-                                class="w-full border rounded-lg px-4 py-3 mt-2">
+                <input
+                    type="text"
+                    name="aadhaar"
+                    value="{{ student.aadhaar }}"
+                    class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400">
 
-                        </div>
+            </div>
 
-                        <div>
+            <!-- Qualification -->
 
-                            <label class="font-semibold">
+            <div>
 
-                                Occupation
+                <label class="font-semibold text-gray-700">
 
-                            </label>
+                    Qualification
 
-                            <input
-                                type="text"
-                                name="occupation"
-                                value="{{ student.occupation }}"
-                                class="w-full border rounded-lg px-4 py-3 mt-2">
+                </label>
 
-                        </div>
+                <input
+                    type="text"
+                    name="qualification"
+                    value="{{ student.qualification }}"
+                    class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400">
 
-                    </div>
+            </div>
 
-                </div>
+            <!-- Occupation -->
 
-                <!-- Parent Details -->
+            <div>
 
-                <div class="bg-white rounded-xl shadow">
+                <label class="font-semibold text-gray-700">
 
-                    <div class="border-b px-6 py-4">
+                    Occupation
 
-                        <h2 class="text-2xl font-bold text-indigo-600">
+                </label>
 
-                            👨‍👩‍👦 Parent Details
+                <input
+                    type="text"
+                    name="occupation"
+                    value="{{ student.occupation }}"
+                    class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400">
 
-                        </h2>
+            </div>
 
-                    </div>
+        </div>
 
-                    <div class="grid md:grid-cols-3 gap-6 p-6">
+    </div>
 
-                        <div>
+    <!-- ===== PART 2A ENDS HERE ===== -->
+     <!-- ================= PARENT DETAILS ================= -->
 
-                            <label class="font-semibold">
-
-                                Father Name
-
-                            </label>
-
-                            <input
-                                type="text"
-                                name="father_name"
-                                value="{{ student.father_name }}"
-                                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-                        </div>
-
-                        <div>
-
-                            <label class="font-semibold">
-
-                                Mother Name
-
-                            </label>
-
-                            <input
-                                type="text"
-                                name="mother_name"
-                                value="{{ student.mother_name }}"
-                                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-                        </div>
-
-                        <div>
-
-                            <label class="font-semibold">
-
-                                Parent Mobile
-
-                            </label>
-
-                            <input
-                                type="text"
-                                name="parent_mobile"
-                                value="{{ student.parent_mobile }}"
-                                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-                        </div>
-
-                    </div>
-
-                </div>
-                <!-- ================= CONTACT DETAILS ================= -->
-
-<div class="bg-white rounded-xl shadow">
+<div class="card">
 
     <div class="border-b px-6 py-4">
 
-        <h2 class="text-2xl font-bold text-indigo-600">
+        <h2 class="section-title">
+
+            👨‍👩‍👦 Parent Details
+
+        </h2>
+
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6 p-6">
+
+        <!-- Father Name -->
+
+        <div>
+
+            <label class="font-semibold text-gray-700">
+
+                Father Name
+
+            </label>
+
+            <input
+                type="text"
+                name="father_name"
+                value="{{ student.father_name }}"
+                class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+
+        </div>
+
+        <!-- Mother Name -->
+
+        <div>
+
+            <label class="font-semibold text-gray-700">
+
+                Mother Name
+
+            </label>
+
+            <input
+                type="text"
+                name="mother_name"
+                value="{{ student.mother_name }}"
+                class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+
+        </div>
+
+        <!-- Parent Mobile -->
+
+        <div>
+
+            <label class="font-semibold text-gray-700">
+
+                Parent Mobile
+
+            </label>
+
+            <input
+                type="text"
+                name="parent_mobile"
+                value="{{ student.parent_mobile }}"
+                class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===== PART 2B ENDS HERE ===== -->
+ <!-- ================= CONTACT INFORMATION ================= -->
+
+<div class="card">
+
+    <div class="border-b px-6 py-4">
+
+        <h2 class="section-title">
 
             📞 Contact Information
 
@@ -312,523 +529,86 @@
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
 
+        <!-- Student Mobile -->
+
         <div>
 
-            <label class="font-semibold">Student Mobile</label>
+            <label class="font-semibold text-gray-700">
+
+                Student Mobile
+
+            </label>
 
             <input
                 type="text"
                 name="mobile"
                 value="{{ student.mobile }}"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
+                class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
 
         </div>
 
+        <!-- Alternate Mobile -->
+
         <div>
 
-            <label class="font-semibold">Alternate Mobile</label>
+            <label class="font-semibold text-gray-700">
+
+                Alternate Mobile
+
+            </label>
 
             <input
                 type="text"
                 name="alternate_mobile"
                 value="{{ student.alternate_mobile }}"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
+                class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
 
         </div>
 
+        <!-- Email -->
+
         <div>
 
-            <label class="font-semibold">Email</label>
+            <label class="font-semibold text-gray-700">
+
+                Email
+
+            </label>
 
             <input
                 type="email"
                 name="email"
                 value="{{ student.email }}"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
+                class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
 
         </div>
 
-        <div class="md:col-span-2 lg:col-span-3">
+        <!-- Address -->
 
-            <label class="font-semibold">Address</label>
+        <div class="md:col-span-3">
+
+            <label class="font-semibold text-gray-700">
+
+                Address
+
+            </label>
 
             <textarea
                 rows="4"
                 name="address"
-                class="w-full border rounded-lg px-4 py-3 mt-2">{{ student.address }}</textarea>
+                class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">{{ student.address }}</textarea>
 
         </div>
 
     </div>
 
-</div>
+    <!-- Action Buttons -->
 
-
-<!-- ================= COURSE DETAILS ================= -->
-
-<div class="bg-white rounded-xl shadow">
-
-    <div class="border-b px-6 py-4">
-
-        <h2 class="text-2xl font-bold text-indigo-600">
-
-            📚 Course Details
-
-        </h2>
-
-    </div>
-
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
-
-        <div>
-
-            <label class="font-semibold">Course</label>
-
-           <select
-    name="course"
-    class="w-full border rounded-lg px-4 py-3 mt-2">
-
-    {% for course in courses %}
-
-    <option
-        value="{{ course.title }}"
-        {% if student.course == course.title %}
-        selected
-        {% endif %}>
-
-        {{ course.title }}
-
-    </option>
-
-    {% endfor %}
-
-</select>
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold">Batch</label>
-
-            <select
-    name="batch"
-    class="w-full border rounded-lg px-4 py-3 mt-2">
-
-    {% for batch in batches %}
-
-    <option
-        value="{{ batch }}"
-        {% if student.batch == batch %}
-        selected
-        {% endif %}>
-
-        {{ batch }}
-
-    </option>
-
-    {% endfor %}
-
-</select>
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold">Admission Date</label>
-
-            <input
-                type="date"
-                name="admission_date"
-                value="{{ student.admission_date }}"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold">Trainer</label>
-
-            <input
-                type="text"
-                name="trainer"
-                value="{{ student.trainer }}"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-        </div>
-
-    </div>
-
-</div>
-
-
-
-<!-- ================= FEE SUMMARY ================= -->
-
-<div class="bg-white rounded-xl shadow mt-8">
-
-    <div class="border-b px-6 py-4">
-
-        <h2 class="text-2xl font-bold text-green-600">
-
-            💰 Fee Summary
-
-        </h2>
-
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
-
-        <!-- Course Fee -->
-
-        <div class="bg-blue-50 rounded-xl p-6 border">
-
-            <p class="text-gray-500 text-sm">
-
-                Course Fee
-
-            </p>
-
-            <h2 class="text-3xl font-bold text-blue-700 mt-2">
-
-                ₹ {{ student.course_fee }}
-
-            </h2>
-
-        </div>
-
-        <!-- Total Paid -->
-
-        <div class="bg-green-50 rounded-xl p-6 border">
-
-            <p class="text-gray-500 text-sm">
-
-                Total Paid
-
-            </p>
-
-            <h2 class="text-3xl font-bold text-green-700 mt-2">
-
-                ₹ {{ total_paid }}
-
-            </h2>
-
-        </div>
-
-        <!-- Remaining Balance -->
-
-        <div class="bg-red-50 rounded-xl p-6 border">
-
-            <p class="text-gray-500 text-sm">
-
-                Remaining Balance
-
-            </p>
-
-            <h2 class="text-3xl font-bold text-red-700 mt-2">
-
-                ₹ {{ balance }}
-
-            </h2>
-
-        </div>
-
-        <!-- Payment Status -->
-
-        <div class="bg-yellow-50 rounded-xl p-6 border">
-
-            <p class="text-gray-500 text-sm">
-
-                Payment Status
-
-            </p>
-
-            <h2 class="text-2xl font-bold text-yellow-700 mt-2">
-
-                {{ status }}
-
-            </h2>
-
-        </div>
-
-    </div>
-
-</div>
-<!-- ================= PAYMENT HISTORY ================= -->
-
-<div class="bg-white rounded-xl shadow mt-8">
-
-    <div class="border-b px-6 py-4">
-
-        <h2 class="text-2xl font-bold text-green-600">
-
-            💳 Payment History
-
-        </h2>
-
-    </div>
-
-    <div class="overflow-x-auto">
-
-        <table class="w-full">
-
-            <thead class="bg-gray-100">
-
-                <tr>
-
-                    <th class="p-3 text-left">Date</th>
-
-                    <th class="p-3 text-left">Amount</th>
-
-                    <th class="p-3 text-left">Mode</th>
-
-                    <th class="p-3 text-left">Receipt</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                {% for payment in payments %}
-
-                <tr class="border-b">
-
-                    <td class="p-3">
-
-                        {{ payment.payment_date.strftime("%d-%m-%Y") }}
-
-                    </td>
-
-                    <td class="p-3">
-
-                        ₹ {{ payment.amount }}
-
-                    </td>
-
-                    <td class="p-3">
-
-                        {{ payment.payment_mode }}
-
-                    </td>
-
-                    <td class="p-3">
-
-                        {{ payment.receipt_number }}
-
-                    </td>
-
-                </tr>
-
-                {% else %}
-
-                <tr>
-
-                    <td colspan="4" class="text-center p-6 text-gray-500">
-
-                        No Payments Yet
-
-                    </td>
-
-                </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-</div>
-<!-- ================= ADD PAYMENT ================= -->
-
-<div class="bg-white rounded-xl shadow mt-8">
-
-    <div class="border-b px-6 py-4">
-        <h2 class="text-2xl font-bold text-blue-600">
-            ➕ Add New Payment
-        </h2>
-    </div>
-
-    <form method="POST"
-          action="{{ url_for('admin.add_payment', id=student.id) }}">
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
-
-            <div>
-                <label class="font-semibold">Amount</label>
-                <input
-                    type="number"
-                    name="amount"
-                    required
-                    class="w-full border rounded-lg px-4 py-3 mt-2">
-            </div>
-
-            <div>
-                <label class="font-semibold">Payment Mode</label>
-                <select
-                    name="payment_mode"
-                    class="w-full border rounded-lg px-4 py-3 mt-2">
-
-                    <option>Cash</option>
-                    <option>UPI</option>
-                    <option>Card</option>
-                    <option>Bank Transfer</option>
-
-                </select>
-            </div>
-
-            <div>
-                <label class="font-semibold">Transaction ID</label>
-                <input
-                    type="text"
-                    name="transaction_id"
-                    class="w-full border rounded-lg px-4 py-3 mt-2">
-            </div>
-
-            <div>
-                <label class="font-semibold">Remarks</label>
-                <input
-                    type="text"
-                    name="remarks"
-                    class="w-full border rounded-lg px-4 py-3 mt-2">
-            </div>
-
-        </div>
-
-        <div class="px-6 pb-6">
-
-            <button
-                type="submit"
-                class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg">
-
-                Save Payment
-
-            </button>
-
-        </div>
-
-    </form>
-
-</div>
-
-
-<!-- ================= DOCUMENTS ================= -->
-
-<div class="bg-white rounded-xl shadow">
-
-    <div class="border-b px-6 py-4">
-
-        <h2 class="text-2xl font-bold text-indigo-600">
-
-            📄 Documents
-
-        </h2>
-
-    </div>
-
-    <div class="grid md:grid-cols-3 gap-6 p-6">
-
-        <div>
-
-            <label class="font-semibold">
-
-                Current Photo
-
-            </label>
-
-           {% if student.photo %}
-    <img
-        src="{{ url_for('static', filename='uploads/photos/' + student.photo) }}"
-        class="w-40 h-40 object-cover rounded-lg border mt-3">
-{% else %}
-    <div class="w-40 h-40 border rounded-lg flex items-center justify-center bg-gray-100 mt-3">
-        <span class="text-gray-500 text-sm">
-            No Photo Uploaded
-        </span>
-    </div>
-{% endif %}
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold">
-
-                Replace Photo
-
-            </label>
-
-            <input
-                type="file"
-                name="student_photo"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold">
-
-                Upload New Documents
-
-            </label>
-
-            <input
-                type="file"
-                name="documents"
-                multiple
-                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- ================= REMARKS ================= -->
-
-<div class="bg-white rounded-xl shadow">
-
-    <div class="border-b px-6 py-4">
-
-        <h2 class="text-2xl font-bold text-indigo-600">
-
-            📝 Remarks
-
-        </h2>
-
-    </div>
-
-    <div class="p-6">
-
-        <textarea
-            rows="5"
-            name="remarks"
-            class="w-full border rounded-lg px-4 py-3">{{ student.remarks }}</textarea>
-
-    </div>
-
-</div>
-
-
-<!-- ================= ACTION BUTTONS ================= -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-    <div class="flex justify-end gap-4">
-
-        <a href="{{ url_for('admin.students') }}"
-           class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg">
-
-            Cancel
-
-        </a>
+    <div class="flex justify-end gap-3 px-6 pb-6">
 
         <button
             type="reset"
-            class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg">
+            class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold transition">
 
             Reset
 
@@ -836,7 +616,7 @@
 
         <button
             type="submit"
-            class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold">
+            class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition">
 
             💾 Update Student
 
@@ -845,13 +625,797 @@
     </div>
 
 </div>
+
+</div>
+
+<!-- ================= END OF PERSONAL TAB ================= -->
+
+<!-- ================= START ACADEMIC TAB ================= -->
+ <!-- ================= ACADEMIC TAB ================= -->
+
+<div id="academic" class="tab-content space-y-8">
+
+    <!-- ================= COURSE DETAILS ================= -->
+
+    <div class="card">
+
+        <div class="border-b px-6 py-4">
+
+            <h2 class="section-title">
+
+                🎓 Course Details
+
+            </h2>
+
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+
+            <!-- Course -->
+
+            <div>
+
+                <label class="font-semibold text-gray-700">
+
+                    Course
+
+                </label>
+
+                <select
+                    name="course"
+                    class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+
+                    {% for course in courses %}
+
+                    <option
+                        value="{{ course.title }}"
+                        {% if student.course==course.title %}selected{% endif %}>
+
+                        {{ course.title }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <!-- Batch -->
+
+            <div>
+
+                <label class="font-semibold text-gray-700">
+
+                    Batch
+
+                </label>
+
+                <select
+                    name="batch"
+                    class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+
+                    {% for batch in batches %}
+
+                    <option
+                        value="{{ batch }}"
+                        {% if student.batch==batch %}selected{% endif %}>
+
+                        {{ batch }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <!-- Admission Date -->
+
+            <div>
+
+                <label class="font-semibold text-gray-700">
+
+                    Admission Date
+
+                </label>
+
+                <input
+                    type="date"
+                    name="admission_date"
+                    value="{{ student.admission_date }}"
+                    class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+
+            </div>
+
+            <!-- Trainer -->
+
+            <div>
+
+                <label class="font-semibold text-gray-700">
+
+                    Trainer
+
+                </label>
+
+                <input
+                    type="text"
+                    name="trainer"
+                    value="{{ student.trainer }}"
+                    class="w-full border rounded-lg px-4 py-3 mt-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= REMARKS ================= -->
+
+    <div class="card">
+
+        <div class="border-b px-6 py-4">
+
+            <h2 class="section-title">
+
+                📝 Remarks
+
+            </h2>
+
+        </div>
+
+        <div class="p-6">
+
+            <textarea
+                rows="6"
+                name="remarks"
+                class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 focus:outline-none">{{ student.remarks }}</textarea>
+
+        </div>
+
+        <!-- Action Buttons -->
+
+        <div class="flex justify-end gap-3 px-6 pb-6">
+
+            <button
+                type="submit"
+                class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition">
+
+                💾 Update Student
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= END OF ACADEMIC TAB ================= -->
+
+<!-- ================= START DOCUMENTS TAB ================= -->
+ <!-- ================= DOCUMENTS TAB ================= -->
+
+<div id="documents" class="tab-content space-y-8">
+
+    <div class="card">
+
+        <div class="border-b px-6 py-4">
+
+            <h2 class="section-title">
+
+                📂 Student Documents
+
+            </h2>
+
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8 p-6">
+
+            <!-- ================= CURRENT PHOTO ================= -->
+
+            <div>
+
+                <label class="font-semibold block mb-3">
+
+                    Current Photo
+
+                </label>
+
+                {% if student.photo %}
+
+                <img
+                    src="{{ url_for('static', filename='uploads/photos/' + student.photo) }}"
+                    class="w-48 h-48 object-cover rounded-xl border shadow">
+
+                {% else %}
+
+                <div
+                    class="w-48 h-48 rounded-xl border-2 border-dashed border-gray-300 bg-gray-100 flex items-center justify-center text-gray-500">
+
+                    No Photo Available
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+            <!-- ================= REPLACE PHOTO ================= -->
+
+            <div>
+
+                <label class="font-semibold block mb-3">
+
+                    Replace Photo
+
+                </label>
+
+                <input
+                    type="file"
+                    name="student_photo"
+                    accept=".jpg,.jpeg,.png"
+                    class="w-full border rounded-lg px-4 py-3">
+
+                <p class="text-sm text-gray-500 mt-2">
+
+                    Supported formats: JPG, JPEG, PNG
+
+                </p>
+
+            </div>
+
+            <!-- ================= DOCUMENTS ================= -->
+
+            <div>
+
+                <label class="font-semibold block mb-3">
+
+                    Upload Documents
+
+                </label>
+
+                <input
+                    type="file"
+                    name="documents"
+                    multiple
+                    class="w-full border rounded-lg px-4 py-3">
+
+                <p class="text-sm text-gray-500 mt-2">
+
+                    Aadhaar, Certificates, Resume, Mark Sheets, etc.
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- ================= ACTION BUTTON ================= -->
+
+        <div class="flex justify-end gap-3 px-6 pb-6">
+
+            <button
+                type="submit"
+                class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition">
+
+                💾 Update Student
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= END DOCUMENTS TAB ================= -->
+
+<!-- ================= START FEE DETAILS TAB ================= -->
+ <!-- ================= FEE DETAILS TAB ================= -->
+
+<div id="fee" class="tab-content space-y-8">
+
+    <!-- ================= FEE SUMMARY CARDS ================= -->
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <!-- Course Fee -->
+
+        <div class="card bg-blue-50 border border-blue-100">
+
+            <div class="p-6">
+
+                <p class="text-gray-500 text-sm">
+
+                    Course Fee
+
+                </p>
+
+                <h2 class="text-3xl font-bold text-blue-700 mt-2">
+
+                    ₹ {{ student.course_fee }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <!-- Total Paid -->
+
+        <div class="card bg-green-50 border border-green-100">
+
+            <div class="p-6">
+
+                <p class="text-gray-500 text-sm">
+
+                    Total Paid
+
+                </p>
+
+                <h2 class="text-3xl font-bold text-green-700 mt-2">
+
+                    ₹ {{ total_paid }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <!-- Remaining Balance -->
+
+        <div class="card bg-red-50 border border-red-100">
+
+            <div class="p-6">
+
+                <p class="text-gray-500 text-sm">
+
+                    Remaining Balance
+
+                </p>
+
+                <h2 class="text-3xl font-bold text-red-700 mt-2">
+
+                    ₹ {{ balance }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <!-- Payment Status -->
+
+        <div class="card bg-yellow-50 border border-yellow-100">
+
+            <div class="p-6">
+
+                <p class="text-gray-500 text-sm">
+
+                    Payment Status
+
+                </p>
+
+                <h2 class="text-2xl font-bold text-yellow-700 mt-2">
+
+                    {{ status }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= FEE OVERVIEW ================= -->
+
+    <div class="card">
+
+        <div class="border-b px-6 py-4">
+
+            <h2 class="section-title">
+
+                💰 Fee Overview
+
+            </h2>
+
+        </div>
+
+        <div class="p-6">
+
+            <table class="w-full">
+
+                <tr class="border-b">
+
+                    <td class="py-4 font-semibold">
+
+                        Course Fee
+
+                    </td>
+
+                    <td class="text-right font-semibold">
+
+                        ₹ {{ student.course_fee }}
+
+                    </td>
+
+                </tr>
+
+                <tr class="border-b">
+
+                    <td class="py-4 font-semibold">
+
+                        Total Paid
+
+                    </td>
+
+                    <td class="text-right text-green-600 font-bold">
+
+                        ₹ {{ total_paid }}
+
+                    </td>
+
+                </tr>
+
+                <tr class="border-b">
+
+                    <td class="py-4 font-semibold">
+
+                        Remaining Balance
+
+                    </td>
+
+                    <td class="text-right text-red-600 font-bold">
+
+                        ₹ {{ balance }}
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td class="py-4 font-semibold">
+
+                        Status
+
+                    </td>
+
+                    <td class="text-right font-bold">
+
+                        {{ status }}
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+        <!-- ================= UPDATE BUTTON ================= -->
+
+        <div class="flex justify-end gap-3 px-6 pb-6">
+
+            <button
+                type="submit"
+                class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition">
+
+                💾 Update Student
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- END OF STUDENT UPDATE FORM -->
+<!-- IMPORTANT: Close the main form here -->
+<!-- ===================================================== -->
+
 </form>
 
+<!-- ================= END FEE TAB ================= -->
 
+<!-- ================= PAYMENTS TAB STARTS NEXT ================= -->
+ <!-- ================= PAYMENTS TAB ================= -->
+
+<div id="payments" class="tab-content space-y-8">
+
+    <!-- ================= PAYMENT HISTORY ================= -->
+
+    <div class="card">
+
+        <div class="border-b px-6 py-4">
+
+            <h2 class="section-title">
+
+                💳 Payment History
+
+            </h2>
+
+        </div>
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full">
+
+                <thead class="bg-gray-100">
+
+                    <tr>
+
+                        <th class="p-4 text-left">Date</th>
+                        <th class="p-4 text-left">Amount</th>
+                        <th class="p-4 text-left">Mode</th>
+                        <th class="p-4 text-left">Receipt</th>
+                        <th class="p-4 text-left">Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for payment in payments %}
+
+                    <tr class="border-b hover:bg-gray-50">
+
+                        <td class="p-4">
+
+                            {{ payment.payment_date.strftime("%d-%m-%Y") }}
+
+                        </td>
+
+                        <td class="p-4 font-semibold text-green-600">
+
+                            ₹ {{ payment.amount }}
+
+                        </td>
+
+                        <td class="p-4">
+
+                            {{ payment.payment_mode }}
+
+                        </td>
+
+                        <td class="p-4">
+
+                            {{ payment.receipt_number }}
+
+                        </td>
+
+                        <td class="p-4">
+
+                            <a
+                                href="{{ url_for('static', filename='receipts/' + payment.receipt_number + '.pdf') }}"
+                                download
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+
+                                📄 Download
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td colspan="5"
+                            class="text-center text-gray-500 py-8">
+
+                            No Payment Records Found
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ADD PAYMENT ================= -->
+
+    <div class="card">
+
+        <div class="border-b px-6 py-4">
+
+            <h2 class="section-title">
+
+                ➕ Add Payment
+
+            </h2>
+
+        </div>
+
+        <form
+            method="POST"
+            action="/admin/students/{{ student.id }}/payment">
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+
+                <!-- Amount -->
+
+                <div>
+
+                    <label class="font-semibold">
+
+                        Amount
+
+                    </label>
+
+                    <input
+                        type="number"
+                        name="amount"
+                        required
+                        class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                </div>
+
+                <!-- Payment Mode -->
+
+                <div>
+
+                    <label class="font-semibold">
+
+                        Payment Mode
+
+                    </label>
+
+                    <select
+                        name="payment_mode"
+                        class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                        <option>Cash</option>
+                        <option>UPI</option>
+                        <option>Card</option>
+                        <option>Bank Transfer</option>
+
+                    </select>
+
+                </div>
+
+                <!-- Transaction ID -->
+
+                <div>
+
+                    <label class="font-semibold">
+
+                        Transaction ID
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="transaction_id"
+                        class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                </div>
+
+                <!-- Remarks -->
+
+                <div>
+
+                    <label class="font-semibold">
+
+                        Remarks
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="remarks"
+                        class="w-full border rounded-lg px-4 py-3 mt-2">
+
+                </div>
+
+            </div>
+
+            <div class="px-6 pb-6 flex justify-end">
+
+                <button
+                    type="submit"
+                    class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold">
+
+                    💾 Save Payment
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
 
 </div>
 
-</div>
+<!-- ================= END PAYMENTS TAB ================= -->
+ <!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+function openTab(evt, tabName) {
+
+    if (evt) {
+        evt.preventDefault();
+    }
+
+    // Hide all tabs
+    const tabContents = document.querySelectorAll(".tab-content");
+    tabContents.forEach(tab => {
+        tab.classList.remove("active");
+    });
+
+    // Remove active state from all buttons
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    tabButtons.forEach(btn => {
+        btn.classList.remove(
+            "bg-indigo-600",
+            "text-white"
+        );
+
+        btn.classList.add(
+            "bg-white",
+            "text-gray-700"
+        );
+    });
+
+    // Show selected tab
+    const activeTab = document.getElementById(tabName);
+
+    if (activeTab) {
+        activeTab.classList.add("active");
+    }
+
+    // Highlight active button
+    if (evt && evt.currentTarget) {
+
+        evt.currentTarget.classList.remove(
+            "bg-white",
+            "text-gray-700"
+        );
+
+        evt.currentTarget.classList.add(
+            "bg-indigo-600",
+            "text-white"
+        );
+
+    }
+
+}
+
+
+// ================= DEFAULT TAB =================
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const firstTab = document.querySelector(".tab-btn");
+
+    if (firstTab) {
+
+        firstTab.click();
+
+    }
+
+});
+
+</script>
 
 </body>
 

@@ -10,12 +10,134 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models import Course, Student, Payment
 from database import db
 from datetime import datetime
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
+from reportlab.lib.colors import HexColor
 admin = Blueprint("admin", __name__, url_prefix="/admin")
 UPLOAD_FOLDER = "static/uploads"
 
 os.makedirs(os.path.join(UPLOAD_FOLDER, "photos"), exist_ok=True)
 os.makedirs(os.path.join(UPLOAD_FOLDER, "aadhaar"), exist_ok=True)
 os.makedirs(os.path.join(UPLOAD_FOLDER, "qualification"), exist_ok=True)
+def generate_receipt(student, payment):
+    
+    receipt_folder = "static/receipts"
+    os.makedirs(receipt_folder, exist_ok=True)
+
+    pdf_path = os.path.join(
+        receipt_folder,
+        f"{payment.receipt_number}.pdf"
+    )
+
+    c = canvas.Canvas(pdf_path, pagesize=A4)
+
+    width, height = A4
+
+    # ----------------------------
+    # Logo
+    # ----------------------------
+
+    logo_path = "static/logo.jpeg"
+
+    if os.path.exists(logo_path):
+        logo = ImageReader(logo_path)
+        c.drawImage(
+            logo,
+            40,
+            height-110,
+            width=70,
+            height=70,
+            preserveAspectRatio=True
+        )
+
+    # ----------------------------
+    # Header
+    # ----------------------------
+
+    c.setFont("Helvetica-Bold",22)
+    c.setFillColor(HexColor("#C59D2A"))
+    c.drawString(130,height-60,"RR ORIGIN")
+
+    c.setFont("Helvetica",12)
+    c.setFillColor(HexColor("#555555"))
+    c.drawString(130,height-80,"WHERE CAREERS BEGIN")
+
+    c.line(40,height-120,560,height-120)
+
+    # ----------------------------
+    # Receipt Title
+    # ----------------------------
+
+    c.setFont("Helvetica-Bold",18)
+    c.drawString(190,height-150,"PAYMENT RECEIPT")
+
+    y = height-190
+
+    c.setFont("Helvetica",12)
+
+    c.drawString(50,y,f"Receipt No : {payment.receipt_number}")
+
+    y-=25
+
+    c.drawString(50,y,f"Student Name : {student.name}")
+
+    y-=25
+
+    c.drawString(50,y,f"Course : {student.course}")
+
+    y-=25
+
+    c.drawString(50,y,f"Batch : {student.batch}")
+
+    y-=25
+
+    c.drawString(50,y,f"Amount Paid : Rs. {payment.amount:,.2f}")
+
+    y-=25
+
+    c.drawString(50,y,f"Remaining Balance : Rs. {student.balance_amount:,.2f}")
+
+    y-=25
+
+    c.drawString(50,y,f"Payment Mode : {payment.payment_mode}")
+
+    y-=25
+
+    c.drawString(
+        50,
+        y,
+        f"Transaction ID : {payment.transaction_id or '-'}"
+    )
+
+    y-=25
+
+    c.drawString(
+        50,
+        y,
+        f"Date : {payment.payment_date.strftime('%d-%m-%Y')}"
+    )
+
+    y-=60
+
+    c.line(40,y,560,y)
+
+    y-=30
+
+    c.setFont("Helvetica-Bold",14)
+    c.drawString(50,y,"Thank you for choosing RR ORIGIN!")
+
+    y-=40
+
+    c.drawRightString(
+        540,
+        y,
+        "Authorized Signature"
+    )
+
+    c.save()
+
+    return pdf_path
 
 
 # Dashboard
@@ -175,6 +297,9 @@ def add_student():
 
             db.session.add(payment)
             db.session.commit()
+  
+
+            generate_receipt(student, payment)
 
         flash("Student added successfully!", "success")
 
@@ -324,39 +449,88 @@ def edit_student(id):
     )
 @admin.route("/students/<int:id>/payment", methods=["POST"])
 def add_payment(id):
-    print("ADD PAYMENT ROUTE CALLED")
+
     student = Student.query.get_or_404(id)
 
-    amount = float(request.form.get("amount"))
+    try:
 
-    payment_mode = request.form.get("payment_mode")
+        # ----------------------------
+        # Remaining Balance Check
+        # ----------------------------
+        remaining = (student.course_fee or 0) - (student.paid_amount or 0)
 
-    transaction_id = request.form.get("transaction_id")
+        # Already fully paid
+        if remaining <= 0:
+            flash(
+                "Course fee is already fully paid. No more payments are allowed.",
+                "warning"
+            )
+            return redirect(url_for("admin.edit_student", id=id))
 
-    remarks = request.form.get("remarks")
+        amount = float(request.form.get("amount") or 0)
 
-    receipt_number = "RR" + datetime.now().strftime("%Y%m%d%H%M%S")
+        # Invalid amount
+        if amount <= 0:
+            flash("Enter a valid payment amount.", "danger")
+            return redirect(url_for("admin.edit_student", id=id))
 
-    payment = Payment(
-        student_id=student.id,
-        amount=amount,
-        payment_mode=payment_mode,
-        transaction_id=transaction_id,
-        receipt_number=receipt_number,
-        received_by="Admin",
-        remarks=remarks
-    )
+        # Over payment
+        if amount > remaining:
+            flash(
+                f"Only Rs. {remaining:,.2f} is remaining. Please enter a valid amount.",
+                "danger"
+            )
+            return redirect(url_for("admin.edit_student", id=id))
 
-    db.session.add(payment)
+        payment_mode = request.form.get("payment_mode")
+        transaction_id = request.form.get("transaction_id")
+        remarks = request.form.get("remarks")
 
-    student.paid_amount = (student.paid_amount or 0) + amount
-    student.balance_amount = (student.course_fee or 0) - student.paid_amount
+        receipt_number = "RR" + datetime.now().strftime("%Y%m%d%H%M%S")
 
-    db.session.commit()
+        payment = Payment(
+            student_id=student.id,
+            amount=amount,
+            payment_mode=payment_mode,
+            transaction_id=transaction_id,
+            receipt_number=receipt_number,
+            received_by="Admin",
+            remarks=remarks
+        )
 
-    flash("Payment added successfully!", "success")
+        db.session.add(payment)
 
-    return redirect(url_for("admin.edit_student", id=student.id))
+        # ----------------------------
+        # Update Student Fee
+        # ----------------------------
+        student.paid_amount += amount
+        student.balance_amount = student.course_fee - student.paid_amount
+
+        if student.balance_amount <= 0:
+            student.balance_amount = 0
+            student.status = "Paid"
+
+        elif student.paid_amount == 0:
+            student.status = "Pending"
+
+        else:
+            student.status = "Partially Paid"
+
+        db.session.commit()
+
+        generate_receipt(student, payment)
+
+        flash("Payment Added Successfully", "success")
+
+    except Exception as e:
+        db.session.rollback()
+        print("ERROR:", e)
+        flash(str(e), "danger")
+
+    return redirect(url_for("admin.edit_student", id=id))
+
+
+    
 @admin.route("/students/delete/<int:id>", methods=["POST"])
 def delete_student(id):
 
@@ -375,10 +549,7 @@ def delete_student(id):
 # Courses
 # =========================
 
-# @admin.route("/courses")
-# def courses():
-#     courses = Course.query.all()
-#     return render_template("admin/courses.html", courses=courses)
+
 @admin.route("/courses")
 def courses():
 
