@@ -1,29 +1,152 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-
-
-from models import Course
+from models import Course, Student, Payment, Placement, Company
 from database import db
-from models import Student
-import os
+from sqlalchemy import func
 from werkzeug.utils import secure_filename
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from models import Course, Student, Payment
-from database import db
 from datetime import datetime
-admin = Blueprint("admin", __name__, url_prefix="/admin")
+import os
+
+
+admin = Blueprint(
+    "admin",
+    __name__,
+    url_prefix="/admin"
+)
+
+
 UPLOAD_FOLDER = "static/uploads"
 
-os.makedirs(os.path.join(UPLOAD_FOLDER, "photos"), exist_ok=True)
-os.makedirs(os.path.join(UPLOAD_FOLDER, "aadhaar"), exist_ok=True)
-os.makedirs(os.path.join(UPLOAD_FOLDER, "qualification"), exist_ok=True)
+
+os.makedirs(
+    os.path.join(UPLOAD_FOLDER, "photos"),
+    exist_ok=True
+)
+
+os.makedirs(
+    os.path.join(UPLOAD_FOLDER, "aadhaar"),
+    exist_ok=True
+)
+
+os.makedirs(
+    os.path.join(UPLOAD_FOLDER, "qualification"),
+    exist_ok=True
+)
+
+os.makedirs(
+    os.path.join(UPLOAD_FOLDER, "companies"),
+    exist_ok=True
+)
+
 
 
 # Dashboard
+# =========================
+# Dashboard
+# =========================
+
 @admin.route("/dashboard")
 def dashboard():
-    return render_template("admin/dashboard.html")
+
+    total_students = Student.query.count()
+
+    total_courses = Course.query.count()
+
+    total_placements = Placement.query.count()
+
+    # Company count from Company table
+    total_companies = Company.query.count()
 
 
+    highest_package = db.session.query(
+        func.max(
+            Placement.package
+        )
+    ).scalar()
+
+
+    if highest_package is None:
+        highest_package = 0
+
+
+
+    average_package = db.session.query(
+        func.avg(
+            Placement.package
+        )
+    ).scalar()
+
+
+    if average_package is None:
+        average_package = 0
+    else:
+        average_package = round(
+            average_package,
+            2
+        )
+
+
+
+    if total_students > 0:
+
+        placement_percentage = round(
+            (total_placements / total_students) * 100,
+            2
+        )
+
+    else:
+
+        placement_percentage = 0
+
+
+
+    recent_students = Student.query.order_by(
+        Student.created_at.desc()
+    ).limit(5).all()
+
+
+
+    recent_placements = Placement.query.order_by(
+        Placement.created_at.desc()
+    ).limit(5).all()
+
+
+
+    companies = Company.query.all()
+
+
+
+    return render_template(
+
+        "admin/dashboard.html",
+
+        total_students=total_students,
+
+        total_courses=total_courses,
+
+        total_companies=total_companies,
+
+        total_placements=total_placements,
+
+        highest_package=highest_package,
+
+        average_package=average_package,
+
+        placement_percentage=placement_percentage,
+
+        recent_students=recent_students,
+
+        recent_placements=recent_placements,
+
+        companies=companies,
+
+        admin_name="Admin",
+
+        current_date=datetime.now().strftime(
+            "%d-%m-%Y"
+        ),
+
+        current_year=datetime.now().year
+    )
 # =========================
 # Students
 # =========================
@@ -37,23 +160,86 @@ def students():
         "admin/students.html",
         students=students
     )
-
 @admin.route("/students/add", methods=["GET", "POST"])
 def add_student():
 
     courses = Course.query.all()
 
+
     if request.method == "POST":
 
-        # -----------------------------
-        # Upload Photo (Optional)
-        # -----------------------------
+
+        # ==========================
+        # Aadhaar Validation
+        # ==========================
+
+        aadhaar = request.form.get("aadhaar")
+
+
+        if not aadhaar:
+
+            flash(
+                "Aadhaar number is mandatory!",
+                "danger"
+            )
+
+            return redirect(
+                url_for("admin.add_student")
+            )
+
+
+        if len(aadhaar) != 12 or not aadhaar.isdigit():
+
+            flash(
+                "Enter valid 12 digit Aadhaar number!",
+                "danger"
+            )
+
+            return redirect(
+                url_for("admin.add_student")
+            )
+
+
+        # Check duplicate Aadhaar
+
+        existing_student = Student.query.filter_by(
+            aadhaar=aadhaar
+        ).first()
+
+
+        if existing_student:
+
+            flash(
+                "Aadhaar number already registered!",
+                "danger"
+            )
+
+            return redirect(
+                url_for("admin.add_student")
+            )
+
+
+
+        # ==========================
+        # Photo Upload
+        # ==========================
+
         photo_name = None
 
-        photo = request.files.get("student_photo")
 
-        if photo and photo.filename != "":
-            photo_name = secure_filename(photo.filename)
+        photo = request.files.get(
+            "student_photo"
+        )
+
+
+        if photo and photo.filename:
+
+
+            photo_name = secure_filename(
+                photo.filename
+            )
+
+
             photo.save(
                 os.path.join(
                     UPLOAD_FOLDER,
@@ -62,34 +248,66 @@ def add_student():
                 )
             )
 
-        # -----------------------------
-        # Aadhaar File (Optional)
-        # -----------------------------
-        aadhaar_name = None
 
-        aadhaar = request.files.get("aadhaar_file")
 
-        if aadhaar and aadhaar.filename != "":
-            aadhaar_name = secure_filename(aadhaar.filename)
-            aadhaar.save(
-                os.path.join(
-                    UPLOAD_FOLDER,
-                    "aadhaar",
-                    aadhaar_name
-                )
+        # ==========================
+        # Aadhaar File Upload
+        # ==========================
+
+        aadhaar_file = request.files.get(
+            "aadhaar_file"
+        )
+
+
+        if not aadhaar_file or aadhaar_file.filename == "":
+
+
+            flash(
+                "Please upload Aadhaar card!",
+                "danger"
             )
 
-        # -----------------------------
-        # Qualification File (Optional)
-        # -----------------------------
+
+            return redirect(
+                url_for("admin.add_student")
+            )
+
+
+
+        aadhaar_name = secure_filename(
+            aadhaar_file.filename
+        )
+
+
+        aadhaar_file.save(
+            os.path.join(
+                UPLOAD_FOLDER,
+                "aadhaar",
+                aadhaar_name
+            )
+        )
+
+
+
+        # ==========================
+        # Qualification Upload
+        # ==========================
+
         qualification_name = None
 
-        qualification = request.files.get("qualification_files")
 
-        if qualification and qualification.filename != "":
+        qualification = request.files.get(
+            "qualification_files"
+        )
+
+
+        if qualification and qualification.filename:
+
+
             qualification_name = secure_filename(
                 qualification.filename
             )
+
 
             qualification.save(
                 os.path.join(
@@ -99,93 +317,222 @@ def add_student():
                 )
             )
 
-        # -----------------------------
+
+
+        # ==========================
         # Create Student
-        # -----------------------------
+        # ==========================
+
+
         student = Student(
 
             name=request.form.get("name"),
 
+
             dob=request.form.get("dob") or None,
+
 
             gender=request.form.get("gender"),
 
-            aadhaar=request.form.get("aadhaar"),
 
-            qualification=request.form.get("qualification"),
+            aadhaar=aadhaar,
 
-            occupation=request.form.get("occupation"),
 
-            father_name=request.form.get("father_name"),
+            qualification=request.form.get(
+                "qualification"
+            ),
 
-            mother_name=request.form.get("mother_name"),
 
-            parent_mobile=request.form.get("parent_mobile"),
+            occupation=request.form.get(
+                "occupation"
+            ),
 
-            mobile=request.form.get("mobile"),
 
-            alternate_mobile=request.form.get("alternate_mobile"),
+            father_name=request.form.get(
+                "father_name"
+            ),
 
-            email=request.form.get("email"),
 
-            address=request.form.get("address"),
+            mother_name=request.form.get(
+                "mother_name"
+            ),
 
-            course=request.form.get("course"),
 
-            batch=request.form.get("batch"),
+            parent_mobile=request.form.get(
+                "parent_mobile"
+            ),
 
-            trainer=request.form.get("trainer"),
 
-            admission_date=request.form.get("admission_date") or None,
+            mobile=request.form.get(
+                "mobile"
+            ),
 
-            course_fee=float(request.form.get("course_fee") or 0),
 
-            paid_amount=float(request.form.get("paid_amount") or 0),
+            alternate_mobile=request.form.get(
+                "alternate_mobile"
+            ),
 
-            balance_amount=float(request.form.get("balance_amount") or 0),
 
-            payment_mode=request.form.get("payment_mode"),
+            email=request.form.get(
+                "email"
+            ),
+
+
+            address=request.form.get(
+                "address"
+            ),
+
+
+            course=request.form.get(
+                "course"
+            ),
+
+
+            batch=request.form.get(
+                "batch"
+            ),
+
+
+            trainer=request.form.get(
+                "trainer"
+            ),
+
+
+            admission_date=request.form.get(
+                "admission_date"
+            ) or None,
+
+
+            course_fee=float(
+                request.form.get("course_fee") or 0
+            ),
+
+
+            paid_amount=float(
+                request.form.get("paid_amount") or 0
+            ),
+
+
+            balance_amount=float(
+                request.form.get("balance_amount") or 0
+            ),
+
+
+            payment_mode=request.form.get(
+                "payment_mode"
+            ),
+
 
             photo=photo_name,
 
+
             aadhaar_file=aadhaar_name,
+
 
             qualification_file=qualification_name,
 
-            remarks=request.form.get("remarks")
 
-        )
-        db.session.add(student)
-        db.session.commit()
+            status="Active",
 
-        # Create Initial Payment Record
-        if student.paid_amount > 0:
 
-            receipt_number = "RR" + datetime.now().strftime("%Y%m%d%H%M%S")
-
-            payment = Payment(
-                student_id=student.id,
-                amount=student.paid_amount,
-                payment_mode=student.payment_mode,
-                transaction_id="",
-                receipt_number=receipt_number,
-                received_by="Admin",
-                remarks="Admission Payment"
+            remarks=request.form.get(
+                "remarks"
             )
 
-            db.session.add(payment)
+        )
+
+
+
+        try:
+
+
+            db.session.add(student)
+
             db.session.commit()
 
-        flash("Student added successfully!", "success")
 
-        return redirect(url_for("admin.students"))
+
+            # ==========================
+            # Initial Payment Entry
+            # ==========================
+
+
+            if student.paid_amount > 0:
+
+
+                receipt_number = (
+                    "RR" +
+                    datetime.now().strftime(
+                        "%Y%m%d%H%M%S"
+                    )
+                )
+
+
+                payment = Payment(
+
+                    student_id=student.id,
+
+                    amount=student.paid_amount,
+
+                    payment_mode=student.payment_mode,
+
+                    transaction_id="",
+
+
+                    receipt_number=receipt_number,
+
+
+                    received_by="Admin",
+
+
+                    remarks="Admission Payment"
+
+                )
+
+
+                db.session.add(payment)
+
+                db.session.commit()
+
+
+
+            flash(
+                "Student added successfully!",
+                "success"
+            )
+
+
+            return redirect(
+                url_for("admin.students")
+            )
+
+
+
+        except Exception as e:
+
+
+            db.session.rollback()
+
+
+            print(e)
+
+
+            flash(
+                "Error while adding student!",
+                "danger"
+            )
+
+
+            return redirect(
+                url_for("admin.add_student")
+            )
+
+
 
     return render_template(
         "admin/add_student.html",
         courses=courses
     )
-
-
 
 @admin.route("/students/edit/<int:id>", methods=["GET", "POST"])
 def edit_student(id):
@@ -428,31 +775,193 @@ def edit_course(id):
 # Companies
 # =========================
 
+# =========================
+# Companies
+# =========================
+
+
+# =========================
+# Companies
+# =========================
+
+
 @admin.route("/companies")
 def companies():
-    return render_template("admin/companies.html")
+
+    companies = Company.query.all()
+
+    return render_template(
+        "admin/companies.html",
+        companies=companies
+    )
 
 
-@admin.route("/companies/add")
+
+# =========================
+# Add Company
+# =========================
+
+
+@admin.route("/companies/add", methods=["GET", "POST"])
 def add_company():
-    return render_template("admin/add_company.html")
 
 
+    if request.method == "POST":
+
+
+        company_name = request.form.get("company")
+
+
+        # =========================
+        # Company Logo Upload
+        # =========================
+
+        photo_name = None
+
+
+        photo = request.files.get("photo")
+
+
+        if photo and photo.filename:
+
+
+            photo_name = secure_filename(
+                photo.filename
+            )
+
+
+            photo.save(
+                os.path.join(
+                    UPLOAD_FOLDER,
+                    "companies",
+                    photo_name
+                )
+            )
+
+
+
+        company = Company(
+
+            company=company_name,
+
+            photo=photo_name
+
+        )
+
+
+        db.session.add(company)
+
+        db.session.commit()
+
+
+
+        flash(
+            "Company added successfully!",
+            "success"
+        )
+
+
+        return redirect(
+            url_for("admin.companies")
+        )
+
+
+
+    return render_template(
+        "admin/add_company.html"
+    )
 # =========================
 # Placements
 # =========================
 
-@admin.route("/placements")
+# admin/routes.py
+
+@admin.route('/placements')
 def placements():
-    return render_template("admin/placements.html")
+
+    course = request.args.get("course")
+
+    courses = db.session.query(Student.course).distinct().all()
+
+    if course:
+
+        students = Student.query.filter_by(
+            course=course
+        ).all()
+
+    else:
+
+        students = Student.query.all()
 
 
-@admin.route("/placements/add")
-def add_placement():
-    return render_template("admin/add_placement.html")
+    return render_template(
+        "admin/placements.html",
+        students=students,
+        courses=[c[0] for c in courses]
+    )
+
+from datetime import datetime
+from flask import request, redirect, url_for, render_template, flash
+from database import db
+from models import Student, Placement
+
+@admin.route(
+    '/add-placement/<int:student_id>',
+    methods=['GET','POST']
+)
+def add_placement(student_id):
+
+    student = Student.query.get_or_404(student_id)
+
+    companies = Company.query.all()
 
 
-# =========================
+    if request.method == "POST":
+
+
+        placement = Placement(
+
+            student_id = student.id,
+
+            company = request.form.get("company"),
+
+            designation = request.form.get("designation"),
+
+            package = float(
+                request.form.get("package")
+            ),
+
+            placement_date = datetime.strptime(
+                request.form.get("placement_date"),
+                "%Y-%m-%d"
+            ).date(),
+
+            status="Placed"
+
+        )
+
+
+        db.session.add(placement)
+
+        db.session.commit()
+
+
+        flash(
+            "Placement Added Successfully",
+            "success"
+        )
+
+
+        return redirect(
+            url_for("admin.placements")
+        )
+
+
+    return render_template(
+        "admin/add_placement.html",
+        student=student,
+        companies=companies
+    )# =========================
 # Faculty
 # =========================
 

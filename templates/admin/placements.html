@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Placement Management</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+
+<style>
+
+body{
+    font-family:'Inter',sans-serif;
+}
+
+.glass{
+    background:rgba(255,255,255,0.9);
+    backdrop-filter:blur(10px);
+}
+
+</style>
+
+</head>
+
+
+<body class="bg-gradient-to-br from-blue-50 via-gray-100 to-indigo-50 min-h-screen">
+
+
+<div class="max-w-7xl mx-auto px-6 py-10">
+
+
+<!-- HEADER -->
+
+<div class="flex justify-between items-center mb-8">
+
+
+<div>
+
+<h1 class="text-4xl font-extrabold text-gray-800">
+
+Placement Management
+
+</h1>
+
+
+<p class="text-gray-500 mt-2">
+
+Manage student placement records
+
+</p>
+
+</div>
+
+
+
+<a href="{{ url_for('admin.dashboard') }}"
+
+class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl shadow-lg">
+
+Dashboard
+
+</a>
+
+
+</div>
+
+
+
+
+<!-- COURSE SEARCH -->
+
+
+<div class="bg-white rounded-2xl shadow p-6 mb-8">
+
+
+<form method="GET"
+action="{{ url_for('admin.placements') }}"
+
+class="flex flex-col md:flex-row gap-4">
+
+
+<select
+
+name="course"
+
+class="border p-3 rounded-xl flex-1">
+
+
+<option value="">
+
+All Courses
+
+</option>
+
+
+
+{% for course in courses %}
+
+
+<option value="{{course}}"
+
+{% if request.args.get('course') == course %}
+selected
+{% endif %}
+
+>
+
+{{course}}
+
+</option>
+
+
+{% endfor %}
+
+
+</select>
+
+
+
+
+<button
+
+class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl">
+
+Search
+
+</button>
+
+
+</form>
+
+
+</div>
+
+
+
+
+
+
+<!-- TABLE -->
+
+
+<div class="glass shadow-xl rounded-2xl overflow-hidden border">
+
+
+<table class="w-full">
+
+
+<thead>
+
+
+<tr class="bg-gradient-to-r from-indigo-600 to-blue-600 text-white">
+
+
+<th class="px-6 py-4 text-left">
+
+Student
+
+</th>
+
+
+<th class="px-6 py-4 text-left">
+
+Course
+
+</th>
+
+
+<th class="px-6 py-4 text-left">
+
+Status
+
+</th>
+
+
+<th class="px-6 py-4 text-center">
+
+Action
+
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+
+
+<tbody class="divide-y">
+
+
+
+{% for student in students %}
+
+
+
+<tr class="hover:bg-blue-50 transition">
+
+
+
+<td class="px-6 py-5">
+
+
+<div class="flex items-center gap-3">
+
+
+<div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold">
+
+
+{{student.name[0]}}
+
+
+</div>
+
+
+
+<div>
+
+
+<p class="font-semibold text-gray-800">
+
+{{student.name}}
+
+</p>
+
+
+<p class="text-sm text-gray-500">
+
+{{student.mobile}}
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+</td>
+
+
+
+
+
+<td class="px-6 py-5 text-gray-700">
+
+
+{{student.course}}
+
+
+</td>
+
+
+
+
+
+
+<td class="px-6 py-5">
+
+
+{% if student.placement %}
+
+
+<span class="bg-green-100 text-green-700 px-4 py-2 rounded-full font-semibold">
+
+
+✓ Placed
+
+
+</span>
+
+
+{% else %}
+
+
+<span class="bg-red-100 text-red-700 px-4 py-2 rounded-full font-semibold">
+
+
+✕ Unplaced
+
+
+</span>
+
+
+{% endif %}
+
+
+
+</td>
+
+
+
+
+
+
+
+<td class="px-6 py-5 text-center">
+
+
+
+{% if not student.placement %}
+
+
+
+<a href="{{url_for('admin.add_placement',
+student_id=student.id)}}"
+
+class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-xl">
+
+
+Mark Placed
+
+
+</a>
+
+
+
+{% else %}
+
+
+
+<span class="text-gray-400">
+
+Completed
+
+</span>
+
+
+
+{% endif %}
+
+
+
+</td>
+
+
+
+
+</tr>
+
+
+
+{% else %}
+
+
+
+<tr>
+
+
+<td colspan="4"
+
+class="text-center p-8 text-gray-500">
+
+
+No Students Found
+
+
+</td>
+
+
+</tr>
+
+
+
+{% endfor %}
+
+
+
+
+</tbody>
+
+
+
+</table>
+
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+</body>
+
+</html>

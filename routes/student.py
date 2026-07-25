@@ -1,7 +1,13 @@
 from flask import Blueprint, render_template, redirect, url_for, session
+from sqlalchemy import func
 
 from database import db
-from models import Course, Enrollment
+from models import (
+    Course,
+    Enrollment,
+    Student,
+    Placement
+)
 
 student = Blueprint(
     "student",
@@ -19,8 +25,13 @@ def dashboard():
     if "user_id" not in session:
         return redirect(url_for("auth.login"))
 
+    current_student = Student.query.filter_by(
+        email=session.get("email")
+    ).first()
+
     return render_template(
-        "student/dashboard.html"
+        "student/dashboard.html",
+        student=current_student
     )
 
 
@@ -52,12 +63,12 @@ def enroll(course_id):
     if "user_id" not in session:
         return redirect(url_for("auth.login"))
 
-    existing_enrollment = Enrollment.query.filter_by(
+    existing = Enrollment.query.filter_by(
         student_id=session["user_id"],
         course_id=course_id
     ).first()
 
-    if not existing_enrollment:
+    if not existing:
 
         enrollment = Enrollment(
             student_id=session["user_id"],
@@ -67,7 +78,7 @@ def enroll(course_id):
         db.session.add(enrollment)
         db.session.commit()
 
-    course = Course.query.get(course_id)
+    course = Course.query.get_or_404(course_id)
 
     whatsapp_url = (
         f"https://wa.me/919676250930"
@@ -104,4 +115,91 @@ def my_courses():
     return render_template(
         "student/my_courses.html",
         courses=enrolled_courses
+    )
+
+
+# ==========================================
+# STUDENT PROFILE
+# ==========================================
+@student.route("/profile")
+def profile():
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    current_student = Student.query.filter_by(
+        email=session.get("email")
+    ).first()
+
+    return render_template(
+        "student/profile.html",
+        student=current_student
+    )
+
+
+# ==========================================
+# PAYMENT HISTORY
+# ==========================================
+@student.route("/payments")
+def payments():
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    current_student = Student.query.filter_by(
+        email=session.get("email")
+    ).first()
+
+    payments = current_student.payments
+
+    return render_template(
+        "student/payments.html",
+        student=current_student,
+        payments=payments
+    )
+
+
+# ==========================================
+# PLACEMENT STATUS
+# ==========================================
+@student.route("/placement")
+def placement():
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    current_student = Student.query.filter_by(
+        email=session.get("email")
+    ).first()
+
+    placement = Placement.query.filter_by(
+        student_id=current_student.id
+    ).first()
+
+    return render_template(
+        "student/placement.html",
+        student=current_student,
+        placement=placement
+    )
+
+
+# ==========================================
+# PLACEMENT STATISTICS
+# ==========================================
+@student.route("/placement-stats")
+def placement_stats():
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    stats = db.session.query(
+        Placement.company,
+        func.count(Placement.id)
+    ).group_by(
+        Placement.company
+    ).all()
+
+    return render_template(
+        "student/placement_stats.html",
+        stats=stats
     )

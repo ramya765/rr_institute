@@ -2,41 +2,96 @@
 <html>
 
 <head>
-
     <title>Student Dashboard | RR Institute</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 min-h-screen">
 
     <!-- Navbar -->
-    <nav class="bg-indigo-700 text-white px-8 py-5 flex justify-between">
+    <nav class="bg-indigo-700 text-white px-8 py-5 flex justify-between items-center">
 
-        <h1 class="text-2xl font-bold">
-            RR Institute
-        </h1>
+        <div>
+            <h1 class="text-2xl font-bold">
+                RR Institute
+            </h1>
+        </div>
 
-        <a href="{{ url_for('auth.logout') }}"
-           class="bg-red-500 px-4 py-2 rounded hover:bg-red-600">
+        <div class="flex items-center gap-4">
 
-            Logout
+            <span class="font-medium">
+                Welcome, {{ student.name }}
+            </span>
 
-        </a>
+            <a href="{{ url_for('auth.logout') }}"
+                class="bg-red-500 px-4 py-2 rounded hover:bg-red-600">
+                Logout
+            </a>
+
+        </div>
 
     </nav>
 
     <!-- Main Content -->
     <div class="p-8">
 
-        <h1 class="text-4xl font-bold text-gray-800">
-            Welcome Student
-        </h1>
+        <!-- Welcome Banner -->
+        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl p-8 shadow-lg">
 
-        <p class="text-gray-500 mt-2">
-            Learn industry skills and get placed.
-        </p>
+            <h1 class="text-4xl font-bold">
+                Welcome {{ student.name }} 👋
+            </h1>
+
+            <p class="mt-3 text-lg">
+                Learn industry skills, complete your training, and get placed.
+            </p>
+
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid md:grid-cols-4 gap-6 mt-8">
+
+            <div class="bg-white rounded-xl shadow p-6">
+                <h3 class="text-gray-500">
+                    Course
+                </h3>
+
+                <h2 class="text-2xl font-bold text-indigo-600 mt-2">
+                    {{ student.course }}
+                </h2>
+            </div>
+
+            <div class="bg-white rounded-xl shadow p-6">
+                <h3 class="text-gray-500">
+                    Batch
+                </h3>
+
+                <h2 class="text-2xl font-bold text-green-600 mt-2">
+                    {{ student.batch }}
+                </h2>
+            </div>
+
+            <div class="bg-white rounded-xl shadow p-6">
+                <h3 class="text-gray-500">
+                    Fees Paid
+                </h3>
+
+                <h2 class="text-2xl font-bold text-blue-600 mt-2">
+                    ₹{{ student.paid_amount }}
+                </h2>
+            </div>
+
+            <div class="bg-white rounded-xl shadow p-6">
+                <h3 class="text-gray-500">
+                    Balance Fee
+                </h3>
+
+                <h2 class="text-2xl font-bold text-red-600 mt-2">
+                    ₹{{ student.balance_amount }}
+                </h2>
+            </div>
+
+        </div>
 
         <!-- Dashboard Cards -->
         <div class="grid md:grid-cols-3 gap-8 mt-10">
@@ -45,15 +100,15 @@
             <div class="bg-white shadow rounded-xl p-6">
 
                 <h2 class="text-xl font-bold">
-                    My Courses
+                    📚 My Courses
                 </h2>
 
                 <p class="mt-3 text-gray-500">
-                    View enrolled courses
+                    View your enrolled courses.
                 </p>
 
                 <a href="{{ url_for('student.my_courses') }}"
-                   class="inline-block mt-5 bg-indigo-600 text-white px-5 py-2 rounded hover:bg-indigo-700">
+                    class="inline-block mt-5 bg-indigo-600 text-white px-5 py-2 rounded hover:bg-indigo-700">
 
                     View Courses
 
@@ -65,15 +120,15 @@
             <div class="bg-white shadow rounded-xl p-6">
 
                 <h2 class="text-xl font-bold">
-                    Available Courses
+                    🎯 Available Courses
                 </h2>
 
                 <p class="mt-3 text-gray-500">
-                    Explore new courses
+                    Explore additional courses.
                 </p>
 
                 <a href="{{ url_for('student.courses') }}"
-                   class="inline-block mt-5 bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700">
+                    class="inline-block mt-5 bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700">
 
                     Explore
 
@@ -85,20 +140,109 @@
             <div class="bg-white shadow rounded-xl p-6">
 
                 <h2 class="text-xl font-bold">
-                    Profile
+                    👤 My Profile
                 </h2>
 
                 <p class="mt-3 text-gray-500">
-                    Manage your account
+                    Manage personal details.
                 </p>
 
-                <button class="mt-5 bg-indigo-600 text-white px-5 py-2 rounded hover:bg-indigo-700">
+                <a href="{{ url_for('student.profile') }}"
+                    class="inline-block mt-5 bg-purple-600 text-white px-5 py-2 rounded hover:bg-purple-700">
 
-                    Profile
+                    View Profile
 
-                </button>
+                </a>
 
             </div>
+
+            <!-- Placement Status -->
+            <div class="bg-white shadow rounded-xl p-6">
+
+                <h2 class="text-xl font-bold">
+                    💼 Placement Status
+                </h2>
+
+                <p class="mt-3 text-gray-500">
+                    Check your placement information.
+                </p>
+
+                <a href="{{ url_for('student.placement') }}"
+                    class="inline-block mt-5 bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700">
+
+                    View Placement
+
+                </a>
+
+            </div>
+
+            <!-- Placement Statistics -->
+            <div class="bg-white shadow rounded-xl p-6">
+
+                <h2 class="text-xl font-bold">
+                    📈 Placement Statistics
+                </h2>
+
+                <p class="mt-3 text-gray-500">
+                    Company-wise placements.
+                </p>
+
+                <a href="{{ url_for('student.placement_stats') }}"
+                    class="inline-block mt-5 bg-orange-600 text-white px-5 py-2 rounded hover:bg-orange-700">
+
+                    View Statistics
+
+                </a>
+
+            </div>
+
+            <!-- Payments -->
+            <div class="bg-white shadow rounded-xl p-6">
+
+                <h2 class="text-xl font-bold">
+                    💳 Payment History
+                </h2>
+
+                <p class="mt-3 text-gray-500">
+                    View fee payments and receipts.
+                </p>
+
+                <a href="{{ url_for('student.payments') }}"
+                    class="inline-block mt-5 bg-teal-600 text-white px-5 py-2 rounded hover:bg-teal-700">
+
+                    View Payments
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- Placement Highlight -->
+        <div class="bg-white rounded-xl shadow mt-10 p-8">
+
+            <h2 class="text-2xl font-bold mb-4">
+                🎉 Placement Opportunities
+            </h2>
+
+            <p class="text-gray-600">
+                RR Institute continuously works with leading companies to provide
+                placement opportunities for students. Keep your profile updated,
+                attend training sessions regularly, and prepare for interviews.
+            </p>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-12 text-center text-gray-500">
+
+            <p>
+                © {{ current_year }} RR Institute
+            </p>
+
+            <p class="mt-2">
+                Student Management Portal
+            </p>
 
         </div>
 

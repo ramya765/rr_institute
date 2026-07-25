@@ -162,24 +162,90 @@ class Testimonial(db.Model):
 # ==========================================
 # PLACEMENTS TABLE
 # ==========================================
+# ==========================================
+# PLACEMENTS TABLE
+# ==========================================
 class Placement(db.Model):
     __tablename__ = "placements"
 
     id = db.Column(db.Integer, primary_key=True)
 
-    student_name = db.Column(db.String(100))
+    student_id = db.Column(
+        db.Integer,
+        db.ForeignKey("students.id"),
+        nullable=False
+    )
 
-    company = db.Column(db.String(100))
+    company = db.Column(
+        db.String(100),
+        nullable=False
+    )
 
-    package = db.Column(db.String(50))
+    designation = db.Column(
+        db.String(100)
+    )
 
-    photo = db.Column(db.String(255))
+    package = db.Column(
+        db.Float
+    )
+
+    placement_date = db.Column(
+        db.Date
+    )
+
+    status = db.Column(
+        db.String(20),
+        default="Placed"
+    )
 
     created_at = db.Column(
         db.DateTime,
         default=datetime.utcnow
     )
 
+    student = db.relationship(
+        "Student",
+        backref=db.backref(
+            "placement",
+            uselist=False
+        )
+    )
+    
+# ==========================================
+# COMPANIES TABLE
+# ==========================================
+
+class Company(db.Model):
+
+    __tablename__ = "companies"
+
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+
+    company = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+
+    photo = db.Column(
+        db.String(255)
+    )
+
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+
+    def __repr__(self):
+
+        return f"<Company {self.company}>"
 
 # ==========================================
 # CONTACT TABLE
@@ -278,7 +344,11 @@ class Student(db.Model):
     name = db.Column(db.String(100), nullable=False)
     dob = db.Column(db.Date)
     gender = db.Column(db.String(20))
-    aadhaar = db.Column(db.String(20), unique=True)
+    aadhaar = db.Column(
+    db.String(20),
+    unique=True,
+    nullable=True
+)
     qualification = db.Column(db.String(100))
     occupation = db.Column(db.String(100))
 

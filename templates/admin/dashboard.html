@@ -313,10 +313,10 @@ class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-5 text-center">
 
 </a>
 
-<a href="{{ url_for('admin.add_placement') }}"
+<a href="{{ url_for('admin.placements') }}"
 class="bg-red-600 hover:bg-red-700 text-white rounded-lg p-5 text-center">
 
-💼 Add Placement
+💼 Placement Management
 
 </a>
 
@@ -541,189 +541,7 @@ class="bg-red-600 hover:bg-red-700 text-white rounded-lg p-5 text-center">
 </div>
 
 </div>
-<!-- ===================== RECENT STUDENTS & ENQUIRIES ===================== -->
 
-<div class="grid lg:grid-cols-2 gap-8 mt-10">
-
-    <!-- Recent Students -->
-
-    <div class="bg-white rounded-xl shadow">
-
-        <div class="border-b px-6 py-4">
-
-            <h2 class="text-2xl font-bold">
-
-                👨‍🎓 Recent Students
-
-            </h2>
-
-        </div>
-
-        <div class="overflow-x-auto">
-
-            <table class="w-full">
-
-                <thead class="bg-gray-100">
-
-                    <tr>
-
-                        <th class="p-4 text-left">Student</th>
-                        <th class="p-4 text-left">Course</th>
-                        <th class="p-4 text-left">Batch</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                {% for student in recent_students %}
-
-                    <tr class="border-t hover:bg-gray-50">
-
-                        <td class="p-4">
-
-                            {{ student.name }}
-
-                        </td>
-
-                        <td class="p-4">
-
-                            {{ student.course.title }}
-
-                        </td>
-
-                        <td class="p-4">
-
-                            {{ student.batch.name }}
-
-                        </td>
-
-                    </tr>
-
-                {% else %}
-
-                    <tr>
-
-                        <td colspan="3"
-                            class="text-center text-gray-500 p-6">
-
-                            No Students Found
-
-                        </td>
-
-                    </tr>
-
-                {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- Recent Enquiries -->
-
-    <div class="bg-white rounded-xl shadow">
-
-        <div class="border-b px-6 py-4">
-
-            <h2 class="text-2xl font-bold">
-
-                📝 Recent Enquiries
-
-            </h2>
-
-        </div>
-
-        <div class="overflow-x-auto">
-
-            <table class="w-full">
-
-                <thead class="bg-gray-100">
-
-                    <tr>
-
-                        <th class="p-4 text-left">
-
-                            Name
-
-                        </th>
-
-                        <th class="p-4 text-left">
-
-                            Course
-
-                        </th>
-
-                        <th class="p-4 text-left">
-
-                            Status
-
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                {% for enquiry in recent_enquiries %}
-
-                    <tr class="border-t hover:bg-gray-50">
-
-                        <td class="p-4">
-
-                            {{ enquiry.name }}
-
-                        </td>
-
-                        <td class="p-4">
-
-                            {{ enquiry.course }}
-
-                        </td>
-
-                        <td class="p-4">
-
-                            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">
-
-                                {{ enquiry.status }}
-
-                            </span>
-
-                        </td>
-
-                    </tr>
-
-                {% else %}
-
-                    <tr>
-
-                        <td colspan="3"
-                            class="text-center text-gray-500 p-6">
-
-                            No Enquiries
-
-                        </td>
-
-                    </tr>
-
-                {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-</div>
 
 
 
@@ -737,71 +555,53 @@ class="bg-red-600 hover:bg-red-700 text-white rounded-lg p-5 text-center">
 
     </h2>
 
-    <div class="grid md:grid-cols-4 gap-6">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-        <div>
+        <div class="bg-green-50 rounded-xl p-6">
 
-            <p class="text-gray-500">
+<p class="text-gray-500">
+Highest Package
+</p>
 
-                Highest Package
+<h2 class="text-3xl font-bold text-green-600 mt-3">
+₹{{ highest_package }} LPA
+</h2>
 
-            </p>
+</div>
+        <div class="bg-indigo-50 rounded-xl p-6">
 
-            <h2 class="text-3xl font-bold text-green-600 mt-2">
+<p class="text-gray-500">
+Average Package
+</p>
 
-                ₹{{ highest_package }} LPA
+<h2 class="text-3xl font-bold text-indigo-600 mt-3">
+₹{{ average_package }} LPA
+</h2>
 
-            </h2>
+</div>
 
-        </div>
+        <div class="bg-blue-50 rounded-xl p-6">
 
-        <div>
+<p class="text-gray-500">
+Hiring Companies
+</p>
 
-            <p class="text-gray-500">
+<h2 class="text-3xl font-bold text-blue-600 mt-3">
+{{ hiring_companies }}
+</h2>
 
-                Average Package
+</div>
+<div class="bg-red-50 rounded-xl p-6">
 
-            </p>
+<p class="text-gray-500">
+Placement Rate
+</p>
 
-            <h2 class="text-3xl font-bold text-indigo-600 mt-2">
+<h2 class="text-3xl font-bold text-red-600 mt-3">
+{{ placement_percentage }}%
+</h2>
 
-                ₹{{ average_package }} LPA
-
-            </h2>
-
-        </div>
-
-        <div>
-
-            <p class="text-gray-500">
-
-                Hiring Companies
-
-            </p>
-
-            <h2 class="text-3xl font-bold text-blue-600 mt-2">
-
-                {{ hiring_companies }}
-
-            </h2>
-
-        </div>
-
-        <div>
-
-            <p class="text-gray-500">
-
-                Placement Rate
-
-            </p>
-
-            <h2 class="text-3xl font-bold text-red-600 mt-2">
-
-                {{ placement_percentage }}%
-
-            </h2>
-
-        </div>
+</div>
 
     </div>
 

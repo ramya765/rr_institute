@@ -242,10 +242,14 @@
                             </label>
 
                             <input
-                                type="text"
-                                name="aadhaar"
-                                maxlength="12"
-                                class="w-full border rounded-lg px-4 py-3 mt-2">
+type="text"
+name="aadhaar"
+required
+maxlength="12"
+minlength="12"
+pattern="[0-9]{12}"
+placeholder="Enter 12 digit Aadhaar number"
+class="w-full border rounded-lg px-4 py-3 mt-2">
 
                         </div>
 
