@@ -1,27 +1,62 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-
-
-from models import Course
+from models import Course, Student, Payment, Placement, Company
 from database import db
-from models import Student
-import os
+from sqlalchemy import func
 from werkzeug.utils import secure_filename
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from models import Course, Student, Payment
-from database import db
 from datetime import datetime
+
+import os
+
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 from reportlab.lib.colors import HexColor
-admin = Blueprint("admin", __name__, url_prefix="/admin")
+
+
+# ==========================================================
+# Blueprint
+# ==========================================================
+
+admin = Blueprint(
+    "admin",
+    __name__,
+    url_prefix="/admin"
+)
+
+
+# ==========================================================
+# Upload Folders
+# ==========================================================
+
 UPLOAD_FOLDER = "static/uploads"
 
-os.makedirs(os.path.join(UPLOAD_FOLDER, "photos"), exist_ok=True)
-os.makedirs(os.path.join(UPLOAD_FOLDER, "aadhaar"), exist_ok=True)
-os.makedirs(os.path.join(UPLOAD_FOLDER, "qualification"), exist_ok=True)
+os.makedirs(
+    os.path.join(UPLOAD_FOLDER, "photos"),
+    exist_ok=True
+)
+
+os.makedirs(
+    os.path.join(UPLOAD_FOLDER, "aadhaar"),
+    exist_ok=True
+)
+
+os.makedirs(
+    os.path.join(UPLOAD_FOLDER, "qualification"),
+    exist_ok=True
+)
+
+os.makedirs(
+    os.path.join(UPLOAD_FOLDER, "companies"),
+    exist_ok=True
+)
+
+
+# ==========================================================
+# Generate Receipt
+# ==========================================================
+
 def generate_receipt(student, payment):
-    
+
     receipt_folder = "static/receipts"
     os.makedirs(receipt_folder, exist_ok=True)
 
@@ -34,9 +69,9 @@ def generate_receipt(student, payment):
 
     width, height = A4
 
-    # ----------------------------
+    # ------------------------------------------------------
     # Logo
-    # ----------------------------
+    # ------------------------------------------------------
 
     logo_path = "static/logo.jpeg"
 
@@ -45,64 +80,92 @@ def generate_receipt(student, payment):
         c.drawImage(
             logo,
             40,
-            height-110,
+            height - 110,
             width=70,
             height=70,
             preserveAspectRatio=True
         )
 
-    # ----------------------------
+    # ------------------------------------------------------
     # Header
-    # ----------------------------
+    # ------------------------------------------------------
 
-    c.setFont("Helvetica-Bold",22)
+    c.setFont("Helvetica-Bold", 22)
     c.setFillColor(HexColor("#C59D2A"))
-    c.drawString(130,height-60,"RR ORIGIN")
+    c.drawString(130, height - 60, "RR ORIGIN")
 
-    c.setFont("Helvetica",12)
+    c.setFont("Helvetica", 12)
     c.setFillColor(HexColor("#555555"))
-    c.drawString(130,height-80,"WHERE CAREERS BEGIN")
+    c.drawString(130, height - 80, "WHERE CAREERS BEGIN")
 
-    c.line(40,height-120,560,height-120)
+    c.line(40, height - 120, 560, height - 120)
 
-    # ----------------------------
+    # ------------------------------------------------------
     # Receipt Title
-    # ----------------------------
+    # ------------------------------------------------------
 
-    c.setFont("Helvetica-Bold",18)
-    c.drawString(190,height-150,"PAYMENT RECEIPT")
+    c.setFont("Helvetica-Bold", 18)
+    c.drawString(180, height - 150, "PAYMENT RECEIPT")
 
-    y = height-190
+    y = height - 190
 
-    c.setFont("Helvetica",12)
+    c.setFont("Helvetica", 12)
 
-    c.drawString(50,y,f"Receipt No : {payment.receipt_number}")
+    c.drawString(
+        50,
+        y,
+        f"Receipt No : {payment.receipt_number}"
+    )
 
-    y-=25
+    y -= 25
 
-    c.drawString(50,y,f"Student Name : {student.name}")
+    c.drawString(
+        50,
+        y,
+        f"Student Name : {student.name}"
+    )
 
-    y-=25
+    y -= 25
 
-    c.drawString(50,y,f"Course : {student.course}")
+    c.drawString(
+        50,
+        y,
+        f"Course : {student.course}"
+    )
 
-    y-=25
+    y -= 25
 
-    c.drawString(50,y,f"Batch : {student.batch}")
+    c.drawString(
+        50,
+        y,
+        f"Batch : {student.batch}"
+    )
 
-    y-=25
+    y -= 25
 
-    c.drawString(50,y,f"Amount Paid : Rs. {payment.amount:,.2f}")
+    c.drawString(
+        50,
+        y,
+        f"Amount Paid : Rs. {payment.amount:,.2f}"
+    )
 
-    y-=25
+    y -= 25
 
-    c.drawString(50,y,f"Remaining Balance : Rs. {student.balance_amount:,.2f}")
+    c.drawString(
+        50,
+        y,
+        f"Remaining Balance : Rs. {student.balance_amount:,.2f}"
+    )
 
-    y-=25
+    y -= 25
 
-    c.drawString(50,y,f"Payment Mode : {payment.payment_mode}")
+    c.drawString(
+        50,
+        y,
+        f"Payment Mode : {payment.payment_mode}"
+    )
 
-    y-=25
+    y -= 25
 
     c.drawString(
         50,
@@ -110,7 +173,7 @@ def generate_receipt(student, payment):
         f"Transaction ID : {payment.transaction_id or '-'}"
     )
 
-    y-=25
+    y -= 25
 
     c.drawString(
         50,
@@ -118,16 +181,20 @@ def generate_receipt(student, payment):
         f"Date : {payment.payment_date.strftime('%d-%m-%Y')}"
     )
 
-    y-=60
+    y -= 60
 
-    c.line(40,y,560,y)
+    c.line(40, y, 560, y)
 
-    y-=30
+    y -= 30
 
-    c.setFont("Helvetica-Bold",14)
-    c.drawString(50,y,"Thank you for choosing RR ORIGIN!")
+    c.setFont("Helvetica-Bold", 14)
+    c.drawString(
+        50,
+        y,
+        "Thank you for choosing RR ORIGIN!"
+    )
 
-    y-=40
+    y -= 40
 
     c.drawRightString(
         540,
@@ -140,15 +207,89 @@ def generate_receipt(student, payment):
     return pdf_path
 
 
+# ==========================================================
 # Dashboard
+# ==========================================================
+# ==========================================================
+# Dashboard
+# ==========================================================
+
 @admin.route("/dashboard")
 def dashboard():
-    return render_template("admin/dashboard.html")
+
+    total_students = Student.query.count()
+
+    total_courses = Course.query.count()
+
+    total_placements = Placement.query.count()
+
+    # Company Count
+    total_companies = Company.query.count()
+
+    # Highest Package
+    highest_package = db.session.query(
+        func.max(Placement.package)
+    ).scalar()
+
+    if highest_package is None:
+        highest_package = 0
+
+    # Average Package
+    average_package = db.session.query(
+        func.avg(Placement.package)
+    ).scalar()
+
+    if average_package is None:
+        average_package = 0
+    else:
+        average_package = round(average_package, 2)
+
+    # Placement Percentage
+    if total_students > 0:
+        placement_percentage = round(
+            (total_placements / total_students) * 100,
+            2
+        )
+    else:
+        placement_percentage = 0
+
+    # Recent Students
+    recent_students = Student.query.order_by(
+        Student.created_at.desc()
+    ).limit(5).all()
+
+    # Recent Placements
+    recent_placements = Placement.query.order_by(
+        Placement.created_at.desc()
+    ).limit(5).all()
+
+    # Companies
+    companies = Company.query.all()
+
+    return render_template(
+        "admin/dashboard.html",
+        total_students=total_students,
+        total_courses=total_courses,
+        total_companies=total_companies,
+        total_placements=total_placements,
+        highest_package=highest_package,
+        average_package=average_package,
+        placement_percentage=placement_percentage,
+        recent_students=recent_students,
+        recent_placements=recent_placements,
+        companies=companies,
+        admin_name="Admin",
+        current_date=datetime.now().strftime("%d-%m-%Y"),
+        current_year=datetime.now().year
+    )
 
 
-# =========================
+# ==========================================================
 # Students
-# =========================
+# ==========================================================
+# ==========================================================
+# Students
+# ==========================================================
 
 @admin.route("/students")
 def students():
@@ -160,6 +301,11 @@ def students():
         students=students
     )
 
+
+# ==========================================================
+# Add Student
+# ==========================================================
+
 @admin.route("/students/add", methods=["GET", "POST"])
 def add_student():
 
@@ -167,15 +313,50 @@ def add_student():
 
     if request.method == "POST":
 
-        # -----------------------------
-        # Upload Photo (Optional)
-        # -----------------------------
+        # ==================================================
+        # Aadhaar Validation
+        # ==================================================
+
+        aadhaar = request.form.get("aadhaar")
+
+        if not aadhaar:
+            flash(
+                "Aadhaar number is mandatory!",
+                "danger"
+            )
+            return redirect(url_for("admin.add_student"))
+
+        if len(aadhaar) != 12 or not aadhaar.isdigit():
+            flash(
+                "Enter valid 12 digit Aadhaar number!",
+                "danger"
+            )
+            return redirect(url_for("admin.add_student"))
+
+        # Duplicate Aadhaar Check
+        existing_student = Student.query.filter_by(
+            aadhaar=aadhaar
+        ).first()
+
+        if existing_student:
+            flash(
+                "Aadhaar number already registered!",
+                "danger"
+            )
+            return redirect(url_for("admin.add_student"))
+
+        # ==================================================
+        # Student Photo Upload
+        # ==================================================
+
         photo_name = None
 
         photo = request.files.get("student_photo")
 
-        if photo and photo.filename != "":
+        if photo and photo.filename:
+
             photo_name = secure_filename(photo.filename)
+
             photo.save(
                 os.path.join(
                     UPLOAD_FOLDER,
@@ -184,31 +365,45 @@ def add_student():
                 )
             )
 
-        # -----------------------------
-        # Aadhaar File (Optional)
-        # -----------------------------
+        # ==================================================
+        # Aadhaar File Upload
+        # ==================================================
+
         aadhaar_name = None
 
-        aadhaar = request.files.get("aadhaar_file")
+        aadhaar_file = request.files.get("aadhaar_file")
 
-        if aadhaar and aadhaar.filename != "":
-            aadhaar_name = secure_filename(aadhaar.filename)
-            aadhaar.save(
-                os.path.join(
-                    UPLOAD_FOLDER,
-                    "aadhaar",
-                    aadhaar_name
-                )
+        if not aadhaar_file or aadhaar_file.filename == "":
+            flash(
+                "Please upload Aadhaar card!",
+                "danger"
             )
+            return redirect(url_for("admin.add_student"))
 
-        # -----------------------------
-        # Qualification File (Optional)
-        # -----------------------------
+        aadhaar_name = secure_filename(
+            aadhaar_file.filename
+        )
+
+        aadhaar_file.save(
+            os.path.join(
+                UPLOAD_FOLDER,
+                "aadhaar",
+                aadhaar_name
+            )
+        )
+
+        # ==================================================
+        # Qualification File Upload
+        # ==================================================
+
         qualification_name = None
 
-        qualification = request.files.get("qualification_files")
+        qualification = request.files.get(
+            "qualification_files"
+        )
 
-        if qualification and qualification.filename != "":
+        if qualification and qualification.filename:
+
             qualification_name = secure_filename(
                 qualification.filename
             )
@@ -221,9 +416,10 @@ def add_student():
                 )
             )
 
-        # -----------------------------
-        # Create Student
-        # -----------------------------
+        # ==================================================
+        # Create Student Object
+        # (Continue in Part 3B)
+        # ==================================================
         student = Student(
 
             name=request.form.get("name"),
@@ -232,7 +428,7 @@ def add_student():
 
             gender=request.form.get("gender"),
 
-            aadhaar=request.form.get("aadhaar"),
+            aadhaar=aadhaar,
 
             qualification=request.form.get("qualification"),
 
@@ -274,43 +470,81 @@ def add_student():
 
             qualification_file=qualification_name,
 
+            status="Active",
+
             remarks=request.form.get("remarks")
-
         )
-        db.session.add(student)
-        db.session.commit()
 
-        # Create Initial Payment Record
-        if student.paid_amount > 0:
+        try:
 
-            receipt_number = "RR" + datetime.now().strftime("%Y%m%d%H%M%S")
+            db.session.add(student)
+            db.session.commit()
 
-            payment = Payment(
-                student_id=student.id,
-                amount=student.paid_amount,
-                payment_mode=student.payment_mode,
-                transaction_id="",
-                receipt_number=receipt_number,
-                received_by="Admin",
-                remarks="Admission Payment"
+            # ==========================================
+            # Initial Payment Entry
+            # ==========================================
+
+            if student.paid_amount > 0:
+
+                receipt_number = (
+                    "RR" +
+                    datetime.now().strftime("%Y%m%d%H%M%S")
+                )
+
+                payment = Payment(
+
+                    student_id=student.id,
+
+                    amount=student.paid_amount,
+
+                    payment_mode=student.payment_mode,
+
+                    transaction_id="",
+
+                    receipt_number=receipt_number,
+
+                    received_by="Admin",
+
+                    remarks="Admission Payment"
+                )
+
+                db.session.add(payment)
+                db.session.commit()
+
+                # Generate Receipt AFTER payment is saved
+                generate_receipt(student, payment)
+
+            flash(
+                "Student added successfully!",
+                "success"
             )
 
-            db.session.add(payment)
-            db.session.commit()
-  
+            return redirect(
+                url_for("admin.students")
+            )
 
-            generate_receipt(student, payment)
+        except Exception as e:
 
-        flash("Student added successfully!", "success")
+            db.session.rollback()
 
-        return redirect(url_for("admin.students"))
+            print(e)
+
+            flash(
+                "Error while adding student!",
+                "danger"
+            )
+
+            return redirect(
+                url_for("admin.add_student")
+            )
 
     return render_template(
         "admin/add_student.html",
         courses=courses
     )
-
-
+# ==========================================================
+# Edit Student
+# ==========================================================
 
 @admin.route("/students/edit/<int:id>", methods=["GET", "POST"])
 def edit_student(id):
@@ -323,9 +557,10 @@ def edit_student(id):
         Payment.payment_date.desc()
     ).all()
 
-    # -----------------------------
+    # --------------------------------------------------
     # Fee Summary
-    # -----------------------------
+    # --------------------------------------------------
+
     total_paid = sum(payment.amount for payment in payments)
 
     balance = (student.course_fee or 0) - total_paid
@@ -348,6 +583,10 @@ def edit_student(id):
 
     if request.method == "POST":
 
+        # ----------------------------------------------
+        # Basic Details
+        # ----------------------------------------------
+
         student.name = request.form.get("name")
         student.dob = request.form.get("dob") or None
         student.gender = request.form.get("gender")
@@ -367,17 +606,21 @@ def edit_student(id):
         student.admission_date = request.form.get("admission_date") or None
 
         if request.form.get("course_fee"):
-            student.course_fee = float(request.form.get("course_fee"))
+            student.course_fee = float(
+                request.form.get("course_fee")
+            )
 
         student.payment_mode = request.form.get("payment_mode")
         student.remarks = request.form.get("remarks")
 
-        # -------------------------
-        # Replace Photo
-        # -------------------------
+        # ----------------------------------------------
+        # Replace Student Photo
+        # ----------------------------------------------
+
         photo = request.files.get("student_photo")
 
         if photo and photo.filename != "":
+
             photo_name = secure_filename(photo.filename)
 
             photo.save(
@@ -390,13 +633,17 @@ def edit_student(id):
 
             student.photo = photo_name
 
-        # -------------------------
-        # Replace Aadhaar
-        # -------------------------
+        # ----------------------------------------------
+        # Replace Aadhaar File
+        # ----------------------------------------------
+
         aadhaar = request.files.get("aadhaar_file")
 
         if aadhaar and aadhaar.filename != "":
-            aadhaar_name = secure_filename(aadhaar.filename)
+
+            aadhaar_name = secure_filename(
+                aadhaar.filename
+            )
 
             aadhaar.save(
                 os.path.join(
@@ -408,12 +655,16 @@ def edit_student(id):
 
             student.aadhaar_file = aadhaar_name
 
-        # -------------------------
-        # Replace Qualification
-        # -------------------------
-        qualification = request.files.get("qualification_files")
+        # ----------------------------------------------
+        # Replace Qualification File
+        # ----------------------------------------------
+
+        qualification = request.files.get(
+            "qualification_files"
+        )
 
         if qualification and qualification.filename != "":
+
             qualification_name = secure_filename(
                 qualification.filename
             )
@@ -435,7 +686,12 @@ def edit_student(id):
             "success"
         )
 
-        return redirect(url_for("admin.edit_student", id=student.id))
+        return redirect(
+            url_for(
+                "admin.edit_student",
+                id=student.id
+            )
+        )
 
     return render_template(
         "admin/edit_student.html",
@@ -447,6 +703,10 @@ def edit_student(id):
         balance=balance,
         status=status
     )
+# ==========================================================
+# Add Payment
+# ==========================================================
+
 @admin.route("/students/<int:id>/payment", methods=["POST"])
 def add_payment(id):
 
@@ -454,101 +714,155 @@ def add_payment(id):
 
     try:
 
-        # ----------------------------
+        # --------------------------------------------------
         # Remaining Balance Check
-        # ----------------------------
-        remaining = (student.course_fee or 0) - (student.paid_amount or 0)
+        # --------------------------------------------------
 
-        # Already fully paid
+        remaining = (
+            (student.course_fee or 0)
+            - (student.paid_amount or 0)
+        )
+
+        # Already Fully Paid
         if remaining <= 0:
             flash(
                 "Course fee is already fully paid. No more payments are allowed.",
                 "warning"
             )
-            return redirect(url_for("admin.edit_student", id=id))
+            return redirect(
+                url_for("admin.edit_student", id=id)
+            )
 
-        amount = float(request.form.get("amount") or 0)
+        amount = float(
+            request.form.get("amount") or 0
+        )
 
-        # Invalid amount
+        # Invalid Amount
         if amount <= 0:
-            flash("Enter a valid payment amount.", "danger")
-            return redirect(url_for("admin.edit_student", id=id))
+            flash(
+                "Enter a valid payment amount.",
+                "danger"
+            )
+            return redirect(
+                url_for("admin.edit_student", id=id)
+            )
 
-        # Over payment
+        # Prevent Over Payment
         if amount > remaining:
             flash(
                 f"Only Rs. {remaining:,.2f} is remaining. Please enter a valid amount.",
                 "danger"
             )
-            return redirect(url_for("admin.edit_student", id=id))
+            return redirect(
+                url_for("admin.edit_student", id=id)
+            )
 
         payment_mode = request.form.get("payment_mode")
         transaction_id = request.form.get("transaction_id")
         remarks = request.form.get("remarks")
 
-        receipt_number = "RR" + datetime.now().strftime("%Y%m%d%H%M%S")
+        receipt_number = (
+            "RR"
+            + datetime.now().strftime("%Y%m%d%H%M%S")
+        )
 
         payment = Payment(
+
             student_id=student.id,
+
             amount=amount,
+
             payment_mode=payment_mode,
+
             transaction_id=transaction_id,
+
             receipt_number=receipt_number,
+
             received_by="Admin",
+
             remarks=remarks
         )
 
         db.session.add(payment)
 
-        # ----------------------------
-        # Update Student Fee
-        # ----------------------------
+        # --------------------------------------------------
+        # Update Student Fee Details
+        # --------------------------------------------------
+
         student.paid_amount += amount
-        student.balance_amount = student.course_fee - student.paid_amount
+
+        student.balance_amount = (
+            student.course_fee - student.paid_amount
+        )
 
         if student.balance_amount <= 0:
+
             student.balance_amount = 0
             student.status = "Paid"
 
         elif student.paid_amount == 0:
+
             student.status = "Pending"
 
         else:
+
             student.status = "Partially Paid"
 
         db.session.commit()
 
+        # --------------------------------------------------
+        # Generate Receipt
+        # --------------------------------------------------
+
         generate_receipt(student, payment)
 
-        flash("Payment Added Successfully", "success")
+        flash(
+            "Payment Added Successfully",
+            "success"
+        )
 
     except Exception as e:
+
         db.session.rollback()
+
         print("ERROR:", e)
-        flash(str(e), "danger")
 
-    return redirect(url_for("admin.edit_student", id=id))
+        flash(
+            str(e),
+            "danger"
+        )
 
+    return redirect(
+        url_for(
+            "admin.edit_student",
+            id=id
+        )
+    )
+# ==========================================================
+# Delete Student
+# ==========================================================
 
-    
 @admin.route("/students/delete/<int:id>", methods=["POST"])
 def delete_student(id):
 
     student = Student.query.get_or_404(id)
-    
 
     db.session.delete(student)
     db.session.commit()
 
-    flash("Student deleted successfully!", "success")
+    flash(
+        "Student deleted successfully!",
+        "success"
+    )
 
-    return redirect(url_for("admin.students"))
+    return redirect(
+        url_for("admin.students")
+    )
 
 
-# =========================
+# ==========================================================
 # Courses
-# =========================
-
+# ==========================================================
 
 @admin.route("/courses")
 def courses():
@@ -565,132 +879,313 @@ def courses():
     )
 
 
+# ==========================================================
+# Add Course
+# ==========================================================
+
 @admin.route("/courses/add", methods=["GET", "POST"])
 def add_course():
 
     if request.method == "POST":
 
         course = Course(
+
             title=request.form.get("title"),
+
             description=request.form.get("description"),
+
             duration=request.form.get("duration"),
+
             mode=request.form.get("mode"),
+
             trainer=request.form.get("trainer"),
-            price=float(request.form.get("price") or 0),
+
+            price=float(
+                request.form.get("price") or 0
+            ),
+
             featured=True if request.form.get("featured") else False
         )
 
         db.session.add(course)
         db.session.commit()
 
-        flash("Course added successfully!", "success")
+        flash(
+            "Course added successfully!",
+            "success"
+        )
 
-        return redirect(url_for("admin.courses"))
+        return redirect(
+            url_for("admin.courses")
+        )
 
-    return render_template("admin/add_course.html")
+    return render_template(
+        "admin/add_course.html"
+    )
 
+
+# ==========================================================
+# Edit Course
+# ==========================================================
 
 @admin.route("/courses/edit/<int:id>")
 def edit_course(id):
-    return render_template("admin/edit_course.html")
 
-
-# =========================
+    return render_template(
+        "admin/edit_course.html"
+    )
+# ==========================================================
 # Companies
-# =========================
+# ==========================================================
 
 @admin.route("/companies")
 def companies():
-    return render_template("admin/companies.html")
+
+    companies = Company.query.all()
+
+    return render_template(
+        "admin/companies.html",
+        companies=companies
+    )
 
 
-@admin.route("/companies/add")
+# ==========================================================
+# Add Company
+# ==========================================================
+
+@admin.route("/companies/add", methods=["GET", "POST"])
 def add_company():
-    return render_template("admin/add_company.html")
+
+    if request.method == "POST":
+
+        company_name = request.form.get("company")
+
+        # ==================================================
+        # Company Logo Upload
+        # ==================================================
+
+        photo_name = None
+
+        photo = request.files.get("photo")
+
+        if photo and photo.filename:
+
+            photo_name = secure_filename(
+                photo.filename
+            )
+
+            photo.save(
+                os.path.join(
+                    UPLOAD_FOLDER,
+                    "companies",
+                    photo_name
+                )
+            )
+
+        company = Company(
+
+            company=company_name,
+
+            photo=photo_name
+        )
+
+        db.session.add(company)
+        db.session.commit()
+
+        flash(
+            "Company added successfully!",
+            "success"
+        )
+
+        return redirect(
+            url_for("admin.companies")
+        )
+
+    return render_template(
+        "admin/add_company.html"
+    )
 
 
-# =========================
+# ==========================================================
 # Placements
-# =========================
+# ==========================================================
+# ==========================================================
+# Placements
+# ==========================================================
 
 @admin.route("/placements")
 def placements():
-    return render_template("admin/placements.html")
+
+    course = request.args.get("course")
+
+    courses = db.session.query(
+        Student.course
+    ).distinct().all()
+
+    if course:
+        students = Student.query.filter_by(
+            course=course
+        ).all()
+    else:
+        students = Student.query.all()
+
+    return render_template(
+        "admin/placements.html",
+        students=students,
+        courses=[c[0] for c in courses]
+    )
 
 
-@admin.route("/placements/add")
-def add_placement():
-    return render_template("admin/add_placement.html")
+# ==========================================================
+# Add Placement
+# ==========================================================
+
+@admin.route("/add-placement/<int:student_id>", methods=["GET", "POST"])
+def add_placement(student_id):
+
+    student = Student.query.get_or_404(student_id)
+
+    companies = Company.query.all()
+
+    if request.method == "POST":
+
+        placement = Placement(
+
+            student_id=student.id,
+
+            company=request.form.get("company"),
+
+            designation=request.form.get("designation"),
+
+            package=float(
+                request.form.get("package")
+            ),
+
+            placement_date=datetime.strptime(
+                request.form.get("placement_date"),
+                "%Y-%m-%d"
+            ).date(),
+
+            status="Placed"
+        )
+
+        db.session.add(placement)
+        db.session.commit()
+
+        flash(
+            "Placement Added Successfully",
+            "success"
+        )
+
+        return redirect(
+            url_for("admin.placements")
+        )
+
+    return render_template(
+        "admin/add_placement.html",
+        student=student,
+        companies=companies
+    )
 
 
-# =========================
+# ==========================================================
 # Faculty
-# =========================
+# ==========================================================
+# ==========================================================
+# Faculty
+# ==========================================================
 
 @admin.route("/faculty")
 def faculty():
-    return render_template("admin/faculty.html")
+
+    return render_template(
+        "admin/faculty.html"
+    )
 
 
 @admin.route("/faculty/add")
 def add_faculty():
-    return render_template("admin/add_faculty.html")
+
+    return render_template(
+        "admin/add_faculty.html"
+    )
 
 
-# =========================
+# ==========================================================
 # Batches
-# =========================
+# ==========================================================
 
 @admin.route("/batches")
 def batches():
-    return render_template("admin/batches.html")
+
+    return render_template(
+        "admin/batches.html"
+    )
 
 
 @admin.route("/batches/add")
 def add_batch():
-    return render_template("admin/add_batch.html")
+
+    return render_template(
+        "admin/add_batch.html"
+    )
 
 
-# =========================
+# ==========================================================
 # Enquiries
-# =========================
+# ==========================================================
 
 @admin.route("/enquiries")
 def enquiries():
-    return render_template("admin/enquiries.html")
+
+    return render_template(
+        "admin/enquiries.html"
+    )
 
 
-# =========================
+# ==========================================================
 # Gallery
-# =========================
+# ==========================================================
 
 @admin.route("/gallery")
 def gallery():
-    return render_template("admin/gallery.html")
+
+    return render_template(
+        "admin/gallery.html"
+    )
 
 
-# =========================
+# ==========================================================
 # Testimonials
-# =========================
+# ==========================================================
 
 @admin.route("/testimonials")
 def testimonials():
-    return render_template("admin/testimonials.html")
+
+    return render_template(
+        "admin/testimonials.html"
+    )
 
 
-# =========================
+# ==========================================================
 # Notifications
-# =========================
+# ==========================================================
 
 @admin.route("/notifications")
 def notifications():
-    return render_template("admin/notifications.html")
+
+    return render_template(
+        "admin/notifications.html"
+    )
 
 
-# =========================
+# ==========================================================
 # Settings
-# =========================
+# ==========================================================
 
 @admin.route("/settings")
 def settings():
-    return render_template("admin/settings.html")
+
+    return render_template(
+        "admin/settings.html"
+    )
