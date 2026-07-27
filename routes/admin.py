@@ -313,50 +313,15 @@ def add_student():
 
     if request.method == "POST":
 
-        # ==================================================
-        # Aadhaar Validation
-        # ==================================================
-
-        aadhaar = request.form.get("aadhaar")
-
-        if not aadhaar:
-            flash(
-                "Aadhaar number is mandatory!",
-                "danger"
-            )
-            return redirect(url_for("admin.add_student"))
-
-        if len(aadhaar) != 12 or not aadhaar.isdigit():
-            flash(
-                "Enter valid 12 digit Aadhaar number!",
-                "danger"
-            )
-            return redirect(url_for("admin.add_student"))
-
-        # Duplicate Aadhaar Check
-        existing_student = Student.query.filter_by(
-            aadhaar=aadhaar
-        ).first()
-
-        if existing_student:
-            flash(
-                "Aadhaar number already registered!",
-                "danger"
-            )
-            return redirect(url_for("admin.add_student"))
-
-        # ==================================================
-        # Student Photo Upload
-        # ==================================================
-
+        # -----------------------------
+        # Upload Photo (Optional)
+        # -----------------------------
         photo_name = None
 
         photo = request.files.get("student_photo")
 
-        if photo and photo.filename:
-
+        if photo and photo.filename != "":
             photo_name = secure_filename(photo.filename)
-
             photo.save(
                 os.path.join(
                     UPLOAD_FOLDER,
@@ -365,45 +330,31 @@ def add_student():
                 )
             )
 
-        # ==================================================
-        # Aadhaar File Upload
-        # ==================================================
-
+        # -----------------------------
+        # Aadhaar File (Optional)
+        # -----------------------------
         aadhaar_name = None
 
-        aadhaar_file = request.files.get("aadhaar_file")
+        aadhaar = request.files.get("aadhaar_file")
 
-        if not aadhaar_file or aadhaar_file.filename == "":
-            flash(
-                "Please upload Aadhaar card!",
-                "danger"
+        if aadhaar and aadhaar.filename != "":
+            aadhaar_name = secure_filename(aadhaar.filename)
+            aadhaar.save(
+                os.path.join(
+                    UPLOAD_FOLDER,
+                    "aadhaar",
+                    aadhaar_name
+                )
             )
-            return redirect(url_for("admin.add_student"))
 
-        aadhaar_name = secure_filename(
-            aadhaar_file.filename
-        )
-
-        aadhaar_file.save(
-            os.path.join(
-                UPLOAD_FOLDER,
-                "aadhaar",
-                aadhaar_name
-            )
-        )
-
-        # ==================================================
-        # Qualification File Upload
-        # ==================================================
-
+        # -----------------------------
+        # Qualification File (Optional)
+        # -----------------------------
         qualification_name = None
 
-        qualification = request.files.get(
-            "qualification_files"
-        )
+        qualification = request.files.get("qualification_files")
 
-        if qualification and qualification.filename:
-
+        if qualification and qualification.filename != "":
             qualification_name = secure_filename(
                 qualification.filename
             )
@@ -416,10 +367,9 @@ def add_student():
                 )
             )
 
-        # ==================================================
-        # Create Student Object
-        # (Continue in Part 3B)
-        # ==================================================
+        # -----------------------------
+        # Create Student
+        # -----------------------------
         student = Student(
 
             name=request.form.get("name"),
@@ -428,7 +378,7 @@ def add_student():
 
             gender=request.form.get("gender"),
 
-            aadhaar=aadhaar,
+            aadhaar=request.form.get("aadhaar"),
 
             qualification=request.form.get("qualification"),
 
@@ -470,78 +420,43 @@ def add_student():
 
             qualification_file=qualification_name,
 
-            status="Active",
-
             remarks=request.form.get("remarks")
+
         )
+        db.session.add(student)
+        db.session.commit()
+        
 
-        try:
+        # Create Initial Payment Record
+        if student.paid_amount > 0:
 
-            db.session.add(student)
+            receipt_number = "RR" + datetime.now().strftime("%Y%m%d%H%M%S")
+
+            payment = Payment(
+                student_id=student.id,
+                amount=student.paid_amount,
+                payment_mode=student.payment_mode,
+                transaction_id="",
+                receipt_number=receipt_number,
+                received_by="Admin",
+                remarks="Admission Payment"
+            )
+
+            db.session.add(payment)
             db.session.commit()
 
-            # ==========================================
-            # Initial Payment Entry
-            # ==========================================
+            generate_receipt(student, payment)
 
-            if student.paid_amount > 0:
+        flash("Student added successfully!", "success")
 
-                receipt_number = (
-                    "RR" +
-                    datetime.now().strftime("%Y%m%d%H%M%S")
-                )
-
-                payment = Payment(
-
-                    student_id=student.id,
-
-                    amount=student.paid_amount,
-
-                    payment_mode=student.payment_mode,
-
-                    transaction_id="",
-
-                    receipt_number=receipt_number,
-
-                    received_by="Admin",
-
-                    remarks="Admission Payment"
-                )
-
-                db.session.add(payment)
-                db.session.commit()
-
-                # Generate Receipt AFTER payment is saved
-                generate_receipt(student, payment)
-
-            flash(
-                "Student added successfully!",
-                "success"
-            )
-
-            return redirect(
-                url_for("admin.students")
-            )
-
-        except Exception as e:
-
-            db.session.rollback()
-
-            print(e)
-
-            flash(
-                "Error while adding student!",
-                "danger"
-            )
-
-            return redirect(
-                url_for("admin.add_student")
-            )
+        return redirect(url_for("admin.students"))
 
     return render_template(
         "admin/add_student.html",
         courses=courses
     )
+
+
 # ==========================================================
 # Edit Student
 # ==========================================================
