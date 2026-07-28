@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Batch Students</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="max-w-7xl mx-auto p-8">
+
+<div class="bg-white rounded-xl shadow p-6 mb-6">
+
+<h1 class="text-3xl font-bold">
+{{ batch.batch_name }}
+</h1>
+
+<p class="text-gray-600 mt-2">
+Course: {{ batch.course }}
+</p>
+
+<p class="text-gray-600">
+Trainer: {{ batch.trainer }}
+</p>
+
+<p class="text-gray-600">
+Shift: {{ batch.batch_type }}
+</p>
+
+</div>
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+
+<table class="w-full">
+
+<thead class="bg-indigo-600 text-white">
+
+<tr>
+
+<th class="p-4">ID</th>
+<th class="p-4">Student Name</th>
+<th class="p-4">Phone</th>
+<th class="p-4">Email</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for student in students %}
+
+<tr class="border-b">
+
+<td class="p-4">{{ student.id }}</td>
+<td class="p-4">{{ student.name }}</td>
+<td class="p-4">{{ student.mobile }}</td>
+<td class="p-4">{{ student.email }}</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+
+<td colspan="4" class="p-10 text-center text-gray-500">
+
+No students found for this batch
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

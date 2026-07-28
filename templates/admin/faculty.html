@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Management | RR Institute</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+
+<div class="max-w-7xl mx-auto p-8">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800">
+                👨‍🏫 Faculty Management
+            </h1>
+
+            <p class="text-gray-500 mt-2">
+                Manage all trainers and faculty members
+            </p>
+        </div>
+
+        <a href="{{ url_for('admin.add_faculty') }}"
+           class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg shadow">
+
+            ➕ Add Faculty
+
+        </a>
+
+    </div>
+
+    <!-- Total Faculty Card -->
+
+    <div class="bg-white rounded-xl shadow p-6 mb-8">
+
+        <p class="text-gray-500 text-lg">
+            Total Faculty
+        </p>
+
+        <h2 class="text-5xl font-bold text-indigo-600 mt-2">
+            {{ faculties|length }}
+        </h2>
+
+    </div>
+
+    <!-- Faculty Table -->
+
+    <div class="bg-white rounded-xl shadow overflow-hidden">
+
+        <div class="bg-indigo-600 text-white px-6 py-4">
+
+            <h2 class="text-xl font-semibold">
+                Faculty List
+            </h2>
+
+        </div>
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full">
+
+                <thead class="bg-gray-100">
+
+                <tr>
+
+                    <th class="p-4 text-left">Faculty ID</th>
+                    <th class="p-4 text-left">Name</th>
+                    <th class="p-4 text-left">Subject</th>
+                    <th class="p-4 text-left">Email</th>
+                    <th class="p-4 text-left">Phone</th>
+                    <th class="p-4 text-left">Batch</th>
+                    <th class="p-4 text-left">Payment</th>
+                    <th class="p-4 text-left">Status</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for faculty in faculties %}
+
+                <tr class="border-b hover:bg-gray-50">
+
+                    <td class="p-4">
+                        {{ faculty.faculty_id }}
+                    </td>
+
+                    <td class="p-4 font-semibold">
+                        {{ faculty.name }}
+                    </td>
+
+                    <td class="p-4">
+                        {{ faculty.subject }}
+                    </td>
+
+                    <td class="p-4">
+                        {{ faculty.email }}
+                    </td>
+
+                    <td class="p-4">
+                        {{ faculty.phone }}
+                    </td>
+
+                    <td class="p-4">
+                        {{ faculty.batch }}
+                    </td>
+
+                    <td class="p-4 font-semibold text-green-600">
+                        ₹{{ faculty.payment }}
+                    </td>
+
+                    <td class="p-4">
+
+                        {% if faculty.status == "Active" %}
+
+                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                            Active
+                        </span>
+
+                        {% else %}
+
+                        <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
+                            Inactive
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="8" class="text-center p-10 text-gray-500">
+
+                        No Faculty Added Yet
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

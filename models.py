@@ -56,19 +56,38 @@ class Payment(db.Model):
 # USERS TABLE
 # ==========================================
 class User(db.Model):
+
     __tablename__ = "users"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+    
 
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(
+        db.String(100),
+        nullable=False
+    )
 
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    email = db.Column(
+        db.String(120),
+        unique=True,
+        nullable=False
+    )
 
-    phone = db.Column(db.String(15), nullable=False)
+    phone = db.Column(
+        db.String(15),
+        nullable=False
+    )
 
-    password = db.Column(db.String(255), nullable=False)
+    password = db.Column(
+        db.String(255),
+        nullable=False
+    )
 
     role = db.Column(
+<<<<<<< HEAD
         db.Enum("admin", "student"),
         default="student",
         nullable=False
@@ -84,7 +103,13 @@ class User(db.Model):
     portal_stage = db.Column(
         db.String(30),
         default="explorer"
+=======
+        db.Enum("admin","student"),
+        nullable=False,
+        default="student"
+>>>>>>> 7bdaa8db9e97b9f5bc4168a85529215a452b1f2f
     )
+
 
     created_at = db.Column(
         db.DateTime,
@@ -92,6 +117,17 @@ class User(db.Model):
     )
 
 # ==========================================
+
+    student_profile = db.relationship(
+    "Student",
+    backref="user",
+    uselist=False,
+)
+
+
+    def __repr__(self):
+
+        return f"<User {self.name}>"# ==========================================
 # COURSES TABLE
 # ==========================================
 class Course(db.Model):
@@ -165,14 +201,144 @@ class Testimonial(db.Model):
         db.DateTime,
         default=datetime.utcnow
     )
+class Faculty(db.Model):
+    __tablename__ = "faculty"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    faculty_id = db.Column(db.String(20), unique=True)
+
+    name = db.Column(db.String(100), nullable=False)
+
+    email = db.Column(db.String(120), unique=True)
+
+    phone = db.Column(db.String(15))
+
+    subject = db.Column(db.String(100))
+
+    qualification = db.Column(db.String(100))
+
+    experience = db.Column(db.String(50))
+
+    batch = db.Column(db.String(50))
+    # Morning / Afternoon / Evening / Night
+
+    joining_date = db.Column(db.Date)
+
+    payment = db.Column(db.Float)
+
+    status = db.Column(db.String(20), default="Active")
+
+    address = db.Column(db.Text)
+
+    photo = db.Column(db.String(255))
 
 
-# ==========================================
+
+class Batch(db.Model):
+    __tablename__ = "batches"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    batch_id = db.Column(
+        db.String(20),
+        unique=True
+    )
+
+    batch_name = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    course = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    trainer = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    batch_type = db.Column(
+        db.String(30),
+        nullable=False
+    )
+
+    timing = db.Column(
+        db.String(50)
+    )
+
+    start_date = db.Column(
+        db.Date
+    )
+
+    status = db.Column(
+        db.String(20),
+        default="Active"
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )# ==========================================
 # PLACEMENTS TABLE
 # ==========================================
 # ==========================================
 # PLACEMENTS TABLE
 # ==========================================
+
+from datetime import datetime
+from database import db
+
+class Enquiry(db.Model):
+
+    __tablename__ = "enquiries"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    name = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    email = db.Column(
+        db.String(120),
+        nullable=False
+    )
+
+    phone = db.Column(
+        db.String(20),
+        nullable=False
+    )
+
+    course = db.Column(
+        db.String(100)
+    )
+
+    qualification = db.Column(
+        db.String(100)
+    )
+
+    message = db.Column(
+        db.Text
+    )
+
+    status = db.Column(
+        db.String(20),
+        default="New"
+    )
+    # New / Contacted / Interested / Converted
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+    
+    
 class Placement(db.Model):
     __tablename__ = "placements"
 
@@ -212,12 +378,13 @@ class Placement(db.Model):
     )
 
     student = db.relationship(
-        "Student",
-        backref=db.backref(
-            "placement",
-            uselist=False
-        )
+    "Student",
+    backref=db.backref(
+        "placement",
+        uselist=False,
+        
     )
+)
     
 # ==========================================
 # COMPANIES TABLE
@@ -316,20 +483,33 @@ class WebsiteSetting(db.Model):
 # ==========================================
 # ENROLLMENTS TABLE
 # ==========================================
+# ==========================================
+# ENROLLMENTS TABLE
+# ==========================================
 class Enrollment(db.Model):
+
     __tablename__ = "enrollments"
 
-    id = db.Column(db.Integer, primary_key=True)
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
 
     student_id = db.Column(
         db.Integer,
-        db.ForeignKey("users.id")
+        db.ForeignKey("students.id"),
+        nullable=False
     )
+
 
     course_id = db.Column(
         db.Integer,
-        db.ForeignKey("courses.id")
+        db.ForeignKey("courses.id"),
+        nullable=False
     )
+
 
     enrolled_at = db.Column(
         db.DateTime,
@@ -353,6 +533,21 @@ class Lead(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     # ==========================================
 # STUDENTS TABLE
+
+
+    student = db.relationship(
+    "Student",
+    backref=db.backref(
+        "enrollments",
+        cascade="all, delete-orphan"
+    )
+)
+
+
+    course = db.relationship(
+        "Course",
+        backref="enrollments"
+    )# STUDENTS TABLE
 # ==========================================
 # ==========================================
 # STUDENTS TABLE
@@ -361,6 +556,12 @@ class Student(db.Model):
     __tablename__ = "students"
 
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(
+    db.Integer,
+    db.ForeignKey("users.id"),
+    unique=True,
+    nullable=True
+)
 
     # --------------------------
     # Personal Details
@@ -437,6 +638,8 @@ class Student(db.Model):
         db.DateTime,
         default=datetime.utcnow
     )
+    
+    
 
     def __repr__(self):
         return f"<Student {self.name}>"
