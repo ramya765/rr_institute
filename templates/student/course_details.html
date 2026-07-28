@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>{{ course.title }} | RR IT Origin</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+font-family:'Inter',sans-serif;
+background:#f4f7fb;
+}
+
+.hero{
+background:linear-gradient(135deg,#4338ca,#2563eb);
+}
+
+.card{
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.sticky-card{
+position:sticky;
+top:30px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HERO -->
+
+<section class="hero text-white">
+
+<div class="max-w-7xl mx-auto px-6 py-14">
+
+<a href="{{ url_for('student.courses') }}"
+class="inline-block bg-white text-indigo-700 px-5 py-2 rounded-lg font-semibold mb-8">
+
+← Back to Courses
+
+</a>
+
+<div class="grid lg:grid-cols-2 gap-12 items-center">
+
+<div>
+
+<span class="bg-yellow-400 text-black px-4 py-1 rounded-full text-sm font-bold">
+
+⭐ Featured Course
+
+</span>
+
+<h1 class="text-5xl font-extrabold mt-5">
+
+{{ course.title }}
+
+</h1>
+
+<p class="mt-6 text-lg text-indigo-100">
+
+{{ course.description }}
+
+</p>
+
+<div class="flex flex-wrap gap-6 mt-8">
+
+<div>
+
+<div class="text-yellow-300 text-2xl">
+
+★★★★★
+
+</div>
+
+<div>
+
+4.9 Rating
+
+</div>
+
+</div>
+
+<div>
+
+<div class="text-2xl font-bold">
+
+3000+
+
+</div>
+
+<div>
+
+Students
+
+</div>
+
+</div>
+
+<div>
+
+<div class="text-2xl font-bold">
+
+100%
+
+</div>
+
+<div>
+
+Placement Assistance
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+{% if course.image %}
+
+<img
+src="{{ url_for('static', filename='uploads/' + course.image) }}"
+class="rounded-3xl shadow-2xl w-full">
+
+{% else %}
+
+<div class="h-96 rounded-3xl bg-white/20 flex items-center justify-center">
+
+<span class="text-9xl font-bold">
+
+{{ course.title[0] }}
+
+</span>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- CONTENT -->
+
+<!-- <section class="max-w-7xl mx-auto px-6 py-14">
+
+<div class="grid lg:grid-cols-3 gap-10">
+
+LEFT -->
+
+<div class="lg:col-span-2 space-y-8">
+    <!-- About Course -->
+
+<div class="bg-white rounded-2xl shadow-lg p-8">
+
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">
+
+        About this Course
+
+    </h2>
+
+    <p class="text-gray-600 leading-8 text-lg">
+
+        {{ course.description }}
+
+    </p>
+
+</div>
+
+
+<!-- What You'll Learn -->
+
+<div class="bg-white rounded-2xl shadow-lg p-8">
+
+    <h2 class="text-3xl font-bold text-gray-800 mb-8">
+
+        What You'll Learn
+
+    </h2>
+
+    <div class="grid md:grid-cols-2 gap-5">
+
+        <div class="flex items-center">
+
+            <span class="text-green-600 text-xl mr-3">✔</span>
+
+            Industry Ready Skills
+
+        </div>
+
+        <div class="flex items-center">
+
+            <span class="text-green-600 text-xl mr-3">✔</span>
+
+            Live Projects
+
+        </div>
+
+        <div class="flex items-center">
+
+            <span class="text-green-600 text-xl mr-3">✔</span>
+
+            Resume Preparation
+
+        </div>
+
+        <div class="flex items-center">
+
+            <span class="text-green-600 text-xl mr-3">✔</span>
+
+            Mock Interviews
+
+        </div>
+
+        <div class="flex items-center">
+
+            <span class="text-green-600 text-xl mr-3">✔</span>
+
+            Placement Assistance
+
+        </div>
+
+        <div class="flex items-center">
+
+            <span class="text-green-600 text-xl mr-3">✔</span>
+
+            Certificate after Completion
+
+        </div>
+
+        <div class="flex items-center">
+
+            <span class="text-green-600 text-xl mr-3">✔</span>
+
+            Doubt Clearing Sessions
+
+        </div>
+
+        <div class="flex items-center">
+
+            <span class="text-green-600 text-xl mr-3">✔</span>
+
+            Lifetime Learning Support
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Course Highlights -->
+
+<div class="bg-white rounded-2xl shadow-lg p-8">
+
+    <h2 class="text-3xl font-bold mb-8">
+
+        Course Highlights
+
+    </h2>
+
+    <div class="grid md:grid-cols-2 gap-6">
+
+        <div class="border rounded-xl p-6">
+
+            <h3 class="text-gray-500">
+
+                Duration
+
+            </h3>
+
+            <p class="text-2xl font-bold mt-2">
+
+                {{ course.duration }}
+
+            </p>
+
+        </div>
+
+        <div class="border rounded-xl p-6">
+
+            <h3 class="text-gray-500">
+
+                Trainer
+
+            </h3>
+
+            <p class="text-2xl font-bold mt-2">
+
+                {{ course.trainer }}
+
+            </p>
+
+        </div>
+
+        <div class="border rounded-xl p-6">
+
+            <h3 class="text-gray-500">
+
+                Learning Mode
+
+            </h3>
+
+            <p class="text-2xl font-bold mt-2">
+
+                {{ course.mode }}
+
+            </p>
+
+        </div>
+
+        <div class="border rounded-xl p-6">
+
+            <h3 class="text-gray-500">
+
+                Certification
+
+            </h3>
+
+            <p class="text-2xl font-bold mt-2 text-green-600">
+
+                Included
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Course Curriculum -->
+
+<div class="bg-white rounded-2xl shadow-lg p-8">
+
+    <h2 class="text-3xl font-bold mb-8">
+
+        Course Curriculum
+
+    </h2>
+
+    <div class="space-y-4">
+
+        <div class="border rounded-xl p-5">
+
+            <h3 class="font-bold text-lg">
+
+                Module 1
+
+            </h3>
+
+            <p class="text-gray-600 mt-2">
+
+                Fundamentals & Basics
+
+            </p>
+
+        </div>
+
+        <div class="border rounded-xl p-5">
+
+            <h3 class="font-bold text-lg">
+
+                Module 2
+
+            </h3>
+
+            <p class="text-gray-600 mt-2">
+
+                Intermediate Concepts
+
+            </p>
+
+        </div>
+
+        <div class="border rounded-xl p-5">
+
+            <h3 class="font-bold text-lg">
+
+                Module 3
+
+            </h3>
+
+            <p class="text-gray-600 mt-2">
+
+                Advanced Concepts
+
+            </p>
+
+        </div>
+
+        <div class="border rounded-xl p-5">
+
+            <h3 class="font-bold text-lg">
+
+                Module 4
+
+            </h3>
+
+            <p class="text-gray-600 mt-2">
+
+                Live Projects & Interview Preparation
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Trainer -->
+
+<div class="bg-white rounded-2xl shadow-lg p-8">
+
+    <h2 class="text-3xl font-bold mb-8">
+
+        Meet Your Trainer
+
+    </h2>
+
+    <div class="flex flex-col md:flex-row gap-8 items-center">
+
+        <div class="w-36 h-36 rounded-full bg-indigo-600 flex items-center justify-center text-white text-5xl font-bold">
+
+            {{ course.trainer[0] }}
+
+        </div>
+
+        <div>
+
+            <h3 class="text-2xl font-bold">
+
+                {{ course.trainer }}
+
+            </h3>
+
+            <p class="text-gray-600 mt-4 leading-8">
+
+                Experienced industry professional with practical knowledge,
+                real-time project experience, interview preparation guidance,
+                and dedicated mentoring throughout the course.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- RIGHT SIDEBAR -->
+
+</div>
+
+<div>
+
+    <div class="sticky-card">
+
+        <!-- Price Card -->
+
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+
+            {% if course.image %}
+
+            <img
+                src="{{ url_for('static', filename='uploads/' + course.image) }}"
+                class="w-full h-56 object-cover">
+
+            {% else %}
+
+            <div class="h-56 bg-gradient-to-r from-indigo-600 to-blue-600 flex items-center justify-center">
+
+                <span class="text-7xl font-bold text-white">
+
+                    {{ course.title[0] }}
+
+                </span>
+
+            </div>
+
+            {% endif %}
+
+            <div class="p-8">
+
+                <div class="text-center">
+
+                    <p class="text-gray-500">
+
+                        Course Fee
+
+                    </p>
+
+                    <h1 class="text-5xl font-extrabold text-indigo-700 mt-2">
+
+                        ₹{{ course.price }}
+
+                    </h1>
+
+                </div>
+
+                <div class="space-y-4 mt-8">
+
+                    <div class="flex justify-between">
+
+                        <span>📅 Duration</span>
+
+                        <strong>{{ course.duration }}</strong>
+
+                    </div>
+
+                    <div class="flex justify-between">
+
+                        <span>💻 Mode</span>
+
+                        <strong>{{ course.mode }}</strong>
+
+                    </div>
+
+                    <div class="flex justify-between">
+
+                        <span>👨‍🏫 Trainer</span>
+
+                        <strong>{{ course.trainer }}</strong>
+
+                    </div>
+
+                    <div class="flex justify-between">
+
+                        <span>🎓 Certificate</span>
+
+                        <strong>Included</strong>
+
+                    </div>
+
+                    <div class="flex justify-between">
+
+                        <span>💼 Placement</span>
+
+                        <strong>Support</strong>
+
+                    </div>
+
+                </div>
+
+                <a href="{{ url_for('student.enroll', course_id=course.id) }}"
+                   class="block text-center mt-8 bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-bold text-lg">
+
+                    🚀 Enroll Now
+
+                </a>
+
+                <a href="https://wa.me/91XXXXXXXXXX"
+                   target="_blank"
+                   class="block text-center mt-4 border border-green-600 text-green-700 hover:bg-green-600 hover:text-white py-4 rounded-xl font-semibold">
+
+                    WhatsApp Enquiry
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- Why Choose Us -->
+
+        <div class="bg-white rounded-2xl shadow-lg mt-8 p-6">
+
+            <h2 class="text-2xl font-bold mb-5">
+
+                Why RR IT Origin?
+
+            </h2>
+
+            <ul class="space-y-3 text-gray-600">
+
+                <li>✅ Live Industry Projects</li>
+
+                <li>✅ Mock Interviews</li>
+
+                <li>✅ Resume Building</li>
+
+                <li>✅ Placement Assistance</li>
+
+                <li>✅ Expert Trainers</li>
+
+                <li>✅ Lifetime Support</li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Student Reviews -->
+
+<section class="max-w-7xl mx-auto px-6 mb-16">
+
+    <h2 class="text-4xl font-bold mb-8">
+
+        Student Reviews
+
+    </h2>
+
+    <div class="grid md:grid-cols-3 gap-8">
+
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+
+            <div class="text-yellow-500 text-xl">
+
+                ★★★★★
+
+            </div>
+
+            <p class="mt-4 text-gray-600">
+
+                Excellent trainer and real-time projects helped me gain confidence.
+
+            </p>
+
+            <h4 class="mt-5 font-bold">
+
+                Rahul
+
+            </h4>
+
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+
+            <div class="text-yellow-500 text-xl">
+
+                ★★★★★
+
+            </div>
+
+            <p class="mt-4 text-gray-600">
+
+                Great placement support and practical learning experience.
+
+            </p>
+
+            <h4 class="mt-5 font-bold">
+
+                Sneha
+
+            </h4>
+
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+
+            <div class="text-yellow-500 text-xl">
+
+                ★★★★★
+
+            </div>
+
+            <p class="mt-4 text-gray-600">
+
+                Highly recommended for freshers and working professionals.
+
+            </p>
+
+            <h4 class="mt-5 font-bold">
+
+                Arjun
+
+            </h4>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Footer -->
+
+<footer class="bg-gray-900 text-gray-300">
+
+    <div class="max-w-7xl mx-auto px-6 py-12">
+
+        <div class="text-center">
+
+            <h2 class="text-3xl font-bold text-white">
+
+                RR IT Origin
+
+            </h2>
+
+            <p class="mt-4">
+
+                Learn • Build • Get Placed 🚀
+
+            </p>
+
+            <p class="mt-2">
+
+                © 2026 RR IT Origin. All Rights Reserved.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+</body>
+
+</html>

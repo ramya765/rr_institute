@@ -499,19 +499,17 @@ class Enrollment(db.Model):
         default=datetime.utcnow
     )
 class Lead(db.Model):
+    __tablename__ = "lead"
+
     id = db.Column(db.Integer, primary_key=True)
-
     name = db.Column(db.String(100))
-
     mobile = db.Column(db.String(20))
-
-    email = db.Column(db.String(100))
-
+    email = db.Column(db.String(120))
     course = db.Column(db.String(100))
-
     message = db.Column(db.Text)
-
     status = db.Column(db.String(20), default="Pending")
+
+
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     # ==========================================

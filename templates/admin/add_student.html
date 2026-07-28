@@ -153,6 +153,7 @@
             <form method="POST"
                   enctype="multipart/form-data"
                   class="space-y-8">
+                  
 
                 <!-- ================= PERSONAL INFORMATION ================= -->
 
@@ -180,11 +181,12 @@
 
                             </label>
 
-                            <input
-                                type="text"
-                                name="name"
-                                required
-                                class="w-full border rounded-lg px-4 py-3 mt-2">
+                        <input
+    type="text"
+    name="name"
+    value="{{ lead.name if lead else '' }}"
+    required
+    class="w-full border rounded-lg px-4 py-3 mt-2">
 
                         </div>
 
@@ -383,10 +385,11 @@ class="w-full border rounded-lg px-4 py-3 mt-2">
             </label>
 
             <input
-                type="text"
-                name="mobile"
-                required
-                class="w-full border rounded-lg px-4 py-3 mt-2">
+    type="text"
+    name="mobile"
+    value="{{ lead.mobile if lead else '' }}"
+    required
+    class="w-full border rounded-lg px-4 py-3 mt-2">
 
         </div>
 
@@ -413,10 +416,11 @@ class="w-full border rounded-lg px-4 py-3 mt-2">
 
             </label>
 
-            <input
-                type="email"
-                name="email"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
+           <input
+    type="email"
+    name="email"
+    value="{{ lead.email if lead else '' }}"
+    class="w-full border rounded-lg px-4 py-3 mt-2">
 
         </div>
 

@@ -1,19 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from models import (
-    Course,
-    Student,
-    Payment,
-    Placement,
-    Company,
-    Faculty,
-    Batch,
-    Enquiry
-)
+from models import Course, Student, Payment, Placement, Company,Lead
 from database import db
 from sqlalchemy import func
 from werkzeug.utils import secure_filename
-from datetime import datetime
-from models import Faculty
 from datetime import datetime
 
 import os
@@ -28,16 +17,11 @@ from reportlab.lib.colors import HexColor
 # Blueprint
 # ==========================================================
 
-
-
-
 admin = Blueprint(
     "admin",
     __name__,
     url_prefix="/admin"
 )
-
-
 
 
 # ==========================================================
@@ -241,6 +225,7 @@ def dashboard():
 
     # Company Count
     total_companies = Company.query.count()
+    total_leads = Lead.query.count()
 
     # Highest Package
     highest_package = db.session.query(
@@ -288,6 +273,7 @@ def dashboard():
         total_courses=total_courses,
         total_companies=total_companies,
         total_placements=total_placements,
+        total_leads=total_leads,
         highest_package=highest_package,
         average_package=average_package,
         placement_percentage=placement_percentage,
@@ -300,152 +286,7 @@ def dashboard():
     )
 
 
-import random
-
-
-import random
-
-@admin.route("/batches")
-def batches():
-
-    batches = Batch.query.order_by(
-        Batch.id.desc()
-    ).all()
-
-    return render_template(
-        "admin/batches.html",
-        batches=batches
-    )
-
 # ==========================================================
-# Enquiries
-# ==========================================================
-
-@admin.route("/enquiries")
-def enquiries():
-
-    enquiries = Enquiry.query.order_by(
-        Enquiry.id.desc()
-    ).all()
-
-
-    return render_template(
-        "admin/enquiries.html",
-        enquiries=enquiries
-    )
-
-@admin.route("/batches/add", methods=["GET", "POST"])
-def add_batch():
-
-    courses = Course.query.all()
-
-    faculties = Faculty.query.all()
-
-    if request.method == "POST":
-
-        batch = Batch(
-
-            batch_id=f"BAT{random.randint(1000,9999)}",
-
-            batch_name=request.form.get("batch_name"),
-
-            course=request.form.get("course"),
-
-            trainer=request.form.get("trainer"),
-
-            batch_type=request.form.get("batch_type"),
-
-            timing=request.form.get("timing"),
-
-            start_date=request.form.get("start_date") or None,
-
-            status=request.form.get("status")
-
-        )
-
-        db.session.add(batch)
-        db.session.commit()
-
-        flash(
-            "Batch Added Successfully",
-            "success"
-        )
-
-        return redirect(
-            url_for("admin.batches")
-        )
-
-    return render_template(
-        "admin/add_batch.html",
-        courses=courses,
-        faculties=faculties
-    )
-
-
-@admin.route("/batches/<int:id>/students")
-def batch_students(id):
-
-    batch = Batch.query.get_or_404(id)
-
-    students = Student.query.filter_by(
-        course=batch.course,
-        trainer=batch.trainer,
-        batch=batch.batch_type
-    ).all()
-
-    return render_template(
-        "admin/batch_students.html",
-        batch=batch,
-        students=students
-    )
-@admin.route("/faculty/add", methods=["GET", "POST"])
-def add_faculty():
-
-    if request.method == "POST":
-
-        faculty = Faculty(
-
-            faculty_id=f"FAC{random.randint(1000,9999)}",
-
-            name=request.form.get("name"),
-
-            email=request.form.get("email"),
-
-            phone=request.form.get("phone"),
-
-            subject=request.form.get("subject"),
-
-            qualification=request.form.get("qualification"),
-
-            experience=request.form.get("experience"),
-
-            batch=request.form.get("batch"),
-
-            payment=request.form.get("payment"),
-
-            status=request.form.get("status"),
-
-            address=request.form.get("address"),
-
-            joining_date=datetime.now()
-
-        )
-
-        db.session.add(faculty)
-        db.session.commit()
-
-        flash(
-            "Faculty Added Successfully",
-            "success"
-        )
-
-        return redirect(
-            url_for("admin.faculty")
-        )
-
-    return render_template(
-        "admin/add_faculty.html"
-    )# ==========================================================
 # Students
 # ==========================================================
 # ==========================================================
@@ -469,6 +310,11 @@ def students():
 
 @admin.route("/students/add", methods=["GET", "POST"])
 def add_student():
+    lead = None
+
+    lead_id = request.args.get("lead_id")
+    if lead_id:
+        lead = Lead.query.get_or_404(lead_id)
 
     courses = Course.query.all()
 
@@ -587,6 +433,8 @@ def add_student():
         db.session.add(student)
         db.session.commit()
         
+        
+        
 
         # Create Initial Payment Record
         if student.paid_amount > 0:
@@ -613,9 +461,10 @@ def add_student():
         return redirect(url_for("admin.students"))
 
     return render_template(
-        "admin/add_student.html",
-        courses=courses
-    )
+    "admin/add_student.html",
+    courses=courses,
+    lead=lead
+)
 
 
 # ==========================================================
@@ -1174,21 +1023,49 @@ def add_placement(student_id):
 @admin.route("/faculty")
 def faculty():
 
-    faculties = Faculty.query.order_by(
-        Faculty.id.desc()
-    ).all()
-
     return render_template(
-        "admin/faculty.html",
-        faculties=faculties
+        "admin/faculty.html"
     )
 
 
+@admin.route("/faculty/add")
+def add_faculty():
+
+    return render_template(
+        "admin/add_faculty.html"
+    )
 
 
+# ==========================================================
+# Batches
+# ==========================================================
+
+@admin.route("/batches")
+def batches():
+
+    return render_template(
+        "admin/batches.html"
+    )
 
 
+@admin.route("/batches/add")
+def add_batch():
 
+    return render_template(
+        "admin/add_batch.html"
+    )
+
+
+# ==========================================================
+# Enquiries
+# ==========================================================
+
+@admin.route("/enquiries")
+def enquiries():
+
+    return render_template(
+        "admin/enquiries.html"
+    )
 
 
 # ==========================================================
@@ -1237,3 +1114,53 @@ def settings():
     return render_template(
         "admin/settings.html"
     )
+
+@admin.route("/leads")
+def leads():
+
+    leads = Lead.query.order_by(
+        Lead.created_at.desc()
+    ).all()
+
+    return render_template(
+        "admin/leads.html",
+        leads=leads
+    )
+@admin.route("/lead/<int:lead_id>")
+def lead_details(lead_id):
+
+    lead = Lead.query.get_or_404(lead_id)
+
+    return render_template(
+        "admin/lead_details.html",
+        lead=lead
+    )
+@admin.route("/lead/<int:lead_id>/approve")
+def approve_lead(lead_id):
+
+    lead = Lead.query.get_or_404(lead_id)
+
+    # Update status
+    lead.status = "Approved"
+    db.session.commit()
+
+    # Redirect to Add Student page with lead_id
+    return redirect(
+        url_for("admin.add_student", lead_id=lead.id)
+    )
+# ==========================================================
+# Reject Lead
+# ==========================================================
+
+@admin.route("/lead/<int:lead_id>/reject")
+def reject_lead(lead_id):
+
+    lead = Lead.query.get_or_404(lead_id)
+
+    lead.status = "Rejected"
+
+    db.session.commit()
+
+    flash("Lead Rejected Successfully", "warning")
+
+    return redirect(url_for("admin.leads"))
