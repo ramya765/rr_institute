@@ -70,18 +70,26 @@ class User(db.Model):
 
     role = db.Column(
         db.Enum("admin", "student"),
-        nullable=False,
-        default="student"
+        default="student",
+        nullable=False
+    )
+
+    # NEW
+    is_active = db.Column(
+        db.Boolean,
+        default=False
+    )
+
+    # NEW
+    portal_stage = db.Column(
+        db.String(30),
+        default="explorer"
     )
 
     created_at = db.Column(
         db.DateTime,
         default=datetime.utcnow
     )
-
-    def __repr__(self):
-        return f"<User {self.name}>"
-
 
 # ==========================================
 # COURSES TABLE
@@ -327,6 +335,22 @@ class Enrollment(db.Model):
         db.DateTime,
         default=datetime.utcnow
     )
+class Lead(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    name = db.Column(db.String(100))
+
+    mobile = db.Column(db.String(20))
+
+    email = db.Column(db.String(100))
+
+    course = db.Column(db.String(100))
+
+    message = db.Column(db.Text)
+
+    status = db.Column(db.String(20), default="Pending")
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     # ==========================================
 # STUDENTS TABLE
 # ==========================================
@@ -416,3 +440,4 @@ class Student(db.Model):
 
     def __repr__(self):
         return f"<Student {self.name}>"
+    
