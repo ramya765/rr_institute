@@ -56,76 +56,37 @@ class Payment(db.Model):
 # USERS TABLE
 # ==========================================
 class User(db.Model):
-
     __tablename__ = "users"
 
-    id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
-    
+    id = db.Column(db.Integer, primary_key=True)
 
-    name = db.Column(
-        db.String(100),
-        nullable=False
-    )
+    name = db.Column(db.String(100), nullable=False)
 
-    email = db.Column(
-        db.String(120),
-        unique=True,
-        nullable=False
-    )
+    email = db.Column(db.String(120), unique=True, nullable=False)
 
-    phone = db.Column(
-        db.String(15),
-        nullable=False
-    )
+    phone = db.Column(db.String(15), nullable=False)
 
-    password = db.Column(
-        db.String(255),
-        nullable=False
-    )
+    password = db.Column(db.String(255), nullable=False)
 
     role = db.Column(
-<<<<<<< HEAD
         db.Enum("admin", "student"),
         default="student",
         nullable=False
     )
-
-    # NEW
-    is_active = db.Column(
-        db.Boolean,
-        default=False
-    )
-
-    # NEW
-    portal_stage = db.Column(
-        db.String(30),
-        default="explorer"
-=======
-        db.Enum("admin","student"),
-        nullable=False,
-        default="student"
->>>>>>> 7bdaa8db9e97b9f5bc4168a85529215a452b1f2f
-    )
-
 
     created_at = db.Column(
         db.DateTime,
         default=datetime.utcnow
     )
 
-# ==========================================
-
     student_profile = db.relationship(
-    "Student",
-    backref="user",
-    uselist=False,
-)
-
+        "Student",
+        backref="user",
+        uselist=False
+    )
 
     def __repr__(self):
+        return f"<User {self.name}>"
 
         return f"<User {self.name}>"# ==========================================
 # COURSES TABLE
