@@ -56,17 +56,35 @@ class Payment(db.Model):
 # USERS TABLE
 # ==========================================
 class User(db.Model):
+
     __tablename__ = "users"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+    
 
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(
+        db.String(100),
+        nullable=False
+    )
 
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    email = db.Column(
+        db.String(120),
+        unique=True,
+        nullable=False
+    )
 
-    phone = db.Column(db.String(15), nullable=False)
+    phone = db.Column(
+        db.String(15),
+        nullable=False
+    )
 
-    password = db.Column(db.String(255), nullable=False)
+    password = db.Column(
+        db.String(255),
+        nullable=False
+    )
 
     role = db.Column(
         db.Enum("admin", "student"),
@@ -74,21 +92,25 @@ class User(db.Model):
         nullable=False
     )
 
+    # NEW
+    is_active = db.Column(
+        db.Boolean,
+        default=False
+    )
+
+    # NEW
+    portal_stage = db.Column(
+        db.String(30),
+        default="explorer"
+    )
+
+
     created_at = db.Column(
         db.DateTime,
         default=datetime.utcnow
     )
 
-    student_profile = db.relationship(
-        "Student",
-        backref="user",
-        uselist=False
-    )
-
-    def __repr__(self):
-        return f"<User {self.name}>"
-
-        return f"<User {self.name}>"# ==========================================
+# ==========================================
 # COURSES TABLE
 # ==========================================
 class Course(db.Model):
@@ -494,21 +516,6 @@ class Lead(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     # ==========================================
 # STUDENTS TABLE
-
-
-    student = db.relationship(
-    "Student",
-    backref=db.backref(
-        "enrollments",
-        cascade="all, delete-orphan"
-    )
-)
-
-
-    course = db.relationship(
-        "Course",
-        backref="enrollments"
-    )# STUDENTS TABLE
 # ==========================================
 # ==========================================
 # STUDENTS TABLE
