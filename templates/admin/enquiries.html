@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Enquiries | RR Institute</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+
+<body class="bg-gray-100">
+
+
+<div class="max-w-7xl mx-auto p-8">
+
+
+<!-- Header -->
+
+<div class="flex justify-between items-center mb-8">
+
+
+<div>
+
+<h1 class="text-3xl font-bold text-gray-800">
+
+📝 Student Enquiries
+
+</h1>
+
+
+<p class="text-gray-500 mt-2">
+
+Manage website registrations and interested students
+
+</p>
+
+
+</div>
+
+
+<div class="bg-indigo-600 text-white px-6 py-4 rounded-xl">
+
+
+<p class="text-sm">
+
+Total Enquiries
+
+</p>
+
+
+<h2 class="text-3xl font-bold">
+
+{{ enquiries|length }}
+
+</h2>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- Table -->
+
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+
+
+<table class="w-full">
+
+
+<thead class="bg-indigo-900 text-white">
+
+
+<tr>
+
+
+<th class="p-4 text-left">
+ID
+</th>
+
+
+<th class="p-4 text-left">
+Student
+</th>
+
+
+<th class="p-4 text-left">
+Email
+</th>
+
+
+<th class="p-4 text-left">
+Phone
+</th>
+
+
+<th class="p-4 text-left">
+Course
+</th>
+
+
+<th class="p-4 text-left">
+Status
+</th>
+
+
+<th class="p-4 text-left">
+Date
+</th>
+
+
+<th class="p-4">
+Actions
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+
+<tbody>
+
+
+{% for enquiry in enquiries %}
+
+
+<tr class="border-b hover:bg-gray-50">
+
+
+<td class="p-4">
+
+{{ enquiry.id }}
+
+</td>
+
+
+
+<td class="p-4 font-semibold">
+
+{{ enquiry.name }}
+
+</td>
+
+
+
+<td class="p-4">
+
+{{ enquiry.email }}
+
+</td>
+
+
+
+<td class="p-4">
+
+{{ enquiry.phone }}
+
+</td>
+
+
+
+<td class="p-4">
+
+<span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+
+{{ enquiry.course }}
+
+</span>
+
+</td>
+
+
+
+
+<td class="p-4">
+
+
+{% if enquiry.status == "New" %}
+
+
+<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">
+
+{{ enquiry.status }}
+
+</span>
+
+
+{% elif enquiry.status == "Contacted" %}
+
+
+<span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+
+{{ enquiry.status }}
+
+</span>
+
+
+{% else %}
+
+
+<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full">
+
+{{ enquiry.status }}
+
+</span>
+
+
+{% endif %}
+
+
+
+</td>
+
+
+
+
+<td class="p-4">
+
+{{ enquiry.created_at.strftime("%d-%m-%Y") }}
+
+</td>
+
+
+
+
+<td class="p-4">
+
+
+<a href="https://wa.me/91{{ enquiry.phone }}"
+target="_blank"
+class="bg-green-600 text-white px-4 py-2 rounded-lg">
+
+WhatsApp
+
+</a>
+
+
+</td>
+
+
+</tr>
+
+
+{% else %}
+
+
+<tr>
+
+<td colspan="8"
+class="text-center p-10 text-gray-500">
+
+No Enquiries Found
+
+</td>
+
+</tr>
+
+
+{% endfor %}
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+</div>
+
+
+</body>
+
+</html>
