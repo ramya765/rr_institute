@@ -265,29 +265,21 @@ Action
 <td class="px-6 py-5">
 
 
-{% if student.placement %}
-
+{% if student.placements %}
 
 <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full font-semibold">
 
-
 ✓ Placed
 
-
 </span>
-
 
 {% else %}
 
-
 <span class="bg-red-100 text-red-700 px-4 py-2 rounded-full font-semibold">
-
 
 ✕ Unplaced
 
-
 </span>
-
 
 {% endif %}
 
@@ -305,7 +297,7 @@ Action
 
 
 
-{% if not student.placement %}
+{% if not student.placements %}
 
 
 

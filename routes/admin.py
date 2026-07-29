@@ -296,14 +296,95 @@ def dashboard():
 @admin.route("/students")
 def students():
 
-    students = Student.query.all()
+
+    search = request.args.get("search")
+    course_filter = request.args.get("course")
+    batch_filter = request.args.get("batch")
+
+
+    query = Student.query
+
+
+
+    if search:
+
+        query = query.filter(
+            Student.name.like(f"%{search}%")
+        )
+
+
+    if course_filter:
+
+        query = query.filter(
+            Student.course == course_filter
+        )
+
+
+    if batch_filter:
+
+        query = query.filter(
+            Student.batch == batch_filter
+        )
+
+
+    students = query.all()
+
+
+
+    total_students = Student.query.count()
+
+
+
+    active_students = Student.query.filter(
+        Student.status.in_([
+            "Paid",
+            "Partially Paid",
+            "Unpaid",
+            "Active"
+        ])
+    ).count()
+
+
+
+    placed_students = Student.query.filter_by(
+        status="Placed"
+    ).count()
+
+
+
+    pending_fees = db.session.query(
+        func.sum(Student.balance_amount)
+    ).scalar() or 0
+
+
+
+    courses = Course.query.all()
+
+
+
+    batches = db.session.query(
+        Student.batch
+    ).distinct().all()
+
+
 
     return render_template(
         "admin/students.html",
-        students=students
+
+        students=students,
+
+        total_students=total_students,
+
+        active_students=active_students,
+
+        placed_students=placed_students,
+
+        pending_fees=pending_fees,
+
+        courses=courses,
+
+        batches=[b[0] for b in batches]
     )
-
-
 # ==========================================================
 # Add Student
 # ==========================================================
@@ -410,6 +491,7 @@ def add_student():
             batch=request.form.get("batch"),
 
             trainer=request.form.get("trainer"),
+            status="Unpaid",
 
             admission_date=request.form.get("admission_date") or None,
 
@@ -725,13 +807,13 @@ def add_payment(id):
             student.balance_amount = 0
             student.status = "Paid"
 
-        elif student.paid_amount == 0:
+        elif student.paid_amount > 0:
 
-            student.status = "Pending"
+            student.status = "Partially Paid"
 
         else:
 
-            student.status = "Partially Paid"
+            student.status = "Unpaid"
 
         db.session.commit()
 
@@ -859,6 +941,18 @@ def edit_course(id):
     return render_template(
         "admin/edit_course.html"
     )
+    
+@admin.route('/course/delete/<int:id>')
+def delete_course(id):
+
+    course = Course.query.get_or_404(id)
+
+    db.session.delete(course)
+    db.session.commit()
+
+    flash("Course deleted successfully","success")
+
+    return redirect(url_for('admin.courses'))
 # ==========================================================
 # Companies
 # ==========================================================
@@ -972,15 +1066,44 @@ def add_placement(student_id):
 
     companies = Company.query.all()
 
+
     if request.method == "POST":
+
+        company = request.form.get("company")
+        designation = request.form.get("designation")
+
+
+        # CHECK DUPLICATE
+
+        existing = Placement.query.filter_by(
+            student_id=student.id,
+            company=company,
+            designation=designation
+        ).first()
+
+
+        if existing:
+
+            flash(
+                "This student already has this company and designation!",
+                "danger"
+            )
+
+            return redirect(
+                url_for(
+                    "admin.add_placement",
+                    student_id=student.id
+                )
+            )
+
 
         placement = Placement(
 
             student_id=student.id,
 
-            company=request.form.get("company"),
+            company=company,
 
-            designation=request.form.get("designation"),
+            designation=designation,
 
             package=float(
                 request.form.get("package")
@@ -994,24 +1117,28 @@ def add_placement(student_id):
             status="Placed"
         )
 
+
         db.session.add(placement)
+        student.status = "Placed"
         db.session.commit()
+
 
         flash(
             "Placement Added Successfully",
             "success"
         )
 
+
         return redirect(
             url_for("admin.placements")
         )
+
 
     return render_template(
         "admin/add_placement.html",
         student=student,
         companies=companies
     )
-
 
 # ==========================================================
 # Faculty

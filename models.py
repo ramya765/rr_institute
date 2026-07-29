@@ -323,9 +323,13 @@ class Enquiry(db.Model):
     
     
 class Placement(db.Model):
+
     __tablename__ = "placements"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
 
     student_id = db.Column(
         db.Integer,
@@ -360,15 +364,25 @@ class Placement(db.Model):
         default=datetime.utcnow
     )
 
+
     student = db.relationship(
-    "Student",
-    backref=db.backref(
-        "placement",
-        uselist=False,
-        
+        "Student",
+        backref=db.backref(
+            "placements",
+            lazy=True
+        )
     )
-)
-    
+
+
+    # PREVENT DUPLICATES
+    __table_args__ = (
+        db.UniqueConstraint(
+            "student_id",
+            "company",
+            "designation",
+            name="unique_student_company_designation"
+        ),
+    )
 # ==========================================
 # COMPANIES TABLE
 # ==========================================
