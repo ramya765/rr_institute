@@ -1,9 +1,13 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from models import Course, Student, Payment, Placement, Company,Lead
-from database import db
+from models import Course, Student, Payment, Placement, Company, Lead, User
+from database import db, bcrypt
 from sqlalchemy import func
 from werkzeug.utils import secure_filename
 from datetime import datetime
+from flask_mail import Message
+from mail_config import mail
+import secrets
+
 
 import os
 
@@ -389,27 +393,38 @@ def students():
 # Add Student
 # ==========================================================
 
+
 @admin.route("/students/add", methods=["GET", "POST"])
 def add_student():
+
     lead = None
 
     lead_id = request.args.get("lead_id")
+
     if lead_id:
         lead = Lead.query.get_or_404(lead_id)
 
+
     courses = Course.query.all()
+
 
     if request.method == "POST":
 
-        # -----------------------------
-        # Upload Photo (Optional)
-        # -----------------------------
+
+        # ==============================
+        # Upload Photo
+        # ==============================
+
         photo_name = None
 
         photo = request.files.get("student_photo")
 
         if photo and photo.filename != "":
-            photo_name = secure_filename(photo.filename)
+
+            photo_name = secure_filename(
+                photo.filename
+            )
+
             photo.save(
                 os.path.join(
                     UPLOAD_FOLDER,
@@ -418,15 +433,23 @@ def add_student():
                 )
             )
 
-        # -----------------------------
-        # Aadhaar File (Optional)
-        # -----------------------------
+
+
+        # ==============================
+        # Upload Aadhaar
+        # ==============================
+
         aadhaar_name = None
 
         aadhaar = request.files.get("aadhaar_file")
 
+
         if aadhaar and aadhaar.filename != "":
-            aadhaar_name = secure_filename(aadhaar.filename)
+
+            aadhaar_name = secure_filename(
+                aadhaar.filename
+            )
+
             aadhaar.save(
                 os.path.join(
                     UPLOAD_FOLDER,
@@ -435,17 +458,25 @@ def add_student():
                 )
             )
 
-        # -----------------------------
-        # Qualification File (Optional)
-        # -----------------------------
+
+
+        # ==============================
+        # Upload Qualification
+        # ==============================
+
         qualification_name = None
 
-        qualification = request.files.get("qualification_files")
+        qualification = request.files.get(
+            "qualification_files"
+        )
+
 
         if qualification and qualification.filename != "":
+
             qualification_name = secure_filename(
                 qualification.filename
             )
+
 
             qualification.save(
                 os.path.join(
@@ -455,9 +486,13 @@ def add_student():
                 )
             )
 
-        # -----------------------------
+
+
+        # ==============================
         # Create Student
-        # -----------------------------
+        # ==============================
+
+
         student = Student(
 
             name=request.form.get("name"),
@@ -491,17 +526,33 @@ def add_student():
             batch=request.form.get("batch"),
 
             trainer=request.form.get("trainer"),
+
             status="Unpaid",
 
-            admission_date=request.form.get("admission_date") or None,
+            admission_date=request.form.get(
+                "admission_date"
+            ) or None,
 
-            course_fee=float(request.form.get("course_fee") or 0),
 
-            paid_amount=float(request.form.get("paid_amount") or 0),
+            course_fee=float(
+                request.form.get("course_fee") or 0
+            ),
 
-            balance_amount=float(request.form.get("balance_amount") or 0),
 
-            payment_mode=request.form.get("payment_mode"),
+            paid_amount=float(
+                request.form.get("paid_amount") or 0
+            ),
+
+
+            balance_amount=float(
+                request.form.get("balance_amount") or 0
+            ),
+
+
+            payment_mode=request.form.get(
+                "payment_mode"
+            ),
+
 
             photo=photo_name,
 
@@ -510,45 +561,250 @@ def add_student():
             qualification_file=qualification_name,
 
             remarks=request.form.get("remarks")
-
         )
+
+
+
         db.session.add(student)
+
         db.session.commit()
-        
-        
-        
 
-        # Create Initial Payment Record
-        if student.paid_amount > 0:
 
-            receipt_number = "RR" + datetime.now().strftime("%Y%m%d%H%M%S")
 
-            payment = Payment(
-                student_id=student.id,
-                amount=student.paid_amount,
-                payment_mode=student.payment_mode,
-                transaction_id="",
-                receipt_number=receipt_number,
-                received_by="Admin",
-                remarks="Admission Payment"
-            )
+        # ==================================================
+        # CREATE LOGIN + SEND EMAIL ALWAYS
+        # ==================================================
 
-            db.session.add(payment)
+
+        if student.email:
+
+
+            plain_password = secrets.token_urlsafe(8)
+
+
+
+            user = User.query.filter_by(
+                email=student.email
+            ).first()
+
+
+
+            if user:
+
+
+                # Existing user update
+
+                user.name = student.name
+
+                user.phone = student.mobile
+
+                user.password = bcrypt.generate_password_hash(
+                    plain_password
+                ).decode("utf-8")
+
+
+            else:
+
+
+                # New user create
+
+                user = User(
+
+                    name=student.name,
+
+                    email=student.email,
+
+                    phone=student.mobile,
+
+                    password=bcrypt.generate_password_hash(
+                        plain_password
+                    ).decode("utf-8"),
+
+                    role="student",
+
+                    is_active=True,
+
+                    portal_stage="student"
+
+                )
+
+
+                db.session.add(user)
+
+
+
             db.session.commit()
 
-            generate_receipt(student, payment)
 
-        flash("Student added successfully!", "success")
 
-        return redirect(url_for("admin.students"))
+            # Connect student with user
+
+            student.user_id = user.id
+
+            db.session.commit()
+
+
+
+            # ==============================
+            # SEND EMAIL
+            # ==============================
+
+            try:
+
+
+                msg = Message(
+
+                    subject="RR Origin Student Portal Login",
+
+                    recipients=[
+                        student.email
+                    ]
+
+                )
+
+
+                msg.body = f"""
+
+Hello {student.name},
+
+
+Welcome to RR Origin.
+
+
+Your Student Portal Login Details:
+
+
+Email:
+{student.email}
+
+
+Password:
+{plain_password}
+
+
+Login URL:
+
+http://127.0.0.1:5000/login
+
+
+
+Please change your password after login.
+
+
+Regards,
+
+RR Origin Team
+
+"""
+
+
+                mail.send(msg)
+
+
+
+                print("==============================")
+
+                print("EMAIL SENT SUCCESSFULLY")
+
+                print("TO:", student.email)
+
+                print("==============================")
+
+
+
+            except Exception as e:
+
+
+                print("==============================")
+
+                print("EMAIL ERROR:", e)
+
+                print("==============================")
+
+
+
+
+            print("==============================")
+
+            print("STUDENT LOGIN CREATED")
+
+            print("EMAIL:", student.email)
+
+            print("PASSWORD:", plain_password)
+
+            print("==============================")
+
+
+
+
+        # ==================================================
+        # INITIAL PAYMENT
+        # ==================================================
+
+
+        if student.paid_amount > 0:
+
+
+            receipt_number = (
+                "RR"
+                +
+                datetime.now().strftime(
+                    "%Y%m%d%H%M%S"
+                )
+            )
+
+
+            payment = Payment(
+
+                student_id=student.id,
+
+                amount=student.paid_amount,
+
+                payment_mode=student.payment_mode,
+
+                transaction_id="",
+
+                receipt_number=receipt_number,
+
+                received_by="Admin",
+
+                remarks="Admission Payment"
+
+            )
+
+
+            db.session.add(payment)
+
+            db.session.commit()
+
+
+
+            generate_receipt(
+                student,
+                payment
+            )
+
+
+
+        flash(
+            "Student added successfully!",
+            "success"
+        )
+
+
+        return redirect(
+            url_for(
+                "admin.students"
+            )
+        )
+
+
 
     return render_template(
-    "admin/add_student.html",
-    courses=courses,
-    lead=lead
-)
-
-
+        "admin/add_student.html",
+        courses=courses,
+        lead=lead
+    )
 # ==========================================================
 # Edit Student
 # ==========================================================

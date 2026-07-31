@@ -14,13 +14,36 @@ student = Blueprint("student", __name__, url_prefix="/student")
 @student.route("/dashboard")
 def dashboard():
     return render_template("student/dashboard.html")
+from models import User, Student
+
 @student.route("/explorer")
 def explorer_dashboard():
 
     if "user_id" not in session:
         return redirect(url_for("auth.login"))
 
-    return render_template("student/explorer_dashboard.html")
+    user = User.query.get(
+        session["user_id"]
+    )
+
+    # Only admin-created students
+    if user.portal_stage != "student":
+        flash(
+            "Access Denied",
+            "danger"
+        )
+        return redirect(
+            url_for("student.dashboard")
+        )
+
+    student = Student.query.filter_by(
+        user_id=user.id
+    ).first()
+
+    return render_template(
+        "student/explorer_dashboard.html",
+        student=student
+    )
 @student.route("/courses")
 def courses():
 
