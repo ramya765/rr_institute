@@ -4,59 +4,101 @@ from flask import (
     session,
     redirect,
     url_for,
-    request
+    request,
+    flash
 )
-from models import Course,Lead
-from database import db
 
-student = Blueprint("student", __name__, url_prefix="/student")
+from database import db
+from models import Course, Lead, User, Student, Batch
+
+student = Blueprint(
+    "student",
+    __name__,
+    url_prefix="/student"
+)
+
+# ==========================================
+# Student Dashboard
+# ==========================================
 
 @student.route("/dashboard")
 def dashboard():
-    return render_template("student/dashboard.html")
-from models import User, Student
 
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    user = User.query.get(session["user_id"])
+
+    student_record = Student.query.filter_by(
+        user_id=user.id
+    ).first()
+
+    return render_template(
+        "student/dashboard.html",
+        student=student_record,
+        user=user
+    )
+
+
+# ==========================================
+# Explorer Dashboard
+# ==========================================
 @student.route("/explorer")
 def explorer_dashboard():
 
     if "user_id" not in session:
         return redirect(url_for("auth.login"))
 
-    user = User.query.get(
-        session["user_id"]
-    )
+    user = User.query.get(session["user_id"])
 
-    # Only admin-created students
-    if user.portal_stage != "student":
-        flash(
-            "Access Denied",
-            "danger"
-        )
+    if user.portal_stage != "explorer":
+        flash("Access Denied", "danger")
         return redirect(
             url_for("student.dashboard")
         )
 
-    student = Student.query.filter_by(
-        user_id=user.id
+    student_record = Student.query.filter_by(
+        email=user.email
     ).first()
+
+    # ADD THIS
+    batch = None
+
+    if student_record:
+        batch = Batch.query.filter_by(
+            batch_type=student_record.batch,
+            course=student_record.course
+        ).first()
 
     return render_template(
         "student/explorer_dashboard.html",
-        student=student
+        student=student_record,
+        user=user,
+        batch=batch
     )
+# ==========================================
+# Courses
+# ==========================================
+
 @student.route("/courses")
 def courses():
 
     if "user_id" not in session:
         return redirect(url_for("auth.login"))
 
-    courses = Course.query.order_by(Course.id.desc()).all()
+    courses = Course.query.order_by(
+        Course.id.desc()
+    ).all()
 
     return render_template(
         "student/courses.html",
         courses=courses
     )
 
+
+# ==========================================
+# Course Details
+# ==========================================
 
 @student.route("/course/<int:course_id>")
 def course_details(course_id):
@@ -70,6 +112,12 @@ def course_details(course_id):
         "student/course_details.html",
         course=course
     )
+
+
+# ==========================================
+# Enroll Form
+# ==========================================
+
 @student.route("/enroll/<int:course_id>")
 def enroll(course_id):
 
@@ -82,12 +130,18 @@ def enroll(course_id):
         "enroll.html",
         course=course
     )
-from flask import request
+
+
+# ==========================================
+# Submit Enrollment
+# ==========================================
 
 @student.route("/submit-enrollment", methods=["POST"])
 def submit_enrollment():
 
-    course = Course.query.get(request.form.get("course_id"))
+    course = Course.query.get_or_404(
+        request.form.get("course_id")
+    )
 
     lead = Lead(
         name=request.form.get("name"),
@@ -101,7 +155,18 @@ def submit_enrollment():
     db.session.add(lead)
     db.session.commit()
 
-    return redirect(url_for("student.thank_you"))
+    return redirect(
+        url_for("student.thank_you")
+    )
+
+
+# ==========================================
+# Thank You
+# ==========================================
+
 @student.route("/thank-you")
 def thank_you():
-    return render_template("thank_you.html")
+
+    return render_template(
+        "thank_you.html"
+    )

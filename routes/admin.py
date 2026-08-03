@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models import Course, Student, Payment, Placement, Company, Lead, User
+from models import Batch, Course, Faculty
+
 from database import db, bcrypt
 from sqlalchemy import func
 from werkzeug.utils import secure_filename
@@ -601,6 +603,9 @@ def add_student():
                 user.password = bcrypt.generate_password_hash(
                     plain_password
                 ).decode("utf-8")
+                user.portal_stage = "explorer"
+
+                user.is_active = True
 
 
             else:
@@ -624,7 +629,7 @@ def add_student():
 
                     is_active=True,
 
-                    portal_stage="student"
+                    portal_stage="explorer"
 
                 )
 
@@ -632,7 +637,7 @@ def add_student():
                 db.session.add(user)
 
 
-
+            
             db.session.commit()
 
 
@@ -965,6 +970,24 @@ def edit_student(id):
         total_paid=total_paid,
         balance=balance,
         status=status
+    )
+    
+    
+    
+@admin.route("/batch/<int:id>/students")
+def batch_students(id):
+
+    batch = Batch.query.get_or_404(id)
+
+    students = Student.query.filter_by(
+        course=batch.course,
+        batch=batch.batch_type
+    ).all()
+
+    return render_template(
+        "admin/batch_students.html",
+        batch=batch,
+        students=students
     )
 # ==========================================================
 # Add Payment
@@ -1426,18 +1449,76 @@ def add_faculty():
 @admin.route("/batches")
 def batches():
 
+    batches = Batch.query.order_by(
+        Batch.created_at.desc()
+    ).all()
+
     return render_template(
-        "admin/batches.html"
+        "admin/batches.html",
+        batches=batches
     )
 
 
-@admin.route("/batches/add")
+@admin.route("/batches/add", methods=["GET", "POST"])
 def add_batch():
 
-    return render_template(
-        "admin/add_batch.html"
-    )
+    courses = Course.query.all()
+    faculties = Faculty.query.all()
 
+    if request.method == "POST":
+
+        batch = Batch(
+
+            batch_id="B" + datetime.now().strftime("%Y%m%d%H%M%S"),
+
+            batch_name=request.form.get("batch_name"),
+
+            course=request.form.get("course"),
+
+            trainer=request.form.get("trainer"),
+
+            batch_type=request.form.get("batch_type"),
+
+            timing=request.form.get("timing"),
+
+            start_date=request.form.get("start_date") or None,
+
+            status=request.form.get("status")
+        )
+
+        db.session.add(batch)
+        db.session.commit()
+
+        # ---------------------------------------
+        # Update Students of same course
+        # ---------------------------------------
+
+        students = Student.query.filter_by(
+            course=batch.course
+        ).all()
+
+        for student in students:
+
+            student.batch = batch.batch_name
+
+            student.trainer = batch.trainer
+
+        db.session.commit()
+
+        flash(
+            "Batch Added Successfully",
+            "success"
+        )
+
+        return redirect(
+            url_for("admin.batches")
+        )
+
+    return render_template(
+        "admin/add_batch.html",
+        courses=courses,
+        faculties=faculties
+    )
 
 # ==========================================================
 # Enquiries
