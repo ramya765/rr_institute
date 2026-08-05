@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>
+Upload Study Material
+</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+
+<body class="bg-gray-100">
+
+
+<div class="max-w-4xl mx-auto mt-10 bg-white p-8 rounded shadow">
+
+
+<h1 class="text-3xl font-bold mb-6">
+Upload Study Material
+</h1>
+
+
+
+<form method="POST"
+      enctype="multipart/form-data">
+
+
+<!-- Title -->
+
+<label class="block mb-2">
+Title
+</label>
+
+<input
+type="text"
+name="title"
+required
+class="w-full border p-3 rounded mb-4"
+>
+
+
+
+<!-- Description -->
+
+<label>
+Description
+</label>
+
+<textarea
+name="description"
+class="w-full border p-3 rounded mb-4">
+</textarea>
+
+
+
+<!-- Course -->
+
+<label>
+Course
+</label>
+
+
+<select
+name="course"
+required
+class="w-full border p-3 rounded mb-4">
+
+
+<option value="">
+Select Course
+</option>
+
+
+{% for course in courses %}
+
+<option value="{{course.title}}">
+{{course.title}}
+</option>
+
+{% endfor %}
+
+
+</select>
+
+
+
+
+
+<!-- Material Type -->
+
+<label>
+
+Material Type
+
+</label>
+
+
+<select
+
+name="material_type"
+
+class="w-full border p-3 rounded mb-4">
+
+
+<option>
+PDF
+</option>
+
+
+<option>
+Video
+</option>
+
+
+<option>
+Notes
+</option>
+
+
+<option>
+Assignment
+</option>
+
+
+</select>
+
+
+
+
+
+<!-- Upload File -->
+
+<label>
+
+Upload File
+
+</label>
+
+
+<input
+
+type="file"
+
+name="material"
+
+required
+
+class="border p-3 w-full rounded mb-5"
+
+>
+
+
+
+
+
+<button
+
+class="bg-blue-600 text-white px-6 py-3 rounded">
+
+Upload Material
+
+</button>
+
+
+
+
+<a href="{{url_for('admin.study_materials')}}"
+
+class="ml-3 bg-gray-500 text-white px-6 py-3 rounded">
+
+Cancel
+
+</a>
+
+
+
+</form>
+
+
+</div>
+
+
+</body>
+
+</html>

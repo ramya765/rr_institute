@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Study Materials</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+
+<body class="bg-gray-100">
+
+
+<div class="flex min-h-screen">
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="w-64 bg-gray-900 text-white p-5">
+
+
+<h2 class="text-2xl font-bold mb-8">
+RR ORIGIN
+</h2>
+
+
+<nav class="space-y-3">
+
+
+<a href="{{ url_for('admin.dashboard') }}"
+class="block px-4 py-2 rounded hover:bg-gray-700">
+
+Dashboard
+
+</a>
+
+
+<a href="{{ url_for('admin.students') }}"
+class="block px-4 py-2 rounded hover:bg-gray-700">
+
+Students
+
+</a>
+
+
+
+<a href="{{ url_for('admin.courses') }}"
+class="block px-4 py-2 rounded hover:bg-gray-700">
+
+Courses
+
+</a>
+
+
+
+<a href="{{ url_for('admin.batches') }}"
+class="block px-4 py-2 rounded hover:bg-gray-700">
+
+Batches
+
+</a>
+
+
+
+
+<!-- ACTIVE -->
+
+<a href="{{ url_for('admin.study_materials') }}"
+class="block px-4 py-2 rounded bg-blue-600">
+
+Study Materials
+
+</a>
+
+
+
+<a href="{{ url_for('admin.placements') }}"
+class="block px-4 py-2 rounded hover:bg-gray-700">
+
+Placements
+
+</a>
+
+
+</nav>
+
+
+</aside>
+
+
+
+
+
+<!-- ================= CONTENT ================= -->
+
+
+<main class="flex-1 p-8">
+
+
+<div class="flex justify-between items-center mb-8">
+
+
+<h1 class="text-3xl font-bold">
+
+Study Materials
+
+</h1>
+
+
+
+<a href="{{ url_for('admin.add_study_material') }}"
+
+class="bg-blue-600 text-white px-5 py-3 rounded-lg hover:bg-blue-700">
+
++ Upload Material
+
+</a>
+
+
+</div>
+
+
+
+
+
+<!-- SEARCH -->
+
+
+<form method="GET"
+class="bg-white p-5 rounded shadow mb-6">
+
+
+<div class="grid md:grid-cols-3 gap-4">
+
+
+<input
+
+type="text"
+
+name="search"
+
+placeholder="Search Material"
+
+class="border p-3 rounded"
+
+
+
+>
+
+
+<select name="course"
+
+class="border p-3 rounded">
+
+
+<option value="">
+All Courses
+</option>
+
+
+{% for course in courses %}
+
+<option value="{{ course.title }}">
+
+{{ course.title }}
+
+</option>
+
+{% endfor %}
+
+
+</select>
+
+
+
+
+
+<select name="batch"
+
+class="border p-3 rounded">
+
+
+<option value="">
+All Batches
+</option>
+
+
+
+{% for batch in batches %}
+
+
+<option value="{{ batch }}">
+
+{{ batch }}
+
+</option>
+
+
+{% endfor %}
+
+
+
+</select>
+
+
+
+</div>
+
+
+<button
+
+class="mt-4 bg-gray-900 text-white px-5 py-2 rounded">
+
+Search
+
+</button>
+
+
+</form>
+
+
+
+
+
+
+<!-- MATERIAL TABLE -->
+
+
+<div class="bg-white rounded shadow overflow-hidden">
+
+
+<table class="w-full">
+
+
+<thead class="bg-gray-800 text-white">
+
+
+<tr>
+
+<th class="p-3">
+Title
+</th>
+
+
+<th class="p-3">
+Course
+</th>
+
+
+<th class="p-3">
+Batch
+</th>
+
+
+<th class="p-3">
+Faculty
+</th>
+
+
+<th class="p-3">
+Type
+</th>
+
+
+<th class="p-3">
+Action
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+
+
+<tbody>
+
+
+
+{% for material in materials %}
+
+
+<tr class="border-b">
+
+
+<td class="p-3">
+
+{{ material.title }}
+
+</td>
+
+
+
+<td class="p-3">
+
+{{ material.course }}
+
+</td>
+
+
+
+<td class="p-3">
+
+{{ material.batch }}
+
+</td>
+
+
+
+<td class="p-3">
+
+{{ material.faculty }}
+
+</td>
+
+
+
+<td class="p-3">
+
+{{ material.material_type }}
+
+</td>
+
+
+
+
+<td class="p-3 space-x-2">
+
+
+<a
+
+href="{{ url_for('admin.download_material',
+filename=material.file_name) }}"
+
+class="bg-green-600 text-white px-3 py-1 rounded">
+
+
+Download
+
+
+</a>
+
+
+
+
+<form method="POST"
+
+action="{{ url_for('admin.delete_study_material',
+id=material.id) }}"
+
+style="display:inline;">
+
+
+
+<button
+
+onclick="return confirm('Delete this material?')"
+
+class="bg-red-600 text-white px-3 py-1 rounded">
+
+Delete
+
+</button>
+
+
+
+</form>
+
+
+
+</td>
+
+
+
+</tr>
+
+
+{% else %}
+
+
+<tr>
+
+<td colspan="6"
+class="p-5 text-center">
+
+No Materials Uploaded
+
+</td>
+
+</tr>
+
+
+{% endfor %}
+
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+</main>
+
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models import Course, Student, Payment, Placement, Company, Lead, User
-from models import Batch, Course, Faculty
+from models import Batch, Course, Faculty,  StudyMaterial
 
+
+from flask import send_from_directory
 from database import db, bcrypt
 from sqlalchemy import func
 from werkzeug.utils import secure_filename
@@ -9,6 +11,8 @@ from datetime import datetime
 from flask_mail import Message
 from mail_config import mail
 import secrets
+
+
 
 
 import os
@@ -55,6 +59,7 @@ os.makedirs(
     os.path.join(UPLOAD_FOLDER, "companies"),
     exist_ok=True
 )
+
 
 
 # ==========================================================
@@ -1133,19 +1138,20 @@ def delete_student(id):
 
     student = Student.query.get_or_404(id)
 
+    # Delete user account
+    if student.user_id:
+        user = User.query.get(student.user_id)
+        if user:
+            db.session.delete(user)
+
+    # Delete student
     db.session.delete(student)
+
     db.session.commit()
 
-    flash(
-        "Student deleted successfully!",
-        "success"
-    )
+    flash("Student and user account deleted successfully.", "success")
 
-    return redirect(
-        url_for("admin.students")
-    )
-
-
+    return redirect(url_for("admin.students"))
 # ==========================================================
 # Courses
 # ==========================================================
@@ -1567,6 +1573,179 @@ def notifications():
         "admin/notifications.html"
     )
 
+
+# ==========================================================
+# STUDY MATERIALS
+# ==========================================================
+
+@admin.route("/study-materials")
+def study_materials():
+
+    search = request.args.get("search")
+    course = request.args.get("course")
+
+    query = StudyMaterial.query
+
+    if search:
+
+        query = query.filter(
+            StudyMaterial.title.like(f"%{search}%")
+        )
+
+    if course:
+
+        query = query.filter(
+            StudyMaterial.course == course
+        )
+
+   
+
+    materials = query.order_by(
+        StudyMaterial.created_at.desc()
+    ).all()
+
+    courses = Course.query.all()
+
+   
+
+    return render_template(
+
+        "admin/study_materials.html",
+
+        materials=materials,
+
+        courses=courses,
+
+
+    )
+# ==========================================================
+# Study Material Upload Folder
+# ==========================================================
+
+MATERIAL_UPLOAD_FOLDER = "static/study_materials"
+
+os.makedirs(
+    MATERIAL_UPLOAD_FOLDER,
+    exist_ok=True
+)
+    
+@admin.route("/study-materials/add", methods=["GET", "POST"])
+def add_study_material():
+
+
+    courses = Course.query.all()
+
+
+
+    if request.method == "POST":
+
+        file = request.files.get("material")
+
+        filename = None
+
+        if file and file.filename != "":
+
+            filename = secure_filename(file.filename)
+
+            file.save(
+
+                os.path.join(
+
+                    MATERIAL_UPLOAD_FOLDER,
+
+                    filename
+
+                )
+
+            )
+
+        material = StudyMaterial(
+
+            title=request.form.get("title"),
+
+            description=request.form.get("description"),
+
+            course=request.form.get("course"),
+
+
+
+            material_type=request.form.get("material_type"),
+
+            file_name=filename,
+
+            uploaded_by="Admin"
+
+        )
+
+        db.session.add(material)
+
+        db.session.commit()
+
+        flash(
+
+            "Study Material Uploaded Successfully",
+
+            "success"
+
+        )
+
+        return redirect(
+
+            url_for("admin.study_materials")
+
+        )
+
+    return render_template(
+    "admin/add_study_material.html",
+    courses=courses,
+)
+    
+@admin.route("/study-materials/delete/<int:id>", methods=["POST"])
+def delete_study_material(id):
+
+    material = StudyMaterial.query.get_or_404(id)
+
+    path = os.path.join(
+
+        MATERIAL_UPLOAD_FOLDER,
+
+        material.file_name
+
+    )
+
+    if os.path.exists(path):
+
+        os.remove(path)
+
+    db.session.delete(material)
+
+    db.session.commit()
+
+    flash(
+
+        "Material Deleted Successfully",
+
+        "success"
+
+    )
+
+    return redirect(
+
+        url_for("admin.study_materials")
+
+    )
+@admin.route("/study-materials/download/<filename>")
+def download_material(filename):
+
+    return send_from_directory(
+
+        MATERIAL_UPLOAD_FOLDER,
+
+        filename,
+
+        as_attachment=True
+
+    )
 
 # ==========================================================
 # Settings

@@ -1,280 +1,468 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>RR It Origin</title>
+<title>RR IT Origin | IT Training Institute</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+
 <style>
+
 body{
     font-family:'Inter',sans-serif;
+    background:#FAF9F6;
 }
 
-.hero-bg{
-    background: linear-gradient(
-        rgba(15,23,42,0.9),
-        rgba(15,23,42,0.9)
-    ),
-    url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3');
-    background-size: cover;
-    background-position:center;
+
+.gold{
+    color:#D4AF37;
 }
 
-.course-card:hover{
-    transform: translateY(-5px);
-    transition: .3s;
+
+.gold-bg{
+    background:#D4AF37;
 }
+
+
+.hero{
+
+background:
+linear-gradient(
+rgba(17,24,39,.85),
+rgba(17,24,39,.85)
+),
+url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3");
+
+background-size:cover;
+background-position:center;
+
+}
+
+
+.card-hover{
+
+transition:.4s;
+
+}
+
+
+.card-hover:hover{
+
+transform:translateY(-10px);
+
+box-shadow:0 20px 40px rgba(0,0,0,.15);
+
+}
+
+
+.gold-border{
+
+border:2px solid #D4AF37;
+
+}
+
+
 </style>
+
 
 </head>
 
-<body class="bg-slate-50">
+
+
+<body>
+
+
+<!-- TOP BAR -->
+
+<div class="bg-gray-900 text-white py-3">
+
+<div class="max-w-7xl mx-auto px-8 flex justify-between items-center text-sm">
+
+
+<div class="font-medium tracking-wide">
+
+📞 +91 9392105004
+
+<span class="mx-3 text-yellow-500">|</span>
+
+✉ info@rritorigin.com
+
+</div>
+
+
+<div class="hidden md:block font-semibold tracking-wide">
+
+Learn • Build • Get Placed
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
+
 
 <!-- NAVBAR -->
 
-<nav class="bg-white shadow-md sticky top-0 z-50">
+
+<nav class="bg-white shadow sticky top-0 z-50">
+
 
 <div class="max-w-7xl mx-auto px-6">
 
-<div class="flex justify-between items-center py-4">
 
-<h1 class="text-3xl font-bold text-indigo-600">
-RR It Origin 
-</h1>
+<div class="flex justify-between items-center h-24">
 
-<div class="hidden md:flex gap-8 font-medium">
-
-<a href="#">Home</a>
-<a href="#">Courses</a>
-<a href="#">Placements</a>
-<a href="#">About</a>
-<a href="#">Contact</a>
-
-</div>
-
-<div class="flex gap-3">
-
-<a href="{{ url_for('auth.login') }}"
-class="border border-indigo-600 px-5 py-2 rounded-lg text-indigo-600 hover:bg-indigo-600 hover:text-white transition duration-300">
-Login
-</a>
+<!-- LOGO -->
 
 
+<div class="flex items-center gap-2">
 
-</div>
 
-<a href="{{ url_for('main.enroll') }}"
-   class="bg-indigo-600 px-5 py-2 rounded-lg text-white">
-    Enroll Now
-</a>
+<img
 
-</div>
+src="{{ url_for('static', filename='images/logo.jpeg') }}"
 
-</div>
+class="h-16 w-auto rounded-lg"
 
-</div>
 
-</nav>
+>
 
-<!-- HERO -->
-
-<section class="hero-bg min-h-screen flex items-center">
-
-<div class="max-w-7xl mx-auto px-6">
-
-<div class="grid lg:grid-cols-2 gap-12 items-center">
 
 <div>
 
-<span class="bg-indigo-500 text-white px-4 py-2 rounded-full text-sm">
-#1 IT Training Institute
-</span>
 
-<h1 class="text-6xl font-extrabold text-white mt-6 leading-tight">
-
-Master Java, Python,
-AWS & Data Engineering
+<h1 class="text-3xl font-extrabold text-gray-900">
+RR IT Origin
 
 </h1>
 
-<p class="text-gray-300 mt-6 text-xl">
 
-Learn from industry experts and get placement assistance with real-time projects.
+<p class="text-sm text-gray-500 font-medium">
+IT Training & Career Academy
 
 </p>
 
-<div class="mt-8 space-y-3 text-white">
-
-<p>✓ 5000+ Students Trained</p>
-<p>✓ Live Projects</p>
-<p>✓ Mock Interviews</p>
-<p>✓ Placement Support</p>
-<p>✓ Lifetime Access</p>
 
 </div>
 
-<div class="mt-10 flex gap-4">
 
-<a href="{{ url_for('main.courses') }}"
-class="bg-indigo-600 px-8 py-4 rounded-xl text-white font-semibold hover:bg-indigo-700">
-Explore Courses
+</div>
+
+
+
+
+
+
+
+<!-- MENU -->
+
+
+<div class="hidden lg:flex gap-10 text-base font-semibold">
+
+<a href="#" class="hover:text-yellow-600">
+
+Home
+
 </a>
 
+
+<a href="{{ url_for('main.courses') }}" class="hover:text-yellow-600">
+
+Courses
+
+</a>
+
+
+<a href="#" class="hover:text-yellow-600">
+
+Placements
+
+</a>
+
+
+<a href="#" class="hover:text-yellow-600">
+
+About
+
+</a>
+
+
+<a href="#" class="hover:text-yellow-600">
+
+Contact
+
+</a>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- BUTTONS -->
+
+
+<div class="flex gap-2">
+
+
 <a
-href="https://wa.me/919392105004?text=Hi%20RR%20Institute,%20I%20am%20interested%20in%20your%20courses."
+
+href="{{ url_for('auth.login') }}"
+
+class="px-6 py-3 text-base rounded-xl border-2 border-yellow-600 text-yellow-700 font-semibold"
+>
+
+Login
+
+</a>
+
+
+
+
+<a
+
+href="{{ url_for('main.enroll') }}"
+
+class="px-6 py-3 text-base rounded-xl bg-yellow-600 text-white font-semibold shadow-lg"
+>
+
+Enroll Now
+
+</a>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+</nav>
+<!-- HERO SECTION -->
+
+
+<section class="hero min-h-screen flex items-center">
+
+
+<div class="max-w-7xl mx-auto px-6">
+
+
+<div class="grid lg:grid-cols-2 gap-14 items-center">
+
+
+
+<div>
+
+
+<span class="bg-yellow-600 text-white px-5 py-2 rounded-full">
+
+Premium IT Training Institute
+
+</span>
+
+
+
+
+<h1 class="text-5xl lg:text-6xl font-extrabold text-white mt-8 leading-tight">
+
+
+Build Your Future
+
+With Industry Ready Skills
+
+
+</h1>
+
+
+
+
+<p class="text-gray-300 text-xl mt-6">
+
+
+Master Java, Python, Cloud, Data Engineering,
+AI and emerging technologies with real-time projects.
+
+
+</p>
+
+
+
+
+
+<div class="mt-8 space-y-3 text-white">
+
+
+<p>
+✓ Experienced Industry Trainers
+</p>
+
+
+<p>
+✓ Practical Project Based Learning
+</p>
+
+
+<p>
+✓ Placement Preparation
+</p>
+
+
+<p>
+✓ Interview Guidance
+</p>
+
+
+
+</div>
+
+
+
+
+<div class="flex gap-4 mt-10">
+
+
+<a
+
+href="{{ url_for('main.courses') }}"
+
+class="bg-yellow-600 px-8 py-4 rounded-xl text-white font-bold"
+
+>
+
+Explore Courses
+
+</a>
+
+
+
+
+<a
+
+href="https://wa.me/919392105004"
+
 target="_blank"
-class="bg-green-500 px-8 py-4 rounded-xl text-white font-semibold hover:bg-green-600">
+
+class="border border-white px-8 py-4 rounded-xl text-white"
+
+>
 
 WhatsApp Us
 
 </a>
 
-</div>
+
 
 </div>
+
+
+
+</div>
+
+
+
+
 
 <div>
 
-    <img
-    src="{{ url_for('static', filename='images/institute.jpeg') }}"
-    alt="Karanam Murali Krishna Prasanth"
-    class="rounded-3xl shadow-2xl w-full h-auto">
 
-    <div class="mt-4 text-center bg-white p-4 rounded-xl shadow">
+<img
 
-        <h3 class="text-2xl font-bold text-indigo-600">
-            Karanam Murali Krishna Prasanth
-        </h3>
+src="{{ url_for('static', filename='images/institute.jpeg') }}"
 
-        <p class="text-gray-600 mt-2">
-            Founder & Director, RR IT Origin
-        </p>
+class="rounded-3xl shadow-2xl w-full"
 
-    </div>
+>
+
+
+<div class="bg-white rounded-xl mt-5 p-5 text-center shadow">
+
+
+<h2 class="text-xl font-bold">
+
+RR IT Origin
+
+</h2>
+
+
+<p class="text-gray-600">
+
+Empowering Students Through Technology
+
+</p>
+
 
 </div>
-</div>
+
 
 </div>
+
+
+
+</div>
+
+
+</div>
+
 
 </section>
-
-<!-- STATS -->
-
-<section class="py-20">
-
-<div class="max-w-7xl mx-auto px-6">
-
-<div class="grid md:grid-cols-4 gap-8">
-
-<div class="bg-white p-8 rounded-2xl shadow text-center">
-<h2 class="text-4xl font-bold text-indigo-600">5000+</h2>
-<p class="mt-2">Students Trained</p>
-</div>
-
-<div class="bg-white p-8 rounded-2xl shadow text-center">
-<h2 class="text-4xl font-bold text-indigo-600">1000+</h2>
-<p class="mt-2">Placements</p>
-</div>
-
-<div class="bg-white p-8 rounded-2xl shadow text-center">
-<h2 class="text-4xl font-bold text-indigo-600">200+</h2>
-<p class="mt-2">Hiring Companies</p>
-</div>
-
-<div class="bg-white p-8 rounded-2xl shadow text-center">
-<h2 class="text-4xl font-bold text-indigo-600">15+</h2>
-<p class="mt-2">Technologies</p>
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- COURSES -->
+<!-- ================= STATS SECTION ================= -->
 
 <section class="py-20 bg-white">
 
 <div class="max-w-7xl mx-auto px-6">
 
-<h2 class="text-4xl font-bold text-center">
-Popular Courses
-</h2>
+<div class="grid md:grid-cols-4 gap-8">
 
-<div class="grid md:grid-cols-3 gap-8 mt-12">
 
-<div class="course-card bg-white rounded-2xl shadow-lg overflow-hidden">
-
-<img src="https://picsum.photos/400/250?1">
-
-<div class="p-6">
-
-<h3 class="text-xl font-bold">
-Java Full Stack
-</h3>
-
+<div class="bg-gray-50 p-8 rounded-2xl text-center card-hover">
+<h2 class="text-5xl font-bold gold">5000+</h2>
 <p class="mt-3 text-gray-600">
-Spring Boot, React, Microservices
+Students Trained
 </p>
-
-<a href="#" class="mt-4 inline-block text-indigo-600 font-semibold">
-Learn More →
-</a>
-
 </div>
 
-</div>
 
-<div class="course-card bg-white rounded-2xl shadow-lg overflow-hidden">
-
-<img src="https://picsum.photos/400/250?2">
-
-<div class="p-6">
-
-<h3 class="text-xl font-bold">
-Python & AI
-</h3>
-
+<div class="bg-gray-50 p-8 rounded-2xl text-center card-hover">
+<h2 class="text-5xl font-bold gold">1000+</h2>
 <p class="mt-3 text-gray-600">
-Python, ML, GenAI
+Career Opportunities
 </p>
-
-<a href="#" class="mt-4 inline-block text-indigo-600 font-semibold">
-Learn More →
-</a>
-
 </div>
 
-</div>
 
-<div class="course-card bg-white rounded-2xl shadow-lg overflow-hidden">
-
-<img src="https://picsum.photos/400/250?3">
-
-<div class="p-6">
-
-<h3 class="text-xl font-bold">
-AWS Cloud
-</h3>
-
+<div class="bg-gray-50 p-8 rounded-2xl text-center card-hover">
+<h2 class="text-5xl font-bold gold">50+</h2>
 <p class="mt-3 text-gray-600">
-EC2, S3, RDS, DevOps
+Industry Projects
 </p>
-
-<a href="#" class="mt-4 inline-block text-indigo-600 font-semibold">
-Learn More →
-</a>
-
 </div>
 
+
+<div class="bg-gray-50 p-8 rounded-2xl text-center card-hover">
+<h2 class="text-5xl font-bold gold">15+</h2>
+<p class="mt-3 text-gray-600">
+Technologies
+</p>
 </div>
+
 
 </div>
 
@@ -282,37 +470,167 @@ Learn More →
 
 </section>
 
-<!-- WHY CHOOSE US -->
+
+
+
+
+<!-- ================= ABOUT SECTION ================= -->
+
 
 <section class="py-20">
 
+
 <div class="max-w-7xl mx-auto px-6">
 
-<h2 class="text-4xl font-bold text-center">
-Why Choose Us?
+
+<div class="grid lg:grid-cols-2 gap-12 items-center">
+
+
+<div>
+
+
+<h2 class="text-4xl font-bold">
+
+Why Choose 
+<span class="gold">
+RR IT Origin?
+</span>
+
 </h2>
 
-<div class="grid md:grid-cols-4 gap-8 mt-12">
 
-<div class="bg-white p-8 rounded-2xl shadow">
-<h3 class="font-bold text-xl">Expert Trainers</h3>
-<p class="mt-3">Industry experienced mentors.</p>
+<p class="mt-6 text-gray-600 text-lg">
+
+RR IT Origin focuses on practical technology training
+with real-time projects, expert mentoring and career
+guidance to help students become industry-ready.
+
+</p>
+
+
+<div class="mt-8 space-y-4">
+
+
+<div class="flex gap-4">
+
+<span class="text-yellow-600 text-2xl">
+✓
+</span>
+
+<p>
+Real-time Project Training
+</p>
+
 </div>
 
-<div class="bg-white p-8 rounded-2xl shadow">
-<h3 class="font-bold text-xl">Live Projects</h3>
-<p class="mt-3">Real-world project exposure.</p>
+
+<div class="flex gap-4">
+
+<span class="text-yellow-600 text-2xl">
+✓
+</span>
+
+<p>
+Experienced Trainers
+</p>
+
 </div>
 
-<div class="bg-white p-8 rounded-2xl shadow">
-<h3 class="font-bold text-xl">Placements</h3>
-<p class="mt-3">Interview preparation support.</p>
+
+
+<div class="flex gap-4">
+
+<span class="text-yellow-600 text-2xl">
+✓
+</span>
+
+<p>
+Placement Assistance
+</p>
+
 </div>
 
-<div class="bg-white p-8 rounded-2xl shadow">
-<h3 class="font-bold text-xl">Lifetime Access</h3>
-<p class="mt-3">Access recordings anytime.</p>
+
+
+<div class="flex gap-4">
+
+<span class="text-yellow-600 text-2xl">
+✓
+</span>
+
+<p>
+Interview Preparation
+</p>
+
 </div>
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="bg-gray-900 rounded-3xl p-10 text-white">
+
+
+<h3 class="text-3xl font-bold">
+
+Our Mission
+
+</h3>
+
+
+<p class="mt-5 text-gray-300">
+
+To bridge the gap between academic learning and
+industry requirements by providing quality IT education.
+
+</p>
+
+
+<div class="mt-8">
+
+<p class="text-yellow-500 text-xl font-bold">
+
+Learn
+
+</p>
+
+<p>
+Master modern technologies
+</p>
+
+
+<p class="text-yellow-500 text-xl font-bold mt-5">
+
+Build
+
+</p>
+
+<p>
+Create real-world projects
+</p>
+
+
+
+<p class="text-yellow-500 text-xl font-bold mt-5">
+
+Grow
+
+</p>
+
+<p>
+Achieve your career goals
+</p>
+
+
+</div>
+
+
+</div>
+
 
 </div>
 
@@ -320,9 +638,224 @@ Why Choose Us?
 
 </section>
 
-<!-- TESTIMONIALS -->
 
-<section class="bg-indigo-600 text-white py-20">
+
+
+
+
+<!-- ================= COURSES ================= -->
+
+
+<section class="py-20 bg-white">
+
+
+<div class="max-w-7xl mx-auto px-6">
+
+
+<h2 class="text-4xl font-bold text-center">
+
+Popular Courses
+
+</h2>
+
+
+<p class="text-center text-gray-500 mt-3">
+
+Industry demanded technologies
+
+</p>
+
+
+
+<div class="grid md:grid-cols-3 gap-8 mt-12">
+
+
+
+<div class="rounded-2xl shadow-lg p-8 card-hover">
+
+
+<h3 class="text-2xl font-bold">
+
+Java Full Stack
+
+</h3>
+
+
+<p class="mt-4 text-gray-600">
+
+Core Java, Spring Boot,
+Hibernate, React and Microservices.
+
+</p>
+
+
+<a href="{{ url_for('main.courses') }}"
+class="inline-block mt-5 text-yellow-600 font-bold">
+
+Explore →
+
+</a>
+
+
+</div>
+
+
+
+
+
+<div class="rounded-2xl shadow-lg p-8 card-hover">
+
+
+<h3 class="text-2xl font-bold">
+
+Python & AI
+
+</h3>
+
+
+<p class="mt-4 text-gray-600">
+
+Python programming,
+Machine Learning and AI concepts.
+
+</p>
+
+
+<a href="{{ url_for('main.courses') }}"
+class="inline-block mt-5 text-yellow-600 font-bold">
+
+Explore →
+
+</a>
+
+
+</div>
+
+
+
+
+
+
+<div class="rounded-2xl shadow-lg p-8 card-hover">
+
+
+<h3 class="text-2xl font-bold">
+
+Cloud & Data Engineering
+
+</h3>
+
+
+<p class="mt-4 text-gray-600">
+
+AWS, Databricks,
+Snowflake and ETL pipelines.
+
+</p>
+
+
+<a href="{{ url_for('main.courses') }}"
+class="inline-block mt-5 text-yellow-600 font-bold">
+
+Explore →
+
+</a>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<!-- ================= PLACEMENT ================= -->
+
+
+<section id="placements" class="py-20 bg-gray-900 text-white">
+
+
+<div class="max-w-7xl mx-auto px-6 text-center">
+
+
+<h2 class="text-4xl font-bold">
+
+Placement Support
+
+</h2>
+
+
+<p class="text-gray-300 mt-4">
+
+We prepare students for every step of their career journey.
+
+</p>
+
+
+<div class="grid md:grid-cols-4 gap-8 mt-12">
+
+
+<div>
+<h3 class="text-yellow-500 text-2xl font-bold">
+01
+</h3>
+<p>
+Resume Building
+</p>
+</div>
+
+
+<div>
+<h3 class="text-yellow-500 text-2xl font-bold">
+02
+</h3>
+<p>
+Mock Interviews
+</p>
+</div>
+
+
+<div>
+<h3 class="text-yellow-500 text-2xl font-bold">
+03
+</h3>
+<p>
+Technical Training
+</p>
+</div>
+
+
+<div>
+<h3 class="text-yellow-500 text-2xl font-bold">
+04
+</h3>
+<p>
+Career Guidance
+</p>
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+
+<section class="py-20 bg-white">
 
 <div class="max-w-7xl mx-auto px-6">
 
@@ -330,22 +863,50 @@ Why Choose Us?
 Student Success Stories
 </h2>
 
+
 <div class="grid md:grid-cols-3 gap-8 mt-12">
 
-<div class="bg-white text-black p-6 rounded-2xl">
-<p>"Got placed in Accenture after Java training."</p>
-<h4 class="mt-4 font-bold">Divya N</h4>
+
+<div class="p-8 shadow-xl rounded-2xl">
+
+<p>
+"Excellent training and practical projects helped me improve my skills."
+</p>
+
+<h3 class="font-bold mt-5">
+- Student
+</h3>
+
 </div>
 
-<div class="bg-white text-black p-6 rounded-2xl">
-<p>"Excellent trainers and real-time projects."</p>
-<h4 class="mt-4 font-bold">Rahul K</h4>
+
+
+<div class="p-8 shadow-xl rounded-2xl">
+
+<p>
+"Great mentors and placement guidance."
+</p>
+
+<h3 class="font-bold mt-5">
+- Student
+</h3>
+
 </div>
 
-<div class="bg-white text-black p-6 rounded-2xl">
-<p>"Best AWS training I've attended."</p>
-<h4 class="mt-4 font-bold">Priya S</h4>
+
+
+<div class="p-8 shadow-xl rounded-2xl">
+
+<p>
+"Real-time projects gave industry confidence."
+</p>
+
+<h3 class="font-bold mt-5">
+- Student
+</h3>
+
 </div>
+
 
 </div>
 
@@ -353,80 +914,105 @@ Student Success Stories
 
 </section>
 
-<!-- HIRING PARTNERS -->
 
-<section class="py-20 bg-white">
+<!-- ================= FOOTER ================= -->
 
-<div class="max-w-7xl mx-auto px-6 text-center">
+<footer class="bg-black text-white py-12">
 
-<h2 class="text-4xl font-bold">
-Hiring Partners
-</h2>
-
-<div class="grid grid-cols-2 md:grid-cols-5 gap-8 mt-12">
-
-<div class="shadow p-6 rounded-xl">TCS</div>
-<div class="shadow p-6 rounded-xl">Infosys</div>
-<div class="shadow p-6 rounded-xl">Wipro</div>
-<div class="shadow p-6 rounded-xl">Accenture</div>
-<div class="shadow p-6 rounded-xl">Capgemini</div>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- FOOTER -->
-
-<footer class="bg-slate-900 text-white py-12">
 
 <div class="max-w-7xl mx-auto px-6">
 
-<div class="grid md:grid-cols-4 gap-8">
+
+<div class="grid md:grid-cols-3 gap-10">
+
 
 <div>
-<h3 class="font-bold text-xl">RR IT Origin</h3>
-<p class="mt-3 text-gray-400">
-Empowering careers through technology training.
+
+<h2 class="text-2xl font-bold">
+
+RR IT Origin
+
+</h2>
+
+<p class="text-gray-400 mt-4">
+
+Learn. Build. Get Placed.
+
 </p>
+
 </div>
+
+
 
 <div>
-<h3 class="font-bold">Courses</h3>
-<p class="mt-2">Java</p>
-<p>Python</p>
-<p>AWS</p>
+
+<h3 class="font-bold text-xl">
+
+Quick Links
+
+</h3>
+
+<p class="mt-3">
+Courses
+</p>
+
+<p>
+Placements
+</p>
+
+<p>
+Contact
+</p>
+
 </div>
+
+
 
 <div>
-<h3 class="font-bold">Company</h3>
-<p class="mt-2">About</p>
-<p>Placements</p>
-<p>Contact</p>
+
+<h3 class="font-bold text-xl">
+
+Contact
+
+</h3>
+
+<p class="mt-3">
+
+📞 +91 9392105004
+
+</p>
+
+<p>
+
+✉ info@rritorigin.com
+
+</p>
+
 </div>
 
-<div>
-<h3 class="font-bold">Contact</h3>
-<p class="mt-2">+91 9392105004</p>
-<p>info@techacademy.com</p>
-</div>
 
 </div>
 
+
 </div>
+
 
 </footer>
 
-<!-- WHATSAPP FLOATING BUTTON -->
 
-<a
-href="https://wa.me/919392105004"
-class="fixed bottom-6 right-6 bg-green-500 text-white px-6 py-4 rounded-full shadow-lg">
+
+
+
+<!-- WHATSAPP -->
+
+
+<a href="https://wa.me/919392105004"
+target="_blank"
+class="fixed bottom-6 right-6 bg-green-500 text-white px-6 py-4 rounded-full shadow-xl">
 
 WhatsApp
 
 </a>
-
 </body>
+
 </html>
