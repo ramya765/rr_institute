@@ -1,0 +1,288 @@
+{% extends "student/layout.html" %}
+
+{% block content %}
+
+<div class="bg-white rounded-2xl shadow-lg p-8">
+
+    <div class="flex items-center gap-6">
+
+        <div class="w-28 h-28 rounded-full bg-indigo-600 text-white flex items-center justify-center text-5xl font-bold">
+
+            {{ student.name[0] }}
+
+        </div>
+
+        <div>
+
+            <h1 class="text-4xl font-bold text-indigo-700">
+
+                {{ student.name }}
+
+            </h1>
+
+            <p class="text-gray-500 mt-2">
+
+                {{ student.email }}
+
+            </p>
+
+            <p class="text-gray-500">
+
+                {{ student.mobile }}
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="bg-white rounded-2xl shadow-lg mt-8 p-8">
+
+    <h2 class="text-2xl font-bold text-indigo-700 mb-6">
+
+        👤 Personal Information
+
+    </h2>
+
+    <div class="grid md:grid-cols-2 gap-6">
+
+        <div>
+
+            <label class="font-semibold text-gray-500">
+
+                Full Name
+
+            </label>
+
+            <p class="text-lg mt-2">
+
+                {{ student.name }}
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold text-gray-500">
+
+                Email
+
+            </label>
+
+            <p class="text-lg mt-2">
+
+                {{ student.email }}
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold text-gray-500">
+
+                Mobile
+
+            </label>
+
+            <p class="text-lg mt-2">
+
+                {{ student.mobile }}
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold text-gray-500">
+
+                Gender
+
+            </label>
+
+            <p class="text-lg mt-2">
+
+                {{ student.gender or "-" }}
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold text-gray-500">
+
+                Father Name
+
+            </label>
+
+            <p class="text-lg mt-2">
+
+                {{ student.father_name or "-" }}
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold text-gray-500">
+
+                Mother Name
+
+            </label>
+
+            <p class="text-lg mt-2">
+
+                {{ student.mother_name or "-" }}
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold text-gray-500">
+
+                Address
+
+            </label>
+
+            <p class="text-lg mt-2">
+
+                {{ student.address or "-" }}
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold text-gray-500">
+
+                Date of Birth
+
+            </label>
+
+            <p class="text-lg mt-2">
+
+                {{ student.dob or "-" }}
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="bg-white rounded-2xl shadow-lg mt-8 p-8">
+
+    <h2 class="text-2xl font-bold text-indigo-700 mb-6">
+
+        🎓 Academic Information
+
+    </h2>
+
+    <div class="grid md:grid-cols-2 gap-6">
+
+        <div>
+
+            <label class="font-semibold text-gray-500">
+
+                Course
+
+            </label>
+
+            <p class="text-lg mt-2">
+
+                {{ student.course }}
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold text-gray-500">
+
+                Trainer
+
+            </label>
+
+            <p class="text-lg mt-2">
+
+                {{ student.trainer }}
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold text-gray-500">
+
+                Batch
+
+            </label>
+
+            <p class="text-lg mt-2">
+
+                {{ student.batch }}
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold text-gray-500">
+
+                Admission Date
+
+            </label>
+
+            <p class="text-lg mt-2">
+
+                {{ student.admission_date }}
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <label class="font-semibold text-gray-500">
+
+                Status
+
+            </label>
+
+            <p class="text-lg mt-2">
+
+                {{ student.status }}
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="mt-8">
+
+    <a href="{{ url_for('student.explorer_dashboard') }}"
+       class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg">
+
+        ← Back to Dashboard
+
+    </a>
+
+</div>
+
+{% endblock %}

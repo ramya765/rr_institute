@@ -1,8 +1,9 @@
-from datetime import datetime
+
 from database import db
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
-
+def ist_now():
+    return datetime.now(timezone.utc) + timedelta(hours=5, minutes=30)
 class Payment(db.Model):
     __tablename__ = "payments"
 
@@ -162,7 +163,117 @@ class Gallery(db.Model):
         db.DateTime,
         default=datetime.utcnow
     )
+class InstituteSettings(db.Model):
 
+    id = db.Column(db.Integer, primary_key=True)
+
+    institute_name = db.Column(
+        db.String(200),
+        default="RR IT Origin"
+    )
+
+    email = db.Column(
+        db.String(120)
+    )
+
+    phone = db.Column(
+        db.String(30)
+    )
+
+    whatsapp = db.Column(
+        db.String(30)
+    )
+
+    website = db.Column(
+        db.String(200)
+    )
+
+    address = db.Column(
+        db.Text
+    )
+
+    city = db.Column(
+        db.String(100)
+    )
+
+    state = db.Column(
+        db.String(100)
+    )
+
+    pincode = db.Column(
+        db.String(20)
+    )
+
+    logo = db.Column(
+        db.String(255)
+    )
+
+    contact_email = db.Column(
+        db.String(120)
+    )
+
+    support_email = db.Column(
+        db.String(120)
+    )
+
+    welcome_text = db.Column(
+        db.Text
+    )
+
+    footer_text = db.Column(
+        db.Text
+    )
+
+    facebook = db.Column(
+        db.String(255)
+    )
+
+    instagram = db.Column(
+        db.String(255)
+    )
+
+    linkedin = db.Column(
+        db.String(255)
+    )
+
+    youtube = db.Column(
+        db.String(255)
+    )
+
+    new_lead_notification = db.Column(
+        db.Boolean,
+        default=True
+    )
+
+    admission_notification = db.Column(
+        db.Boolean,
+        default=True
+    )
+
+    payment_notification = db.Column(
+        db.Boolean,
+        default=True
+    )
+
+    placement_notification = db.Column(
+        db.Boolean,
+        default=True
+    )
+
+    student_registration = db.Column(
+        db.Boolean,
+        default=True
+    )
+
+    student_login = db.Column(
+        db.Boolean,
+        default=True
+    )
+
+    maintenance_mode = db.Column(
+        db.Boolean,
+        default=False
+    )
 
 # ==========================================
 # TESTIMONIALS TABLE
@@ -217,56 +328,6 @@ class Faculty(db.Model):
     photo = db.Column(db.String(255))
 
 
-
-class Batch(db.Model):
-    __tablename__ = "batches"
-
-    id = db.Column(db.Integer, primary_key=True)
-
-    batch_id = db.Column(
-        db.String(20),
-        unique=True
-    )
-
-    batch_name = db.Column(
-        db.String(100),
-        nullable=False
-    )
-
-    course = db.Column(
-        db.String(100),
-        nullable=False
-    )
-
-    trainer = db.Column(
-        db.String(100),
-        nullable=False
-    )
-
-    batch_type = db.Column(
-        db.String(30),
-        nullable=False
-    )
-
-    timing = db.Column(
-        db.String(50)
-    )
-
-    start_date = db.Column(
-        db.Date
-    )
-
-    status = db.Column(
-        db.String(20),
-        default="Active"
-    )
-
-    created_at = db.Column(
-        db.DateTime,
-        default=datetime.utcnow
-    )# ==========================================
-# PLACEMENTS TABLE
-# ==========================================
 # ==========================================
 # PLACEMENTS TABLE
 # ==========================================
@@ -525,7 +586,10 @@ class Lead(db.Model):
 
 
 
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(
+    db.DateTime,
+    default=ist_now
+)
     # ==========================================
 # STUDENTS TABLE
 # ==========================================

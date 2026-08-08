@@ -15,12 +15,12 @@
             <h1 class="text-2xl font-bold">
                 RR Institute
             </h1>
-        </div>
+        </div>   
 
         <div class="flex items-center gap-4">
 
             <span class="font-medium">
-                Welcome, {{ student.name }}
+                Welcome, {{ user.name }}
             </span>
 
             <a href="{{ url_for('auth.logout') }}"
@@ -39,7 +39,7 @@
         <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl p-8 shadow-lg">
 
             <h1 class="text-4xl font-bold">
-                Welcome {{ student.name }} 👋
+                Welcome {{ user.name }} 👋
             </h1>
 
             <p class="mt-3 text-lg">
@@ -49,50 +49,8 @@
         </div>
 
         <!-- Quick Stats -->
-        <div class="grid md:grid-cols-4 gap-6 mt-8">
-
-            <div class="bg-white rounded-xl shadow p-6">
-                <h3 class="text-gray-500">
-                    Course
-                </h3>
-
-                <h2 class="text-2xl font-bold text-indigo-600 mt-2">
-                    {{ student.course }}
-                </h2>
-            </div>
-
-            <div class="bg-white rounded-xl shadow p-6">
-                <h3 class="text-gray-500">
-                    Batch
-                </h3>
-
-                <h2 class="text-2xl font-bold text-green-600 mt-2">
-                    {{ student.batch }}
-                </h2>
-            </div>
-
-            <div class="bg-white rounded-xl shadow p-6">
-                <h3 class="text-gray-500">
-                    Fees Paid
-                </h3>
-
-                <h2 class="text-2xl font-bold text-blue-600 mt-2">
-                    ₹{{ student.paid_amount }}
-                </h2>
-            </div>
-
-            <div class="bg-white rounded-xl shadow p-6">
-                <h3 class="text-gray-500">
-                    Balance Fee
-                </h3>
-
-                <h2 class="text-2xl font-bold text-red-600 mt-2">
-                    ₹{{ student.balance_amount }}
-                </h2>
-            </div>
-
-        </div>
-
+        
+               
         <!-- Dashboard Cards -->
         <div class="grid md:grid-cols-3 gap-8 mt-10">
 
@@ -100,11 +58,11 @@
             <div class="bg-white shadow rounded-xl p-6">
 
                 <h2 class="text-xl font-bold">
-                    📚 My Courses
+                    📚 View Courses
                 </h2>
 
                 <p class="mt-3 text-gray-500">
-                    View your enrolled courses.
+                    View All our courses.
                 </p>
 
                 <a href="{{ url_for('student.courses') }}"
@@ -117,64 +75,14 @@
             </div>
 
             <!-- Available Courses -->
-            <div class="bg-white shadow rounded-xl p-6">
+         
 
-                <h2 class="text-xl font-bold">
-                    🎯 Available Courses
-                </h2>
-
-                <p class="mt-3 text-gray-500">
-                    Explore additional courses.
-                </p>
-
-                <a href="{{ url_for('student.courses') }}"
-                    class="inline-block mt-5 bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700">
-
-                    Explore
-
-                </a>
-
-            </div>
 
             <!-- Profile -->
-            <div class="bg-white shadow rounded-xl p-6">
+            
 
-                <h2 class="text-xl font-bold">
-                    👤 My Profile
-                </h2>
+           
 
-                <p class="mt-3 text-gray-500">
-                    Manage personal details.
-                </p>
-
-                <a 
-                    class="inline-block mt-5 bg-purple-600 text-white px-5 py-2 rounded hover:bg-purple-700">
-
-                    View Profile
-
-                </a>
-
-            </div>
-
-            <!-- Placement Status -->
-            <div class="bg-white shadow rounded-xl p-6">
-
-                <h2 class="text-xl font-bold">
-                    💼 Placement Status
-                </h2>
-
-                <p class="mt-3 text-gray-500">
-                    Check your placement information.
-                </p>
-
-                <a 
-                    class="inline-block mt-5 bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700">
-
-                    View Placement
-
-                </a>
-
-            </div>
 
             <!-- Placement Statistics -->
             <div class="bg-white shadow rounded-xl p-6">
@@ -197,24 +105,7 @@
             </div>
 
             <!-- Payments -->
-            <div class="bg-white shadow rounded-xl p-6">
-
-                <h2 class="text-xl font-bold">
-                    💳 Payment History
-                </h2>
-
-                <p class="mt-3 text-gray-500">
-                    View fee payments and receipts.
-                </p>
-
-                <a
-                    class="inline-block mt-5 bg-teal-600 text-white px-5 py-2 rounded hover:bg-teal-700">
-
-                    View Payments
-
-                </a>
-
-            </div>
+           
 
         </div>
 

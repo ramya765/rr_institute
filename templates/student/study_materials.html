@@ -1,339 +1,154 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "student/layout.html" %}
 
-<head>
+{% block content %}
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div class="bg-white rounded-2xl shadow-lg p-8">
 
-<title>
-Study Materials | RR Origin
-</title>
+    <h1 class="text-3xl font-bold text-indigo-700 mb-8">
+        📚 Study Materials
+    </h1>
 
-<script src="https://cdn.tailwindcss.com"></script>
+    <!-- Student Info -->
+    <div class="bg-indigo-50 rounded-xl p-6 mb-8">
 
-</head>
+        <h2 class="text-2xl font-bold">
+            {{ student.name }}
+        </h2>
 
+        <p class="text-gray-600 mt-2">
+            Course : <strong>{{ student.course }}</strong>
+        </p>
 
-<body class="bg-gray-100">
+    </div>
 
+    {% if materials %}
 
-<div class="flex min-h-screen">
+    <div class="overflow-x-auto">
 
+        <table class="w-full border border-gray-200 rounded-lg overflow-hidden">
 
-<!-- ================= SIDEBAR ================= -->
+            <thead class="bg-indigo-600 text-white">
 
-<aside class="w-64 bg-gray-900 text-white p-5">
+                <tr>
 
+                    <th class="p-4 text-left">
+                        Title
+                    </th>
 
-<h2 class="text-2xl font-bold mb-8">
-RR ORIGIN
-</h2>
+                    <th class="p-4 text-left">
+                        Description
+                    </th>
 
+                    <th class="p-4 text-left">
+                        Type
+                    </th>
 
+                    <th class="p-4 text-left">
+                        Uploaded Date
+                    </th>
 
-<nav class="space-y-3">
+                    <th class="p-4 text-center">
+                        Actions
+                    </th>
 
+                </tr>
 
-<a href="{{ url_for('student.dashboard') }}"
-class="block px-4 py-2 rounded hover:bg-gray-700">
+            </thead>
 
-Dashboard
+            <tbody>
 
-</a>
+            {% for material in materials %}
 
+                <tr class="border-b hover:bg-gray-50">
 
+                    <td class="p-4 font-semibold">
 
-<a href="{{ url_for('student.dashboard') }}"
-class="block px-4 py-2 rounded hover:bg-gray-700">
+                        {{ material.title }}
 
-My Profile
+                    </td>
 
-</a>
+                    <td class="p-4">
 
+                        {{ material.description or "No Description" }}
 
+                    </td>
 
-<a href="{{ url_for('student.study_materials') }}"
-class="block px-4 py-2 rounded bg-blue-600">
+                    <td class="p-4">
 
-Study Materials
+                        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
 
-</a>
+                            {{ material.material_type }}
 
+                        </span>
 
+                    </td>
 
-<a href="#"
-class="block px-4 py-2 rounded hover:bg-gray-700">
+                    <td class="p-4">
 
-Assignments
+                        {{ material.created_at.strftime("%d-%m-%Y") }}
 
-</a>
+                    </td>
 
+                    <td class="p-4 text-center space-x-2">
 
+                        <a href="{{ url_for('student.view_material', filename=material.file_name) }}"
+                           target="_blank"
+                           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
 
-<a href="#"
-class="block px-4 py-2 rounded hover:bg-gray-700">
+                            👁 View
 
-Placements
+                        </a>
 
-</a>
+                        <a href="{{ url_for('student.download_material', filename=material.file_name) }}"
+                           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
 
+                            📥 Download
 
+                        </a>
 
-<a href="{{ url_for('auth.logout') }}"
-class="block px-4 py-2 rounded hover:bg-red-600">
+                    </td>
 
-Logout
+                </tr>
 
-</a>
+            {% endfor %}
 
+            </tbody>
 
+        </table>
 
-</nav>
+    </div>
 
+    {% else %}
 
-</aside>
+    <div class="bg-yellow-50 border border-yellow-300 rounded-xl p-8 text-center">
 
+        <h2 class="text-2xl font-bold text-yellow-700">
 
+            No Study Materials Available
 
+        </h2>
 
+        <p class="mt-3 text-gray-600">
 
-<!-- ================= CONTENT ================= -->
+            Your trainer has not uploaded any study materials yet.
 
+        </p>
 
-<main class="flex-1 p-8">
+    </div>
 
+    {% endif %}
 
+    <div class="mt-8">
 
-<h1 class="text-3xl font-bold mb-8">
+        <a href="{{ url_for('student.explorer_dashboard') }}"
+           class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg">
 
-My Study Materials
+            ← Back to Dashboard
 
-</h1>
+        </a>
 
-
-
-<!-- Student Info -->
-
-<div class="bg-white shadow rounded-lg p-5 mb-6">
-
-
-<h2 class="text-xl font-semibold">
-
-Student:
-{{ student.name }}
-
-</h2>
-
-
-<p class="text-gray-600">
-
-Course:
-{{ student.course }}
-
-</p>
-
+    </div>
 
 </div>
 
-
-
-
-
-<div class="bg-white rounded-lg shadow overflow-hidden">
-
-
-<table class="w-full">
-
-
-<thead class="bg-gray-900 text-white">
-
-
-<tr>
-
-
-<th class="p-4 text-left">
-Title
-</th>
-
-
-<th class="p-4 text-left">
-Description
-</th>
-
-
-<th class="p-4 text-left">
-Type
-</th>
-
-
-<th class="p-4 text-left">
-Uploaded Date
-</th>
-
-
-<th class="p-4 text-center">
-Action
-</th>
-
-
-</tr>
-
-
-</thead>
-
-
-
-
-
-<tbody>
-
-
-{% for material in materials %}
-
-
-
-<tr class="border-b hover:bg-gray-50">
-
-
-
-<td class="p-4 font-semibold">
-
-{{ material.title }}
-
-</td>
-
-
-
-
-
-<td class="p-4">
-
-{% if material.description %}
-
-{{ material.description }}
-
-{% else %}
-
-No description
-
-{% endif %}
-
-</td>
-
-
-
-
-
-<td class="p-4">
-
-
-<span class="bg-blue-100 text-blue-700 px-3 py-1 rounded">
-
-{{ material.material_type }}
-
-</span>
-
-
-</td>
-
-
-
-
-
-<td class="p-4">
-
-{{ material.created_at.strftime('%d-%m-%Y') }}
-
-</td>
-
-
-
-
-<td class="p-4 text-center space-x-2">
-
-
-<!-- View Button -->
-
-<a
-href="{{ url_for('student.view_material',
-filename=material.file_name) }}"
-target="_blank"
-class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-
-View
-
-</a>
-
-
-
-<!-- Download Button -->
-
-<a
-href="{{ url_for('student.download_material',
-filename=material.file_name) }}"
-class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-
-Download
-
-</a>
-
-
-
-</td>
-
-
-</tr>
-
-
-
-
-
-{% else %}
-
-
-
-
-<tr>
-
-<td colspan="5"
-class="text-center p-8 text-gray-500">
-
-
-No study materials available
-
-
-</td>
-
-
-</tr>
-
-
-
-{% endfor %}
-
-
-
-
-</tbody>
-
-
-</table>
-
-
-
-</div>
-
-
-
-</main>
-
-
-
-</div>
-
-
-
-</body>
-
-</html>
+{% endblock %}

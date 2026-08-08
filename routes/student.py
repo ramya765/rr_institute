@@ -10,7 +10,8 @@ from flask import (
 )
 
 from database import db
-from models import Course, Lead, User, Student, Batch,StudyMaterial
+from models import Course, Lead, User, Student, StudyMaterial
+from models import Payment,Placement
 
 student = Blueprint(
     "student",
@@ -39,7 +40,86 @@ def dashboard():
         student=student_record,
         user=user
     )
+@student.route("/my-course")
+def my_course():
 
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    user = User.query.get(session["user_id"])
+
+    student_record = Student.query.filter_by(
+        user_id=user.id
+    ).first_or_404()
+
+    return render_template(
+        "student/my_course.html",
+        student=student_record
+    )
+
+
+@student.route("/fee-details")
+def fee_details():
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    user = User.query.get(session["user_id"])
+
+    student_record = Student.query.filter_by(
+        user_id=user.id
+    ).first_or_404()
+
+    payments = Payment.query.filter_by(
+        student_id=student_record.id
+    ).order_by(
+        Payment.payment_date.desc()
+    ).all()
+
+    return render_template(
+        "student/fee_details.html",
+        student=student_record,
+        payments=payments
+    )
+
+
+@student.route("/profile")
+def profile():
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    user = User.query.get(session["user_id"])
+
+    student = Student.query.filter_by(
+        user_id=user.id
+    ).first_or_404()
+
+    return render_template(
+        "student/profile.html",
+        student=student
+    )
+@student.route("/placement")
+def placement():
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    user = User.query.get(session["user_id"])
+
+    student = Student.query.filter_by(
+        user_id=user.id
+    ).first_or_404()
+
+    placement = Placement.query.filter_by(
+        student_id=student.id
+    ).first()
+
+    return render_template(
+        "student/placement.html",
+        student=student,
+        placement=placement
+    )
 
 # ==========================================
 # Explorer Dashboard
@@ -62,20 +142,11 @@ def explorer_dashboard():
         email=user.email
     ).first()
 
-    # ADD THIS
-    batch = None
-
-    if student_record:
-        batch = Batch.query.filter_by(
-            batch_type=student_record.batch,
-            course=student_record.course
-        ).first()
-
+    
     return render_template(
         "student/explorer_dashboard.html",
         student=student_record,
         user=user,
-        batch=batch
     )
 # ==========================================
 # Courses
@@ -177,42 +248,29 @@ def study_materials():
     if "user_id" not in session:
         return redirect(url_for("auth.login"))
 
-
     user = User.query.get(session["user_id"])
-
 
     student = Student.query.filter_by(
         email=user.email
     ).first()
-
 
     if not student:
         flash(
             "Student record not found",
             "danger"
         )
-
         return redirect(
             url_for("student.explorer_dashboard")
         )
-
-
-    print("Student:", student.name)
-    print("Course:", student.course)
-
 
     materials = StudyMaterial.query.filter_by(
         course=student.course
     ).all()
 
-
-    print("Materials:", materials)
-
-
     return render_template(
         "student/study_materials.html",
-        materials=materials,
-        student=student
+        student=student,
+        materials=materials
     )
 @student.route("/study-materials/download/<filename>")
 def download_material(filename):

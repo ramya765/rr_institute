@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from database import db, bcrypt
 from models import User, Student
 
+
 auth = Blueprint("auth", __name__)
 
 
@@ -144,3 +145,67 @@ def logout():
     flash("Logged out successfully.", "success")
 
     return redirect(url_for("main.home"))
+@auth.route("/forgot-password", methods=["GET","POST"])
+def forgot_password():
+
+    if request.method == "POST":
+
+        email = request.form["email"]
+
+        user = User.query.filter_by(
+            email=email
+        ).first()
+
+        if not user:
+
+            flash(
+                "Email not found",
+                "danger"
+            )
+
+            return redirect(
+                url_for("auth.forgot_password")
+            )
+
+        return redirect(
+            url_for(
+                "auth.reset_password",
+                email=email
+            )
+        )
+
+    return render_template(
+        "forgot_password.html"
+    )
+@auth.route("/reset-password", methods=["GET","POST"])
+def reset_password():
+
+    email = request.args.get("email")
+
+    if request.method == "POST":
+
+        email = request.form["email"]
+
+        password = request.form["password"]
+
+        user = User.query.filter_by(
+            email=email
+        ).first()
+
+        user.password = bcrypt.generate_password_hash(password).decode("utf-8")
+
+        db.session.commit()
+
+        flash(
+            "Password Updated Successfully",
+            "success"
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+    return render_template(
+        "reset_password.html",
+        email=email
+    )

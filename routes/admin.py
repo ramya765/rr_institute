@@ -1,6 +1,15 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import (
+    Blueprint,
+    render_template,
+    redirect,
+    url_for,
+    request,
+    flash,
+    session
+)
 from models import Course, Student, Payment, Placement, Company, Lead, User
-from models import Batch, Course, Faculty,  StudyMaterial
+from models import Course, Faculty,  StudyMaterial
+from models import InstituteSettings
 
 
 from flask import send_from_directory
@@ -1435,100 +1444,122 @@ def add_placement(student_id):
 @admin.route("/faculty")
 def faculty():
 
+    faculties = Faculty.query.all()
+
     return render_template(
-        "admin/faculty.html"
+        "admin/faculty.html",
+        faculties=faculties
     )
 
-
-@admin.route("/faculty/add")
+@admin.route("/faculty/add", methods=["GET", "POST"])
 def add_faculty():
 
-    return render_template(
-        "admin/add_faculty.html"
-    )
+    if request.method == "POST":
 
+        faculty = Faculty(
+            faculty_id="F" + datetime.now().strftime("%Y%m%d%H%M%S"),
+            name=request.form.get("name"),
+            email=request.form.get("email"),
+            phone=request.form.get("phone"),
+            subject=request.form.get("subject"),
+            qualification=request.form.get("qualification"),
+            experience=request.form.get("experience"),
+            batch=request.form.get("batch"),
+            payment=float(request.form.get("payment") or 0),
+            status=request.form.get("status"),
+            address=request.form.get("address")
+        )
+
+        db.session.add(faculty)
+        db.session.commit()
+
+        flash("Faculty added successfully!", "success")
+
+        return redirect(url_for("admin.faculty"))
+
+    return render_template("admin/add_faculty.html")
 
 # ==========================================================
 # Batches
 # ==========================================================
 
-@admin.route("/batches")
-def batches():
+# @admin.route("/batches")
+# def batches():
 
-    batches = Batch.query.order_by(
-        Batch.created_at.desc()
-    ).all()
+#     batches = Batch.query.order_by(
+#         Batch.created_at.desc()
+#     ).all()
 
-    return render_template(
-        "admin/batches.html",
-        batches=batches
-    )
+#     return render_template(
+#         "admin/batches.html",
+#         batches=batches
+#     )
 
 
-@admin.route("/batches/add", methods=["GET", "POST"])
-def add_batch():
+# @admin.route("/batches/add", methods=["GET", "POST"])
+# def add_batch():
 
-    courses = Course.query.all()
-    faculties = Faculty.query.all()
+#     courses = Course.query.all()
+#     faculties = Faculty.query.all()
 
-    if request.method == "POST":
+#     if request.method == "POST":
 
-        batch = Batch(
+#         batch = Batch(
 
-            batch_id="B" + datetime.now().strftime("%Y%m%d%H%M%S"),
+#             batch_id="B" + datetime.now().strftime("%Y%m%d%H%M%S"),
 
-            batch_name=request.form.get("batch_name"),
+#             batch_name=request.form.get("batch_name"),
 
-            course=request.form.get("course"),
+#             course=request.form.get("course"),
 
-            trainer=request.form.get("trainer"),
+#             trainer=request.form.get("trainer"),
 
-            batch_type=request.form.get("batch_type"),
+#             batch_type=request.form.get("batch_type"),
 
-            timing=request.form.get("timing"),
+#             timing=request.form.get("timing"),
 
-            start_date=request.form.get("start_date") or None,
+#             start_date=request.form.get("start_date") or None,
 
-            status=request.form.get("status")
-        )
+#             status=request.form.get("status")
+#         )
 
-        db.session.add(batch)
-        db.session.commit()
+#         db.session.add(batch)
+#         db.session.commit()
 
-        # ---------------------------------------
-        # Update Students of same course
-        # ---------------------------------------
+#         # ---------------------------------------
+#         # Update Students of same course
+#         # ---------------------------------------
 
-        students = Student.query.filter_by(
-            course=batch.course
-        ).all()
+#         students = Student.query.filter_by(
+#             course=batch.course
+#         ).all()
 
-        for student in students:
+#         for student in students:
 
-            student.batch = batch.batch_name
+#             student.batch = batch.batch_name
 
-            student.trainer = batch.trainer
+#             student.trainer = batch.trainer
 
-        db.session.commit()
+#         db.session.commit()
 
-        flash(
-            "Batch Added Successfully",
-            "success"
-        )
+#         flash(
+#             "Batch Added Successfully",
+#             "success"
+#         )
 
-        return redirect(
-            url_for("admin.batches")
-        )
+#         return redirect(
+#             url_for("admin.batches")
+#         )
 
-    return render_template(
-        "admin/add_batch.html",
-        courses=courses,
-        faculties=faculties
-    )
+#     return render_template(
+#         "admin/add_batch.html",
+#         courses=courses,
+#         faculties=faculties
+#     )
 
-# ==========================================================
-# Enquiries
-# ==========================================================
+# # ==========================================================
+# # Enquiries
+# # ==========================================================
 
 @admin.route("/enquiries")
 def enquiries():
@@ -1751,13 +1782,86 @@ def download_material(filename):
 # Settings
 # ==========================================================
 
-@admin.route("/settings")
+
+@admin.route("/settings", methods=["GET", "POST"])
 def settings():
 
-    return render_template(
-        "admin/settings.html"
-    )
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
 
+    settings = InstituteSettings.query.first()
+
+    if not settings:
+        settings = InstituteSettings()
+        db.session.add(settings)
+        db.session.commit()
+
+    if request.method == "POST":
+
+        settings.institute_name = request.form.get("institute_name")
+        settings.email = request.form.get("email")
+        settings.phone = request.form.get("phone")
+        settings.whatsapp = request.form.get("whatsapp")
+        settings.website = request.form.get("website")
+        settings.address = request.form.get("address")
+        settings.city = request.form.get("city")
+        settings.state = request.form.get("state")
+        settings.pincode = request.form.get("pincode")
+
+        settings.contact_email = request.form.get("contact_email")
+        settings.support_email = request.form.get("support_email")
+
+        settings.welcome_text = request.form.get("welcome_text")
+        settings.footer_text = request.form.get("footer_text")
+
+        settings.facebook = request.form.get("facebook")
+        settings.instagram = request.form.get("instagram")
+        settings.linkedin = request.form.get("linkedin")
+        settings.youtube = request.form.get("youtube")
+
+        settings.new_lead_notification = (
+            "new_lead_notification" in request.form
+        )
+
+        settings.admission_notification = (
+            "admission_notification" in request.form
+        )
+
+        settings.payment_notification = (
+            "payment_notification" in request.form
+        )
+
+        settings.placement_notification = (
+            "placement_notification" in request.form
+        )
+
+        settings.student_registration = (
+            "student_registration" in request.form
+        )
+
+        settings.student_login = (
+            "student_login" in request.form
+        )
+
+        settings.maintenance_mode = (
+            "maintenance_mode" in request.form
+        )
+
+        db.session.commit()
+
+        flash(
+            "Settings updated successfully.",
+            "success"
+        )
+
+        return redirect(
+            url_for("admin.settings")
+        )
+
+    return render_template(
+        "admin/settings.html",
+        settings=settings
+    )
 @admin.route("/leads")
 def leads():
 
