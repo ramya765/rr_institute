@@ -5,115 +5,1108 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <title>RR IT Origin</title>
+    <title>
+        RR IT Origin | Student Portal
+    </title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
 
     <style>
 
-        body{
-            font-family:'Inter',sans-serif;
-            background:#f1f5f9;
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                'Inter',
+                sans-serif;
+
+            background:
+                #071329;
+
+            color:
+                white;
+
+            overflow-x:
+                hidden;
+
+        }
+
+
+        /* ==========================================
+           COLORS
+        ========================================== */
+
+        .gold {
+
+            color:
+                #facc15;
+
+        }
+
+
+        .gold-bg {
+
+            background:
+                #facc15;
+
+        }
+
+
+        /* ==========================================
+           SIDEBAR
+        ========================================== */
+
+        .sidebar {
+
+            background:
+
+                linear-gradient(
+                    180deg,
+                    #071329 0%,
+                    #050e20 100%
+                );
+
+            border-right:
+                1px solid
+                rgba(255,255,255,.10);
+
+            box-shadow:
+                10px 0 40px
+                rgba(0,0,0,.20);
+
+        }
+
+
+        /* ==========================================
+           LOGO AREA
+        ========================================== */
+
+        .logo-box {
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.10);
+
+        }
+
+
+        .logo-icon {
+
+            width:
+                48px;
+
+            height:
+                48px;
+
+            border-radius:
+                14px;
+
+            background:
+                rgba(250,204,21,.10);
+
+            border:
+                1px solid
+                rgba(250,204,21,.30);
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            font-size:
+                22px;
+
+        }
+
+
+        /* ==========================================
+           NAVIGATION
+        ========================================== */
+
+        .nav-link {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                14px;
+
+            margin:
+                6px 14px;
+
+            padding:
+                13px 16px;
+
+            border-radius:
+                12px;
+
+            color:
+                #cbd5e1;
+
+            transition:
+                all .3s ease;
+
+        }
+
+
+        .nav-link:hover {
+
+            background:
+                rgba(250,204,21,.10);
+
+            color:
+                #facc15;
+
+            transform:
+                translateX(5px);
+
+        }
+
+
+        .nav-icon {
+
+            width:
+                30px;
+
+            text-align:
+                center;
+
+            font-size:
+                19px;
+
+        }
+
+
+        /* ==========================================
+           ACTIVE LINK
+        ========================================== */
+
+        .nav-link.active {
+
+            background:
+                rgba(250,204,21,.12);
+
+            color:
+                #facc15;
+
+            border:
+                1px solid
+                rgba(250,204,21,.20);
+
+        }
+
+
+        /* ==========================================
+           LOGOUT
+        ========================================== */
+
+        .logout-link {
+
+            color:
+                #fca5a5;
+
+        }
+
+
+        .logout-link:hover {
+
+            background:
+                rgba(239,68,68,.12);
+
+            color:
+                #f87171;
+
+        }
+
+
+        /* ==========================================
+           MAIN CONTENT
+        ========================================== */
+
+        .main-content {
+
+            min-height:
+                100vh;
+
+            background:
+
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(250,204,21,.05),
+                    transparent 25%
+                ),
+
+                radial-gradient(
+                    circle at 90% 90%,
+                    rgba(37,99,235,.08),
+                    transparent 30%
+                ),
+
+                #071329;
+
+        }
+
+
+        /* ==========================================
+           TOP MOBILE BAR
+        ========================================== */
+
+        .mobile-header {
+
+            background:
+                rgba(7,19,41,.95);
+
+            backdrop-filter:
+                blur(15px);
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.10);
+
+        }
+
+
+        /* ==========================================
+           MOBILE MENU
+        ========================================== */
+
+        .mobile-sidebar {
+
+            transform:
+                translateX(-100%);
+
+            transition:
+                transform .35s ease;
+
+            z-index:
+                9999;
+
+        }
+
+
+        .mobile-sidebar.open {
+
+            transform:
+                translateX(0);
+
+        }
+
+
+        .mobile-overlay {
+
+            display:
+                none;
+
+            position:
+                fixed;
+
+            inset:
+                0;
+
+            background:
+                rgba(0,0,0,.70);
+
+            backdrop-filter:
+                blur(4px);
+
+            z-index:
+                9998;
+
+        }
+
+
+        .mobile-overlay.show {
+
+            display:
+                block;
+
+        }
+
+
+        /* ==========================================
+           PAGE ANIMATION
+        ========================================== */
+
+        .page-content {
+
+            animation:
+                pageIn .5s ease;
+
+        }
+
+
+        @keyframes pageIn {
+
+            from {
+
+                opacity:
+                    0;
+
+                transform:
+                    translateY(15px);
+
+            }
+
+            to {
+
+                opacity:
+                    1;
+
+                transform:
+                    translateY(0);
+
+            }
+
+        }
+
+
+        /* ==========================================
+           SCROLLBAR
+        ========================================== */
+
+        ::-webkit-scrollbar {
+
+            width:
+                7px;
+
+        }
+
+
+        ::-webkit-scrollbar-track {
+
+            background:
+                #050e20;
+
+        }
+
+
+        ::-webkit-scrollbar-thumb {
+
+            background:
+                #334155;
+
+            border-radius:
+                20px;
+
+        }
+
+
+        ::-webkit-scrollbar-thumb:hover {
+
+            background:
+                #facc15;
+
+        }
+
+
+        /* ==========================================
+           MOBILE
+        ========================================== */
+
+        @media(max-width:1023px) {
+
+            .desktop-sidebar {
+
+                display:
+                    none;
+
+            }
+
+            .main-content {
+
+                padding-top:
+                    75px;
+
+            }
+
         }
 
     </style>
 
 </head>
 
+
 <body>
 
-<div class="min-h-screen flex">
 
-    <!-- Sidebar -->
+<!-- =====================================================
+     MOBILE HEADER
+===================================================== -->
 
-    <aside class="w-64 bg-gradient-to-b from-indigo-700 to-purple-800 text-white shadow-xl">
+<header
+    class="mobile-header
+           fixed
+           top-0
+           left-0
+           right-0
+           h-[70px]
+           flex
+           items-center
+           justify-between
+           px-5
+           lg:hidden
+           z-50">
 
-        <div class="p-6 border-b border-indigo-500">
 
-            <h2 class="text-2xl font-bold">
+    <div
+        class="flex
+               items-center
+               gap-3">
+
+
+        <div
+            class="logo-icon">
+
+            🎓
+
+        </div>
+
+
+        <div>
+
+            <h1
+                class="font-bold
+                       text-lg
+                       gold">
 
                 RR IT Origin
 
-            </h2>
+            </h1>
 
-            <p class="text-indigo-200 mt-2">
+            <p
+                class="text-[10px]
+                       tracking-widest
+                       text-gray-500">
 
-                Student Portal
+                STUDENT PORTAL
 
             </p>
 
         </div>
 
-        <nav class="mt-6">
+    </div>
 
-            <a href="{{ url_for('student.explorer_dashboard') }}"
-               class="block px-6 py-3 hover:bg-indigo-600">
 
-                🏠 Dashboard
+    <button
+        onclick="openMobileSidebar()"
+        class="text-2xl
+               text-gray-300
+               hover:text-yellow-400
+               transition">
 
-            </a>
+        ☰
 
-           <a href="{{ url_for('student.my_course') }}"
-   class="block px-6 py-3 hover:bg-indigo-600">
-    📘 My Course
-</a>
+    </button>
 
-            <a href="{{ url_for('student.fee_details') }}"
-               class="block px-6 py-3 hover:bg-indigo-600">
+</header>
 
-                💰 Fee Details
 
-            </a>
 
-            <a href="{{ url_for('student.study_materials') }}"
-               class="block px-6 py-3 hover:bg-indigo-600">
+<!-- =====================================================
+     DESKTOP SIDEBAR
+===================================================== -->
 
-                📚 Study Materials
+<aside
+    class="desktop-sidebar
+           sidebar
+           fixed
+           top-0
+           left-0
+           bottom-0
+           w-72
+           hidden
+           lg:block
+           z-40">
 
-            </a>
 
-            <a href="{{ url_for('student.placement') }}"
-               class="block px-6 py-3 hover:bg-indigo-600">
+    <!-- LOGO -->
 
-                💼 Placement
+    <div
+        class="logo-box
+               p-6">
 
-            </a>
 
-           <a href="{{ url_for('student.profile') }}"
-   class="block px-6 py-3 hover:bg-indigo-600">
+        <div
+            class="flex
+                   items-center
+                   gap-3">
 
-    👤 Profile
 
-</a>
+            <div
+                class="logo-icon">
 
-            <a href="{{ url_for('auth.logout') }}"
-               class="block px-6 py-3 hover:bg-red-600">
+                🎓
 
-                🚪 Logout
+            </div>
 
-            </a>
 
-        </nav>
+            <div>
 
-    </aside>
+                <h2
+                    class="text-2xl
+                           font-bold
+                           gold">
 
-    <!-- Main Content -->
+                    RR IT Origin
 
-    <main class="flex-1 p-8">
+                </h2>
 
-        {% block content %}
 
-        {% endblock %}
+                <p
+                    class="text-xs
+                           text-gray-500
+                           tracking-widest
+                           mt-1">
 
-    </main>
+                    STUDENT PORTAL
 
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- NAVIGATION -->
+
+    <nav
+        class="mt-6">
+
+
+        <p
+            class="px-7
+                   mb-3
+                   text-xs
+                   font-semibold
+                   text-gray-500
+                   tracking-widest">
+
+            MAIN MENU
+
+        </p>
+
+
+        <!-- DASHBOARD -->
+
+        <a
+            href="{{ url_for('student.explorer_dashboard') }}"
+            class="nav-link">
+
+            <span class="nav-icon">
+                🏠
+            </span>
+
+            <span>
+                Dashboard
+            </span>
+
+        </a>
+
+
+        <!-- MY COURSE -->
+
+        <a
+            href="{{ url_for('student.my_course') }}"
+            class="nav-link">
+
+            <span class="nav-icon">
+                📘
+            </span>
+
+            <span>
+                My Course
+            </span>
+
+        </a>
+
+
+        <!-- FEE -->
+
+        <a
+            href="{{ url_for('student.fee_details') }}"
+            class="nav-link">
+
+            <span class="nav-icon">
+                💰
+            </span>
+
+            <span>
+                Fee Details
+            </span>
+
+        </a>
+
+
+        <!-- STUDY MATERIAL -->
+
+        <a
+            href="{{ url_for('student.study_materials') }}"
+            class="nav-link">
+
+            <span class="nav-icon">
+                📚
+            </span>
+
+            <span>
+                Study Materials
+            </span>
+
+        </a>
+
+
+        <!-- PLACEMENT -->
+
+        <a
+            href="{{ url_for('student.placement') }}"
+            class="nav-link">
+
+            <span class="nav-icon">
+                💼
+            </span>
+
+            <span>
+                Placement
+            </span>
+
+        </a>
+
+
+        <!-- PROFILE -->
+
+        <a
+            href="{{ url_for('student.profile') }}"
+            class="nav-link">
+
+            <span class="nav-icon">
+                👤
+            </span>
+
+            <span>
+                Profile
+            </span>
+
+        </a>
+
+
+        <!-- DIVIDER -->
+
+        <div
+            class="border-t
+                   border-gray-800
+                   my-6
+                   mx-5">
+        </div>
+
+
+        <p
+            class="px-7
+                   mb-3
+                   text-xs
+                   font-semibold
+                   text-gray-500
+                   tracking-widest">
+
+            ACCOUNT
+
+        </p>
+
+
+        <!-- LOGOUT -->
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="nav-link logout-link">
+
+            <span class="nav-icon">
+                🚪
+            </span>
+
+            <span>
+                Logout
+            </span>
+
+        </a>
+
+
+    </nav>
+
+
+    <!-- BOTTOM MESSAGE -->
+
+    <div
+        class="absolute
+               bottom-6
+               left-5
+               right-5
+               bg-white/5
+               border
+               border-white/10
+               rounded-xl
+               p-4">
+
+
+        <p
+            class="text-yellow-400
+                   text-sm
+                   font-semibold">
+
+            Learn • Build • Grow
+
+        </p>
+
+
+        <p
+            class="text-gray-500
+                   text-xs
+                   mt-1">
+
+            Your career starts here.
+
+        </p>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =====================================================
+     MOBILE OVERLAY
+===================================================== -->
+
+<div
+    id="mobileOverlay"
+    class="mobile-overlay"
+    onclick="closeMobileSidebar()">
 </div>
+
+
+
+<!-- =====================================================
+     MOBILE SIDEBAR
+===================================================== -->
+
+<aside
+    id="mobileSidebar"
+    class="mobile-sidebar
+           sidebar
+           fixed
+           top-0
+           left-0
+           bottom-0
+           w-72
+           lg:hidden">
+
+
+    <!-- HEADER -->
+
+    <div
+        class="logo-box
+               p-6
+               flex
+               justify-between
+               items-center">
+
+
+        <div>
+
+            <h2
+                class="text-2xl
+                       font-bold
+                       gold">
+
+                RR IT Origin
+
+            </h2>
+
+            <p
+                class="text-xs
+                       text-gray-500
+                       tracking-widest">
+
+                STUDENT PORTAL
+
+            </p>
+
+        </div>
+
+
+        <button
+            onclick="closeMobileSidebar()"
+            class="text-2xl
+                   text-gray-400
+                   hover:text-yellow-400">
+
+            ×
+
+        </button>
+
+    </div>
+
+
+    <!-- MOBILE NAV -->
+
+    <nav class="mt-6">
+
+
+        <a
+            href="{{ url_for('student.explorer_dashboard') }}"
+            class="nav-link">
+
+            <span class="nav-icon">
+                🏠
+            </span>
+
+            Dashboard
+
+        </a>
+
+
+        <a
+            href="{{ url_for('student.my_course') }}"
+            class="nav-link">
+
+            <span class="nav-icon">
+                📘
+            </span>
+
+            My Course
+
+        </a>
+
+
+        <a
+            href="{{ url_for('student.fee_details') }}"
+            class="nav-link">
+
+            <span class="nav-icon">
+                💰
+            </span>
+
+            Fee Details
+
+        </a>
+
+
+        <a
+            href="{{ url_for('student.study_materials') }}"
+            class="nav-link">
+
+            <span class="nav-icon">
+                📚
+            </span>
+
+            Study Materials
+
+        </a>
+
+
+        <a
+            href="{{ url_for('student.placement') }}"
+            class="nav-link">
+
+            <span class="nav-icon">
+                💼
+            </span>
+
+            Placement
+
+        </a>
+
+
+        <a
+            href="{{ url_for('student.profile') }}"
+            class="nav-link">
+
+            <span class="nav-icon">
+                👤
+            </span>
+
+            Profile
+
+        </a>
+
+
+        <div
+            class="border-t
+                   border-gray-800
+                   my-6
+                   mx-5">
+        </div>
+
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="nav-link logout-link">
+
+            <span class="nav-icon">
+                🚪
+            </span>
+
+            Logout
+
+        </a>
+
+    </nav>
+
+</aside>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<main
+    class="main-content
+           lg:ml-72
+           min-h-screen
+           p-5
+           sm:p-7
+           lg:p-10
+           page-content">
+
+
+    {% block content %}
+
+    {% endblock %}
+
+
+</main>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+    /* ==========================================
+       MOBILE SIDEBAR
+    ========================================== */
+
+
+    function openMobileSidebar() {
+
+        const sidebar =
+            document.getElementById(
+                "mobileSidebar"
+            );
+
+        const overlay =
+            document.getElementById(
+                "mobileOverlay"
+            );
+
+
+        if (!sidebar || !overlay)
+            return;
+
+
+        sidebar.classList.add(
+            "open"
+        );
+
+
+        overlay.classList.add(
+            "show"
+        );
+
+
+        document.body.style.overflow =
+            "hidden";
+
+    }
+
+
+
+    function closeMobileSidebar() {
+
+        const sidebar =
+            document.getElementById(
+                "mobileSidebar"
+            );
+
+        const overlay =
+            document.getElementById(
+                "mobileOverlay"
+            );
+
+
+        if (!sidebar || !overlay)
+            return;
+
+
+        sidebar.classList.remove(
+            "open"
+        );
+
+
+        overlay.classList.remove(
+            "show"
+        );
+
+
+        document.body.style.overflow =
+            "auto";
+
+    }
+
+
+
+    /* ==========================================
+       ESC KEY
+    ========================================== */
+
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                closeMobileSidebar();
+
+            }
+
+        }
+    );
+
+
+</script>
+
 
 </body>
 

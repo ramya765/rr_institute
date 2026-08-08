@@ -824,7 +824,7 @@ RR Origin Team
         courses=courses,
         lead=lead
     )
-# ==========================================================
+## ==========================================================
 # Edit Student
 # ==========================================================
 
@@ -863,6 +863,10 @@ def edit_student(id):
         "Weekend"
     ]
 
+    # ==================================================
+    # POST - UPDATE STUDENT
+    # ==================================================
+
     if request.method == "POST":
 
         # ----------------------------------------------
@@ -882,18 +886,50 @@ def edit_student(id):
         student.alternate_mobile = request.form.get("alternate_mobile")
         student.email = request.form.get("email")
         student.address = request.form.get("address")
+
+        # ----------------------------------------------
+        # Course & Batch
+        # ----------------------------------------------
+
         student.course = request.form.get("course")
         student.batch = request.form.get("batch")
-        student.trainer = request.form.get("trainer")
-        student.admission_date = request.form.get("admission_date") or None
+
+        # ----------------------------------------------
+        # AUTOMATIC TRAINER ASSIGNMENT
+        # ----------------------------------------------
+
+        faculty = Faculty.query.filter_by(
+            subject=student.course,
+            batch=student.batch,
+            status="Active"
+        ).first()
+
+        if faculty:
+            student.trainer = faculty.name
+        else:
+            student.trainer = None
+
+        student.admission_date = request.form.get(
+            "admission_date"
+        ) or None
+
+        # ----------------------------------------------
+        # Course Fee
+        # ----------------------------------------------
 
         if request.form.get("course_fee"):
+
             student.course_fee = float(
                 request.form.get("course_fee")
             )
 
-        student.payment_mode = request.form.get("payment_mode")
-        student.remarks = request.form.get("remarks")
+        student.payment_mode = request.form.get(
+            "payment_mode"
+        )
+
+        student.remarks = request.form.get(
+            "remarks"
+        )
 
         # ----------------------------------------------
         # Replace Student Photo
@@ -903,7 +939,9 @@ def edit_student(id):
 
         if photo and photo.filename != "":
 
-            photo_name = secure_filename(photo.filename)
+            photo_name = secure_filename(
+                photo.filename
+            )
 
             photo.save(
                 os.path.join(
@@ -919,7 +957,9 @@ def edit_student(id):
         # Replace Aadhaar File
         # ----------------------------------------------
 
-        aadhaar = request.files.get("aadhaar_file")
+        aadhaar = request.files.get(
+            "aadhaar_file"
+        )
 
         if aadhaar and aadhaar.filename != "":
 
@@ -961,6 +1001,10 @@ def edit_student(id):
 
             student.qualification_file = qualification_name
 
+        # ----------------------------------------------
+        # SAVE
+        # ----------------------------------------------
+
         db.session.commit()
 
         flash(
@@ -975,6 +1019,10 @@ def edit_student(id):
             )
         )
 
+    # ==================================================
+    # GET - DISPLAY STUDENT
+    # ==================================================
+
     return render_template(
         "admin/edit_student.html",
         student=student,
@@ -985,7 +1033,6 @@ def edit_student(id):
         balance=balance,
         status=status
     )
-    
     
     
 @admin.route("/batch/<int:id>/students")
@@ -1783,41 +1830,126 @@ def download_material(filename):
 # ==========================================================
 
 
+# ==========================================
+# Admin Settings
+# ==========================================
+
 @admin.route("/settings", methods=["GET", "POST"])
 def settings():
 
+    # Check admin login
     if "user_id" not in session:
         return redirect(url_for("auth.login"))
 
+    # Get current settings
     settings = InstituteSettings.query.first()
 
+    # If no settings record exists, create one
     if not settings:
-        settings = InstituteSettings()
+        settings = InstituteSettings(
+            institute_name="RR IT Origin",
+            new_lead_notification=True,
+            admission_notification=True,
+            payment_notification=True,
+            placement_notification=True,
+            student_registration=True,
+            student_login=True,
+            maintenance_mode=False
+        )
+
         db.session.add(settings)
         db.session.commit()
 
+    # ==========================================
+    # SAVE SETTINGS
+    # ==========================================
+
     if request.method == "POST":
 
-        settings.institute_name = request.form.get("institute_name")
-        settings.email = request.form.get("email")
-        settings.phone = request.form.get("phone")
-        settings.whatsapp = request.form.get("whatsapp")
-        settings.website = request.form.get("website")
-        settings.address = request.form.get("address")
-        settings.city = request.form.get("city")
-        settings.state = request.form.get("state")
-        settings.pincode = request.form.get("pincode")
+        # Institute Information
+        settings.institute_name = request.form.get(
+            "institute_name"
+        )
 
-        settings.contact_email = request.form.get("contact_email")
-        settings.support_email = request.form.get("support_email")
+        settings.email = request.form.get(
+            "email"
+        )
 
-        settings.welcome_text = request.form.get("welcome_text")
-        settings.footer_text = request.form.get("footer_text")
+        settings.phone = request.form.get(
+            "phone"
+        )
 
-        settings.facebook = request.form.get("facebook")
-        settings.instagram = request.form.get("instagram")
-        settings.linkedin = request.form.get("linkedin")
-        settings.youtube = request.form.get("youtube")
+        settings.whatsapp = request.form.get(
+            "whatsapp"
+        )
+
+        settings.website = request.form.get(
+            "website"
+        )
+
+        settings.address = request.form.get(
+            "address"
+        )
+
+        settings.city = request.form.get(
+            "city"
+        )
+
+        settings.state = request.form.get(
+            "state"
+        )
+
+        settings.pincode = request.form.get(
+            "pincode"
+        )
+
+        settings.logo = request.form.get(
+            "logo"
+        )
+
+        # ==========================================
+        # Communication
+        # ==========================================
+
+        settings.contact_email = request.form.get(
+            "contact_email"
+        )
+
+        settings.support_email = request.form.get(
+            "support_email"
+        )
+
+        settings.welcome_text = request.form.get(
+            "welcome_text"
+        )
+
+        settings.footer_text = request.form.get(
+            "footer_text"
+        )
+
+        # ==========================================
+        # Social Media
+        # ==========================================
+
+        settings.facebook = request.form.get(
+            "facebook"
+        )
+
+        settings.instagram = request.form.get(
+            "instagram"
+        )
+
+        settings.linkedin = request.form.get(
+            "linkedin"
+        )
+
+        settings.youtube = request.form.get(
+            "youtube"
+        )
+
+        # ==========================================
+        # Notifications
+        # ==========================================
 
         settings.new_lead_notification = (
             "new_lead_notification" in request.form
@@ -1835,6 +1967,10 @@ def settings():
             "placement_notification" in request.form
         )
 
+        # ==========================================
+        # Student Portal
+        # ==========================================
+
         settings.student_registration = (
             "student_registration" in request.form
         )
@@ -1847,16 +1983,37 @@ def settings():
             "maintenance_mode" in request.form
         )
 
-        db.session.commit()
+        # ==========================================
+        # Save
+        # ==========================================
 
-        flash(
-            "Settings updated successfully.",
-            "success"
-        )
+        try:
+
+            db.session.commit()
+
+            flash(
+                "Settings updated successfully!",
+                "success"
+            )
+
+        except Exception as e:
+
+            db.session.rollback()
+
+            print("Settings Error:", e)
+
+            flash(
+                "Unable to save settings.",
+                "danger"
+            )
 
         return redirect(
             url_for("admin.settings")
         )
+
+    # ==========================================
+    # Display Settings Page
+    # ==========================================
 
     return render_template(
         "admin/settings.html",

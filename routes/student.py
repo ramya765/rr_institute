@@ -8,6 +8,7 @@ from flask import (
     flash,
     send_from_directory
 )
+from datetime import datetime
 
 from database import db
 from models import Course, Lead, User, Student, StudyMaterial
@@ -99,6 +100,10 @@ def profile():
         "student/profile.html",
         student=student
     )
+# ==========================================
+# Placement
+# ==========================================
+
 @student.route("/placement")
 def placement():
 
@@ -121,6 +126,34 @@ def placement():
         placement=placement
     )
 
+
+# ==========================================
+# Placement Statistics
+# ==========================================
+
+@student.route("/placement-statistics")
+def placement_statistics():
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    user = User.query.get(session["user_id"])
+
+    student_record = Student.query.filter_by(
+        user_id=user.id
+    ).first_or_404()
+
+    return render_template(
+        "student/placement_statistics.html",
+        student=student_record,
+        user=user,
+        current_year=datetime.now().year
+    )
+
+
+# ==========================================
+# Explorer Dashboard
+# ==========================================
 # ==========================================
 # Explorer Dashboard
 # ==========================================

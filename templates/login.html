@@ -10,59 +10,438 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
+        rel="stylesheet">
 
     <style>
 
-        body{
-            font-family:'Inter',sans-serif;
-            background:#f8fafc;
+        * {
+            box-sizing: border-box;
         }
 
-        .bg-image{
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: #071329;
+            color: white;
+            min-height: 100vh;
+        }
 
-            background:linear-gradient(
-                rgba(30,41,59,.85),
-                rgba(30,41,59,.85)
-            ),
-            url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3");
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
 
-            background-size:cover;
-            background-position:center;
+        /* ==========================================
+           BACKGROUND
+        ========================================== */
+
+        .auth-page {
+
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(250,204,21,.10),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 85% 80%,
+                    rgba(37,99,235,.12),
+                    transparent 30%
+                ),
+                #071329;
+
+        }
+
+        /* ==========================================
+           LEFT IMAGE
+        ========================================== */
+
+        .auth-image {
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    rgba(3,14,35,.72),
+                    rgba(3,14,35,.92)
+                ),
+                url("{{ url_for('static', filename='images/institute.jpeg') }}");
+
+            background-size: cover;
+            background-position: center;
+
+            position: relative;
+
+        }
+
+        .auth-image::after {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    transparent 0%,
+                    rgba(3,14,35,.60) 100%
+                );
+
+        }
+
+        .auth-left-content {
+
+            position: relative;
+
+            z-index: 2;
+
+        }
+
+        /* ==========================================
+           GOLD
+        ========================================== */
+
+        .gold {
+            color: #facc15;
+        }
+
+        .gold-bg {
+            background: #facc15;
+        }
+
+        /* ==========================================
+           LOGIN CARD
+        ========================================== */
+
+        .auth-card {
+
+            width: 100%;
+            max-width: 480px;
+
+            background:
+                rgba(11,25,53,.90);
+
+            border:
+                1px solid rgba(255,255,255,.14);
+
+            backdrop-filter: blur(20px);
+
+            border-radius: 28px;
+
+            box-shadow:
+                0 30px 80px rgba(0,0,0,.40);
+
+            animation:
+                cardIn .6s ease;
+
+        }
+
+        @keyframes cardIn {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(30px)
+                    scale(.97);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+
+            }
+
+        }
+
+        /* ==========================================
+           INPUT
+        ========================================== */
+
+        .auth-input {
+
+            width: 100%;
+
+            background:
+                #111f3c;
+
+            border:
+                1px solid #334155;
+
+            color: white;
+
+            border-radius: 12px;
+
+            padding:
+                14px 16px;
+
+            outline: none;
+
+            transition: .3s;
+
+        }
+
+        .auth-input::placeholder {
+            color: #64748b;
+        }
+
+        .auth-input:focus {
+
+            border-color:
+                #facc15;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(250,204,21,.12);
+
+        }
+
+        /* ==========================================
+           BUTTON
+        ========================================== */
+
+        .auth-button {
+
+            width: 100%;
+
+            background:
+                #facc15;
+
+            color:
+                #111827;
+
+            border: none;
+
+            border-radius: 12px;
+
+            padding: 14px;
+
+            font-weight: 800;
+
+            transition: .3s;
+
+        }
+
+        .auth-button:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 15px 35px
+                rgba(250,204,21,.22);
+
+        }
+
+        /* ==========================================
+           LINKS
+        ========================================== */
+
+        .gold-link {
+
+            color: #facc15;
+
+            transition: .3s;
+
+        }
+
+        .gold-link:hover {
+
+            color: #fde047;
+
+        }
+
+        /* ==========================================
+           GOLD LINE
+        ========================================== */
+
+        .gold-line {
+
+            width: 65px;
+
+            height: 4px;
+
+            background: #facc15;
+
+            border-radius: 20px;
+
+            margin: 16px auto;
+
+        }
+
+        /* ==========================================
+           FLASH MESSAGE
+        ========================================== */
+
+        .success-message {
+
+            background:
+                rgba(34,197,94,.12);
+
+            border:
+                1px solid rgba(34,197,94,.35);
+
+            color:
+                #86efac;
+
+        }
+
+        .error-message {
+
+            background:
+                rgba(239,68,68,.12);
+
+            border:
+                1px solid rgba(239,68,68,.35);
+
+            color:
+                #fca5a5;
+
+        }
+
+        /* ==========================================
+           MOBILE
+        ========================================== */
+
+        @media(max-width: 768px) {
+
+            .auth-card {
+
+                border-radius: 22px;
+
+            }
+
         }
 
     </style>
 
 </head>
 
+
 <body>
 
-<div class="min-h-screen grid lg:grid-cols-2">
 
-    <!-- Left Side -->
+<div class="auth-page min-h-screen lg:grid lg:grid-cols-2">
 
-    <div class="bg-image hidden lg:flex items-center justify-center">
 
-        <div class="text-center text-white p-10">
+    <!-- ==========================================
+         LEFT SIDE
+    ========================================== -->
 
-            <h1 class="text-5xl font-bold">
-                RR Institute
+    <div class="auth-image hidden lg:flex items-center justify-center">
+
+        <div class="auth-left-content text-center px-10 max-w-xl">
+
+            <div
+                class="inline-block border border-yellow-400/70
+                       text-yellow-400 px-5 py-2 rounded-full
+                       text-sm font-semibold">
+
+                PREMIUM IT TRAINING INSTITUTE
+
+            </div>
+
+
+            <h1
+                class="serif text-6xl font-bold mt-8">
+
+                Build Your Future
+
+                <br>
+
+                <span class="gold">
+
+                    With Industry Ready Skills
+
+                </span>
+
             </h1>
 
-            <p class="mt-6 text-xl">
 
-                Learn.
-                Practice.
-                Get Placed.
+            <div class="gold-line"></div>
+
+
+            <p class="text-gray-300 text-xl leading-relaxed">
+
+                Learn from industry experts,
+                build real-world projects and
+                prepare yourself for a successful career.
 
             </p>
 
-            <div class="mt-10 space-y-3 text-lg">
 
-                <p>✔ Industry Trainers</p>
-                <p>✔ Live Projects</p>
-                <p>✔ Placement Support</p>
-                <p>✔ Certification</p>
+            <div
+                class="grid grid-cols-2 gap-4 mt-10 text-left">
+
+                <div
+                    class="bg-white/5 border border-white/10
+                           rounded-xl p-4">
+
+                    <p class="gold font-bold">
+                        ✓
+                    </p>
+
+                    <p class="text-gray-300 mt-1">
+                        Industry Trainers
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="bg-white/5 border border-white/10
+                           rounded-xl p-4">
+
+                    <p class="gold font-bold">
+                        ✓
+                    </p>
+
+                    <p class="text-gray-300 mt-1">
+                        Live Projects
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="bg-white/5 border border-white/10
+                           rounded-xl p-4">
+
+                    <p class="gold font-bold">
+                        ✓
+                    </p>
+
+                    <p class="text-gray-300 mt-1">
+                        Placement Support
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="bg-white/5 border border-white/10
+                           rounded-xl p-4">
+
+                    <p class="gold font-bold">
+                        ✓
+                    </p>
+
+                    <p class="text-gray-300 mt-1">
+                        Certification
+                    </p>
+
+                </div>
 
             </div>
 
@@ -71,47 +450,79 @@
     </div>
 
 
-    <!-- Right Side -->
+    <!-- ==========================================
+         RIGHT SIDE
+    ========================================== -->
 
-    <div class="flex items-center justify-center">
+    <div
+        class="flex items-center justify-center
+               px-5 py-10 lg:px-12">
 
-        <div class="bg-white shadow-2xl rounded-2xl p-10 w-full max-w-md">
+
+        <div class="auth-card p-7 sm:p-10">
+
+
+            <!-- LOGO / TITLE -->
 
             <div class="text-center">
 
-                <h2 class="text-4xl font-bold text-indigo-600">
 
-                    Login
+                <div
+                    class="w-16 h-16 mx-auto
+                           rounded-2xl
+                           bg-yellow-400/10
+                           border border-yellow-400/30
+                           flex items-center justify-center
+                           text-3xl">
 
-                </h2>
+                    🎓
 
-                <p class="text-gray-500 mt-2">
+                </div>
+
+
+                <h2
+                    class="serif text-4xl font-bold mt-5">
 
                     Welcome Back
 
+                </h2>
+
+
+                <p class="text-gray-400 mt-2">
+
+                    Login to your student portal
+
                 </p>
+
+
+                <div class="gold-line"></div>
 
             </div>
 
-            <!-- Flash Messages -->
+
+            <!-- FLASH MESSAGES -->
 
             {% with messages = get_flashed_messages(with_categories=true) %}
 
                 {% if messages %}
 
-                    {% for category,message in messages %}
+                    {% for category, message in messages %}
 
-                    <div class="mt-5 p-3 rounded-lg
-                        {% if category=='success' %}
-                            bg-green-100 text-green-700
-                        {% else %}
-                            bg-red-100 text-red-700
-                        {% endif %}
-                    ">
+                        <div
+                            class="
+                            mt-5
+                            p-4
+                            rounded-xl
+                            {% if category == 'success' %}
+                                success-message
+                            {% else %}
+                                error-message
+                            {% endif %}
+                            ">
 
-                        {{ message }}
+                            {{ message }}
 
-                    </div>
+                        </div>
 
                     {% endfor %}
 
@@ -120,17 +531,22 @@
             {% endwith %}
 
 
-            <!-- Login Form -->
+            <!-- LOGIN FORM -->
 
-            <form method="POST" action="{{ url_for('auth.login') }}" class="mt-8 space-y-5">
+            <form
+                method="POST"
+                action="{{ url_for('auth.login') }}"
+                class="mt-7 space-y-5">
 
-                <!-- Email -->
+
+                <!-- EMAIL -->
 
                 <div>
 
-                    <label class="font-medium">
+                    <label
+                        class="text-sm font-semibold text-gray-300">
 
-                        Email
+                        Email Address
 
                     </label>
 
@@ -138,19 +554,18 @@
                         type="email"
                         name="email"
                         required
-
-                        class="w-full mt-2 border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 outline-none"
-
-                        placeholder="Enter Email">
+                        class="auth-input mt-2"
+                        placeholder="Enter your email">
 
                 </div>
 
 
-                <!-- Password -->
+                <!-- PASSWORD -->
 
                 <div>
 
-                    <label class="font-medium">
+                    <label
+                        class="text-sm font-semibold text-gray-300">
 
                         Password
 
@@ -160,108 +575,84 @@
                         type="password"
                         name="password"
                         required
-
-                        class="w-full mt-2 border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 outline-none"
-
-                        placeholder="Enter Password">
+                        class="auth-input mt-2"
+                        placeholder="Enter your password">
 
                 </div>
 
 
-                <!-- Login As -->
+                <!-- REMEMBER / FORGOT -->
 
-                <!-- <div>
-
-                    <label class="font-medium">
-
-                        Login As
-
-                    </label>
-
-                    <select
-
-                        name="role"
-
-                        class="w-full mt-2 border rounded-lg p-3">
-
-                        <option value="student">
-
-                            Student
-
-                        </option>
-
-                        <option value="admin">
-
-                            Admin
-
-                        </option>
-
-                    </select>
-
-                </div> -->
+                <div
+                    class="flex items-center justify-between
+                           text-sm">
 
 
-                <!-- Remember -->
+                    <label
+                        class="flex items-center
+                               gap-2 text-gray-400">
 
-                <div class="flex justify-between">
-
-                    <label>
-
-                        <input type="checkbox">
+                        <input
+                            type="checkbox"
+                            class="accent-yellow-400">
 
                         Remember Me
 
                     </label>
 
-                  <a href="{{ url_for('auth.forgot_password') }}"
-   class="text-indigo-600">
-    Forgot Password?
-</a>
+
+                    <a
+                        href="{{ url_for('auth.forgot_password') }}"
+                        class="gold-link">
+
+                        Forgot Password?
+
+                    </a>
 
                 </div>
 
 
-                <!-- Login Button -->
+                <!-- LOGIN BUTTON -->
 
                 <button
+                    type="submit"
+                    class="auth-button">
 
-                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold">
-
-                    Login
+                    Login →
 
                 </button>
 
             </form>
 
 
-            <!-- Register -->
+            <!-- REGISTER -->
 
-            <div class="text-center mt-6">
+            <div
+                class="text-center mt-7
+                       text-gray-400">
 
                 Don't have an account?
 
                 <a
+                    href="{{ url_for('auth.register') }}"
+                    class="gold-link font-bold ml-1">
 
-                href="{{ url_for('auth.register') }}"
-
-                class="text-indigo-600 font-semibold">
-
-                    Register
+                    Create Account
 
                 </a>
 
             </div>
 
 
-            <!-- Home -->
+            <!-- HOME -->
 
-            <div class="text-center mt-5">
+            <div
+                class="text-center mt-5">
 
                 <a
-
-                href="{{ url_for('main.home') }}"
-
-                class="text-gray-500">
+                    href="{{ url_for('main.home') }}"
+                    class="text-gray-500 hover:text-yellow-400
+                           transition">
 
                     ← Back to Home
 
@@ -274,6 +665,7 @@
     </div>
 
 </div>
+
 
 </body>
 

@@ -2,146 +2,537 @@
 
 {% block content %}
 
-<div class="bg-white rounded-2xl shadow-lg p-8">
+<div class="space-y-7">
 
-    <h1 class="text-3xl font-bold text-indigo-700 mb-8">
-        📚 Study Materials
-    </h1>
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
 
-    <!-- Student Info -->
-    <div class="bg-indigo-50 rounded-xl p-6 mb-8">
+    <div class="relative overflow-hidden rounded-3xl
+                bg-gradient-to-r from-indigo-600 via-purple-600 to-fuchsia-600
+                p-7 md:p-9 shadow-2xl">
 
-        <h2 class="text-2xl font-bold">
-            {{ student.name }}
-        </h2>
+        <!-- Decorative Circle -->
 
-        <p class="text-gray-600 mt-2">
-            Course : <strong>{{ student.course }}</strong>
-        </p>
+        <div class="absolute -right-16 -top-20
+                    w-60 h-60
+                    bg-white/10
+                    rounded-full
+                    blur-2xl">
+        </div>
+
+        <div class="absolute -right-5 -bottom-24
+                    w-52 h-52
+                    bg-yellow-400/10
+                    rounded-full
+                    blur-2xl">
+        </div>
+
+        <div class="relative z-10">
+
+            <p class="text-yellow-300
+                      text-sm
+                      font-semibold
+                      tracking-widest
+                      uppercase">
+
+                Student Portal
+
+            </p>
+
+            <h1 class="text-3xl md:text-4xl
+                       font-bold
+                       mt-2">
+
+                📚 Study Materials
+
+            </h1>
+
+            <p class="mt-3
+                      text-indigo-100
+                      max-w-2xl">
+
+                Access your course materials, notes and
+                learning resources uploaded by your trainer.
+
+            </p>
+
+        </div>
 
     </div>
+
+
+    <!-- =====================================================
+         STUDENT INFORMATION
+    ====================================================== -->
+
+    <div class="dashboard-card rounded-3xl p-6 md:p-7">
+
+        <div class="flex flex-col sm:flex-row
+                    sm:items-center
+                    gap-5">
+
+            <!-- Avatar -->
+
+            <div class="w-16 h-16
+                        rounded-full
+                        bg-gradient-to-br
+                        from-yellow-300
+                        to-yellow-500
+                        text-gray-900
+                        flex items-center
+                        justify-center
+                        text-2xl
+                        font-bold
+                        shrink-0">
+
+                {{ student.name[0]|upper }}
+
+            </div>
+
+
+            <!-- Student Details -->
+
+            <div>
+
+                <h2 class="text-2xl
+                           font-bold
+                           text-white">
+
+                    {{ student.name }}
+
+                </h2>
+
+                <p class="text-gray-400 mt-2">
+
+                    📘 Course :
+                    <strong class="text-yellow-400">
+
+                        {{ student.course }}
+
+                    </strong>
+
+                </p>
+
+            </div>
+
+
+            <!-- Status -->
+
+            <div class="sm:ml-auto">
+
+                <span class="inline-flex
+                             items-center
+                             gap-2
+                             px-4 py-2
+                             rounded-full
+                             bg-green-400/10
+                             border
+                             border-green-400/20
+                             text-green-400
+                             text-sm
+                             font-semibold">
+
+                    <span class="w-2 h-2
+                                 rounded-full
+                                 bg-green-400">
+                    </span>
+
+                    Active Student
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MATERIALS
+    ====================================================== -->
 
     {% if materials %}
 
-    <div class="overflow-x-auto">
+    <div class="dashboard-card
+                rounded-3xl
+                p-5 md:p-7">
 
-        <table class="w-full border border-gray-200 rounded-lg overflow-hidden">
+        <!-- Header -->
 
-            <thead class="bg-indigo-600 text-white">
+        <div class="flex items-center gap-3 mb-6">
 
-                <tr>
+            <div class="section-icon">
 
-                    <th class="p-4 text-left">
-                        Title
-                    </th>
+                📚
 
-                    <th class="p-4 text-left">
-                        Description
-                    </th>
+            </div>
 
-                    <th class="p-4 text-left">
-                        Type
-                    </th>
+            <div>
 
-                    <th class="p-4 text-left">
-                        Uploaded Date
-                    </th>
+                <h2 class="text-xl
+                           md:text-2xl
+                           font-bold">
 
-                    <th class="p-4 text-center">
-                        Actions
-                    </th>
+                    Available Materials
 
-                </tr>
+                </h2>
 
-            </thead>
+                <p class="text-gray-500
+                          text-sm
+                          mt-1">
 
-            <tbody>
+                    Learning resources for your course
 
-            {% for material in materials %}
+                </p>
 
-                <tr class="border-b hover:bg-gray-50">
+            </div>
 
-                    <td class="p-4 font-semibold">
+        </div>
 
-                        {{ material.title }}
 
-                    </td>
+        <!-- Desktop Table -->
 
-                    <td class="p-4">
+        <div class="hidden md:block overflow-x-auto">
 
-                        {{ material.description or "No Description" }}
+            <table class="w-full">
 
-                    </td>
+                <thead>
 
-                    <td class="p-4">
+                    <tr class="border-b
+                               border-white/10">
 
-                        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+                        <th class="p-4
+                                   text-left
+                                   text-gray-400
+                                   text-sm">
 
-                            {{ material.material_type }}
+                            Title
 
-                        </span>
+                        </th>
 
-                    </td>
+                        <th class="p-4
+                                   text-left
+                                   text-gray-400
+                                   text-sm">
 
-                    <td class="p-4">
+                            Description
 
-                        {{ material.created_at.strftime("%d-%m-%Y") }}
+                        </th>
 
-                    </td>
+                        <th class="p-4
+                                   text-left
+                                   text-gray-400
+                                   text-sm">
 
-                    <td class="p-4 text-center space-x-2">
+                            Type
 
-                        <a href="{{ url_for('student.view_material', filename=material.file_name) }}"
-                           target="_blank"
-                           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                        </th>
 
-                            👁 View
+                        <th class="p-4
+                                   text-left
+                                   text-gray-400
+                                   text-sm">
 
-                        </a>
+                            Uploaded Date
 
-                        <a href="{{ url_for('student.download_material', filename=material.file_name) }}"
-                           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                        </th>
 
-                            📥 Download
+                        <th class="p-4
+                                   text-center
+                                   text-gray-400
+                                   text-sm">
 
-                        </a>
+                            Actions
 
-                    </td>
+                        </th>
 
-                </tr>
+                    </tr>
 
-            {% endfor %}
+                </thead>
 
-            </tbody>
 
-        </table>
+                <tbody>
+
+                {% for material in materials %}
+
+                    <tr class="border-b
+                               border-white/10
+                               hover:bg-white/5
+                               transition">
+
+                        <!-- Title -->
+
+                        <td class="p-4">
+
+                            <div class="font-semibold
+                                        text-white">
+
+                                {{ material.title }}
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- Description -->
+
+                        <td class="p-4
+                                   text-gray-400">
+
+                            {{ material.description or "No Description" }}
+
+                        </td>
+
+
+                        <!-- Type -->
+
+                        <td class="p-4">
+
+                            <span class="inline-flex
+                                         px-3 py-1
+                                         rounded-full
+                                         bg-blue-400/10
+                                         border
+                                         border-blue-400/20
+                                         text-blue-400
+                                         text-sm">
+
+                                {{ material.material_type }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- Date -->
+
+                        <td class="p-4
+                                   text-gray-400">
+
+                            {{ material.created_at.strftime("%d-%m-%Y") }}
+
+                        </td>
+
+
+                        <!-- Actions -->
+
+                        <td class="p-4">
+
+                            <div class="flex
+                                        justify-center
+                                        gap-2">
+
+                                <a
+                                    href="{{ url_for('student.view_material', filename=material.file_name) }}"
+                                    target="_blank"
+                                    class="bg-blue-600
+                                           hover:bg-blue-700
+                                           text-white
+                                           px-4 py-2
+                                           rounded-lg
+                                           text-sm
+                                           font-semibold
+                                           transition">
+
+                                    👁 View
+
+                                </a>
+
+
+                                <a
+                                    href="{{ url_for('student.download_material', filename=material.file_name) }}"
+                                    class="bg-green-600
+                                           hover:bg-green-700
+                                           text-white
+                                           px-4 py-2
+                                           rounded-lg
+                                           text-sm
+                                           font-semibold
+                                           transition">
+
+                                    📥 Download
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- =================================================
+             MOBILE MATERIAL CARDS
+        ================================================== -->
+
+        <div class="md:hidden space-y-4">
+
+        {% for material in materials %}
+
+            <div class="mobile-material-card">
+
+                <div class="flex
+                            justify-between
+                            items-start
+                            gap-3">
+
+                    <div>
+
+                        <h3 class="font-bold
+                                   text-white
+                                   text-lg">
+
+                            {{ material.title }}
+
+                        </h3>
+
+                        <p class="text-gray-400
+                                  text-sm
+                                  mt-2">
+
+                            {{ material.description or "No Description" }}
+
+                        </p>
+
+                    </div>
+
+
+                    <span class="shrink-0
+                                 px-3 py-1
+                                 rounded-full
+                                 bg-blue-400/10
+                                 text-blue-400
+                                 text-xs">
+
+                        {{ material.material_type }}
+
+                    </span>
+
+                </div>
+
+
+                <div class="mt-4
+                            text-sm
+                            text-gray-500">
+
+                    📅
+                    {{ material.created_at.strftime("%d-%m-%Y") }}
+
+                </div>
+
+
+                <div class="grid grid-cols-2
+                            gap-3
+                            mt-5">
+
+                    <a
+                        href="{{ url_for('student.view_material', filename=material.file_name) }}"
+                        target="_blank"
+                        class="bg-blue-600
+                               hover:bg-blue-700
+                               text-white
+                               text-center
+                               py-2.5
+                               rounded-lg
+                               font-semibold">
+
+                        👁 View
+
+                    </a>
+
+
+                    <a
+                        href="{{ url_for('student.download_material', filename=material.file_name) }}"
+                        class="bg-green-600
+                               hover:bg-green-700
+                               text-white
+                               text-center
+                               py-2.5
+                               rounded-lg
+                               font-semibold">
+
+                        📥 Download
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+        </div>
 
     </div>
 
+
     {% else %}
 
-    <div class="bg-yellow-50 border border-yellow-300 rounded-xl p-8 text-center">
 
-        <h2 class="text-2xl font-bold text-yellow-700">
+    <!-- =====================================================
+         NO MATERIALS
+    ====================================================== -->
+
+    <div class="dashboard-card
+                rounded-3xl
+                p-10
+                text-center">
+
+        <div class="text-6xl mb-5">
+
+            📚
+
+        </div>
+
+        <h2 class="text-2xl
+                   font-bold
+                   text-yellow-400">
 
             No Study Materials Available
 
         </h2>
 
-        <p class="mt-3 text-gray-600">
+        <p class="mt-3
+                  text-gray-400
+                  max-w-xl
+                  mx-auto">
 
             Your trainer has not uploaded any study materials yet.
+            Please check again later.
 
         </p>
 
     </div>
 
+
     {% endif %}
 
-    <div class="mt-8">
 
-        <a href="{{ url_for('student.explorer_dashboard') }}"
-           class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg">
+    <!-- =====================================================
+         BACK TO DASHBOARD
+    ====================================================== -->
+
+    <div class="pb-5">
+
+        <a
+            href="{{ url_for('student.explorer_dashboard') }}"
+            class="primary-button
+                   inline-flex
+                   items-center
+                   gap-2
+                   px-6 py-3
+                   rounded-lg
+                   font-bold">
 
             ← Back to Dashboard
 
@@ -150,5 +541,176 @@
     </div>
 
 </div>
+
+
+<!-- =====================================================
+     PAGE SPECIFIC CSS
+====================================================== -->
+
+<style>
+
+    /* ==========================================
+       DASHBOARD CARD
+    ========================================== */
+
+    .dashboard-card {
+
+        background:
+            rgba(15,31,65,.72);
+
+        border:
+            1px solid
+            rgba(255,255,255,.12);
+
+        backdrop-filter:
+            blur(15px);
+
+        -webkit-backdrop-filter:
+            blur(15px);
+
+        box-shadow:
+            0 15px 40px
+            rgba(0,0,0,.15);
+
+        transition:
+            all .3s ease;
+
+    }
+
+
+    .dashboard-card:hover {
+
+        border-color:
+            rgba(250,204,21,.35);
+
+        box-shadow:
+            0 20px 50px
+            rgba(0,0,0,.25);
+
+    }
+
+
+    /* ==========================================
+       SECTION ICON
+    ========================================== */
+
+    .section-icon {
+
+        width:
+            45px;
+
+        height:
+            45px;
+
+        border-radius:
+            12px;
+
+        display:
+            flex;
+
+        align-items:
+            center;
+
+        justify-content:
+            center;
+
+        background:
+            rgba(250,204,21,.10);
+
+        border:
+            1px solid
+            rgba(250,204,21,.20);
+
+        font-size:
+            20px;
+
+    }
+
+
+    /* ==========================================
+       MOBILE MATERIAL CARD
+    ========================================== */
+
+    .mobile-material-card {
+
+        background:
+            rgba(255,255,255,.035);
+
+        border:
+            1px solid
+            rgba(255,255,255,.08);
+
+        border-radius:
+            18px;
+
+        padding:
+            18px;
+
+        transition:
+            all .3s ease;
+
+    }
+
+
+    .mobile-material-card:hover {
+
+        transform:
+            translateY(-3px);
+
+        border-color:
+            rgba(250,204,21,.35);
+
+        background:
+            rgba(255,255,255,.06);
+
+    }
+
+
+    /* ==========================================
+       PRIMARY BUTTON
+    ========================================== */
+
+    .primary-button {
+
+        background:
+            #facc15;
+
+        color:
+            #111827;
+
+        transition:
+            all .3s ease;
+
+    }
+
+
+    .primary-button:hover {
+
+        transform:
+            translateY(-3px);
+
+        box-shadow:
+            0 15px 35px
+            rgba(250,204,21,.30);
+
+    }
+
+
+    /* ==========================================
+       MOBILE
+    ========================================== */
+
+    @media(max-width:768px) {
+
+        .dashboard-card {
+
+            border-radius:
+                20px;
+
+        }
+
+    }
+
+</style>
 
 {% endblock %}

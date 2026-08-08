@@ -3,1016 +3,3108 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>RR IT Origin | IT Training Institute</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<script src="https://cdn.tailwindcss.com"></script>
+    <title>
+        {{ settings.institute_name or 'RR IT Origin' }}
+        | IT Training Institute
+    </title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
 
-
-<style>
-
-body{
-    font-family:'Inter',sans-serif;
-    background:#FAF9F6;
-}
-
-
-.gold{
-    color:#D4AF37;
-}
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
+        rel="stylesheet">
 
 
-.gold-bg{
-    background:#D4AF37;
-}
+    <style>
+
+        * {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #071329;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* ================================
+           NAVBAR
+        ================================= */
+
+        .navbar {
+            transition: all .4s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(5, 16, 38, .96);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0,0,0,.25);
+        }
 
 
-.hero{
+        /* ================================
+           HERO
+        ================================= */
 
-background:
-linear-gradient(
-rgba(17,24,39,.85),
-rgba(17,24,39,.85)
-),
-url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3");
+        .hero {
 
-background-size:cover;
-background-position:center;
+            min-height: 100vh;
 
-}
+            background:
+                linear-gradient(
+                    rgba(3, 14, 35, .70),
+                    rgba(3, 14, 35, .92)
+                ),
+                url("{{ url_for('static', filename='images/institute.jpeg') }}");
 
+            background-size: cover;
 
-.card-hover{
+            background-position: center;
 
-transition:.4s;
+            position: relative;
 
-}
-
-
-.card-hover:hover{
-
-transform:translateY(-10px);
-
-box-shadow:0 20px 40px rgba(0,0,0,.15);
-
-}
+        }
 
 
-.gold-border{
+        .hero::after {
 
-border:2px solid #D4AF37;
+            content: "";
 
-}
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    transparent 0%,
+                    rgba(3,14,35,.65) 100%
+                );
+
+            pointer-events: none;
+
+        }
 
 
-</style>
+        /* ================================
+           GOLD
+        ================================= */
 
+        .gold {
+            color: #facc15;
+        }
+
+        .gold-bg {
+            background: #facc15;
+        }
+
+
+        /* ================================
+           BUTTON
+        ================================= */
+
+        .gold-button {
+
+            background: #facc15;
+
+            color: #111827;
+
+            transition: all .3s ease;
+
+        }
+
+        .gold-button:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 15px 35px rgba(250,204,21,.25);
+
+        }
+
+
+        .outline-button {
+
+            border: 1px solid #facc15;
+
+            color: #facc15;
+
+            transition: all .3s ease;
+
+        }
+
+        .outline-button:hover {
+
+            background: #facc15;
+
+            color: #111827;
+
+            transform: translateY(-3px);
+
+        }
+
+
+        /* ================================
+           CARDS
+        ================================= */
+
+        .glass-card {
+
+            background:
+                rgba(15, 31, 65, .72);
+
+            border:
+                1px solid rgba(255,255,255,.18);
+
+            backdrop-filter: blur(15px);
+
+            transition: all .4s ease;
+
+        }
+
+        .glass-card:hover {
+
+            transform: translateY(-8px);
+
+            border-color: rgba(250,204,21,.65);
+
+            box-shadow:
+                0 25px 60px rgba(0,0,0,.25);
+
+        }
+
+
+        /* ================================
+           STAT CARDS
+        ================================= */
+
+        .stat-card {
+
+            background:
+                rgba(14, 30, 62, .88);
+
+            border:
+                1px solid rgba(255,255,255,.22);
+
+            border-radius: 22px;
+
+            transition: .4s;
+
+        }
+
+        .stat-card:hover {
+
+            transform: translateY(-8px);
+
+            border-color: #facc15;
+
+        }
+
+
+        /* ================================
+           REVEAL ANIMATION
+        ================================= */
+
+        .reveal {
+
+            opacity: 0;
+
+            transform:
+                translateY(50px);
+
+            transition:
+                opacity .8s ease,
+                transform .8s ease;
+
+        }
+
+        .reveal.active {
+
+            opacity: 1;
+
+            transform:
+                translateY(0);
+
+        }
+
+
+        /* ================================
+           FLOAT ANIMATION
+        ================================= */
+
+        .floating {
+
+            animation:
+                floating 4s ease-in-out infinite;
+
+        }
+
+        @keyframes floating {
+
+            0%,100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+
+        }
+
+
+        /* ================================
+           GLOW
+        ================================= */
+
+        .glow {
+
+            box-shadow:
+                0 0 80px
+                rgba(250,204,21,.12);
+
+        }
+
+
+        /* ================================
+           MODAL
+        ================================= */
+
+        .modal {
+
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 9999;
+
+            background:
+                rgba(0,0,0,.75);
+
+            backdrop-filter:
+                blur(8px);
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+        }
+
+        .modal.show {
+
+            display: flex;
+
+        }
+
+        .modal-box {
+
+            width: 100%;
+
+            max-width: 520px;
+
+            background: #0b1935;
+
+            border:
+                1px solid rgba(255,255,255,.15);
+
+            border-radius: 25px;
+
+            padding: 35px;
+
+            animation:
+                modalIn .35s ease;
+
+        }
+
+        @keyframes modalIn {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(40px)
+                    scale(.95);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+
+            }
+
+        }
+
+
+        /* ================================
+           INPUT
+        ================================= */
+
+        .dark-input {
+
+            width: 100%;
+
+            background:
+                #111f3c;
+
+            border:
+                1px solid #334155;
+
+            color: white;
+
+            border-radius: 10px;
+
+            padding: 13px 15px;
+
+            outline: none;
+
+        }
+
+        .dark-input:focus {
+
+            border-color:
+                #facc15;
+
+            box-shadow:
+                0 0 0 2px
+                rgba(250,204,21,.15);
+
+        }
+
+
+        /* ================================
+           MOBILE MENU
+        ================================= */
+
+        #mobileMenu {
+
+            display: none;
+
+        }
+
+        #mobileMenu.show {
+
+            display: block;
+
+        }
+
+
+        /* ================================
+           CHAT BUTTON
+        ================================= */
+
+        .chat-button {
+
+            position: fixed;
+
+            bottom: 25px;
+
+            right: 25px;
+
+            width: 60px;
+
+            height: 60px;
+
+            border-radius: 50%;
+
+            background: #facc15;
+
+            color: #111827;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 25px;
+
+            z-index: 1000;
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,.35);
+
+            animation:
+                pulseChat 2s infinite;
+
+        }
+
+        @keyframes pulseChat {
+
+            0% {
+                box-shadow:
+                    0 0 0 0
+                    rgba(250,204,21,.5);
+            }
+
+            70% {
+                box-shadow:
+                    0 0 0 18px
+                    rgba(250,204,21,0);
+            }
+
+            100% {
+                box-shadow:
+                    0 0 0 0
+                    rgba(250,204,21,0);
+            }
+
+        }
+
+
+        /* ================================
+           LINE
+        ================================= */
+
+        .gold-line {
+
+            width: 70px;
+
+            height: 4px;
+
+            background: #facc15;
+
+            margin:
+                20px auto;
+
+            border-radius: 20px;
+
+        }
+
+
+        /* ================================
+           MOBILE
+        ================================= */
+
+        @media(max-width: 768px) {
+
+            .hero h1 {
+
+                font-size: 45px !important;
+
+            }
+
+            .hero {
+
+                min-height:
+                    900px;
+
+            }
+
+        }
+
+    </style>
 
 </head>
-
 
 
 <body>
 
 
-<!-- TOP BAR -->
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
 
-<div class="bg-gray-900 text-white py-3">
+<nav
+    id="navbar"
+    class="navbar fixed top-0 left-0 right-0 z-50">
 
-<div class="max-w-7xl mx-auto px-8 flex justify-between items-center text-sm">
+    <div
+        class="max-w-7xl mx-auto px-6">
 
+        <div
+            class="flex items-center justify-between h-24">
 
-<div class="font-medium tracking-wide">
 
-📞 +91 9392105004
+            <!-- LOGO -->
 
-<span class="mx-3 text-yellow-500">|</span>
+            <a
+                href="/"
+                class="flex items-center gap-3">
 
-✉ info@rritorigin.com
+                <img
+                    src="{{ url_for('static', filename='images/logo.jpeg') }}"
+                    class="h-14 w-auto rounded-lg">
 
-</div>
+                <div>
 
+                    <h1
+                        class="text-xl md:text-2xl font-bold gold">
 
-<div class="hidden md:block font-semibold tracking-wide">
+                        {{ settings.institute_name or 'RR IT Origin' }}
 
-Learn • Build • Get Placed
+                    </h1>
 
-</div>
+                    <p
+                        class="text-xs tracking-widest text-gray-300">
 
+                        LEARN • BUILD • SUCCEED
 
-</div>
+                    </p>
 
-</div>
+                </div>
 
+            </a>
 
 
+            <!-- DESKTOP MENU -->
 
+            <div
+                class="hidden lg:flex items-center gap-8">
 
-<!-- NAVBAR -->
+                <a
+                    href="/"
+                    class="text-yellow-400 font-semibold">
 
+                    Home
 
-<nav class="bg-white shadow sticky top-0 z-50">
+                </a>
 
+                <a
+                    href="{{ url_for('main.courses') }}"
+                    class="hover:text-yellow-400 transition">
 
-<div class="max-w-7xl mx-auto px-6">
+                    Courses
 
+                </a>
 
-<div class="flex justify-between items-center h-24">
+                <a
+                    href="#placements"
+                    class="hover:text-yellow-400 transition">
 
-<!-- LOGO -->
+                    Placements
 
+                </a>
 
-<div class="flex items-center gap-2">
+                <button
+                    onclick="openModal('aboutModal')"
+                    class="hover:text-yellow-400 transition">
 
+                    About
 
-<img
+                </button>
 
-src="{{ url_for('static', filename='images/logo.jpeg') }}"
+                <a
+                    href="#contact"
+                    class="hover:text-yellow-400 transition">
 
-class="h-16 w-auto rounded-lg"
+                    Contact
 
+                </a>
 
->
+            </div>
 
 
-<div>
+            <!-- RIGHT -->
 
+            <div
+                class="hidden lg:flex items-center gap-3">
 
-<h1 class="text-3xl font-extrabold text-gray-900">
-RR IT Origin
+                <button
+                    onclick="openModal('loginModal')"
+                    class="px-5 py-3 border border-yellow-400 text-yellow-400 rounded-lg hover:bg-yellow-400 hover:text-black transition">
 
-</h1>
+                    Login
 
+                </button>
 
-<p class="text-sm text-gray-500 font-medium">
-IT Training & Career Academy
+                <button
+                    onclick="openModal('demoModal')"
+                    class="gold-button px-6 py-3 rounded-lg font-bold">
 
-</p>
+                    Book Demo
 
+                </button>
 
-</div>
+            </div>
 
 
-</div>
+            <!-- MOBILE BUTTON -->
 
+            <button
+                onclick="toggleMobileMenu()"
+                class="lg:hidden text-3xl">
 
+                ☰
 
+            </button>
 
+        </div>
 
 
+        <!-- MOBILE MENU -->
 
-<!-- MENU -->
+        <div
+            id="mobileMenu"
+            class="lg:hidden pb-6">
 
+            <div
+                class="bg-[#0b1935] rounded-xl p-5 space-y-4">
 
-<div class="hidden lg:flex gap-10 text-base font-semibold">
+                <a
+                    href="/"
+                    class="block">
 
-<a href="#" class="hover:text-yellow-600">
+                    Home
 
-Home
+                </a>
 
-</a>
+                <a
+                    href="{{ url_for('main.courses') }}"
+                    class="block">
 
+                    Courses
 
-<a href="{{ url_for('main.courses') }}" class="hover:text-yellow-600">
+                </a>
 
-Courses
+                <a
+                    href="#placements"
+                    class="block">
 
-</a>
+                    Placements
 
+                </a>
 
-<a href="#" class="hover:text-yellow-600">
+                <button
+                    onclick="openModal('aboutModal')"
+                    class="block">
 
-Placements
+                    About
 
-</a>
+                </button>
 
+                <a
+                    href="#contact"
+                    class="block">
 
-<a href="#" class="hover:text-yellow-600">
+                    Contact
 
-About
+                </a>
 
-</a>
+                <button
+                    onclick="openModal('loginModal')"
+                    class="w-full py-3 border border-yellow-400 text-yellow-400 rounded-lg">
 
+                    Login
 
-<a href="#" class="hover:text-yellow-600">
+                </button>
 
-Contact
+                <button
+                    onclick="openModal('demoModal')"
+                    class="w-full py-3 bg-yellow-400 text-black rounded-lg font-bold">
 
-</a>
+                    Book Demo
 
+                </button>
 
-</div>
+            </div>
 
+        </div>
 
-
-
-
-
-
-<!-- BUTTONS -->
-
-
-<div class="flex gap-2">
-
-
-<a
-
-href="{{ url_for('auth.login') }}"
-
-class="px-6 py-3 text-base rounded-xl border-2 border-yellow-600 text-yellow-700 font-semibold"
->
-
-Login
-
-</a>
-
-
-
-
-<a
-
-href="{{ url_for('main.enroll') }}"
-
-class="px-6 py-3 text-base rounded-xl bg-yellow-600 text-white font-semibold shadow-lg"
->
-
-Enroll Now
-
-</a>
-
-
-</div>
-
-
-
-</div>
-
-
-</div>
-
+    </div>
 
 </nav>
-<!-- HERO SECTION -->
 
 
-<section class="hero min-h-screen flex items-center">
 
+<!-- =====================================================
+     HERO
+===================================================== -->
 
-<div class="max-w-7xl mx-auto px-6">
+<section
+    class="hero flex items-center relative pt-24">
 
 
-<div class="grid lg:grid-cols-2 gap-14 items-center">
+    <div
+        class="max-w-7xl mx-auto px-6 w-full relative z-10">
 
 
+        <div
+            class="max-w-5xl mx-auto text-center">
 
-<div>
 
+            <div
+                class="reveal">
 
-<span class="bg-yellow-600 text-white px-5 py-2 rounded-full">
+                <span
+                    class="inline-block border border-yellow-400 text-yellow-400 px-5 py-2 rounded-full text-sm font-semibold">
 
-Premium IT Training Institute
+                    PREMIUM IT TRAINING INSTITUTE
 
-</span>
+                </span>
 
+            </div>
 
 
+            <h1
+                class="reveal serif text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mt-8">
 
-<h1 class="text-5xl lg:text-6xl font-extrabold text-white mt-8 leading-tight">
+                Build Your Future
 
+                <br>
 
-Build Your Future
+                <span class="text-white">
 
-With Industry Ready Skills
+                    With Industry Ready Skills
 
+                </span>
 
-</h1>
+            </h1>
 
 
+            <div
+                class="gold-line">
 
+            </div>
 
-<p class="text-gray-300 text-xl mt-6">
 
+            <p
+                class="reveal text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto">
 
-Master Java, Python, Cloud, Data Engineering,
-AI and emerging technologies with real-time projects.
+                {{ settings.welcome_text or
+                'Learn from industry experts, build real-world projects and prepare yourself for a successful career.' }}
 
+            </p>
 
-</p>
 
+            <!-- HERO STATS -->
 
+            <div
+                class="reveal flex flex-wrap justify-center gap-6 md:gap-10 mt-8 text-lg">
 
+                <span>
 
+                    <b class="text-white">
 
-<div class="mt-8 space-y-3 text-white">
+                        5,000+
 
+                    </b>
 
-<p>
-✓ Experienced Industry Trainers
-</p>
+                    Students
 
+                </span>
 
-<p>
-✓ Practical Project Based Learning
-</p>
+                <span class="gold">
 
+                    ●
 
-<p>
-✓ Placement Preparation
-</p>
+                </span>
 
+                <span>
 
-<p>
-✓ Interview Guidance
-</p>
+                    <b class="text-white">
 
+                        1,000+
 
+                    </b>
 
-</div>
+                    Career Opportunities
 
+                </span>
 
+                <span class="gold">
 
+                    ●
 
-<div class="flex gap-4 mt-10">
+                </span>
 
+                <span>
 
-<a
+                    <b class="text-white">
 
-href="{{ url_for('main.courses') }}"
+                        95%
 
-class="bg-yellow-600 px-8 py-4 rounded-xl text-white font-bold"
+                    </b>
 
->
+                    Success Focus
 
-Explore Courses
+                </span>
 
-</a>
+            </div>
 
 
+            <!-- BUTTONS -->
 
+            <div
+                class="reveal flex flex-wrap justify-center gap-5 mt-10">
 
-<a
+                <button
+                    onclick="openModal('demoModal')"
+                    class="gold-button px-9 py-4 rounded-xl font-bold text-lg">
 
-href="https://wa.me/919392105004"
+                    Book Free Demo
 
-target="_blank"
+                </button>
 
-class="border border-white px-8 py-4 rounded-xl text-white"
 
->
+               <button
+    onclick="openModal('coursesModal')"
+    class="inline-block mt-6 text-yellow-400 font-bold">
 
-WhatsApp Us
+    Explore Course →
 
-</a>
+</button>
 
+            </div>
 
+        </div>
 
-</div>
 
+        <!-- STAT CARDS -->
 
+        <div
+            class="grid md:grid-cols-3 gap-6 mt-16 reveal">
 
-</div>
 
+            <div
+                class="stat-card p-7">
 
+                <div
+                    class="flex items-center gap-5">
 
+                    <div
+                        class="w-16 h-16 rounded-xl bg-yellow-400/10 flex items-center justify-center text-3xl">
 
+                        👨‍🎓
 
-<div>
+                    </div>
 
+                    <div>
 
-<img
+                        <h2
+                            class="counter text-4xl font-bold gold"
+                            data-target="5000">
 
-src="{{ url_for('static', filename='images/institute.jpeg') }}"
+                            0
 
-class="rounded-3xl shadow-2xl w-full"
+                        </h2>
 
->
+                        <p
+                            class="text-gray-300">
 
+                            Students Trained
 
-<div class="bg-white rounded-xl mt-5 p-5 text-center shadow">
+                        </p>
 
+                    </div>
 
-<h2 class="text-xl font-bold">
+                </div>
 
-RR IT Origin
+                <hr
+                    class="border-gray-600 my-5">
 
-</h2>
+                <p
+                    class="text-gray-400 text-center">
 
+                    Join thousands of successful learners
 
-<p class="text-gray-600">
+                </p>
 
-Empowering Students Through Technology
+            </div>
 
-</p>
 
+            <div
+                class="stat-card p-7">
 
-</div>
+                <div
+                    class="flex items-center gap-5">
 
+                    <div
+                        class="w-16 h-16 rounded-xl bg-yellow-400/10 flex items-center justify-center text-3xl">
 
-</div>
+                        🎓
 
+                    </div>
 
+                    <div>
 
-</div>
+                        <h2
+                            class="counter text-4xl font-bold gold"
+                            data-target="1000">
 
+                            0
 
-</div>
+                        </h2>
 
+                        <p
+                            class="text-gray-300">
 
-</section>
-<!-- ================= STATS SECTION ================= -->
+                            Career Opportunities
 
-<section class="py-20 bg-white">
+                        </p>
 
-<div class="max-w-7xl mx-auto px-6">
+                    </div>
 
-<div class="grid md:grid-cols-4 gap-8">
+                </div>
 
+                <hr
+                    class="border-gray-600 my-5">
 
-<div class="bg-gray-50 p-8 rounded-2xl text-center card-hover">
-<h2 class="text-5xl font-bold gold">5000+</h2>
-<p class="mt-3 text-gray-600">
-Students Trained
-</p>
-</div>
+                <p
+                    class="text-gray-400 text-center">
 
+                    Career-focused training and support
 
-<div class="bg-gray-50 p-8 rounded-2xl text-center card-hover">
-<h2 class="text-5xl font-bold gold">1000+</h2>
-<p class="mt-3 text-gray-600">
-Career Opportunities
-</p>
-</div>
+                </p>
 
+            </div>
 
-<div class="bg-gray-50 p-8 rounded-2xl text-center card-hover">
-<h2 class="text-5xl font-bold gold">50+</h2>
-<p class="mt-3 text-gray-600">
-Industry Projects
-</p>
-</div>
 
+            <div
+                class="stat-card p-7">
 
-<div class="bg-gray-50 p-8 rounded-2xl text-center card-hover">
-<h2 class="text-5xl font-bold gold">15+</h2>
-<p class="mt-3 text-gray-600">
-Technologies
-</p>
-</div>
+                <div
+                    class="flex items-center gap-5">
 
+                    <div
+                        class="w-16 h-16 rounded-xl bg-yellow-400/10 flex items-center justify-center text-3xl">
 
-</div>
+                        📈
 
-</div>
+                    </div>
 
-</section>
+                    <div>
 
+                        <h2
+                            class="text-4xl font-bold gold">
 
+                            95%
 
+                        </h2>
 
+                        <p
+                            class="text-gray-300">
 
-<!-- ================= ABOUT SECTION ================= -->
+                            Success Focus
 
+                        </p>
 
-<section class="py-20">
+                    </div>
 
+                </div>
 
-<div class="max-w-7xl mx-auto px-6">
+                <hr
+                    class="border-gray-600 my-5">
 
+                <p
+                    class="text-gray-400 text-center">
 
-<div class="grid lg:grid-cols-2 gap-12 items-center">
+                    Practical learning with career guidance
 
+                </p>
 
-<div>
+            </div>
 
 
-<h2 class="text-4xl font-bold">
+        </div>
 
-Why Choose 
-<span class="gold">
-RR IT Origin?
-</span>
-
-</h2>
-
-
-<p class="mt-6 text-gray-600 text-lg">
-
-RR IT Origin focuses on practical technology training
-with real-time projects, expert mentoring and career
-guidance to help students become industry-ready.
-
-</p>
-
-
-<div class="mt-8 space-y-4">
-
-
-<div class="flex gap-4">
-
-<span class="text-yellow-600 text-2xl">
-✓
-</span>
-
-<p>
-Real-time Project Training
-</p>
-
-</div>
-
-
-<div class="flex gap-4">
-
-<span class="text-yellow-600 text-2xl">
-✓
-</span>
-
-<p>
-Experienced Trainers
-</p>
-
-</div>
-
-
-
-<div class="flex gap-4">
-
-<span class="text-yellow-600 text-2xl">
-✓
-</span>
-
-<p>
-Placement Assistance
-</p>
-
-</div>
-
-
-
-<div class="flex gap-4">
-
-<span class="text-yellow-600 text-2xl">
-✓
-</span>
-
-<p>
-Interview Preparation
-</p>
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-<div class="bg-gray-900 rounded-3xl p-10 text-white">
-
-
-<h3 class="text-3xl font-bold">
-
-Our Mission
-
-</h3>
-
-
-<p class="mt-5 text-gray-300">
-
-To bridge the gap between academic learning and
-industry requirements by providing quality IT education.
-
-</p>
-
-
-<div class="mt-8">
-
-<p class="text-yellow-500 text-xl font-bold">
-
-Learn
-
-</p>
-
-<p>
-Master modern technologies
-</p>
-
-
-<p class="text-yellow-500 text-xl font-bold mt-5">
-
-Build
-
-</p>
-
-<p>
-Create real-world projects
-</p>
-
-
-
-<p class="text-yellow-500 text-xl font-bold mt-5">
-
-Grow
-
-</p>
-
-<p>
-Achieve your career goals
-</p>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-</div>
+    </div>
 
 </section>
 
 
 
+<!-- =====================================================
+     ABOUT
+===================================================== -->
 
+<section
+    class="py-24 bg-[#071329] reveal">
 
 
-<!-- ================= COURSES ================= -->
+    <div
+        class="max-w-7xl mx-auto px-6">
 
 
-<section class="py-20 bg-white">
+        <div
+            class="grid lg:grid-cols-2 gap-14 items-center">
 
 
-<div class="max-w-7xl mx-auto px-6">
+            <div>
 
+                <span
+                    class="text-yellow-400 font-semibold">
 
-<h2 class="text-4xl font-bold text-center">
+                    ABOUT OUR INSTITUTE
 
-Popular Courses
+                </span>
 
-</h2>
 
+                <h2
+                    class="serif text-4xl md:text-5xl font-bold mt-4">
 
-<p class="text-center text-gray-500 mt-3">
+                    Learn Skills.
 
-Industry demanded technologies
+                    <br>
 
-</p>
+                    <span class="gold">
 
+                        Build Careers.
 
+                    </span>
 
-<div class="grid md:grid-cols-3 gap-8 mt-12">
+                </h2>
 
 
+                <p
+                    class="text-gray-300 text-lg mt-6 leading-relaxed">
 
-<div class="rounded-2xl shadow-lg p-8 card-hover">
+                    {{ settings.institute_name or 'RR IT Origin' }}
+                    focuses on practical technology education,
+                    real-world projects, experienced trainers and
+                    career-oriented learning.
 
+                </p>
 
-<h3 class="text-2xl font-bold">
 
-Java Full Stack
+                <div
+                    class="space-y-4 mt-8">
 
-</h3>
+                    <p>✓ Industry Experienced Trainers</p>
 
+                    <p>✓ Real-Time Project Training</p>
 
-<p class="mt-4 text-gray-600">
+                    <p>✓ Interview Preparation</p>
 
-Core Java, Spring Boot,
-Hibernate, React and Microservices.
+                    <p>✓ Placement Assistance</p>
 
-</p>
+                </div>
 
 
-<a href="{{ url_for('main.courses') }}"
-class="inline-block mt-5 text-yellow-600 font-bold">
+                <button
+                    onclick="openModal('aboutModal')"
+                    class="gold-button mt-8 px-7 py-3 rounded-lg font-bold">
 
-Explore →
+                    Know More About Us
 
-</a>
+                </button>
 
+            </div>
 
-</div>
 
+            <div
+                class="relative">
 
+                <img
+                    src="{{ url_for('static', filename='images/institute.jpeg') }}"
+                    class="rounded-3xl shadow-2xl w-full floating">
 
 
+                <div
+                    class="absolute -bottom-8 -left-5 glass-card rounded-2xl p-6">
 
-<div class="rounded-2xl shadow-lg p-8 card-hover">
+                    <p
+                        class="text-yellow-400 font-bold text-2xl">
 
+                        Learn • Build • Grow
 
-<h3 class="text-2xl font-bold">
+                    </p>
 
-Python & AI
+                    <p
+                        class="text-gray-300 mt-1">
 
-</h3>
+                        Your career starts here.
 
+                    </p>
 
-<p class="mt-4 text-gray-600">
+                </div>
 
-Python programming,
-Machine Learning and AI concepts.
+            </div>
 
-</p>
+        </div>
 
-
-<a href="{{ url_for('main.courses') }}"
-class="inline-block mt-5 text-yellow-600 font-bold">
-
-Explore →
-
-</a>
-
-
-</div>
-
-
-
-
-
-
-<div class="rounded-2xl shadow-lg p-8 card-hover">
-
-
-<h3 class="text-2xl font-bold">
-
-Cloud & Data Engineering
-
-</h3>
-
-
-<p class="mt-4 text-gray-600">
-
-AWS, Databricks,
-Snowflake and ETL pipelines.
-
-</p>
-
-
-<a href="{{ url_for('main.courses') }}"
-class="inline-block mt-5 text-yellow-600 font-bold">
-
-Explore →
-
-</a>
-
-
-</div>
-
-
-
-</div>
-
-
-</div>
-
+    </div>
 
 </section>
 
 
 
+<!-- =====================================================
+     COURSES
+===================================================== -->
+
+<section
+    class="py-24 bg-[#0b1935] reveal">
 
 
-
-<!-- ================= PLACEMENT ================= -->
-
-
-<section id="placements" class="py-20 bg-gray-900 text-white">
+    <div
+        class="max-w-7xl mx-auto px-6">
 
 
-<div class="max-w-7xl mx-auto px-6 text-center">
+        <div
+            class="text-center">
+
+            <span
+                class="text-yellow-400 font-semibold">
+
+                OUR PROGRAMS
+
+            </span>
+
+            <h2
+                class="serif text-4xl md:text-5xl font-bold mt-3">
+
+                Industry Ready Courses
+
+            </h2>
+
+            <p
+                class="text-gray-400 mt-4">
+
+                Learn technologies that companies are looking for.
+
+            </p>
+
+        </div>
 
 
-<h2 class="text-4xl font-bold">
-
-Placement Support
-
-</h2>
+        <div
+            class="grid md:grid-cols-3 gap-7 mt-14">
 
 
-<p class="text-gray-300 mt-4">
+            <div
+                class="glass-card rounded-2xl p-8">
 
-We prepare students for every step of their career journey.
+                <div class="text-4xl">
 
-</p>
+                    ☕️
 
+                </div>
 
-<div class="grid md:grid-cols-4 gap-8 mt-12">
+                <h3
+                    class="text-2xl font-bold mt-5">
 
+                    Java Full Stack
 
-<div>
-<h3 class="text-yellow-500 text-2xl font-bold">
-01
-</h3>
-<p>
-Resume Building
-</p>
-</div>
+                </h3>
 
+                <p
+                    class="text-gray-400 mt-4">
 
-<div>
-<h3 class="text-yellow-500 text-2xl font-bold">
-02
-</h3>
-<p>
-Mock Interviews
-</p>
-</div>
+                    Core Java, Spring Boot, Hibernate,
+                    React and Microservices.
 
+                </p>
 
-<div>
-<h3 class="text-yellow-500 text-2xl font-bold">
-03
-</h3>
-<p>
-Technical Training
-</p>
-</div>
+                <button
+    onclick="openModal('coursesModal')"
+    class="inline-block mt-6 text-yellow-400 font-bold">
+
+    Explore Course →
+
+</button>
+
+            </div>
 
 
-<div>
-<h3 class="text-yellow-500 text-2xl font-bold">
-04
-</h3>
-<p>
-Career Guidance
-</p>
-</div>
+            <div
+                class="glass-card rounded-2xl p-8">
+
+                <div class="text-4xl">
+
+                    🤖
+
+                </div>
+
+                <h3
+                    class="text-2xl font-bold mt-5">
+
+                    Python & AI
+
+                </h3>
+
+                <p
+                    class="text-gray-400 mt-4">
+
+                    Python, Machine Learning,
+                    AI and real-world projects.
+
+                </p>
+
+                <button
+    onclick="openModal('coursesModal')"
+    class="inline-block mt-6 text-yellow-400 font-bold">
+
+    Explore Course →
+
+</button>
+
+            </div>
 
 
-</div>
+            <div
+                class="glass-card rounded-2xl p-8">
 
+                <div class="text-4xl">
 
-</div>
+                    ☁️
 
+                </div>
+
+                <h3
+                    class="text-2xl font-bold mt-5">
+
+                    Cloud & Data
+
+                </h3>
+
+                <p
+                    class="text-gray-400 mt-4">
+
+                    AWS, Data Engineering,
+                    Databricks and modern cloud technologies.
+
+                </p>
+
+               <button
+    onclick="openModal('coursesModal')"
+    class="inline-block mt-6 text-yellow-400 font-bold">
+
+    Explore Course →
+
+</button>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </section>
 
 
 
-<section class="py-20 bg-white">
+<!-- =====================================================
+     PLACEMENTS
+===================================================== -->
 
-<div class="max-w-7xl mx-auto px-6">
-
-<h2 class="text-4xl font-bold text-center">
-Student Success Stories
-</h2>
-
-
-<div class="grid md:grid-cols-3 gap-8 mt-12">
+<section
+    id="placements"
+    class="py-24 bg-[#050e20] reveal">
 
 
-<div class="p-8 shadow-xl rounded-2xl">
-
-<p>
-"Excellent training and practical projects helped me improve my skills."
-</p>
-
-<h3 class="font-bold mt-5">
-- Student
-</h3>
-
-</div>
+    <div
+        class="max-w-7xl mx-auto px-6 text-center">
 
 
+        <span
+            class="text-yellow-400 font-semibold">
 
-<div class="p-8 shadow-xl rounded-2xl">
+            CAREER SUPPORT
 
-<p>
-"Great mentors and placement guidance."
-</p>
-
-<h3 class="font-bold mt-5">
-- Student
-</h3>
-
-</div>
+        </span>
 
 
+        <h2
+            class="serif text-4xl md:text-5xl font-bold mt-3">
 
-<div class="p-8 shadow-xl rounded-2xl">
+            From Learning To Placement
 
-<p>
-"Real-time projects gave industry confidence."
-</p>
-
-<h3 class="font-bold mt-5">
-- Student
-</h3>
-
-</div>
+        </h2>
 
 
-</div>
+        <p
+            class="text-gray-400 mt-4 max-w-2xl mx-auto">
 
-</div>
+            We support students throughout their career journey.
+
+        </p>
+
+
+        <div
+            class="grid md:grid-cols-4 gap-6 mt-14">
+
+
+            <div class="glass-card rounded-2xl p-7">
+
+                <div class="text-yellow-400 text-3xl">
+
+                    01
+
+                </div>
+
+                <h3 class="font-bold text-xl mt-4">
+
+                    Resume Building
+
+                </h3>
+
+                <p class="text-gray-400 mt-3">
+
+                    Build a professional resume.
+
+                </p>
+
+            </div>
+
+
+            <div class="glass-card rounded-2xl p-7">
+
+                <div class="text-yellow-400 text-3xl">
+
+                    02
+
+                </div>
+
+                <h3 class="font-bold text-xl mt-4">
+
+                    Mock Interviews
+
+                </h3>
+
+                <p class="text-gray-400 mt-3">
+
+                    Practice real interview scenarios.
+
+                </p>
+
+            </div>
+
+
+            <div class="glass-card rounded-2xl p-7">
+
+                <div class="text-yellow-400 text-3xl">
+
+                    03
+
+                </div>
+
+                <h3 class="font-bold text-xl mt-4">
+
+                    Technical Training
+
+                </h3>
+
+                <p class="text-gray-400 mt-3">
+
+                    Improve technical confidence.
+
+                </p>
+
+            </div>
+
+
+            <div class="glass-card rounded-2xl p-7">
+
+                <div class="text-yellow-400 text-3xl">
+
+                    04
+
+                </div>
+
+                <h3 class="font-bold text-xl mt-4">
+
+                    Career Guidance
+
+                </h3>
+
+                <p class="text-gray-400 mt-3">
+
+                    Get guidance throughout your journey.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
 
 </section>
 
 
-<!-- ================= FOOTER ================= -->
 
-<footer class="bg-black text-white py-12">
+<!-- =====================================================
+     SUCCESS STORIES
+===================================================== -->
 
-
-<div class="max-w-7xl mx-auto px-6">
-
-
-<div class="grid md:grid-cols-3 gap-10">
+<section
+    class="py-24 bg-[#071329] reveal">
 
 
-<div>
-
-<h2 class="text-2xl font-bold">
-
-RR IT Origin
-
-</h2>
-
-<p class="text-gray-400 mt-4">
-
-Learn. Build. Get Placed.
-
-</p>
-
-</div>
+    <div
+        class="max-w-7xl mx-auto px-6">
 
 
+        <div class="text-center">
 
-<div>
+            <span class="text-yellow-400 font-semibold">
 
-<h3 class="font-bold text-xl">
+                STUDENT VOICE
 
-Quick Links
+            </span>
 
-</h3>
+            <h2
+                class="serif text-4xl md:text-5xl font-bold mt-3">
 
-<p class="mt-3">
-Courses
-</p>
+                Student Success Stories
 
-<p>
-Placements
-</p>
+            </h2>
 
-<p>
-Contact
-</p>
-
-</div>
+        </div>
 
 
-
-<div>
-
-<h3 class="font-bold text-xl">
-
-Contact
-
-</h3>
-
-<p class="mt-3">
-
-📞 +91 9392105004
-
-</p>
-
-<p>
-
-✉ info@rritorigin.com
-
-</p>
-
-</div>
+        <div
+            class="grid md:grid-cols-3 gap-7 mt-14">
 
 
-</div>
+            <div
+                class="glass-card rounded-2xl p-8">
+
+                <div class="text-yellow-400 text-3xl">
+
+                    “
+
+                </div>
+
+                <p class="text-gray-300 mt-4">
+
+                    Excellent training and practical projects
+                    helped me improve my technical skills.
+
+                </p>
+
+                <h4 class="font-bold mt-6">
+
+                    — Student
+
+                </h4>
+
+            </div>
 
 
-</div>
+            <div
+                class="glass-card rounded-2xl p-8">
 
+                <div class="text-yellow-400 text-3xl">
+
+                    “
+
+                </div>
+
+                <p class="text-gray-300 mt-4">
+
+                    Great mentors, practical learning and
+                    placement guidance.
+
+                </p>
+
+                <h4 class="font-bold mt-6">
+
+                    — Student
+
+                </h4>
+
+            </div>
+
+
+            <div
+                class="glass-card rounded-2xl p-8">
+
+                <div class="text-yellow-400 text-3xl">
+
+                    “
+
+                </div>
+
+                <p class="text-gray-300 mt-4">
+
+                    Real-time projects helped me gain confidence
+                    for the industry.
+
+                </p>
+
+                <h4 class="font-bold mt-6">
+
+                    — Student
+
+                </h4>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CONTACT
+===================================================== -->
+
+<section
+    id="contact"
+    class="py-24 bg-[#0b1935] reveal">
+
+
+    <div
+        class="max-w-6xl mx-auto px-6">
+
+
+        <div
+            class="glass-card rounded-3xl p-10 md:p-14 text-center">
+
+
+            <span
+                class="text-yellow-400 font-semibold">
+
+                GET IN TOUCH
+
+            </span>
+
+
+            <h2
+                class="serif text-4xl md:text-5xl font-bold mt-3">
+
+                Ready To Start Your Career?
+
+            </h2>
+
+
+            <p
+                class="text-gray-400 mt-5">
+
+                Talk to our team and choose the right course
+                for your career.
+
+            </p>
+
+
+            <div
+                class="flex flex-wrap justify-center gap-5 mt-8">
+
+                <button
+                    onclick="openModal('demoModal')"
+                    class="gold-button px-8 py-4 rounded-xl font-bold">
+
+                    Book Free Demo
+
+                </button>
+
+
+                <a
+                    href="https://wa.me/{{ settings.whatsapp|replace('+','')|replace(' ','') }}"
+                    target="_blank"
+                    class="outline-button px-8 py-4 rounded-xl font-bold">
+
+                    WhatsApp Us
+
+                </a>
+
+            </div>
+
+
+            <div
+                class="mt-8 text-gray-300">
+
+                📞 {{ settings.phone or '+91 9392105004' }}
+
+                <span class="mx-3">
+
+                    |
+
+                </span>
+
+                ✉ {{ settings.email or 'info@rritorigin.com' }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer
+    class="bg-black py-12">
+
+
+    <div
+        class="max-w-7xl mx-auto px-6">
+
+
+        <div
+            class="grid md:grid-cols-3 gap-10">
+
+
+            <div>
+
+                <h2
+                    class="text-2xl font-bold gold">
+
+                    {{ settings.institute_name or 'RR IT Origin' }}
+
+                </h2>
+
+                <p
+                    class="text-gray-500 mt-4">
+
+                    {{ settings.welcome_text or
+                    'Learn. Build. Get Placed.' }}
+
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h3 class="font-bold text-xl">
+
+                    Quick Links
+
+                </h3>
+
+                <div class="mt-4 space-y-3 text-gray-400">
+
+                    <a
+                        href="{{ url_for('main.courses') }}"
+                        class="block hover:text-yellow-400">
+
+                        Courses
+
+                    </a>
+
+                    <a
+                        href="#placements"
+                        class="block hover:text-yellow-400">
+
+                        Placements
+
+                    </a>
+
+                    <a
+                        href="#contact"
+                        class="block hover:text-yellow-400">
+
+                        Contact
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <h3 class="font-bold text-xl">
+
+                    Contact
+
+                </h3>
+
+                <p class="text-gray-400 mt-4">
+
+                    📞 {{ settings.phone or '+91 9392105004' }}
+
+                </p>
+
+                <p class="text-gray-400 mt-2">
+
+                    ✉ {{ settings.email or 'info@rritorigin.com' }}
+
+                </p>
+
+                <p class="text-gray-400 mt-2">
+
+                    📍 {{ settings.address or 'India' }}
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <div
+            class="border-t border-gray-800 mt-10 pt-6 text-center text-gray-500">
+
+            © 2026
+            {{ settings.institute_name or 'RR IT Origin' }}.
+            All Rights Reserved.
+
+        </div>
+
+    </div>
 
 </footer>
 
 
 
+<!-- =====================================================
+     FLOATING WHATSAPP
+===================================================== -->
 
+<a
+    href="https://wa.me/{{ settings.whatsapp|replace('+','')|replace(' ','') }}"
+    target="_blank"
+    class="chat-button">
 
-<!-- WHATSAPP -->
-
-
-<a href="https://wa.me/919392105004"
-target="_blank"
-class="fixed bottom-6 right-6 bg-green-500 text-white px-6 py-4 rounded-full shadow-xl">
-
-WhatsApp
+    💬
 
 </a>
+
+
+
+<!-- =====================================================
+     LOGIN MODAL
+===================================================== -->
+
+<div
+    id="loginModal"
+    class="modal"
+    onclick="closeOutside(event,'loginModal')">
+
+
+    <div class="modal-box">
+
+
+        <div class="flex justify-between items-center">
+
+            <div>
+
+                <h2
+                    class="text-3xl font-bold">
+
+                    Welcome Back
+
+                </h2>
+
+                <p
+                    class="text-gray-400 mt-1">
+
+                    Login to your student portal.
+
+                </p>
+
+            </div>
+
+
+            <button
+                onclick="closeModal('loginModal')"
+                class="text-2xl text-gray-400">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="{{ url_for('auth.login') }}"
+            class="space-y-5 mt-8">
+
+
+            <div>
+
+                <label
+                    class="text-sm text-gray-300">
+
+                    Email
+
+                </label>
+
+                <input
+                    type="email"
+                    name="email"
+                    required
+                    class="dark-input mt-2"
+                    placeholder="Enter your email">
+
+            </div>
+
+
+            <div>
+
+                <label
+                    class="text-sm text-gray-300">
+
+                    Password
+
+                </label>
+
+                <input
+                    type="password"
+                    name="password"
+                    required
+                    class="dark-input mt-2"
+                    placeholder="Enter your password">
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="gold-button w-full py-3 rounded-lg font-bold">
+
+                Login
+
+            </button>
+
+
+            <p class="text-center text-gray-400 text-sm">
+
+    Don't have an account?
+
+    <button
+        type="button"
+        onclick="switchToRegister()"
+        class="text-yellow-400 hover:text-yellow-300">
+
+        Register
+
+    </button>
+
+</p>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     REGISTRATION MODAL
+===================================================== -->
+
+<div
+    id="registerModal"
+    class="modal"
+    onclick="closeOutside(event,'registerModal')">
+
+    <div
+        class="modal-box"
+        style="max-width:600px; max-height:90vh; overflow-y:auto;">
+
+        <!-- HEADER -->
+
+        <div class="flex justify-between items-center">
+
+            <div>
+
+                <h2 class="text-3xl font-bold">
+
+                    Student Registration
+
+                </h2>
+
+                <p class="text-gray-400 mt-1">
+
+                    Create your account
+
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                onclick="closeModal('registerModal')"
+                class="text-3xl text-gray-400 hover:text-white">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <!-- REGISTRATION FORM -->
+
+        <form
+            method="POST"
+            action="{{ url_for('auth.register') }}"
+            class="space-y-4 mt-7">
+
+
+            <!-- NAME -->
+
+            <div>
+
+                <label class="text-sm text-gray-300">
+
+                    Full Name
+
+                </label>
+
+                <input
+                    type="text"
+                    name="name"
+                    required
+                    placeholder="Enter Full Name"
+                    class="dark-input mt-2">
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div>
+
+                <label class="text-sm text-gray-300">
+
+                    Email
+
+                </label>
+
+                <input
+                    type="email"
+                    name="email"
+                    required
+                    placeholder="Enter Email"
+                    class="dark-input mt-2">
+
+            </div>
+
+
+            <!-- PHONE -->
+
+            <div>
+
+                <label class="text-sm text-gray-300">
+
+                    Phone Number
+
+                </label>
+
+                <input
+                    type="tel"
+                    name="phone"
+                    required
+                    maxlength="10"
+                    placeholder="Enter Mobile Number"
+                    class="dark-input mt-2">
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div>
+
+                <label class="text-sm text-gray-300">
+
+                    Password
+
+                </label>
+
+                <input
+                    type="password"
+                    id="modal_password"
+                    name="password"
+                    required
+                    placeholder="Create Password"
+                    class="dark-input mt-2">
+
+            </div>
+
+
+            <!-- CONFIRM PASSWORD -->
+
+            <div>
+
+                <label class="text-sm text-gray-300">
+
+                    Confirm Password
+
+                </label>
+
+                <input
+                    type="password"
+                    id="modal_confirm_password"
+                    name="confirm_password"
+                    required
+                    placeholder="Confirm Password"
+                    class="dark-input mt-2">
+
+            </div>
+
+
+            <!-- TERMS -->
+
+            <div class="flex items-center text-sm text-gray-300">
+
+                <input
+                    type="checkbox"
+                    required
+                    class="mr-3">
+
+                <span>
+
+                    I agree to the Terms & Conditions
+
+                </span>
+
+            </div>
+
+
+            <!-- REGISTER BUTTON -->
+
+            <button
+                type="submit"
+                class="gold-button w-full py-3 rounded-lg font-bold">
+
+                Create Account
+
+            </button>
+
+
+        </form>
+
+
+        <!-- LOGIN -->
+
+        <div class="text-center mt-6 text-gray-400">
+
+            Already have an account?
+
+            <button
+                type="button"
+                onclick="switchToLogin()"
+                class="text-yellow-400 hover:text-yellow-300 font-semibold">
+
+                Login
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+     ABOUT MODAL
+===================================================== -->
+
+<div
+    id="aboutModal"
+    class="modal"
+    onclick="closeOutside(event,'aboutModal')">
+
+
+    <div class="modal-box">
+
+
+        <div class="flex justify-between">
+
+            <h2
+                class="text-3xl font-bold gold">
+
+                About {{ settings.institute_name or 'RR IT Origin' }}
+
+            </h2>
+
+
+            <button
+                onclick="closeModal('aboutModal')"
+                class="text-2xl text-gray-400">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <p
+            class="text-gray-300 leading-relaxed mt-6">
+
+            {{ settings.institute_name or 'RR IT Origin' }}
+            is focused on practical technology training,
+            real-world projects, industry mentoring and
+            career preparation.
+
+        </p>
+
+
+        <div
+            class="space-y-4 mt-7 text-gray-300">
+
+            <p>✓ Industry Experienced Trainers</p>
+
+            <p>✓ Practical Project Based Learning</p>
+
+            <p>✓ Interview Preparation</p>
+
+            <p>✓ Placement Assistance</p>
+
+            <p>✓ Career Guidance</p>
+
+        </div>
+
+
+        <button
+            onclick="closeModal('aboutModal')"
+            class="gold-button mt-8 px-7 py-3 rounded-lg font-bold">
+
+            Close
+
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     BOOK DEMO MODAL
+===================================================== -->
+
+<div
+    id="demoModal"
+    class="modal"
+    onclick="closeOutside(event,'demoModal')">
+
+
+    <div class="modal-box">
+
+
+        <div class="flex justify-between">
+
+            <div>
+
+                <h2
+                    class="text-3xl font-bold">
+
+                    Book Free Demo
+
+                </h2>
+
+                <p
+                    class="text-gray-400 mt-2">
+
+                    Start your learning journey today.
+
+                </p>
+
+            </div>
+
+
+            <button
+                onclick="closeModal('demoModal')"
+                class="text-2xl text-gray-400">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="{{ url_for('main.enroll') }}"
+            class="space-y-4 mt-7">
+
+
+            <input
+                type="text"
+                name="name"
+                required
+                class="dark-input"
+                placeholder="Your Name">
+
+
+            <input
+                type="tel"
+                name="mobile"
+                required
+                class="dark-input"
+                placeholder="Mobile Number">
+
+
+            <input
+                type="email"
+                name="email"
+                required
+                class="dark-input"
+                placeholder="Email Address">
+
+
+            <select
+                name="course"
+                class="dark-input">
+
+                <option>
+
+                    Select Course
+
+                </option>
+
+                <option>
+
+                    Java Full Stack
+
+                </option>
+
+                <option>
+
+                    Python & AI
+
+                </option>
+
+                <option>
+
+                    Cloud & Data Engineering
+
+                </option>
+
+            </select>
+
+
+            <button
+                type="submit"
+                class="gold-button w-full py-3 rounded-lg font-bold">
+
+                Submit Request
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     COURSES MODAL
+===================================================== -->
+
+<div
+    id="coursesModal"
+    class="modal"
+    onclick="closeOutside(event,'coursesModal')">
+
+    <div
+        class="modal-box"
+        style="max-width:1100px; max-height:90vh; overflow-y:auto;">
+
+        <!-- HEADER -->
+
+        <div class="flex justify-between items-start mb-8">
+
+            <div>
+
+                <span class="text-yellow-400 font-semibold text-sm">
+                    OUR PROGRAMS
+                </span>
+
+                <h2 class="text-3xl md:text-4xl font-bold mt-2">
+                    Explore Our Courses
+                </h2>
+
+                <p class="text-gray-400 mt-2">
+                    Choose the right technology course for your career.
+                </p>
+
+            </div>
+
+            <button
+                onclick="closeModal('coursesModal')"
+                class="text-3xl text-gray-400 hover:text-white">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <!-- COURSE GRID -->
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+
+            <!-- JAVA -->
+
+            <div class="glass-card rounded-2xl p-6">
+
+                <div class="text-4xl mb-4">
+                    ☕
+                </div>
+
+                <h3 class="text-xl font-bold">
+                    Java Full Stack
+                </h3>
+
+                <p class="text-gray-400 text-sm mt-3">
+                    Java, Spring Boot, Hibernate, React,
+                    REST APIs and Microservices.
+                </p>
+
+                <div class="flex flex-wrap gap-2 mt-4">
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        Java
+                    </span>
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        Spring Boot
+                    </span>
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        React
+                    </span>
+
+                </div>
+
+                <button
+                    onclick="openCounsellor()"
+                    class="mt-6 text-yellow-400 font-semibold">
+
+                    Know More →
+
+                </button>
+
+            </div>
+
+
+            <!-- SALESFORCE -->
+
+            <div class="glass-card rounded-2xl p-6">
+
+                <div class="text-4xl mb-4">
+                    ☁️
+                </div>
+
+                <h3 class="text-xl font-bold">
+                    Salesforce
+                </h3>
+
+                <p class="text-gray-400 text-sm mt-3">
+                    Salesforce Admin, Apex, Lightning,
+                    LWC and real-time projects.
+                </p>
+
+                <div class="flex flex-wrap gap-2 mt-4">
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        Admin
+                    </span>
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        Apex
+                    </span>
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        LWC
+                    </span>
+
+                </div>
+
+                <button
+                    onclick="openCounsellor()"
+                    class="mt-6 text-yellow-400 font-semibold">
+
+                    Know More →
+
+                </button>
+
+            </div>
+
+
+            <!-- PYTHON -->
+
+            <div class="glass-card rounded-2xl p-6">
+
+                <div class="text-4xl mb-4">
+                    🐍
+                </div>
+
+                <h3 class="text-xl font-bold">
+                    Python Full Stack
+                </h3>
+
+                <p class="text-gray-400 text-sm mt-3">
+                    Python, Django, Flask, REST APIs,
+                    HTML, CSS, JavaScript and databases.
+                </p>
+
+                <div class="flex flex-wrap gap-2 mt-4">
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        Python
+                    </span>
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        Django
+                    </span>
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        Flask
+                    </span>
+
+                </div>
+
+                <button
+                    onclick="openCounsellor()"
+                    class="mt-6 text-yellow-400 font-semibold">
+
+                    Know More →
+
+                </button>
+
+            </div>
+
+
+            <!-- MERN -->
+
+            <div class="glass-card rounded-2xl p-6">
+
+                <div class="text-4xl mb-4">
+                    ⚛️
+                </div>
+
+                <h3 class="text-xl font-bold">
+                    MERN Full Stack
+                </h3>
+
+                <p class="text-gray-400 text-sm mt-3">
+                    MongoDB, Express, React, Node.js
+                    and modern web development.
+                </p>
+
+                <div class="flex flex-wrap gap-2 mt-4">
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        MongoDB
+                    </span>
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        React
+                    </span>
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        Node.js
+                    </span>
+
+                </div>
+
+                <button
+                    onclick="openCounsellor()"
+                    class="mt-6 text-yellow-400 font-semibold">
+
+                    Know More →
+
+                </button>
+
+            </div>
+
+
+            <!-- AI -->
+
+            <div class="glass-card rounded-2xl p-6">
+
+                <div class="text-4xl mb-4">
+                    🤖
+                </div>
+
+                <h3 class="text-xl font-bold">
+                    Python & AI
+                </h3>
+
+                <p class="text-gray-400 text-sm mt-3">
+                    Python, Machine Learning, AI,
+                    APIs and real-world AI projects.
+                </p>
+
+                <div class="flex flex-wrap gap-2 mt-4">
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        Python
+                    </span>
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        AI
+                    </span>
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        ML
+                    </span>
+
+                </div>
+
+                <button
+                    onclick="openCounsellor()"
+                    class="mt-6 text-yellow-400 font-semibold">
+
+                    Know More →
+
+                </button>
+
+            </div>
+
+
+            <!-- CLOUD -->
+
+            <div class="glass-card rounded-2xl p-6">
+
+                <div class="text-4xl mb-4">
+                    ☁️
+                </div>
+
+                <h3 class="text-xl font-bold">
+                    Cloud & Data Engineering
+                </h3>
+
+                <p class="text-gray-400 text-sm mt-3">
+                    AWS, Data Engineering, ETL,
+                    Databricks and modern cloud technologies.
+                </p>
+
+                <div class="flex flex-wrap gap-2 mt-4">
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        AWS
+                    </span>
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        ETL
+                    </span>
+
+                    <span class="bg-yellow-400/10 text-yellow-400 px-3 py-1 rounded-full text-xs">
+                        Data
+                    </span>
+
+                </div>
+
+                <button
+                    onclick="openCounsellor()"
+                    class="mt-6 text-yellow-400 font-semibold">
+
+                    Know More →
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- COUNSELLOR -->
+
+        <div class="border-t border-gray-700 mt-8 pt-7 text-center">
+
+            <p class="text-gray-400 mb-4">
+
+                Not sure which course is right for you?
+
+            </p>
+
+            <button
+                onclick="openCounsellor()"
+                class="gold-button px-7 py-3 rounded-lg font-bold">
+
+                Talk to Our Counsellor
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+     COUNSELLOR MODAL
+===================================================== -->
+
+<div
+    id="counsellorModal"
+    class="modal"
+    onclick="closeOutside(event,'counsellorModal')">
+
+    <div class="modal-box">
+
+        <div class="flex justify-between items-start">
+
+            <div>
+                <span class="text-yellow-400 font-semibold text-sm">
+                    CAREER GUIDANCE
+                </span>
+
+                <h2 class="text-3xl font-bold mt-2">
+                    Talk To Our Counsellor
+                </h2>
+
+                <p class="text-gray-400 mt-2">
+                    Get guidance and choose the right course
+                    for your career.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                onclick="closeModal('counsellorModal')"
+                class="text-3xl text-gray-400 hover:text-white">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <!-- PHONE -->
+
+        <div class="glass-card rounded-2xl p-6 mt-7 text-center">
+
+            <div class="text-4xl">
+                📞
+            </div>
+
+            <p class="text-gray-400 mt-3">
+                Call our counsellor
+            </p>
+
+            <a
+                href="tel:9876567890"
+                class="block text-3xl font-bold text-yellow-400 mt-2">
+
+                9876567890
+
+            </a>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="flex gap-4 mt-7">
+
+            <a
+                href="tel:9876567890"
+                class="gold-button flex-1 py-3 rounded-lg font-bold text-center">
+
+                📞 Call Now
+
+            </a>
+
+            <a
+                href="https://wa.me/919876567890"
+                target="_blank"
+                class="outline-button flex-1 py-3 rounded-lg font-bold text-center">
+
+                💬 WhatsApp
+
+            </a>
+
+        </div>
+
+
+        <button
+            type="button"
+            onclick="closeModal('counsellorModal')"
+            class="w-full mt-5 text-gray-400 hover:text-white">
+
+            Close
+
+        </button>
+
+    </div>
+
+</div>
+<script>
+
+    /* ==========================================
+       NAVBAR SCROLL
+    ========================================== */
+
+    window.addEventListener("scroll", function () {
+
+        const navbar = document.getElementById("navbar");
+
+        if (!navbar) return;
+
+        if (window.scrollY > 50) {
+            navbar.classList.add("scrolled");
+        } else {
+            navbar.classList.remove("scrolled");
+        }
+
+    });
+
+
+
+    /* ==========================================
+       MOBILE MENU
+    ========================================== */
+
+    function toggleMobileMenu() {
+
+        const menu = document.getElementById("mobileMenu");
+
+        if (!menu) {
+            console.error("Mobile menu not found");
+            return;
+        }
+
+        menu.classList.toggle("show");
+
+    }
+
+
+
+    /* ==========================================
+       OPEN MODAL
+    ========================================== */
+
+    function openModal(id) {
+
+        const modal = document.getElementById(id);
+
+        if (!modal) {
+            console.error("Modal not found:", id);
+            return;
+        }
+
+        modal.classList.add("show");
+
+        document.body.style.overflow = "hidden";
+
+    }
+
+
+
+    /* ==========================================
+       CLOSE MODAL
+    ========================================== */
+
+    function closeModal(id) {
+
+        const modal = document.getElementById(id);
+
+        if (!modal) {
+            console.error("Modal not found:", id);
+            return;
+        }
+
+        modal.classList.remove("show");
+
+        document.body.style.overflow = "auto";
+
+    }
+
+
+
+    /* ==========================================
+       LOGIN → REGISTER
+    ========================================== */
+
+    function switchToRegister() {
+
+        closeModal("loginModal");
+
+        setTimeout(function () {
+
+            openModal("registerModal");
+
+        }, 200);
+
+    }
+
+
+
+    /* ==========================================
+       REGISTER → LOGIN
+    ========================================== */
+
+    function switchToLogin() {
+
+        closeModal("registerModal");
+
+        setTimeout(function () {
+
+            openModal("loginModal");
+
+        }, 200);
+
+    }
+
+
+
+    /* ==========================================
+       OPEN COUNSELLOR MODAL
+    ========================================== */
+
+    function openCounsellor() {
+
+        /*
+         * First close Courses modal
+         */
+
+        closeModal("coursesModal");
+
+
+        /*
+         * Then open Counsellor modal
+         */
+
+        setTimeout(function () {
+
+            openModal("counsellorModal");
+
+        }, 200);
+
+    }
+
+
+
+    /* ==========================================
+       CLOSE MODAL WHEN CLICKING OUTSIDE
+    ========================================== */
+
+    function closeOutside(event, id) {
+
+        if (event.target.id === id) {
+
+            closeModal(id);
+
+        }
+
+    }
+
+
+
+    /* ==========================================
+       ESC KEY CLOSE
+    ========================================== */
+
+    document.addEventListener("keydown", function (event) {
+
+        if (event.key === "Escape") {
+
+            document
+                .querySelectorAll(".modal")
+                .forEach(function (modal) {
+
+                    modal.classList.remove("show");
+
+                });
+
+            document.body.style.overflow = "auto";
+
+        }
+
+    });
+
+
+
+    /* ==========================================
+       SCROLL REVEAL ANIMATION
+    ========================================== */
+
+    const observer = new IntersectionObserver(
+        function (entries) {
+
+            entries.forEach(function (entry) {
+
+                if (entry.isIntersecting) {
+
+                    entry.target.classList.add("active");
+
+                }
+
+            });
+
+        },
+        {
+            threshold: 0.12
+        }
+    );
+
+
+
+    document
+        .querySelectorAll(".reveal")
+        .forEach(function (element) {
+
+            observer.observe(element);
+
+        });
+
+
+
+    /* ==========================================
+       COUNTER ANIMATION
+    ========================================== */
+
+    const counters =
+        document.querySelectorAll(".counter");
+
+
+    let counterStarted = false;
+
+
+
+    function startCounters() {
+
+        if (counterStarted) {
+            return;
+        }
+
+        counterStarted = true;
+
+
+
+        counters.forEach(function (counter) {
+
+            const target =
+                Number(counter.dataset.target);
+
+            let current = 0;
+
+            const increment = target / 100;
+
+
+
+            const timer = setInterval(function () {
+
+                current += increment;
+
+
+
+                if (current >= target) {
+
+                    current = target;
+
+                    clearInterval(timer);
+
+                }
+
+
+
+                counter.innerText =
+                    Math.floor(current)
+                    .toLocaleString() + "+";
+
+
+
+            }, 20);
+
+
+        });
+
+
+    }
+
+
+
+    /* ==========================================
+       COUNTER OBSERVER
+    ========================================== */
+
+    const statsSection =
+        document.querySelector(".stat-card");
+
+
+
+    const counterObserver =
+        new IntersectionObserver(
+            function (entries) {
+
+                if (
+                    entries.length > 0 &&
+                    entries[0].isIntersecting
+                ) {
+
+                    startCounters();
+
+                }
+
+            },
+            {
+                threshold: 0.5
+            }
+        );
+
+
+
+    if (statsSection) {
+
+        counterObserver.observe(statsSection);
+
+    }
+
+
+
+    /* ==========================================
+       REGISTRATION PASSWORD VALIDATION
+    ========================================== */
+
+    const modalPassword =
+        document.getElementById("modal_password");
+
+
+    const modalConfirmPassword =
+        document.getElementById("modal_confirm_password");
+
+
+
+    if (modalPassword && modalConfirmPassword) {
+
+        modalConfirmPassword.addEventListener(
+            "keyup",
+            function () {
+
+                if (
+                    modalPassword.value !==
+                    modalConfirmPassword.value
+                ) {
+
+                    modalConfirmPassword.setCustomValidity(
+                        "Passwords do not match"
+                    );
+
+                } else {
+
+                    modalConfirmPassword.setCustomValidity("");
+
+                }
+
+            }
+        );
+
+    }
+
+
+</script>
+
 </body>
 
 </html>

@@ -1,0 +1,2368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Placement Statistics | RR IT Origin</title>
+
+
+    <!-- =====================================================
+         TAILWIND CSS
+    ====================================================== -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <!-- =====================================================
+         GOOGLE FONT
+    ====================================================== -->
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+
+    <!-- =====================================================
+         CUSTOM CSS
+    ====================================================== -->
+
+    <style>
+
+        /* =====================================================
+           GLOBAL
+        ====================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            font-family: 'Inter', sans-serif;
+
+            min-height: 100vh;
+
+            color: white;
+
+            overflow-x: hidden;
+
+            background:
+
+                linear-gradient(
+                    rgba(3, 14, 35, 0.78),
+                    rgba(3, 14, 35, 0.88)
+                ),
+
+                url("{{ url_for('static', filename='images/institute.jpeg') }}");
+
+            background-size: cover;
+
+            background-position: center;
+
+            background-attachment: fixed;
+
+            background-repeat: no-repeat;
+        }
+
+
+        /* =====================================================
+           BACKGROUND GLOW
+        ====================================================== */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: -1;
+
+            pointer-events: none;
+
+            background:
+
+                radial-gradient(
+                    circle at 10% 20%,
+                    rgba(99, 102, 241, 0.15),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 90% 70%,
+                    rgba(250, 204, 21, 0.08),
+                    transparent 30%
+                );
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ====================================================== */
+
+        .top-navbar {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+
+            background:
+
+                rgba(3, 14, 35, 0.82);
+
+            border-bottom:
+
+                1px solid
+                rgba(255,255,255,0.12);
+
+            backdrop-filter:
+
+                blur(22px);
+
+            -webkit-backdrop-filter:
+
+                blur(22px);
+
+            box-shadow:
+
+                0 8px 30px
+                rgba(0,0,0,0.20);
+        }
+
+
+        .navbar-inner {
+
+            min-height: 68px;
+        }
+
+
+        /* =====================================================
+           BRAND
+        ====================================================== */
+
+        .brand-wrap {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            transition:
+
+                transform .3s ease;
+        }
+
+
+        .brand-wrap:hover {
+
+            transform:
+
+                translateY(-1px);
+        }
+
+
+        .logo-image {
+
+            height: 55px;
+
+            width: auto;
+
+            object-fit: contain;
+
+            border-radius: 10px;
+
+            transition:
+
+                all .3s ease;
+        }
+
+
+        .logo-image:hover {
+
+            transform:
+
+                scale(1.05);
+        }
+
+
+        .logo-text {
+
+            color: #facc15;
+        }
+
+
+        .portal-text {
+
+            color:
+
+                rgba(255,255,255,.60);
+
+            font-size: 10px;
+
+            letter-spacing: 2px;
+        }
+
+
+        /* =====================================================
+           LOGOUT
+        ====================================================== */
+
+        .logout-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding:
+
+                10px 20px;
+
+            border-radius:
+
+                11px;
+
+            background:
+
+                rgba(239,68,68,.90);
+
+            color: white;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            border:
+
+                1px solid
+                rgba(255,255,255,.12);
+
+            box-shadow:
+
+                0 8px 20px
+                rgba(239,68,68,.18);
+
+            transition:
+
+                all .3s ease;
+        }
+
+
+        .logout-button:hover {
+
+            background:
+
+                #dc2626;
+
+            transform:
+
+                translateY(-2px);
+
+            box-shadow:
+
+                0 12px 30px
+                rgba(239,68,68,.35);
+        }
+
+
+        /* =====================================================
+           MAIN
+        ====================================================== */
+
+        .main-container {
+
+            max-width: 1280px;
+
+            margin: auto;
+
+            padding:
+
+                35px 20px 50px;
+        }
+
+
+        /* =====================================================
+           PAGE HERO
+        ====================================================== */
+
+        .page-hero {
+
+            position: relative;
+
+            overflow: hidden;
+
+            padding:
+
+                40px;
+
+            border-radius:
+
+                24px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    rgba(15,23,42,.75),
+                    rgba(67,56,202,.68),
+                    rgba(124,58,237,.60)
+                );
+
+            border:
+
+                1px solid
+                rgba(255,255,255,.18);
+
+            backdrop-filter:
+
+                blur(16px);
+
+            -webkit-backdrop-filter:
+
+                blur(16px);
+
+            box-shadow:
+
+                0 25px 70px
+                rgba(0,0,0,.30);
+        }
+
+
+        .page-hero::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 280px;
+
+            height: 280px;
+
+            border-radius: 50%;
+
+            background:
+
+                rgba(255,255,255,.06);
+
+            top: -150px;
+
+            right: -80px;
+        }
+
+
+        .page-badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding:
+
+                8px 15px;
+
+            border-radius:
+
+                999px;
+
+            color:
+
+                #fde047;
+
+            background:
+
+                rgba(250,204,21,.12);
+
+            border:
+
+                1px solid
+                rgba(250,204,21,.25);
+
+            font-size:
+
+                12px;
+
+            font-weight:
+
+                700;
+        }
+
+
+        .page-title {
+
+            margin-top: 16px;
+
+            font-size:
+
+                clamp(32px,5vw,48px);
+
+            font-weight:
+
+                800;
+
+            letter-spacing:
+
+                -1.5px;
+        }
+
+
+        .page-description {
+
+            margin-top: 12px;
+
+            max-width: 750px;
+
+            color:
+
+                rgba(224,231,255,.88);
+
+            line-height:
+
+                1.7;
+        }
+
+
+        /* =====================================================
+           STATISTICS CARDS
+        ====================================================== */
+
+        .stats-grid {
+
+            display: grid;
+
+            grid-template-columns:
+
+                repeat(4,1fr);
+
+            gap: 20px;
+
+            margin-top: 28px;
+        }
+
+
+        .stat-card {
+
+            padding:
+
+                25px;
+
+            border-radius:
+
+                20px;
+
+            background:
+
+                rgba(255,255,255,.08);
+
+            border:
+
+                1px solid
+                rgba(255,255,255,.15);
+
+            backdrop-filter:
+
+                blur(18px);
+
+            -webkit-backdrop-filter:
+
+                blur(18px);
+
+            transition:
+
+                all .35s ease;
+        }
+
+
+        .stat-card:hover {
+
+            transform:
+
+                translateY(-7px);
+
+            background:
+
+                rgba(255,255,255,.12);
+
+            border-color:
+
+                rgba(250,204,21,.45);
+
+            box-shadow:
+
+                0 20px 45px
+                rgba(0,0,0,.28);
+        }
+
+
+        .stat-icon {
+
+            width: 52px;
+
+            height: 52px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius:
+
+                14px;
+
+            font-size:
+
+                25px;
+
+            background:
+
+                rgba(250,204,21,.12);
+
+            border:
+
+                1px solid
+                rgba(250,204,21,.20);
+        }
+
+
+        .stat-number {
+
+            margin-top: 18px;
+
+            font-size:
+
+                30px;
+
+            font-weight:
+
+                800;
+        }
+
+
+        .stat-label {
+
+            margin-top: 5px;
+
+            color:
+
+                rgba(209,213,219,.75);
+
+            font-size:
+
+                14px;
+        }
+
+
+        /* =====================================================
+           SECTION
+        ====================================================== */
+
+        .section-box {
+
+            margin-top: 30px;
+
+            padding:
+
+                30px;
+
+            border-radius:
+
+                22px;
+
+            background:
+
+                rgba(255,255,255,.07);
+
+            border:
+
+                1px solid
+                rgba(255,255,255,.14);
+
+            backdrop-filter:
+
+                blur(18px);
+
+            -webkit-backdrop-filter:
+
+                blur(18px);
+        }
+
+
+        .section-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .section-title {
+
+            font-size:
+
+                25px;
+
+            font-weight:
+
+                800;
+        }
+
+
+        .section-subtitle {
+
+            margin-top: 5px;
+
+            color:
+
+                rgba(156,163,175,.85);
+
+            font-size:
+
+                14px;
+        }
+
+
+        /* =====================================================
+           COMPANY GRID
+        ====================================================== */
+
+        .company-grid {
+
+            display: grid;
+
+            grid-template-columns:
+
+                repeat(4,1fr);
+
+            gap: 18px;
+        }
+
+
+        .company-card {
+
+            padding:
+
+                20px;
+
+            border-radius:
+
+                17px;
+
+            background:
+
+                rgba(255,255,255,.055);
+
+            border:
+
+                1px solid
+                rgba(255,255,255,.10);
+
+            transition:
+
+                all .3s ease;
+        }
+
+
+        .company-card:hover {
+
+            transform:
+
+                translateY(-5px);
+
+            background:
+
+                rgba(255,255,255,.10);
+
+            border-color:
+
+                rgba(250,204,21,.40);
+        }
+
+
+        .company-top {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 10px;
+        }
+
+
+        .company-logo {
+
+            width: 48px;
+
+            height: 48px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius:
+
+                13px;
+
+            background:
+
+                rgba(255,255,255,.10);
+
+            font-size:
+
+                20px;
+
+            font-weight:
+
+                800;
+        }
+
+
+        .company-year {
+
+            padding:
+
+                5px 9px;
+
+            border-radius:
+
+                7px;
+
+            background:
+
+                rgba(99,102,241,.15);
+
+            color:
+
+                #c7d2fe;
+
+            font-size:
+
+                11px;
+
+            font-weight:
+
+                600;
+        }
+
+
+        .company-name {
+
+            margin-top:
+
+                17px;
+
+            font-size:
+
+                18px;
+
+            font-weight:
+
+                700;
+        }
+
+
+        .students-count {
+
+            margin-top:
+
+                12px;
+
+            color:
+
+                #facc15;
+
+            font-size:
+
+                24px;
+
+            font-weight:
+
+                800;
+        }
+
+
+        .students-label {
+
+            color:
+
+                rgba(156,163,175,.80);
+
+            font-size:
+
+                12px;
+        }
+
+
+        .package-info {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-top:
+
+                15px;
+
+            padding-top:
+
+                12px;
+
+            border-top:
+
+                1px solid
+                rgba(255,255,255,.08);
+
+            font-size:
+
+                12px;
+        }
+
+
+        .package-label {
+
+            color:
+
+                rgba(156,163,175,.75);
+        }
+
+
+        .package-value {
+
+            color:
+
+                #86efac;
+
+            font-weight:
+
+                700;
+        }
+
+
+        /* =====================================================
+           TABLE
+        ====================================================== */
+
+        .table-wrapper {
+
+            overflow-x:
+
+                auto;
+
+            border-radius:
+
+                14px;
+
+            border:
+
+                1px solid
+                rgba(255,255,255,.10);
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse:
+
+                collapse;
+
+            min-width:
+
+                700px;
+        }
+
+
+        thead {
+
+            background:
+
+                rgba(255,255,255,.08);
+        }
+
+
+        th {
+
+            padding:
+
+                15px;
+
+            text-align:
+
+                left;
+
+            color:
+
+                #d1d5db;
+
+            font-size:
+
+                12px;
+
+            text-transform:
+
+                uppercase;
+
+            letter-spacing:
+
+                .5px;
+        }
+
+
+        td {
+
+            padding:
+
+                16px 15px;
+
+            border-top:
+
+                1px solid
+                rgba(255,255,255,.07);
+
+            color:
+
+                #e5e7eb;
+
+            font-size:
+
+                14px;
+        }
+
+
+        tbody tr {
+
+            transition:
+
+                background .25s ease;
+        }
+
+
+        tbody tr:hover {
+
+            background:
+
+                rgba(255,255,255,.06);
+        }
+
+
+        .company-name-table {
+
+            font-weight:
+
+                700;
+
+            color:
+
+                white;
+        }
+
+
+        .placed-number {
+
+            color:
+
+                #facc15;
+
+            font-weight:
+
+                800;
+        }
+
+
+        .package {
+
+            color:
+
+                #86efac;
+
+            font-weight:
+
+                700;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ====================================================== */
+
+        .footer {
+
+            margin-top:
+
+                45px;
+
+            padding:
+
+                25px 0;
+
+            text-align:
+
+                center;
+
+            border-top:
+
+                1px solid
+                rgba(255,255,255,.10);
+
+            color:
+
+                rgba(156,163,175,.75);
+
+            font-size:
+
+                13px;
+        }
+
+
+        /* =====================================================
+           ANIMATION
+        ====================================================== */
+
+        .fade-up {
+
+            opacity: 0;
+
+            animation:
+
+                fadeUp .7s ease forwards;
+        }
+
+
+        .delay-1 {
+
+            animation-delay:
+
+                .15s;
+        }
+
+
+        .delay-2 {
+
+            animation-delay:
+
+                .25s;
+        }
+
+
+        .delay-3 {
+
+            animation-delay:
+
+                .35s;
+        }
+
+
+        .delay-4 {
+
+            animation-delay:
+
+                .45s;
+        }
+
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+
+                    translateY(25px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+
+                    translateY(0);
+            }
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ====================================================== */
+
+        @media(max-width:1000px) {
+
+            .stats-grid {
+
+                grid-template-columns:
+
+                    repeat(2,1fr);
+            }
+
+
+            .company-grid {
+
+                grid-template-columns:
+
+                    repeat(2,1fr);
+            }
+        }
+
+
+        @media(max-width:700px) {
+
+            body {
+
+                background-attachment:
+
+                    scroll;
+            }
+
+
+            .main-container {
+
+                padding:
+
+                    25px 15px;
+            }
+
+
+            .logo-image {
+
+                height:
+
+                    45px;
+            }
+
+
+            .logo-text {
+
+                font-size:
+
+                    19px;
+            }
+
+
+            .portal-text {
+
+                font-size:
+
+                    8px;
+            }
+
+
+            .logout-button {
+
+                padding:
+
+                    8px 13px;
+
+                font-size:
+
+                    12px;
+            }
+
+
+            .page-hero {
+
+                padding:
+
+                    28px 22px;
+            }
+
+
+            .page-title {
+
+                font-size:
+
+                    32px;
+            }
+
+
+            .stats-grid {
+
+                grid-template-columns:
+
+                    1fr 1fr;
+
+                gap:
+
+                    12px;
+            }
+
+
+            .stat-card {
+
+                padding:
+
+                    18px;
+            }
+
+
+            .stat-number {
+
+                font-size:
+
+                    25px;
+            }
+
+
+            .section-box {
+
+                padding:
+
+                    20px;
+            }
+
+
+            .section-header {
+
+                align-items:
+
+                    flex-start;
+
+                flex-direction:
+
+                    column;
+            }
+
+
+            .company-grid {
+
+                grid-template-columns:
+
+                    1fr;
+            }
+        }
+
+
+        @media(max-width:420px) {
+
+            .stats-grid {
+
+                grid-template-columns:
+
+                    1fr;
+            }
+
+
+            .logo-image {
+
+                height:
+
+                    40px;
+            }
+
+
+            .logo-text {
+
+                font-size:
+
+                    17px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+====================================================== -->
+
+<nav class="top-navbar px-5 md:px-8 py-3">
+
+    <div
+        class="navbar-inner max-w-7xl mx-auto flex justify-between items-center">
+
+
+        <!-- BRAND -->
+
+        <div class="brand-wrap">
+
+            <img
+                src="{{ url_for('static', filename='images/logo.jpeg') }}"
+                class="logo-image"
+                alt="RR IT Origin Logo">
+
+
+            <div>
+
+                <h1
+                    class="logo-text text-xl md:text-2xl font-bold">
+
+                    RR IT Origin
+
+                </h1>
+
+
+                <p class="portal-text">
+
+                    STUDENT PORTAL
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOGOUT -->
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="logout-button">
+
+            Logout
+
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     MAIN
+====================================================== -->
+
+<main class="main-container">
+
+
+    <!-- =================================================
+         PAGE HERO
+    ================================================== -->
+
+    <section class="page-hero fade-up">
+
+
+        <div class="page-badge">
+
+            📊
+
+            <span>
+                RR IT ORIGIN • PLACEMENT CELL
+            </span>
+
+        </div>
+
+
+        <h1 class="page-title">
+
+            Placement Statistics
+
+        </h1>
+
+
+        <p class="page-description">
+
+            Explore the placement achievements of RR IT Origin
+            students. View the companies that recruited our
+            students, number of students placed and package
+            highlights.
+
+        </p>
+
+    </section>
+
+
+
+    <!-- =================================================
+         KEY STATISTICS
+    ================================================== -->
+
+    <section class="stats-grid">
+
+
+        <!-- TOTAL STUDENTS -->
+
+        <div class="stat-card fade-up delay-1">
+
+            <div class="stat-icon">
+
+                🎓
+
+            </div>
+
+
+            <div class="stat-number">
+
+                248
+
+            </div>
+
+
+            <div class="stat-label">
+
+                Students Placed
+
+            </div>
+
+        </div>
+
+
+
+        <!-- COMPANIES -->
+
+        <div class="stat-card fade-up delay-2">
+
+            <div class="stat-icon">
+
+                🏢
+
+            </div>
+
+
+            <div class="stat-number">
+
+                32
+
+            </div>
+
+
+            <div class="stat-label">
+
+                Recruiting Companies
+
+            </div>
+
+        </div>
+
+
+
+        <!-- HIGHEST PACKAGE -->
+
+        <div class="stat-card fade-up delay-3">
+
+            <div class="stat-icon">
+
+                🚀
+
+            </div>
+
+
+            <div class="stat-number">
+
+                ₹12.5 LPA
+
+            </div>
+
+
+            <div class="stat-label">
+
+                Highest Package
+
+            </div>
+
+        </div>
+
+
+
+        <!-- AVERAGE PACKAGE -->
+
+        <div class="stat-card fade-up delay-4">
+
+            <div class="stat-icon">
+
+                💼
+
+            </div>
+
+
+            <div class="stat-number">
+
+                ₹5.8 LPA
+
+            </div>
+
+
+            <div class="stat-label">
+
+                Average Package
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         COMPANY-WISE PLACEMENT
+    ================================================== -->
+
+    <section class="section-box fade-up delay-2">
+
+
+        <div class="section-header">
+
+            <div>
+
+                <h2 class="section-title">
+
+                    Company-wise Placements
+
+                </h2>
+
+
+                <p class="section-subtitle">
+
+                    Students placed across leading companies
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- COMPANY CARDS -->
+
+        <div class="company-grid">
+
+
+            <!-- TCS -->
+
+            <div class="company-card">
+
+                <div class="company-top">
+
+                    <div class="company-logo">
+
+                        T
+
+                    </div>
+
+                    <span class="company-year">
+
+                        2026
+
+                    </span>
+
+                </div>
+
+
+                <h3 class="company-name">
+
+                    TCS
+
+                </h3>
+
+
+                <div class="students-count">
+
+                    42
+
+                </div>
+
+
+                <div class="students-label">
+
+                    Students Placed
+
+                </div>
+
+
+                <div class="package-info">
+
+                    <span class="package-label">
+
+                        Highest Package
+
+                    </span>
+
+                    <span class="package-value">
+
+                        ₹7.2 LPA
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- INFOSYS -->
+
+            <div class="company-card">
+
+                <div class="company-top">
+
+                    <div class="company-logo">
+
+                        I
+
+                    </div>
+
+                    <span class="company-year">
+
+                        2026
+
+                    </span>
+
+                </div>
+
+
+                <h3 class="company-name">
+
+                    Infosys
+
+                </h3>
+
+
+                <div class="students-count">
+
+                    35
+
+                </div>
+
+
+                <div class="students-label">
+
+                    Students Placed
+
+                </div>
+
+
+                <div class="package-info">
+
+                    <span class="package-label">
+
+                        Highest Package
+
+                    </span>
+
+                    <span class="package-value">
+
+                        ₹6.5 LPA
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- WIPRO -->
+
+            <div class="company-card">
+
+                <div class="company-top">
+
+                    <div class="company-logo">
+
+                        W
+
+                    </div>
+
+                    <span class="company-year">
+
+                        2026
+
+                    </span>
+
+                </div>
+
+
+                <h3 class="company-name">
+
+                    Wipro
+
+                </h3>
+
+
+                <div class="students-count">
+
+                    28
+
+                </div>
+
+
+                <div class="students-label">
+
+                    Students Placed
+
+                </div>
+
+
+                <div class="package-info">
+
+                    <span class="package-label">
+
+                        Highest Package
+
+                    </span>
+
+                    <span class="package-value">
+
+                        ₹6.8 LPA
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ACCENTURE -->
+
+            <div class="company-card">
+
+                <div class="company-top">
+
+                    <div class="company-logo">
+
+                        A
+
+                    </div>
+
+                    <span class="company-year">
+
+                        2026
+
+                    </span>
+
+                </div>
+
+
+                <h3 class="company-name">
+
+                    Accenture
+
+                </h3>
+
+
+                <div class="students-count">
+
+                    24
+
+                </div>
+
+
+                <div class="students-label">
+
+                    Students Placed
+
+                </div>
+
+
+                <div class="package-info">
+
+                    <span class="package-label">
+
+                        Highest Package
+
+                    </span>
+
+                    <span class="package-value">
+
+                        ₹8.2 LPA
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- COGNIZANT -->
+
+            <div class="company-card">
+
+                <div class="company-top">
+
+                    <div class="company-logo">
+
+                        C
+
+                    </div>
+
+                    <span class="company-year">
+
+                        2026
+
+                    </span>
+
+                </div>
+
+
+                <h3 class="company-name">
+
+                    Cognizant
+
+                </h3>
+
+
+                <div class="students-count">
+
+                    31
+
+                </div>
+
+
+                <div class="students-label">
+
+                    Students Placed
+
+                </div>
+
+
+                <div class="package-info">
+
+                    <span class="package-label">
+
+                        Highest Package
+
+                    </span>
+
+                    <span class="package-value">
+
+                        ₹7.5 LPA
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CAPGEMINI -->
+
+            <div class="company-card">
+
+                <div class="company-top">
+
+                    <div class="company-logo">
+
+                        C
+
+                    </div>
+
+                    <span class="company-year">
+
+                        2026
+
+                    </span>
+
+                </div>
+
+
+                <h3 class="company-name">
+
+                    Capgemini
+
+                </h3>
+
+
+                <div class="students-count">
+
+                    22
+
+                </div>
+
+
+                <div class="students-label">
+
+                    Students Placed
+
+                </div>
+
+
+                <div class="package-info">
+
+                    <span class="package-label">
+
+                        Highest Package
+
+                    </span>
+
+                    <span class="package-value">
+
+                        ₹6.2 LPA
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DELOITTE -->
+
+            <div class="company-card">
+
+                <div class="company-top">
+
+                    <div class="company-logo">
+
+                        D
+
+                    </div>
+
+                    <span class="company-year">
+
+                        2026
+
+                    </span>
+
+                </div>
+
+
+                <h3 class="company-name">
+
+                    Deloitte
+
+                </h3>
+
+
+                <div class="students-count">
+
+                    18
+
+                </div>
+
+
+                <div class="students-label">
+
+                    Students Placed
+
+                </div>
+
+
+                <div class="package-info">
+
+                    <span class="package-label">
+
+                        Highest Package
+
+                    </span>
+
+                    <span class="package-value">
+
+                        ₹9.5 LPA
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TECH MAHINDRA -->
+
+            <div class="company-card">
+
+                <div class="company-top">
+
+                    <div class="company-logo">
+
+                        T
+
+                    </div>
+
+                    <span class="company-year">
+
+                        2026
+
+                    </span>
+
+                </div>
+
+
+                <h3 class="company-name">
+
+                    Tech Mahindra
+
+                </h3>
+
+
+                <div class="students-count">
+
+                    26
+
+                </div>
+
+
+                <div class="students-label">
+
+                    Students Placed
+
+                </div>
+
+
+                <div class="package-info">
+
+                    <span class="package-label">
+
+                        Highest Package
+
+                    </span>
+
+                    <span class="package-value">
+
+                        ₹6.0 LPA
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         DETAILED TABLE
+    ================================================== -->
+
+    <section class="section-box fade-up delay-3">
+
+
+        <div class="section-header">
+
+            <div>
+
+                <h2 class="section-title">
+
+                    Placement Details
+
+                </h2>
+
+
+                <p class="section-subtitle">
+
+                    Detailed company-wise placement information
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Company
+                        </th>
+
+                        <th>
+                            Students Placed
+                        </th>
+
+                        <th>
+                            Highest Package
+                        </th>
+
+                        <th>
+                            Average Package
+                        </th>
+
+                        <th>
+                            Placement Year
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <tr>
+
+                        <td class="company-name-table">
+                            TCS
+                        </td>
+
+                        <td class="placed-number">
+                            42
+                        </td>
+
+                        <td class="package">
+                            ₹7.2 LPA
+                        </td>
+
+                        <td>
+                            ₹5.1 LPA
+                        </td>
+
+                        <td>
+                            2026
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td class="company-name-table">
+                            Infosys
+                        </td>
+
+                        <td class="placed-number">
+                            35
+                        </td>
+
+                        <td class="package">
+                            ₹6.5 LPA
+                        </td>
+
+                        <td>
+                            ₹4.8 LPA
+                        </td>
+
+                        <td>
+                            2026
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td class="company-name-table">
+                            Wipro
+                        </td>
+
+                        <td class="placed-number">
+                            28
+                        </td>
+
+                        <td class="package">
+                            ₹6.8 LPA
+                        </td>
+
+                        <td>
+                            ₹4.9 LPA
+                        </td>
+
+                        <td>
+                            2026
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td class="company-name-table">
+                            Accenture
+                        </td>
+
+                        <td class="placed-number">
+                            24
+                        </td>
+
+                        <td class="package">
+                            ₹8.2 LPA
+                        </td>
+
+                        <td>
+                            ₹5.7 LPA
+                        </td>
+
+                        <td>
+                            2026
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td class="company-name-table">
+                            Cognizant
+                        </td>
+
+                        <td class="placed-number">
+                            31
+                        </td>
+
+                        <td class="package">
+                            ₹7.5 LPA
+                        </td>
+
+                        <td>
+                            ₹5.3 LPA
+                        </td>
+
+                        <td>
+                            2026
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td class="company-name-table">
+                            Capgemini
+                        </td>
+
+                        <td class="placed-number">
+                            22
+                        </td>
+
+                        <td class="package">
+                            ₹6.2 LPA
+                        </td>
+
+                        <td>
+                            ₹4.7 LPA
+                        </td>
+
+                        <td>
+                            2026
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td class="company-name-table">
+                            Deloitte
+                        </td>
+
+                        <td class="placed-number">
+                            18
+                        </td>
+
+                        <td class="package">
+                            ₹9.5 LPA
+                        </td>
+
+                        <td>
+                            ₹6.4 LPA
+                        </td>
+
+                        <td>
+                            2026
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td class="company-name-table">
+                            Tech Mahindra
+                        </td>
+
+                        <td class="placed-number">
+                            26
+                        </td>
+
+                        <td class="package">
+                            ₹6.0 LPA
+                        </td>
+
+                        <td>
+                            ₹4.5 LPA
+                        </td>
+
+                        <td>
+                            2026
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         FOOTER
+    ================================================== -->
+
+    <footer class="footer">
+
+        <p>
+
+            © {{ current_year }} RR Institute
+
+        </p>
+
+
+        <p class="mt-2">
+
+            Student Management Portal
+
+        </p>
+
+
+        <p class="mt-1 text-xs">
+
+            LEARN • BUILD • SUCCEED
+
+        </p>
+
+    </footer>
+
+
+</main>
+
+
+</body>
+
+</html>
