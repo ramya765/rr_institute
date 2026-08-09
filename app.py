@@ -6,6 +6,9 @@ from mail_config import mail
 
 from flask import Flask, render_template
 from flask_bcrypt import Bcrypt
+ 
+
+
 # ======================================================
 # Create Flask App
 # ======================================================

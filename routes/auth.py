@@ -7,6 +7,7 @@ from models import User, Student, InstituteSettings
 auth = Blueprint("auth", __name__)
 
 
+
 # ==========================
 # Register
 # ==========================

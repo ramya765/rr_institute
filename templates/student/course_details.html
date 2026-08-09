@@ -3,736 +3,3189 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
 
-<title>{{ course.title }} | RR IT Origin</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<script src="https://cdn.tailwindcss.com"></script>
+    <title>{{ course.title }} | RR IT Origin</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
 
-<style>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
+        rel="stylesheet">
 
-body{
-font-family:'Inter',sans-serif;
-background:#f4f7fb;
-}
 
-.hero{
-background:linear-gradient(135deg,#4338ca,#2563eb);
-}
+    <style>
 
-.card{
-transition:.3s;
-}
+        * {
+            box-sizing: border-box;
+        }
 
-.card:hover{
-transform:translateY(-5px);
-}
+        html {
+            scroll-behavior: smooth;
+        }
 
-.sticky-card{
-position:sticky;
-top:30px;
-}
+        body {
 
-</style>
+            margin: 0;
+
+            font-family: 'Inter', sans-serif;
+
+            background:
+                #07132f;
+
+            color: white;
+
+            overflow-x: hidden;
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+
+            position: relative;
+
+            z-index: 100;
+
+            min-height: 82px;
+
+            background:
+                rgba(5, 15, 38, .96);
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.08);
+
+            backdrop-filter:
+                blur(15px);
+        }
+
+
+        .nav-container {
+
+            max-width: 1450px;
+
+            margin: auto;
+
+            min-height: 82px;
+
+            padding:
+                0 30px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            text-decoration: none;
+        }
+
+
+        .brand-logo {
+
+            width: 48px;
+
+            height: 52px;
+
+            border:
+                2px solid
+                #facc15;
+
+            border-radius:
+                14px 14px 20px 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 25px;
+
+            background:
+                rgba(250,204,21,.06);
+
+            color:
+                #facc15;
+        }
+
+
+        .brand-name {
+
+            font-family:
+                'Playfair Display',
+                serif;
+
+            color:
+                #facc15;
+
+            font-size:
+                24px;
+
+            font-weight:
+                800;
+
+            line-height:
+                1;
+        }
+
+
+        .brand-tagline {
+
+            color:
+                #cbd5e1;
+
+            font-size:
+                9px;
+
+            letter-spacing:
+                3px;
+
+            font-weight:
+                600;
+
+            margin-top:
+                5px;
+        }
+
+
+        .nav-links {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                38px;
+        }
+
+
+        .nav-link {
+
+            position:
+                relative;
+
+            color:
+                #f8fafc;
+
+            text-decoration:
+                none;
+
+            font-size:
+                15px;
+
+            font-weight:
+                600;
+
+            padding:
+                30px 0;
+
+            transition:
+                .3s;
+        }
+
+
+        .nav-link:hover {
+
+            color:
+                #facc15;
+        }
+
+
+        .nav-link.active {
+
+            color:
+                #facc15;
+        }
+
+
+        .nav-link.active::after {
+
+            content: "";
+
+            position:
+                absolute;
+
+            bottom:
+                9px;
+
+            left:
+                0;
+
+            width:
+                100%;
+
+            height:
+                3px;
+
+            background:
+                #facc15;
+
+            border-radius:
+                20px;
+        }
+
+
+        .dashboard-btn {
+
+            background:
+                #facc15;
+
+            color:
+                #111827;
+
+            padding:
+                13px 22px;
+
+            border-radius:
+                9px;
+
+            font-size:
+                14px;
+
+            font-weight:
+                800;
+
+            text-decoration:
+                none;
+
+            transition:
+                .3s;
+        }
+
+
+        .dashboard-btn:hover {
+
+            background:
+                #fde047;
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 10px 30px
+                rgba(250,204,21,.18);
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            background:
+                radial-gradient(
+                    circle at 75% 35%,
+                    rgba(37,99,235,.30),
+                    transparent 38%
+                ),
+                linear-gradient(
+                    135deg,
+                    #050f27,
+                    #0b1d42 55%,
+                    #07132f
+                );
+        }
+
+
+        .hero-grid {
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            opacity:
+                .07;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,.15) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.15) 1px,
+                    transparent 1px
+                );
+
+            background-size:
+                70px 70px;
+        }
+
+
+        .hero-container {
+
+            position:
+                relative;
+
+            z-index:
+                5;
+
+            max-width:
+                1250px;
+
+            margin:
+                auto;
+
+            padding:
+                70px 25px 85px;
+        }
+
+
+        .back-btn {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                8px;
+
+            color:
+                #facc15;
+
+            border:
+                1px solid
+                rgba(250,204,21,.4);
+
+            background:
+                rgba(250,204,21,.06);
+
+            padding:
+                10px 17px;
+
+            border-radius:
+                9px;
+
+            text-decoration:
+                none;
+
+            font-size:
+                13px;
+
+            font-weight:
+                700;
+
+            transition:
+                .3s;
+
+            margin-bottom:
+                45px;
+        }
+
+
+        .back-btn:hover {
+
+            background:
+                rgba(250,204,21,.13);
+
+            transform:
+                translateX(-3px);
+        }
+
+
+        .hero-grid-layout {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1.1fr .9fr;
+
+            gap:
+                70px;
+
+            align-items:
+                center;
+        }
+
+
+        .featured {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            background:
+                #facc15;
+
+            color:
+                #111827;
+
+            padding:
+                7px 14px;
+
+            border-radius:
+                999px;
+
+            font-size:
+                11px;
+
+            font-weight:
+                900;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                .5px;
+        }
+
+
+        .hero-title {
+
+            font-family:
+                'Playfair Display',
+                serif;
+
+            font-size:
+                clamp(42px, 5vw, 70px);
+
+            line-height:
+                1.06;
+
+            font-weight:
+                800;
+
+            margin:
+                20px 0 0;
+
+            color:
+                white;
+        }
+
+
+        .hero-title::after {
+
+            content:
+                "";
+
+            display:
+                block;
+
+            width:
+                80px;
+
+            height:
+                3px;
+
+            background:
+                #facc15;
+
+            margin-top:
+                24px;
+
+            border-radius:
+                20px;
+        }
+
+
+        .hero-description {
+
+            margin-top:
+                25px;
+
+            color:
+                #cbd5e1;
+
+            font-size:
+                16px;
+
+            line-height:
+                1.8;
+
+            max-width:
+                680px;
+        }
+
+
+        /* =====================================================
+           HERO STATS
+        ===================================================== */
+
+        .hero-stats {
+
+            display:
+                flex;
+
+            flex-wrap:
+                wrap;
+
+            gap:
+                35px;
+
+            margin-top:
+                35px;
+        }
+
+
+        .hero-stat-number {
+
+            color:
+                #facc15;
+
+            font-size:
+                24px;
+
+            font-weight:
+                900;
+        }
+
+
+        .hero-stat-label {
+
+            color:
+                #94a3b8;
+
+            font-size:
+                11px;
+
+            margin-top:
+                3px;
+        }
+
+
+        /* =====================================================
+           HERO IMAGE
+        ===================================================== */
+
+        .hero-image-card {
+
+            position:
+                relative;
+
+            border:
+                1px solid
+                rgba(250,204,21,.35);
+
+            border-radius:
+                25px;
+
+            padding:
+                10px;
+
+            background:
+                rgba(255,255,255,.05);
+
+            box-shadow:
+                0 30px 80px
+                rgba(0,0,0,.4);
+
+            transform:
+                rotate(1deg);
+
+            transition:
+                .4s;
+        }
+
+
+        .hero-image-card:hover {
+
+            transform:
+                rotate(0deg)
+                translateY(-6px);
+
+            border-color:
+                rgba(250,204,21,.7);
+        }
+
+
+        .hero-image {
+
+            width:
+                100%;
+
+            height:
+                430px;
+
+            object-fit:
+                cover;
+
+            border-radius:
+                18px;
+
+            display:
+                block;
+        }
+
+
+        .default-image {
+
+            height:
+                430px;
+
+            border-radius:
+                18px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #10295a,
+                    #172554
+                );
+        }
+
+
+        .course-letter {
+
+            width:
+                130px;
+
+            height:
+                130px;
+
+            border-radius:
+                35px;
+
+            border:
+                2px solid
+                rgba(250,204,21,.5);
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            color:
+                #facc15;
+
+            font-size:
+                65px;
+
+            font-weight:
+                900;
+
+            background:
+                rgba(250,204,21,.08);
+        }
+
+
+        /* =====================================================
+           MAIN CONTENT
+        ===================================================== */
+
+        .content {
+
+            max-width:
+                1250px;
+
+            margin:
+                auto;
+
+            padding:
+                80px 25px 90px;
+        }
+
+
+        .main-layout {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1.7fr .8fr;
+
+            gap:
+                30px;
+
+            align-items:
+                start;
+        }
+
+
+        .left-content {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                25px;
+        }
+
+
+        /* =====================================================
+           CONTENT CARDS
+        ===================================================== */
+
+        .dark-card {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #101f42,
+                    #0a1733
+                );
+
+            border:
+                1px solid
+                rgba(255,255,255,.09);
+
+            border-radius:
+                20px;
+
+            padding:
+                30px;
+
+            box-shadow:
+                0 18px 45px
+                rgba(0,0,0,.18);
+
+            transition:
+                .35s;
+        }
+
+
+        .dark-card:hover {
+
+            border-color:
+                rgba(250,204,21,.3);
+
+            transform:
+                translateY(-3px);
+        }
+
+
+        .card-title {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                12px;
+
+            font-family:
+                'Playfair Display',
+                serif;
+
+            color:
+                white;
+
+            font-size:
+                29px;
+
+            font-weight:
+                800;
+
+            margin:
+                0 0 22px;
+        }
+
+
+        .card-title-icon {
+
+            width:
+                42px;
+
+            height:
+                42px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(250,204,21,.10);
+
+            border:
+                1px solid
+                rgba(250,204,21,.22);
+
+            font-size:
+                20px;
+        }
+
+
+        .description {
+
+            color:
+                #94a3b8;
+
+            font-size:
+                15px;
+
+            line-height:
+                1.9;
+        }
+
+
+        /* =====================================================
+           LEARN GRID
+        ===================================================== */
+
+        .learn-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(2,1fr);
+
+            gap:
+                14px;
+        }
+
+
+        .learn-item {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                12px;
+
+            padding:
+                14px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.07);
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(255,255,255,.025);
+
+            color:
+                #dbeafe;
+
+            font-size:
+                13px;
+
+            font-weight:
+                600;
+
+            transition:
+                .3s;
+        }
+
+
+        .learn-item:hover {
+
+            background:
+                rgba(250,204,21,.07);
+
+            border-color:
+                rgba(250,204,21,.3);
+
+            transform:
+                translateX(4px);
+        }
+
+
+        .check {
+
+            width:
+                25px;
+
+            height:
+                25px;
+
+            flex-shrink:
+                0;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(52,211,153,.12);
+
+            color:
+                #34d399;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            font-size:
+                12px;
+        }
+
+
+        /* =====================================================
+           HIGHLIGHTS
+        ===================================================== */
+
+        .highlights {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(2,1fr);
+
+            gap:
+                15px;
+        }
+
+
+        .highlight {
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            background:
+                rgba(255,255,255,.025);
+
+            padding:
+                20px;
+
+            border-radius:
+                14px;
+
+            transition:
+                .3s;
+        }
+
+
+        .highlight:hover {
+
+            border-color:
+                rgba(250,204,21,.35);
+
+            transform:
+                translateY(-3px);
+        }
+
+
+        .highlight-label {
+
+            color:
+                #64748b;
+
+            font-size:
+                11px;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                .5px;
+        }
+
+
+        .highlight-value {
+
+            color:
+                #facc15;
+
+            font-size:
+                20px;
+
+            font-weight:
+                800;
+
+            margin-top:
+                8px;
+
+            word-break:
+                break-word;
+        }
+
+
+        /* =====================================================
+           CURRICULUM
+        ===================================================== */
+
+        .module {
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            border-radius:
+                14px;
+
+            padding:
+                18px 20px;
+
+            margin-bottom:
+                12px;
+
+            background:
+                rgba(255,255,255,.025);
+
+            transition:
+                .3s;
+        }
+
+
+        .module:last-child {
+
+            margin-bottom:
+                0;
+        }
+
+
+        .module:hover {
+
+            border-color:
+                rgba(250,204,21,.35);
+
+            background:
+                rgba(250,204,21,.035);
+
+            transform:
+                translateX(5px);
+        }
+
+
+        .module-number {
+
+            display:
+                inline-block;
+
+            color:
+                #111827;
+
+            background:
+                #facc15;
+
+            padding:
+                5px 10px;
+
+            border-radius:
+                7px;
+
+            font-size:
+                10px;
+
+            font-weight:
+                900;
+
+            margin-bottom:
+                8px;
+        }
+
+
+        .module-title {
+
+            color:
+                white;
+
+            font-size:
+                15px;
+
+            font-weight:
+                800;
+        }
+
+
+        .module-description {
+
+            color:
+                #64748b;
+
+            font-size:
+                12px;
+
+            margin-top:
+                6px;
+        }
+
+
+        /* =====================================================
+           TRAINER
+        ===================================================== */
+
+        .trainer-box {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                25px;
+        }
+
+
+        .trainer-avatar {
+
+            width:
+                105px;
+
+            height:
+                105px;
+
+            flex-shrink:
+                0;
+
+            border-radius:
+                50%;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            color:
+                #facc15;
+
+            background:
+                rgba(250,204,21,.08);
+
+            border:
+                2px solid
+                rgba(250,204,21,.35);
+
+            font-size:
+                42px;
+
+            font-weight:
+                900;
+        }
+
+
+        .trainer-name {
+
+            color:
+                white;
+
+            font-size:
+                24px;
+
+            font-weight:
+                800;
+        }
+
+
+        .trainer-description {
+
+            color:
+                #94a3b8;
+
+            line-height:
+                1.8;
+
+            font-size:
+                13px;
+
+            margin-top:
+                9px;
+        }
+
+
+        /* =====================================================
+           RIGHT SIDEBAR
+        ===================================================== */
+
+        .sticky-card {
+
+            position:
+                sticky;
+
+            top:
+                25px;
+        }
+
+
+        .price-card {
+
+            overflow:
+                hidden;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #102044,
+                    #081631
+                );
+
+            border:
+                1px solid
+                rgba(250,204,21,.35);
+
+            border-radius:
+                22px;
+
+            box-shadow:
+                0 25px 60px
+                rgba(0,0,0,.35);
+        }
+
+
+        .price-image {
+
+            width:
+                100%;
+
+            height:
+                210px;
+
+            object-fit:
+                cover;
+        }
+
+
+        .price-image-placeholder {
+
+            height:
+                210px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #12295a,
+                    #172554
+                );
+        }
+
+
+        .price-body {
+
+            padding:
+                27px;
+        }
+
+
+        .price-label {
+
+            text-align:
+                center;
+
+            color:
+                #64748b;
+
+            font-size:
+                11px;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                1px;
+        }
+
+
+        .price {
+
+            text-align:
+                center;
+
+            color:
+                #facc15;
+
+            font-size:
+                43px;
+
+            font-weight:
+                900;
+
+            margin-top:
+                4px;
+        }
+
+
+        .price-divider {
+
+            height:
+                1px;
+
+            background:
+                rgba(255,255,255,.08);
+
+            margin:
+                25px 0;
+        }
+
+
+        .side-detail {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            gap:
+                10px;
+
+            padding:
+                13px 0;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.06);
+
+            font-size:
+                12px;
+        }
+
+
+        .side-detail:last-child {
+
+            border-bottom:
+                none;
+        }
+
+
+        .side-label {
+
+            color:
+                #64748b;
+        }
+
+
+        .side-value {
+
+            color:
+                #e2e8f0;
+
+            font-weight:
+                700;
+
+            text-align:
+                right;
+        }
+
+
+        .enroll-btn {
+
+            display:
+                block;
+
+            width:
+                100%;
+
+            text-align:
+                center;
+
+            margin-top:
+                25px;
+
+            background:
+                #facc15;
+
+            color:
+                #111827;
+
+            padding:
+                15px;
+
+            border-radius:
+                11px;
+
+            text-decoration:
+                none;
+
+            font-size:
+                15px;
+
+            font-weight:
+                900;
+
+            transition:
+                .3s;
+        }
+
+
+        .enroll-btn:hover {
+
+            background:
+                #fde047;
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 12px 30px
+                rgba(250,204,21,.20);
+        }
+
+
+        .whatsapp-btn {
+
+            display:
+                block;
+
+            width:
+                100%;
+
+            text-align:
+                center;
+
+            margin-top:
+                11px;
+
+            border:
+                1px solid
+                rgba(52,211,153,.5);
+
+            color:
+                #34d399;
+
+            padding:
+                14px;
+
+            border-radius:
+                11px;
+
+            text-decoration:
+                none;
+
+            font-size:
+                13px;
+
+            font-weight:
+                800;
+
+            transition:
+                .3s;
+        }
+
+
+        .whatsapp-btn:hover {
+
+            background:
+                rgba(52,211,153,.10);
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        /* =====================================================
+           WHY CHOOSE US
+        ===================================================== */
+
+        .why-card {
+
+            margin-top:
+                18px;
+
+            background:
+                #0d1d3f;
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            border-radius:
+                20px;
+
+            padding:
+                25px;
+        }
+
+
+        .why-title {
+
+            color:
+                white;
+
+            font-family:
+                'Playfair Display',
+                serif;
+
+            font-size:
+                23px;
+
+            font-weight:
+                800;
+
+            margin-bottom:
+                18px;
+        }
+
+
+        .why-item {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                10px;
+
+            color:
+                #cbd5e1;
+
+            font-size:
+                12px;
+
+            padding:
+                9px 0;
+        }
+
+
+        .why-item span {
+
+            color:
+                #34d399;
+        }
+
+
+        /* =====================================================
+           REVIEWS
+        ===================================================== */
+
+        .reviews-section {
+
+            max-width:
+                1250px;
+
+            margin:
+                auto;
+
+            padding:
+                0 25px 90px;
+        }
+
+
+        .reviews-title {
+
+            font-family:
+                'Playfair Display',
+                serif;
+
+            color:
+                white;
+
+            font-size:
+                38px;
+
+            font-weight:
+                800;
+
+            margin-bottom:
+                30px;
+        }
+
+
+        .reviews-title span {
+
+            color:
+                #facc15;
+        }
+
+
+        .reviews-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(3,1fr);
+
+            gap:
+                20px;
+        }
+
+
+        .review {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #101f42,
+                    #0a1733
+                );
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            border-radius:
+                18px;
+
+            padding:
+                25px;
+
+            transition:
+                .3s;
+        }
+
+
+        .review:hover {
+
+            transform:
+                translateY(-6px);
+
+            border-color:
+                rgba(250,204,21,.35);
+        }
+
+
+        .review-stars {
+
+            color:
+                #facc15;
+
+            letter-spacing:
+                2px;
+        }
+
+
+        .review-text {
+
+            color:
+                #94a3b8;
+
+            font-size:
+                13px;
+
+            line-height:
+                1.8;
+
+            margin-top:
+                15px;
+        }
+
+
+        .review-name {
+
+            color:
+                white;
+
+            font-size:
+                14px;
+
+            font-weight:
+                800;
+
+            margin-top:
+                18px;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+
+            background:
+                #040c1d;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.08);
+        }
+
+
+        .footer-inner {
+
+            max-width:
+                1250px;
+
+            margin:
+                auto;
+
+            padding:
+                45px 25px;
+        }
+
+
+        .footer-title {
+
+            color:
+                #facc15;
+
+            font-family:
+                'Playfair Display',
+                serif;
+
+            font-size:
+                25px;
+
+            font-weight:
+                800;
+        }
+
+
+        .footer-text {
+
+            color:
+                #64748b;
+
+            font-size:
+                12px;
+
+            line-height:
+                1.8;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width:1000px) {
+
+            .nav-links {
+
+                gap:
+                    18px;
+            }
+
+
+            .hero-grid-layout {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .hero-image-card {
+
+                max-width:
+                    650px;
+
+                margin:
+                    auto;
+
+                width:
+                    100%;
+            }
+
+
+            .main-layout {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .sticky-card {
+
+                position:
+                    relative;
+
+                top:
+                    0;
+            }
+
+
+            .reviews-grid {
+
+                grid-template-columns:
+                    1fr 1fr;
+            }
+
+        }
+
+
+        @media(max-width:700px) {
+
+            .nav-container {
+
+                flex-wrap:
+                    wrap;
+
+                gap:
+                    15px;
+
+                padding:
+                    15px 18px;
+            }
+
+
+            .navbar {
+
+                min-height:
+                    auto;
+            }
+
+
+            .nav-links {
+
+                order:
+                    3;
+
+                width:
+                    100%;
+
+                overflow-x:
+                    auto;
+
+                gap:
+                    22px;
+            }
+
+
+            .nav-link {
+
+                padding:
+                    8px 0;
+
+                white-space:
+                    nowrap;
+            }
+
+
+            .nav-link.active::after {
+
+                bottom:
+                    -2px;
+            }
+
+
+            .hero-container {
+
+                padding:
+                    45px 18px 65px;
+            }
+
+
+            .hero-title {
+
+                font-size:
+                    42px;
+            }
+
+
+            .hero-description {
+
+                font-size:
+                    14px;
+            }
+
+
+            .hero-image {
+
+                height:
+                    300px;
+            }
+
+
+            .default-image {
+
+                height:
+                    300px;
+            }
+
+
+            .hero-stats {
+
+                gap:
+                    20px;
+            }
+
+
+            .content {
+
+                padding:
+                    55px 18px 70px;
+            }
+
+
+            .learn-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .highlights {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .dark-card {
+
+                padding:
+                    22px;
+            }
+
+
+            .trainer-box {
+
+                flex-direction:
+                    column;
+
+                text-align:
+                    center;
+            }
+
+
+            .reviews-section {
+
+                padding:
+                    0 18px 70px;
+            }
+
+
+            .reviews-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+        }
+
+
+        @media(max-width:480px) {
+
+            .brand-name {
+
+                font-size:
+                    19px;
+            }
+
+
+            .brand-tagline {
+
+                font-size:
+                    7px;
+
+                letter-spacing:
+                    2px;
+            }
+
+
+            .brand-logo {
+
+                width:
+                    42px;
+
+                height:
+                    46px;
+            }
+
+
+            .dashboard-btn {
+
+                padding:
+                    10px 13px;
+
+                font-size:
+                    11px;
+            }
+
+
+            .hero-title {
+
+                font-size:
+                    36px;
+            }
+
+
+            .card-title {
+
+                font-size:
+                    25px;
+            }
+
+
+            .price {
+
+                font-size:
+                    36px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
+
 <body>
 
-<!-- HERO -->
 
-<section class="hero text-white">
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
 
-<div class="max-w-7xl mx-auto px-6 py-14">
+<header class="navbar">
 
-<a href="{{ url_for('student.courses') }}"
-class="inline-block bg-white text-indigo-700 px-5 py-2 rounded-lg font-semibold mb-8">
+    <div class="nav-container">
 
-← Back to Courses
 
-</a>
+        <a
+            href="{{ url_for('student.explorer_dashboard') }}"
+            class="brand">
 
-<div class="grid lg:grid-cols-2 gap-12 items-center">
 
-<div>
+            <div class="brand-logo">
 
-<span class="bg-yellow-400 text-black px-4 py-1 rounded-full text-sm font-bold">
+                🎓
 
-⭐ Featured Course
+            </div>
 
-</span>
 
-<h1 class="text-5xl font-extrabold mt-5">
+            <div>
 
-{{ course.title }}
+                <div class="brand-name">
 
-</h1>
+                    RR IT Origin
 
-<p class="mt-6 text-lg text-indigo-100">
+                </div>
 
-{{ course.description }}
+                <div class="brand-tagline">
 
-</p>
+                    LEARN • GROW • SUCCEED
 
-<div class="flex flex-wrap gap-6 mt-8">
+                </div>
 
-<div>
+            </div>
 
-<div class="text-yellow-300 text-2xl">
 
-★★★★★
+        </a>
 
-</div>
 
-<div>
+        <nav class="nav-links">
 
-4.9 Rating
 
-</div>
+            <a
+                href="{{ url_for('student.explorer_dashboard') }}"
+                class="nav-link">
 
-</div>
+                Home
 
-<div>
+            </a>
 
-<div class="text-2xl font-bold">
 
-3000+
+            <a
+                href="{{ url_for('student.courses') }}"
+                class="nav-link active">
 
-</div>
+                Courses
 
-<div>
+            </a>
 
-Students
 
-</div>
+            <a
+                href="{{ url_for('student.placement_statistics') }}"
+                class="nav-link">
 
-</div>
+                Results
 
-<div>
+            </a>
 
-<div class="text-2xl font-bold">
 
-100%
+            <a
+                href="{{ url_for('student.profile') }}"
+                class="nav-link">
 
-</div>
+                Profile
 
-<div>
+            </a>
 
-Placement Assistance
 
-</div>
+            <a
+                href="{{ url_for('auth.logout') }}"
+                class="nav-link">
 
-</div>
+                Logout
 
-</div>
+            </a>
 
-</div>
 
-<div>
+        </nav>
 
-{% if course.image %}
 
-<img
-src="{{ url_for('static', filename='uploads/' + course.image) }}"
-class="rounded-3xl shadow-2xl w-full">
+        <a
+            href="{{ url_for('student.explorer_dashboard') }}"
+            class="dashboard-btn">
 
-{% else %}
+            Dashboard
 
-<div class="h-96 rounded-3xl bg-white/20 flex items-center justify-center">
+        </a>
 
-<span class="text-9xl font-bold">
-
-{{ course.title[0] }}
-
-</span>
-
-</div>
-
-{% endif %}
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- CONTENT -->
-
-<!-- <section class="max-w-7xl mx-auto px-6 py-14">
-
-<div class="grid lg:grid-cols-3 gap-10">
-
-LEFT -->
-
-<div class="lg:col-span-2 space-y-8">
-    <!-- About Course -->
-
-<div class="bg-white rounded-2xl shadow-lg p-8">
-
-    <h2 class="text-3xl font-bold text-gray-800 mb-6">
-
-        About this Course
-
-    </h2>
-
-    <p class="text-gray-600 leading-8 text-lg">
-
-        {{ course.description }}
-
-    </p>
-
-</div>
-
-
-<!-- What You'll Learn -->
-
-<div class="bg-white rounded-2xl shadow-lg p-8">
-
-    <h2 class="text-3xl font-bold text-gray-800 mb-8">
-
-        What You'll Learn
-
-    </h2>
-
-    <div class="grid md:grid-cols-2 gap-5">
-
-        <div class="flex items-center">
-
-            <span class="text-green-600 text-xl mr-3">✔</span>
-
-            Industry Ready Skills
-
-        </div>
-
-        <div class="flex items-center">
-
-            <span class="text-green-600 text-xl mr-3">✔</span>
-
-            Live Projects
-
-        </div>
-
-        <div class="flex items-center">
-
-            <span class="text-green-600 text-xl mr-3">✔</span>
-
-            Resume Preparation
-
-        </div>
-
-        <div class="flex items-center">
-
-            <span class="text-green-600 text-xl mr-3">✔</span>
-
-            Mock Interviews
-
-        </div>
-
-        <div class="flex items-center">
-
-            <span class="text-green-600 text-xl mr-3">✔</span>
-
-            Placement Assistance
-
-        </div>
-
-        <div class="flex items-center">
-
-            <span class="text-green-600 text-xl mr-3">✔</span>
-
-            Certificate after Completion
-
-        </div>
-
-        <div class="flex items-center">
-
-            <span class="text-green-600 text-xl mr-3">✔</span>
-
-            Doubt Clearing Sessions
-
-        </div>
-
-        <div class="flex items-center">
-
-            <span class="text-green-600 text-xl mr-3">✔</span>
-
-            Lifetime Learning Support
-
-        </div>
 
     </div>
 
-</div>
+</header>
 
 
-<!-- Course Highlights -->
 
-<div class="bg-white rounded-2xl shadow-lg p-8">
+<!-- =====================================================
+     HERO
+===================================================== -->
 
-    <h2 class="text-3xl font-bold mb-8">
+<section class="hero">
 
-        Course Highlights
 
-    </h2>
+    <div class="hero-grid"></div>
 
-    <div class="grid md:grid-cols-2 gap-6">
 
-        <div class="border rounded-xl p-6">
+    <div class="hero-container">
 
-            <h3 class="text-gray-500">
 
-                Duration
+        <a
+            href="{{ url_for('student.courses') }}"
+            class="back-btn">
 
-            </h3>
+            ← Back to Courses
 
-            <p class="text-2xl font-bold mt-2">
+        </a>
 
-                {{ course.duration }}
 
-            </p>
+        <div class="hero-grid-layout">
 
-        </div>
 
-        <div class="border rounded-xl p-6">
+            <!-- LEFT -->
 
-            <h3 class="text-gray-500">
+            <div>
 
-                Trainer
 
-            </h3>
+                <span class="featured">
 
-            <p class="text-2xl font-bold mt-2">
-
-                {{ course.trainer }}
-
-            </p>
-
-        </div>
-
-        <div class="border rounded-xl p-6">
-
-            <h3 class="text-gray-500">
-
-                Learning Mode
-
-            </h3>
-
-            <p class="text-2xl font-bold mt-2">
-
-                {{ course.mode }}
-
-            </p>
-
-        </div>
-
-        <div class="border rounded-xl p-6">
-
-            <h3 class="text-gray-500">
-
-                Certification
-
-            </h3>
-
-            <p class="text-2xl font-bold mt-2 text-green-600">
-
-                Included
-
-            </p>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- Course Curriculum -->
-
-<div class="bg-white rounded-2xl shadow-lg p-8">
-
-    <h2 class="text-3xl font-bold mb-8">
-
-        Course Curriculum
-
-    </h2>
-
-    <div class="space-y-4">
-
-        <div class="border rounded-xl p-5">
-
-            <h3 class="font-bold text-lg">
-
-                Module 1
-
-            </h3>
-
-            <p class="text-gray-600 mt-2">
-
-                Fundamentals & Basics
-
-            </p>
-
-        </div>
-
-        <div class="border rounded-xl p-5">
-
-            <h3 class="font-bold text-lg">
-
-                Module 2
-
-            </h3>
-
-            <p class="text-gray-600 mt-2">
-
-                Intermediate Concepts
-
-            </p>
-
-        </div>
-
-        <div class="border rounded-xl p-5">
-
-            <h3 class="font-bold text-lg">
-
-                Module 3
-
-            </h3>
-
-            <p class="text-gray-600 mt-2">
-
-                Advanced Concepts
-
-            </p>
-
-        </div>
-
-        <div class="border rounded-xl p-5">
-
-            <h3 class="font-bold text-lg">
-
-                Module 4
-
-            </h3>
-
-            <p class="text-gray-600 mt-2">
-
-                Live Projects & Interview Preparation
-
-            </p>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- Trainer -->
-
-<div class="bg-white rounded-2xl shadow-lg p-8">
-
-    <h2 class="text-3xl font-bold mb-8">
-
-        Meet Your Trainer
-
-    </h2>
-
-    <div class="flex flex-col md:flex-row gap-8 items-center">
-
-        <div class="w-36 h-36 rounded-full bg-indigo-600 flex items-center justify-center text-white text-5xl font-bold">
-
-            {{ course.trainer[0] }}
-
-        </div>
-
-        <div>
-
-            <h3 class="text-2xl font-bold">
-
-                {{ course.trainer }}
-
-            </h3>
-
-            <p class="text-gray-600 mt-4 leading-8">
-
-                Experienced industry professional with practical knowledge,
-                real-time project experience, interview preparation guidance,
-                and dedicated mentoring throughout the course.
-
-            </p>
-
-        </div>
-
-    </div>
-
-</div>
-<!-- RIGHT SIDEBAR -->
-
-</div>
-
-<div>
-
-    <div class="sticky-card">
-
-        <!-- Price Card -->
-
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-
-            {% if course.image %}
-
-            <img
-                src="{{ url_for('static', filename='uploads/' + course.image) }}"
-                class="w-full h-56 object-cover">
-
-            {% else %}
-
-            <div class="h-56 bg-gradient-to-r from-indigo-600 to-blue-600 flex items-center justify-center">
-
-                <span class="text-7xl font-bold text-white">
-
-                    {{ course.title[0] }}
+                    ⭐ Featured Course
 
                 </span>
 
-            </div>
 
-            {% endif %}
+                <h1 class="hero-title">
 
-            <div class="p-8">
+                    {{ course.title }}
 
-                <div class="text-center">
+                </h1>
 
-                    <p class="text-gray-500">
 
-                        Course Fee
+                <p class="hero-description">
 
-                    </p>
+                    {{ course.description }}
 
-                    <h1 class="text-5xl font-extrabold text-indigo-700 mt-2">
+                </p>
 
-                        ₹{{ course.price }}
 
-                    </h1>
+                <div class="hero-stats">
+
+
+                    <div>
+
+                        <div class="hero-stat-number">
+
+                            ★★★★★
+
+                        </div>
+
+                        <div class="hero-stat-label">
+
+                            4.9 Rating
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="hero-stat-number">
+
+                            3000+
+
+                        </div>
+
+                        <div class="hero-stat-label">
+
+                            Students
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="hero-stat-number">
+
+                            100%
+
+                        </div>
+
+                        <div class="hero-stat-label">
+
+                            Placement Assistance
+
+                        </div>
+
+                    </div>
+
 
                 </div>
 
-                <div class="space-y-4 mt-8">
-
-                    <div class="flex justify-between">
-
-                        <span>📅 Duration</span>
-
-                        <strong>{{ course.duration }}</strong>
-
-                    </div>
-
-                    <div class="flex justify-between">
-
-                        <span>💻 Mode</span>
-
-                        <strong>{{ course.mode }}</strong>
-
-                    </div>
-
-                    <div class="flex justify-between">
-
-                        <span>👨‍🏫 Trainer</span>
-
-                        <strong>{{ course.trainer }}</strong>
-
-                    </div>
-
-                    <div class="flex justify-between">
-
-                        <span>🎓 Certificate</span>
-
-                        <strong>Included</strong>
-
-                    </div>
-
-                    <div class="flex justify-between">
-
-                        <span>💼 Placement</span>
-
-                        <strong>Support</strong>
-
-                    </div>
-
-                </div>
-
-                <a href="{{ url_for('student.enroll', course_id=course.id) }}"
-                   class="block text-center mt-8 bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-bold text-lg">
-
-                    🚀 Enroll Now
-
-                </a>
-
-                <a href="https://wa.me/91XXXXXXXXXX"
-                   target="_blank"
-                   class="block text-center mt-4 border border-green-600 text-green-700 hover:bg-green-600 hover:text-white py-4 rounded-xl font-semibold">
-
-                    WhatsApp Enquiry
-
-                </a>
 
             </div>
 
-        </div>
 
-        <!-- Why Choose Us -->
+            <!-- IMAGE -->
 
-        <div class="bg-white rounded-2xl shadow-lg mt-8 p-6">
+            <div class="hero-image-card">
 
-            <h2 class="text-2xl font-bold mb-5">
 
-                Why RR IT Origin?
+                {% if course.image %}
 
-            </h2>
 
-            <ul class="space-y-3 text-gray-600">
+                <img
 
-                <li>✅ Live Industry Projects</li>
+                    src="{{ url_for(
+                        'static',
+                        filename='uploads/' + course.image
+                    ) }}"
 
-                <li>✅ Mock Interviews</li>
+                    class="hero-image"
 
-                <li>✅ Resume Building</li>
+                    alt="{{ course.title }}">
 
-                <li>✅ Placement Assistance</li>
 
-                <li>✅ Expert Trainers</li>
+                {% else %}
 
-                <li>✅ Lifetime Support</li>
 
-            </ul>
+                <div class="default-image">
+
+                    <span class="course-letter">
+
+                        {{ course.title[0] }}
+
+                    </span>
+
+                </div>
+
+
+                {% endif %}
+
+
+            </div>
+
 
         </div>
 
     </div>
 
-</div>
+</section>
 
-</div>
+
+
+<!-- =====================================================
+     CONTENT
+===================================================== -->
+
+<section class="content">
+
+
+    <div class="main-layout">
+
+
+        <!-- =================================================
+             LEFT CONTENT
+        ================================================== -->
+
+        <div class="left-content">
+
+
+            <!-- ABOUT -->
+
+            <div class="dark-card">
+
+
+                <h2 class="card-title">
+
+                    <span class="card-title-icon">
+
+                        📚
+
+                    </span>
+
+                    About this Course
+
+                </h2>
+
+
+                <p class="description">
+
+                    {{ course.description }}
+
+                </p>
+
+
+            </div>
+
+
+
+            <!-- WHAT YOU LEARN -->
+
+            <div class="dark-card">
+
+
+                <h2 class="card-title">
+
+                    <span class="card-title-icon">
+
+                        🎯
+
+                    </span>
+
+                    What You'll Learn
+
+                </h2>
+
+
+                <div class="learn-grid">
+
+
+                    <div class="learn-item">
+
+                        <span class="check">✓</span>
+
+                        Industry Ready Skills
+
+                    </div>
+
+
+                    <div class="learn-item">
+
+                        <span class="check">✓</span>
+
+                        Live Projects
+
+                    </div>
+
+
+                    <div class="learn-item">
+
+                        <span class="check">✓</span>
+
+                        Resume Preparation
+
+                    </div>
+
+
+                    <div class="learn-item">
+
+                        <span class="check">✓</span>
+
+                        Mock Interviews
+
+                    </div>
+
+
+                    <div class="learn-item">
+
+                        <span class="check">✓</span>
+
+                        Placement Assistance
+
+                    </div>
+
+
+                    <div class="learn-item">
+
+                        <span class="check">✓</span>
+
+                        Certificate after Completion
+
+                    </div>
+
+
+                    <div class="learn-item">
+
+                        <span class="check">✓</span>
+
+                        Doubt Clearing Sessions
+
+                    </div>
+
+
+                    <div class="learn-item">
+
+                        <span class="check">✓</span>
+
+                        Lifetime Learning Support
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- COURSE HIGHLIGHTS -->
+
+            <div class="dark-card">
+
+
+                <h2 class="card-title">
+
+                    <span class="card-title-icon">
+
+                        ✨
+
+                    </span>
+
+                    Course Highlights
+
+                </h2>
+
+
+                <div class="highlights">
+
+
+                    <div class="highlight">
+
+                        <div class="highlight-label">
+
+                            Duration
+
+                        </div>
+
+                        <div class="highlight-value">
+
+                            {{ course.duration }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="highlight">
+
+                        <div class="highlight-label">
+
+                            Trainer
+
+                        </div>
+
+                        <div class="highlight-value">
+
+                            {{ course.trainer }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="highlight">
+
+                        <div class="highlight-label">
+
+                            Learning Mode
+
+                        </div>
+
+                        <div class="highlight-value">
+
+                            {{ course.mode }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="highlight">
+
+                        <div class="highlight-label">
+
+                            Certification
+
+                        </div>
+
+                        <div class="highlight-value">
+
+                            Included
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CURRICULUM -->
+
+            <div class="dark-card">
+
+
+                <h2 class="card-title">
+
+                    <span class="card-title-icon">
+
+                        📖
+
+                    </span>
+
+                    Course Curriculum
+
+                </h2>
+
+
+                <div>
+
+
+                    <div class="module">
+
+                        <span class="module-number">
+
+                            MODULE 01
+
+                        </span>
+
+                        <div class="module-title">
+
+                            Fundamentals & Basics
+
+                        </div>
+
+                        <div class="module-description">
+
+                            Build a strong foundation and understand
+                            the core concepts.
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="module">
+
+                        <span class="module-number">
+
+                            MODULE 02
+
+                        </span>
+
+                        <div class="module-title">
+
+                            Intermediate Concepts
+
+                        </div>
+
+                        <div class="module-description">
+
+                            Work with practical concepts and
+                            real-world development techniques.
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="module">
+
+                        <span class="module-number">
+
+                            MODULE 03
+
+                        </span>
+
+                        <div class="module-title">
+
+                            Advanced Concepts
+
+                        </div>
+
+                        <div class="module-description">
+
+                            Move into advanced topics and
+                            industry-level implementation.
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="module">
+
+                        <span class="module-number">
+
+                            MODULE 04
+
+                        </span>
+
+                        <div class="module-title">
+
+                            Live Projects & Interview Preparation
+
+                        </div>
+
+                        <div class="module-description">
+
+                            Build projects and prepare for
+                            real-world interviews.
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TRAINER -->
+
+            <div class="dark-card">
+
+
+                <h2 class="card-title">
+
+                    <span class="card-title-icon">
+
+                        👨‍🏫
+
+                    </span>
+
+                    Meet Your Trainer
+
+                </h2>
+
+
+                <div class="trainer-box">
+
+
+                    <div class="trainer-avatar">
+
+                        {{ course.trainer[0] }}
+
+                    </div>
+
+
+                    <div>
+
+
+                        <h3 class="trainer-name">
+
+                            {{ course.trainer }}
+
+                        </h3>
+
+
+                        <p class="trainer-description">
+
+                            Experienced industry professional with
+                            practical knowledge, real-time project
+                            experience, interview preparation guidance,
+                            and dedicated mentoring throughout the course.
+
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             RIGHT SIDEBAR
+        ================================================== -->
+
+        <div>
+
+
+            <div class="sticky-card">
+
+
+                <!-- PRICE -->
+
+                <div class="price-card">
+
+
+                    {% if course.image %}
+
+
+                    <img
+
+                        src="{{ url_for(
+                            'static',
+                            filename='uploads/' + course.image
+                        ) }}"
+
+                        class="price-image"
+
+                        alt="{{ course.title }}">
+
+
+                    {% else %}
+
+
+                    <div class="price-image-placeholder">
+
+                        <span class="course-letter">
+
+                            {{ course.title[0] }}
+
+                        </span>
+
+                    </div>
+
+
+                    {% endif %}
+
+
+                    <div class="price-body">
+
+
+                        <div class="price-label">
+
+                            Course Fee
+
+                        </div>
+
+
+                        <div class="price">
+
+                            ₹{{ course.price }}
+
+                        </div>
+
+
+                        <div class="price-divider"></div>
+
+
+                        <div>
+
+
+                            <div class="side-detail">
+
+                                <span class="side-label">
+
+                                    📅 Duration
+
+                                </span>
+
+                                <span class="side-value">
+
+                                    {{ course.duration }}
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="side-detail">
+
+                                <span class="side-label">
+
+                                    💻 Mode
+
+                                </span>
+
+                                <span class="side-value">
+
+                                    {{ course.mode }}
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="side-detail">
+
+                                <span class="side-label">
+
+                                    👨‍🏫 Trainer
+
+                                </span>
+
+                                <span class="side-value">
+
+                                    {{ course.trainer }}
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="side-detail">
+
+                                <span class="side-label">
+
+                                    🎓 Certificate
+
+                                </span>
+
+                                <span class="side-value">
+
+                                    Included
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="side-detail">
+
+                                <span class="side-label">
+
+                                    💼 Placement
+
+                                </span>
+
+                                <span class="side-value">
+
+                                    Support
+
+                                </span>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- KEEPING EXISTING ENROLL ROUTE -->
+
+                        <a
+
+                            href="{{ url_for(
+                                'student.enroll',
+                                course_id=course.id
+                            ) }}"
+
+                            class="enroll-btn">
+
+                            🚀 Enroll Now
+
+                        </a>
+
+
+                        <!-- KEEPING EXISTING WHATSAPP LINK -->
+
+                        <a
+
+                            href="https://wa.me/91XXXXXXXXXX"
+
+                            target="_blank"
+
+                            class="whatsapp-btn">
+
+                            💬 WhatsApp Enquiry
+
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- WHY CHOOSE US -->
+
+                <div class="why-card">
+
+
+                    <h2 class="why-title">
+
+                        Why RR IT Origin?
+
+                    </h2>
+
+
+                    <div class="why-item">
+
+                        <span>✓</span>
+
+                        Live Industry Projects
+
+                    </div>
+
+
+                    <div class="why-item">
+
+                        <span>✓</span>
+
+                        Mock Interviews
+
+                    </div>
+
+
+                    <div class="why-item">
+
+                        <span>✓</span>
+
+                        Resume Building
+
+                    </div>
+
+
+                    <div class="why-item">
+
+                        <span>✓</span>
+
+                        Placement Assistance
+
+                    </div>
+
+
+                    <div class="why-item">
+
+                        <span>✓</span>
+
+                        Expert Trainers
+
+                    </div>
+
+
+                    <div class="why-item">
+
+                        <span>✓</span>
+
+                        Lifetime Support
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
 
 </section>
 
-<!-- Student Reviews -->
 
-<section class="max-w-7xl mx-auto px-6 mb-16">
 
-    <h2 class="text-4xl font-bold mb-8">
+<!-- =====================================================
+     REVIEWS
+===================================================== -->
 
-        Student Reviews
+<section class="reviews-section">
+
+
+    <h2 class="reviews-title">
+
+        Student <span>Reviews</span>
 
     </h2>
 
-    <div class="grid md:grid-cols-3 gap-8">
 
-        <div class="bg-white rounded-2xl shadow-lg p-6">
+    <div class="reviews-grid">
 
-            <div class="text-yellow-500 text-xl">
+
+        <div class="review">
+
+
+            <div class="review-stars">
 
                 ★★★★★
 
             </div>
 
-            <p class="mt-4 text-gray-600">
 
-                Excellent trainer and real-time projects helped me gain confidence.
+            <p class="review-text">
+
+                Excellent trainer and real-time projects
+                helped me gain confidence.
 
             </p>
 
-            <h4 class="mt-5 font-bold">
+
+            <h4 class="review-name">
 
                 Rahul
 
             </h4>
 
+
         </div>
 
-        <div class="bg-white rounded-2xl shadow-lg p-6">
 
-            <div class="text-yellow-500 text-xl">
+        <div class="review">
+
+
+            <div class="review-stars">
 
                 ★★★★★
 
             </div>
 
-            <p class="mt-4 text-gray-600">
 
-                Great placement support and practical learning experience.
+            <p class="review-text">
+
+                Great placement support and practical
+                learning experience.
 
             </p>
 
-            <h4 class="mt-5 font-bold">
+
+            <h4 class="review-name">
 
                 Sneha
 
             </h4>
 
+
         </div>
 
-        <div class="bg-white rounded-2xl shadow-lg p-6">
 
-            <div class="text-yellow-500 text-xl">
+        <div class="review">
+
+
+            <div class="review-stars">
 
                 ★★★★★
 
             </div>
 
-            <p class="mt-4 text-gray-600">
 
-                Highly recommended for freshers and working professionals.
+            <p class="review-text">
+
+                Highly recommended for freshers and
+                working professionals.
 
             </p>
 
-            <h4 class="mt-5 font-bold">
+
+            <h4 class="review-name">
 
                 Arjun
 
             </h4>
 
+
         </div>
+
 
     </div>
 
 </section>
 
-<!-- Footer -->
 
-<footer class="bg-gray-900 text-gray-300">
 
-    <div class="max-w-7xl mx-auto px-6 py-12">
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+
+    <div class="footer-inner">
+
 
         <div class="text-center">
 
-            <h2 class="text-3xl font-bold text-white">
+
+            <div class="footer-title">
 
                 RR IT Origin
 
-            </h2>
+            </div>
 
-            <p class="mt-4">
+
+            <p class="footer-text mt-3">
 
                 Learn • Build • Get Placed 🚀
 
             </p>
 
-            <p class="mt-2">
+
+            <p class="footer-text mt-2">
 
                 © 2026 RR IT Origin. All Rights Reserved.
 
             </p>
 
+
         </div>
+
 
     </div>
 
 </footer>
+
 
 </body>
 

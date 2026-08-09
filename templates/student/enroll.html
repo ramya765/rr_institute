@@ -3,131 +3,1820 @@
 
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Enroll | {{ course.title }} | RR IT Origin</title>
+<title>Enroll | {{ course.title }} | RR IT Origin</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f4f7fb;
-        }
+<style>
 
-        .hero {
-            background:
-                linear-gradient(
-                    135deg,
-                    #312e81,
-                    #4338ca,
-                    #2563eb
-                );
-        }
+* {
+    box-sizing: border-box;
+}
 
-        .glass {
-            background: rgba(255,255,255,0.92);
-            backdrop-filter: blur(15px);
-        }
+html {
+    scroll-behavior: smooth;
+}
 
-        .input-field {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid #d1d5db;
-            border-radius: 12px;
-            outline: none;
-            transition: .25s;
-        }
+body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background: #f6f8fc;
+    color: #172033;
+}
 
-        .input-field:focus {
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79,70,229,.12);
-        }
 
-        .submit-btn {
-            transition: .3s;
-        }
+/* =====================================================
+   ANIMATIONS
+===================================================== */
 
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(79,70,229,.25);
-        }
+@keyframes fadeUp {
 
-    </style>
+    from {
+        opacity: 0;
+        transform: translateY(35px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+@keyframes fadeLeft {
+
+    from {
+        opacity: 0;
+        transform: translateX(-35px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+}
+
+@keyframes fadeRight {
+
+    from {
+        opacity: 0;
+        transform: translateX(35px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+}
+
+@keyframes floating {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-7px);
+    }
+
+}
+
+.fade-up {
+    animation: fadeUp .8s ease forwards;
+}
+
+.fade-left {
+    animation: fadeLeft .8s ease forwards;
+}
+
+.fade-right {
+    animation: fadeRight .8s ease forwards;
+}
+
+.floating {
+    animation: floating 4s ease-in-out infinite;
+}
+
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.navbar {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 999;
+
+    background:
+        rgba(5, 16, 36, .96);
+
+    backdrop-filter: blur(18px);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,.18);
+
+}
+
+.navbar-inner {
+
+    width: 94%;
+
+    max-width: 1600px;
+
+    min-height: 78px;
+
+    margin: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+}
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    text-decoration: none;
+
+}
+
+.brand-icon {
+
+    width: 46px;
+
+    height: 46px;
+
+    border-radius: 13px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #facc15,
+            #eab308
+        );
+
+    color: #071225;
+
+    font-size: 22px;
+
+    box-shadow:
+        0 8px 25px rgba(250,204,21,.2);
+
+}
+
+.brand-title {
+
+    font-family:
+        "Playfair Display",
+        serif;
+
+    color: #facc15;
+
+    font-size: 21px;
+
+    font-weight: 800;
+
+}
+
+.brand-subtitle {
+
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: 8px;
+
+    letter-spacing: 3px;
+
+    margin-top: -2px;
+
+}
+
+.nav-links {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 32px;
+
+}
+
+.nav-links a {
+
+    color: #e5e7eb;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition: .3s;
+
+}
+
+.nav-links a:hover {
+
+    color: #facc15;
+
+}
+
+.nav-demo {
+
+    background: #facc15;
+
+    color: #071225 !important;
+
+    padding: 12px 20px;
+
+    border-radius: 10px;
+
+    font-weight: 800 !important;
+
+    transition: .3s;
+
+}
+
+.nav-demo:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(250,204,21,.25);
+
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero {
+
+    position: relative;
+
+    overflow: hidden;
+
+    color: white;
+
+    background:
+
+        radial-gradient(
+            circle at 80% 20%,
+            rgba(30,64,175,.32),
+            transparent 35%
+        ),
+
+        linear-gradient(
+            135deg,
+            #061124,
+            #0b1936 55%,
+            #071225
+        );
+
+}
+
+.hero::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 450px;
+
+    height: 450px;
+
+    right: -200px;
+
+    top: -200px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(250,204,21,.06);
+
+}
+
+.hero::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+
+    height: 300px;
+
+    left: -150px;
+
+    bottom: -150px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(37,99,235,.08);
+
+}
+
+.hero-container {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 94%;
+
+    max-width: 1600px;
+
+    margin: auto;
+
+    padding: 50px 20px 65px;
+
+}
+
+.back-link {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #cbd5e1;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    margin-bottom: 35px;
+
+    transition: .3s;
+
+}
+
+.back-link:hover {
+
+    color: #facc15;
+
+    transform: translateX(-4px);
+
+}
+
+.hero-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.1fr)
+        minmax(390px, .9fr);
+
+    gap: 70px;
+
+    align-items: center;
+
+}
+
+.hero-content {
+
+    animation:
+        fadeLeft .8s ease forwards;
+
+}
+
+.hero-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 8px 15px;
+
+    border-radius: 999px;
+
+    color: #facc15;
+
+    border:
+        1px solid rgba(250,204,21,.35);
+
+    background:
+        rgba(250,204,21,.08);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 20px;
+
+}
+
+.hero-title {
+
+    font-family:
+        "Playfair Display",
+        serif;
+
+    font-size:
+        clamp(40px, 5vw, 70px);
+
+    line-height: 1.05;
+
+    font-weight: 800;
+
+    margin: 0 0 20px;
+
+}
+
+.hero-title span {
+
+    color: #facc15;
+
+}
+
+.hero-description {
+
+    max-width: 760px;
+
+    color: #cbd5e1;
+
+    font-size: 17px;
+
+    line-height: 1.8;
+
+    margin-bottom: 28px;
+
+}
+
+.hero-meta {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+}
+
+.meta {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 11px 15px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border:
+        1px solid rgba(255,255,255,.09);
+
+    color: #dbeafe;
+
+    font-size: 13px;
+
+}
+
+.meta strong {
+
+    color: #facc15;
+
+}
+
+
+/* =====================================================
+   HERO COURSE CARD
+===================================================== */
+
+.hero-course-card {
+
+    position: relative;
+
+    background:
+        rgba(255,255,255,.08);
+
+    border:
+        1px solid rgba(255,255,255,.15);
+
+    border-radius: 24px;
+
+    padding: 10px;
+
+    backdrop-filter: blur(15px);
+
+    box-shadow:
+        0 30px 70px rgba(0,0,0,.35);
+
+    animation:
+        fadeRight .8s ease forwards;
+
+}
+
+.hero-course-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: -1px;
+
+    border-radius: 24px;
+
+    border:
+        1px solid rgba(250,204,21,.15);
+
+    pointer-events: none;
+
+}
+
+.course-image {
+
+    width: 100%;
+
+    height: 330px;
+
+    object-fit: cover;
+
+    border-radius: 18px;
+
+    display: block;
+
+}
+
+.course-placeholder {
+
+    width: 100%;
+
+    height: 330px;
+
+    border-radius: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #172b50,
+            #0d1c38
+        );
+
+    color: #facc15;
+
+    font-size: 90px;
+
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main-section {
+
+    padding: 70px 0 100px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f8fafc,
+            #eef2f7
+        );
+
+}
+
+.container {
+
+    width: 94%;
+
+    max-width: 1600px;
+
+    margin: auto;
+
+    padding: 0 20px;
+
+}
+
+.main-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        400px;
+
+    gap: 35px;
+
+    align-items: start;
+
+}
+
+
+/* =====================================================
+   FORM CARD
+===================================================== */
+
+.form-card {
+
+    background: white;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 24px;
+
+    padding: 40px;
+
+    box-shadow:
+        0 18px 50px rgba(15,23,42,.07);
+
+    animation:
+        fadeUp .8s ease forwards;
+
+}
+
+.section-top {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 30px;
+
+}
+
+.section-icon {
+
+    width: 52px;
+
+    height: 52px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: #fff7cc;
+
+    color: #a16207;
+
+    font-size: 23px;
+
+}
+
+.section-small {
+
+    color: #b77900;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+}
+
+.section-title {
+
+    margin: 3px 0 0;
+
+    font-size: 29px;
+
+    font-weight: 800;
+
+    color: #0f172a;
+
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.form-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0,1fr));
+
+    gap: 22px;
+
+}
+
+.form-group {
+
+    margin-bottom: 3px;
+
+}
+
+.form-group.full {
+
+    grid-column:
+        1 / -1;
+
+}
+
+.form-label {
+
+    display: block;
+
+    color: #1e293b;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    margin-bottom: 9px;
+
+}
+
+.required {
+
+    color: #dc2626;
+
+}
+
+.input-wrapper {
+
+    position: relative;
+
+}
+
+.input-icon {
+
+    position: absolute;
+
+    left: 15px;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    color: #94a3b8;
+
+    font-size: 17px;
+
+    pointer-events: none;
+
+}
+
+.input-field {
+
+    width: 100%;
+
+    min-height: 52px;
+
+    padding:
+        14px 16px 14px 45px;
+
+    border:
+        1px solid #dbe2ea;
+
+    border-radius: 12px;
+
+    background: #f8fafc;
+
+    color: #172033;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition: .3s;
+
+}
+
+.input-field::placeholder {
+
+    color: #94a3b8;
+
+}
+
+.input-field:hover {
+
+    border-color: #cbd5e1;
+
+    background: white;
+
+}
+
+.input-field:focus {
+
+    background: white;
+
+    border-color: #eab308;
+
+    box-shadow:
+        0 0 0 4px rgba(250,204,21,.12);
+
+}
+
+textarea.input-field {
+
+    min-height: 140px;
+
+    resize: vertical;
+
+    padding-top: 15px;
+
+}
+
+.textarea-icon {
+
+    position: absolute;
+
+    left: 15px;
+
+    top: 17px;
+
+    color: #94a3b8;
+
+}
+
+
+/* =====================================================
+   FORM FOOTER
+===================================================== */
+
+.form-footer {
+
+    margin-top: 30px;
+
+    padding-top: 25px;
+
+    border-top:
+        1px solid #e5e7eb;
+
+}
+
+.security-note {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    margin-bottom: 18px;
+
+}
+
+.security-note span {
+
+    color: #16a34a;
+
+}
+
+.submit-btn {
+
+    width: 100%;
+
+    min-height: 58px;
+
+    border: none;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #facc15,
+            #eab308
+        );
+
+    color: #071225;
+
+    font-size: 16px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+    box-shadow:
+        0 12px 25px rgba(234,179,8,.20);
+
+}
+
+.submit-btn:hover {
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 18px 35px rgba(234,179,8,.30);
+
+}
+
+.submit-btn:active {
+
+    transform:
+        translateY(0);
+
+}
+
+
+/* =====================================================
+   COURSE SUMMARY
+===================================================== */
+
+.summary-card {
+
+    position: sticky;
+
+    top: 100px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #071225,
+            #102449
+        );
+
+    border-radius: 24px;
+
+    color: white;
+
+    box-shadow:
+        0 25px 60px rgba(7,18,37,.22);
+
+    animation:
+        fadeRight .8s ease forwards;
+
+}
+
+.summary-image {
+
+    width: 100%;
+
+    height: 220px;
+
+    object-fit: cover;
+
+    display: block;
+
+}
+
+.summary-placeholder {
+
+    height: 220px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #172b50,
+            #0b1935
+        );
+
+    font-size: 70px;
+
+    color: #facc15;
+
+}
+
+.summary-body {
+
+    padding: 28px;
+
+}
+
+.summary-label {
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.5px;
+
+}
+
+.summary-title {
+
+    font-family:
+        "Playfair Display",
+        serif;
+
+    font-size: 27px;
+
+    line-height: 1.2;
+
+    font-weight: 800;
+
+    margin:
+        7px 0 20px;
+
+}
+
+.price-label {
+
+    color: #94a3b8;
+
+    font-size: 12px;
+
+}
+
+.price {
+
+    color: #facc15;
+
+    font-size: 39px;
+
+    font-weight: 900;
+
+    margin-top: 3px;
+
+}
+
+.divider {
+
+    height: 1px;
+
+    background:
+        rgba(255,255,255,.10);
+
+    margin:
+        22px 0;
+
+}
+
+.summary-list {
+
+    list-style: none;
+
+    padding: 0;
+
+    margin: 0;
+
+}
+
+.summary-list li {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 13px 0;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.06);
+
+    font-size: 13px;
+
+}
+
+.summary-list li:last-child {
+
+    border-bottom: none;
+
+}
+
+.summary-list span {
+
+    color: #94a3b8;
+
+}
+
+.summary-list strong {
+
+    color: #f8fafc;
+
+    text-align: right;
+
+}
+
+.summary-list .green {
+
+    color: #4ade80;
+
+}
+
+
+/* =====================================================
+   BENEFITS
+===================================================== */
+
+.benefits {
+
+    margin-top: 25px;
+
+    padding-top: 22px;
+
+    border-top:
+        1px solid rgba(255,255,255,.10);
+
+}
+
+.benefits-title {
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+    margin-bottom: 15px;
+
+}
+
+.benefit {
+
+    display: flex;
+
+    gap: 10px;
+
+    color: #cbd5e1;
+
+    font-size: 13px;
+
+    margin-bottom: 11px;
+
+}
+
+.benefit-icon {
+
+    color: #facc15;
+
+    font-weight: 900;
+
+}
+
+
+/* =====================================================
+   TRUST CARD
+===================================================== */
+
+.trust-card {
+
+    margin-top: 18px;
+
+    padding: 20px;
+
+    border-radius: 18px;
+
+    background:
+        #fff;
+
+    border:
+        1px solid #e2e8f0;
+
+    box-shadow:
+        0 12px 30px rgba(15,23,42,.05);
+
+}
+
+.trust-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+.trust-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #ecfdf5;
+
+    color: #16a34a;
+
+}
+
+.trust-title {
+
+    font-weight: 800;
+
+    font-size: 13px;
+
+    color: #172033;
+
+}
+
+.trust-text {
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    margin-top: 3px;
+
+}
+
+
+/* =====================================================
+   BOTTOM INFORMATION CARDS
+===================================================== */
+
+.bottom-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0,1fr));
+
+    gap: 18px;
+
+    margin-top: 30px;
+
+}
+
+.info-card {
+
+    background: white;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 18px;
+
+    padding: 23px;
+
+    transition: .3s;
+
+}
+
+.info-card:hover {
+
+    transform:
+        translateY(-5px);
+
+    border-color: #facc15;
+
+    box-shadow:
+        0 15px 35px rgba(15,23,42,.08);
+
+}
+
+.info-card-icon {
+
+    width: 45px;
+
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #fff7cc;
+
+    margin-bottom: 13px;
+
+}
+
+.info-card h3 {
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    margin: 0 0 6px;
+
+}
+
+.info-card p {
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    margin: 0;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1150px) {
+
+    .nav-links {
+
+        gap: 18px;
+
+    }
+
+    .hero-grid {
+
+        gap: 40px;
+
+    }
+
+    .main-grid {
+
+        grid-template-columns:
+            minmax(0,1fr)
+            350px;
+
+    }
+
+}
+
+@media (max-width: 950px) {
+
+    .nav-links a:not(.nav-demo) {
+
+        display: none;
+
+    }
+
+    .hero-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .hero-content {
+
+        text-align: center;
+
+    }
+
+    .hero-description {
+
+        margin-left: auto;
+
+        margin-right: auto;
+
+    }
+
+    .hero-meta {
+
+        justify-content: center;
+
+    }
+
+    .hero-course-card {
+
+        max-width: 700px;
+
+        width: 100%;
+
+        margin: auto;
+
+    }
+
+    .main-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .summary-card {
+
+        position: relative;
+
+        top: 0;
+
+        order: -1;
+
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .navbar-inner {
+
+        min-height: 68px;
+
+    }
+
+    .brand-title {
+
+        font-size: 18px;
+
+    }
+
+    .brand-subtitle {
+
+        font-size: 7px;
+
+    }
+
+    .nav-demo {
+
+        padding:
+            10px 14px;
+
+        font-size: 12px !important;
+
+    }
+
+    .hero-container {
+
+        padding:
+            35px 10px 50px;
+
+    }
+
+    .hero-title {
+
+        font-size: 40px;
+
+    }
+
+    .hero-description {
+
+        font-size: 14px;
+
+    }
+
+    .course-image,
+    .course-placeholder {
+
+        height: 260px;
+
+    }
+
+    .container {
+
+        padding:
+            0 10px;
+
+    }
+
+    .main-section {
+
+        padding:
+            45px 0 65px;
+
+    }
+
+    .form-card {
+
+        padding: 24px 20px;
+
+        border-radius: 20px;
+
+    }
+
+    .form-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .form-group.full {
+
+        grid-column: auto;
+
+    }
+
+    .section-title {
+
+        font-size: 24px;
+
+    }
+
+    .bottom-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .summary-body {
+
+        padding: 23px;
+
+    }
+
+}
+
+</style>
 
 </head>
 
+
 <body>
 
-    <!-- HERO -->
 
-    <section class="hero text-white">
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
 
-        <div class="max-w-7xl mx-auto px-6 py-10">
+<nav class="navbar">
 
-            <a
-                href="{{ url_for('student.course_details', course_id=course.id) }}"
-                class="inline-block bg-white text-indigo-700 px-5 py-2 rounded-lg font-semibold"
-            >
-                ← Back to Course
-            </a>
+    <div class="navbar-inner">
 
-            <div class="mt-8">
+        <a href="{{ url_for('student.dashboard') }}"
+           class="brand">
 
-                <p class="text-indigo-200 font-semibold">
-                    COURSE ENROLLMENT
-                </p>
+            <div class="brand-icon">
+                🎓
+            </div>
 
-                <h1 class="text-4xl md:text-5xl font-extrabold mt-2">
-                    {{ course.title }}
-                </h1>
+            <div>
 
-                <p class="mt-4 text-indigo-100 text-lg">
-                    Fill in your details and our counsellor will contact you shortly.
-                </p>
+                <div class="brand-title">
+                    RR IT Origin
+                </div>
+
+                <span class="brand-subtitle">
+                    LEARN • GROW • SUCCEED
+                </span>
 
             </div>
 
+        </a>
+
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('student.dashboard') }}">
+                Home
+            </a>
+
+            <a href="{{ url_for('student.courses') }}">
+                Courses
+            </a>
+
+            <a href="{{ url_for('student.placement') }}">
+                Results
+            </a>
+
+            <a href="{{ url_for('student.profile') }}">
+                Profile
+            </a>
+
+            <a href="{{ url_for('student.notifications') }}">
+                🔔 Notifications
+            </a>
+
+            <a href="{{ url_for('auth.logout') }}"
+               class="nav-demo">
+
+                Logout
+
+            </a>
+
         </div>
 
-    </section>
+    </div>
+
+</nav>
 
 
-    <!-- MAIN -->
+<!-- =====================================================
+     HERO
+===================================================== -->
 
-    <main class="max-w-7xl mx-auto px-6 py-12">
+<section class="hero">
 
-        <div class="grid lg:grid-cols-3 gap-10">
+    <div class="hero-container">
+
+        <a href="{{ url_for('student.course_details', course_id=course.id) }}"
+           class="back-link">
+
+            ← Back to Course
+
+        </a>
 
 
-            <!-- ============================= -->
-            <!-- ENROLLMENT FORM -->
-            <!-- ============================= -->
+        <div class="hero-grid">
 
-            <div class="lg:col-span-2">
 
-                <div class="glass rounded-3xl shadow-xl p-8 md:p-10">
+            <div class="hero-content">
 
-                    <div class="mb-8">
+                <div class="hero-badge">
 
-                        <p class="text-indigo-600 font-bold text-sm uppercase">
-                            Get Started
-                        </p>
+                    🎓 COURSE ENROLLMENT
 
-                        <h2 class="text-3xl font-extrabold text-gray-900 mt-2">
-                            Enrollment Information
-                        </h2>
+                </div>
 
-                        <p class="text-gray-500 mt-2">
-                            Please provide your details below.
-                        </p>
+
+                <h1 class="hero-title">
+
+                    Start Your Journey With
+                    <span>{{ course.title }}</span>
+
+                </h1>
+
+
+                <p class="hero-description">
+
+                    Take the next step toward your career.
+                    Fill in your details and our counsellor
+                    will contact you shortly.
+
+                </p>
+
+
+                <div class="hero-meta">
+
+                    {% if course.duration %}
+
+                    <div class="meta">
+
+                        ⏱️
+
+                        Duration:
+
+                        <strong>
+                            {{ course.duration }}
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    {% if course.mode %}
+
+                    <div class="meta">
+
+                        💻
+
+                        Mode:
+
+                        <strong>
+                            {{ course.mode }}
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    {% if course.trainer %}
+
+                    <div class="meta">
+
+                        👨‍🏫
+
+                        Trainer:
+
+                        <strong>
+                            {{ course.trainer }}
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="hero-course-card floating">
+
+                {% if course.image %}
+
+                <img
+                    src="{{ url_for('static', filename='uploads/' + course.image) }}"
+                    class="course-image"
+                    alt="{{ course.title }}"
+                >
+
+                {% else %}
+
+                <div class="course-placeholder">
+
+                    🎓
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<section class="main-section">
+
+    <div class="container">
+
+        <div class="main-grid">
+
+
+            <!-- =================================================
+                 FORM
+            ================================================== -->
+
+            <div>
+
+
+                <div class="form-card">
+
+                    <div class="section-top">
+
+                        <div class="section-icon">
+                            📝
+                        </div>
+
+                        <div>
+
+                            <div class="section-small">
+                                Get Started
+                            </div>
+
+                            <h2 class="section-title">
+                                Enrollment Information
+                            </h2>
+
+                        </div>
 
                     </div>
 
@@ -137,7 +1826,8 @@
                         action="{{ url_for('student.submit_enrollment') }}"
                     >
 
-                        <!-- Course ID -->
+
+                        <!-- COURSE ID -->
 
                         <input
                             type="hidden"
@@ -146,225 +1836,468 @@
                         >
 
 
-                        <!-- Full Name -->
+                        <div class="form-grid">
 
-                        <div class="mb-6">
 
-                            <label class="block text-gray-700 font-semibold mb-2">
-                                Full Name
-                            </label>
+                            <!-- FULL NAME -->
 
-                            <input
-                                type="text"
-                                name="name"
-                                required
-                                placeholder="Enter your full name"
-                                class="input-field"
+                            <div class="form-group">
+
+                                <label class="form-label">
+
+                                    Full Name
+                                    <span class="required">*</span>
+
+                                </label>
+
+                                <div class="input-wrapper">
+
+                                    <span class="input-icon">
+                                        👤
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        required
+                                        placeholder="Enter your full name"
+                                        class="input-field"
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- MOBILE -->
+
+                            <div class="form-group">
+
+                                <label class="form-label">
+
+                                    Mobile Number
+                                    <span class="required">*</span>
+
+                                </label>
+
+                                <div class="input-wrapper">
+
+                                    <span class="input-icon">
+                                        📱
+                                    </span>
+
+                                    <input
+                                        type="tel"
+                                        name="mobile"
+                                        required
+                                        placeholder="Enter your mobile number"
+                                        class="input-field"
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- EMAIL -->
+
+                            <div class="form-group full">
+
+                                <label class="form-label">
+
+                                    Email Address
+                                    <span class="required">*</span>
+
+                                </label>
+
+                                <div class="input-wrapper">
+
+                                    <span class="input-icon">
+                                        ✉️
+                                    </span>
+
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        required
+                                        placeholder="Enter your email address"
+                                        class="input-field"
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- MESSAGE -->
+
+                            <div class="form-group full">
+
+                                <label class="form-label">
+
+                                    Message
+
+                                </label>
+
+                                <div class="input-wrapper">
+
+                                    <span class="textarea-icon">
+                                        💬
+                                    </span>
+
+                                    <textarea
+                                        name="message"
+                                        rows="5"
+                                        placeholder="Tell us what you would like to know..."
+                                        class="input-field"
+                                    ></textarea>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- FORM FOOTER -->
+
+                        <div class="form-footer">
+
+                            <div class="security-note">
+
+                                <span>🔒</span>
+
+                                Your information is safe and will
+                                only be used to contact you regarding
+                                this course.
+
+                            </div>
+
+
+                            <button
+                                type="submit"
+                                class="submit-btn"
                             >
 
-                        </div>
+                                🚀 Submit Enrollment →
 
-
-                        <!-- Mobile -->
-
-                        <div class="mb-6">
-
-                            <label class="block text-gray-700 font-semibold mb-2">
-                                Mobile Number
-                            </label>
-
-                            <input
-                                type="tel"
-                                name="mobile"
-                                required
-                                placeholder="Enter your mobile number"
-                                class="input-field"
-                            >
+                            </button>
 
                         </div>
 
-
-                        <!-- Email -->
-
-                        <div class="mb-6">
-
-                            <label class="block text-gray-700 font-semibold mb-2">
-                                Email Address
-                            </label>
-
-                            <input
-                                type="email"
-                                name="email"
-                                required
-                                placeholder="Enter your email address"
-                                class="input-field"
-                            >
-
-                        </div>
-
-
-                        <!-- Message -->
-
-                        <div class="mb-8">
-
-                            <label class="block text-gray-700 font-semibold mb-2">
-                                Message
-                            </label>
-
-                            <textarea
-                                name="message"
-                                rows="5"
-                                placeholder="Tell us what you would like to know..."
-                                class="input-field"
-                            ></textarea>
-
-                        </div>
-
-
-                        <!-- Submit -->
-
-                        <button
-                            type="submit"
-                            class="submit-btn w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-bold text-lg"
-                        >
-
-                            Submit Enrollment →
-
-                        </button>
 
                     </form>
 
                 </div>
 
+
+                <!-- INFORMATION CARDS -->
+
+                <div class="bottom-grid">
+
+
+                    <div class="info-card">
+
+                        <div class="info-card-icon">
+                            🎯
+                        </div>
+
+                        <h3>
+                            Career Focused
+                        </h3>
+
+                        <p>
+                            Practical training designed to
+                            help you become industry ready.
+                        </p>
+
+                    </div>
+
+
+                    <div class="info-card">
+
+                        <div class="info-card-icon">
+                            👨‍🏫
+                        </div>
+
+                        <h3>
+                            Expert Guidance
+                        </h3>
+
+                        <p>
+                            Get guidance from experienced
+                            trainers throughout your journey.
+                        </p>
+
+                    </div>
+
+
+                    <div class="info-card">
+
+                        <div class="info-card-icon">
+                            🚀
+                        </div>
+
+                        <h3>
+                            Career Support
+                        </h3>
+
+                        <p>
+                            Receive career guidance and
+                            placement-oriented support.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
             </div>
 
 
-            <!-- ============================= -->
-            <!-- COURSE SUMMARY -->
-            <!-- ============================= -->
+            <!-- =================================================
+                 COURSE SUMMARY
+            ================================================== -->
 
             <div>
 
-                <div class="bg-white rounded-3xl shadow-xl overflow-hidden sticky top-8">
+
+                <div class="summary-card">
+
 
                     {% if course.image %}
 
                     <img
                         src="{{ url_for('static', filename='uploads/' + course.image) }}"
-                        class="w-full h-56 object-cover"
+                        class="summary-image"
                         alt="{{ course.title }}"
                     >
 
                     {% else %}
 
-                    <div class="h-56 bg-gradient-to-r from-indigo-600 to-blue-600 flex items-center justify-center">
+                    <div class="summary-placeholder">
 
-                        <span class="text-7xl font-bold text-white">
-                            {{ course.title[0] }}
-                        </span>
+                        🎓
 
                     </div>
 
                     {% endif %}
 
 
-                    <div class="p-7">
+                    <div class="summary-body">
 
-                        <h2 class="text-2xl font-extrabold text-gray-900">
+
+                        <div class="summary-label">
+
+                            You are enrolling in
+
+                        </div>
+
+
+                        <h2 class="summary-title">
+
                             {{ course.title }}
+
                         </h2>
 
 
-                        <div class="mt-6">
+                        <div class="price-label">
 
-                            <p class="text-gray-500">
-                                Course Fee
-                            </p>
-
-                            <p class="text-4xl font-extrabold text-indigo-700 mt-1">
-                                ₹{{ course.price }}
-                            </p>
+                            Course Fee
 
                         </div>
 
 
-                        <div class="border-t mt-6 pt-6 space-y-4">
+                        <div class="price">
 
-                            <div class="flex justify-between">
-                                <span class="text-gray-500">
-                                    Duration
-                                </span>
-
-                                <strong>
-                                    {{ course.duration }}
-                                </strong>
-                            </div>
-
-
-                            <div class="flex justify-between">
-                                <span class="text-gray-500">
-                                    Trainer
-                                </span>
-
-                                <strong>
-                                    {{ course.trainer }}
-                                </strong>
-                            </div>
-
-
-                            <div class="flex justify-between">
-                                <span class="text-gray-500">
-                                    Mode
-                                </span>
-
-                                <strong>
-                                    {{ course.mode }}
-                                </strong>
-                            </div>
-
-
-                            <div class="flex justify-between">
-                                <span class="text-gray-500">
-                                    Certificate
-                                </span>
-
-                                <strong class="text-green-600">
-                                    Included
-                                </strong>
-                            </div>
-
-
-                            <div class="flex justify-between">
-                                <span class="text-gray-500">
-                                    Placement
-                                </span>
-
-                                <strong class="text-green-600">
-                                    Assistance
-                                </strong>
-                            </div>
+                            ₹{{ course.price }}
 
                         </div>
 
 
-                        <!-- Benefits -->
+                        <div class="divider"></div>
 
-                        <div class="border-t mt-6 pt-6">
 
-                            <h3 class="font-bold text-lg mb-4">
-                                Benefits
-                            </h3>
+                        <div>
 
-                            <ul class="space-y-3 text-gray-600">
+                            <ul class="summary-list">
 
-                                <li>✓ Industry-ready skills</li>
-                                <li>✓ Live projects</li>
-                                <li>✓ Resume preparation</li>
-                                <li>✓ Mock interviews</li>
-                                <li>✓ Placement assistance</li>
-                                <li>✓ Certificate after completion</li>
+
+                                <li>
+
+                                    <span>
+                                        Duration
+                                    </span>
+
+                                    <strong>
+                                        {{ course.duration }}
+                                    </strong>
+
+                                </li>
+
+
+                                <li>
+
+                                    <span>
+                                        Trainer
+                                    </span>
+
+                                    <strong>
+                                        {{ course.trainer }}
+                                    </strong>
+
+                                </li>
+
+
+                                <li>
+
+                                    <span>
+                                        Training Mode
+                                    </span>
+
+                                    <strong>
+                                        {{ course.mode }}
+                                    </strong>
+
+                                </li>
+
+
+                                <li>
+
+                                    <span>
+                                        Certificate
+                                    </span>
+
+                                    <strong class="green">
+                                        ✓ Included
+                                    </strong>
+
+                                </li>
+
+
+                                <li>
+
+                                    <span>
+                                        Placement
+                                    </span>
+
+                                    <strong class="green">
+                                        ✓ Assistance
+                                    </strong>
+
+                                </li>
+
 
                             </ul>
+
+                        </div>
+
+
+                        <div class="benefits">
+
+                            <div class="benefits-title">
+
+                                Course Benefits
+
+                            </div>
+
+
+                            <div class="benefit">
+
+                                <span class="benefit-icon">
+                                    ✓
+                                </span>
+
+                                Industry-ready skills
+
+                            </div>
+
+
+                            <div class="benefit">
+
+                                <span class="benefit-icon">
+                                    ✓
+                                </span>
+
+                                Live projects
+
+                            </div>
+
+
+                            <div class="benefit">
+
+                                <span class="benefit-icon">
+                                    ✓
+                                </span>
+
+                                Resume preparation
+
+                            </div>
+
+
+                            <div class="benefit">
+
+                                <span class="benefit-icon">
+                                    ✓
+                                </span>
+
+                                Mock interviews
+
+                            </div>
+
+
+                            <div class="benefit">
+
+                                <span class="benefit-icon">
+                                    ✓
+                                </span>
+
+                                Placement assistance
+
+                            </div>
+
+
+                            <div class="benefit">
+
+                                <span class="benefit-icon">
+                                    ✓
+                                </span>
+
+                                Certificate after completion
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- TRUST -->
+
+                <div class="trust-card">
+
+                    <div class="trust-row">
+
+                        <div class="trust-icon">
+                            🛡️
+                        </div>
+
+                        <div>
+
+                            <div class="trust-title">
+                                Secure Enrollment
+                            </div>
+
+                            <div class="trust-text">
+                                Your details are securely
+                                submitted to our institute.
+                            </div>
 
                         </div>
 
@@ -372,11 +2305,54 @@
 
                 </div>
 
+
             </div>
+
 
         </div>
 
-    </main>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="bg-[#050e20] text-white">
+
+    <div class="w-[94%] max-w-[1600px] mx-auto px-5 py-10 flex flex-col md:flex-row justify-between gap-5">
+
+        <div>
+
+            <div class="text-yellow-400 text-xl font-bold"
+                 style="font-family:'Playfair Display',serif;">
+
+                RR IT Origin
+
+            </div>
+
+            <p class="text-slate-400 text-xs mt-1">
+
+                LEARN • GROW • SUCCEED
+
+            </p>
+
+        </div>
+
+
+        <div class="text-slate-400 text-xs flex items-center">
+
+            © 2026 RR IT Origin.
+            All rights reserved.
+
+        </div>
+
+    </div>
+
+</footer>
+
 
 </body>
 

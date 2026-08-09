@@ -15,6 +15,8 @@ from models import Course, Lead, User, Student, StudyMaterial,InstituteSettings
 from models import Payment,Placement,Notification
 from routes.admin import create_notification
 
+
+
 student = Blueprint(
     "student",
     __name__,
@@ -199,26 +201,169 @@ def placement():
 # Placement Statistics
 # ==========================================
 
+# ==========================================
+# Placement Statistics
+# ==========================================
+
+# ==========================================
+# Placement Statistics
+# ==========================================
+
 @student.route("/placement-statistics")
 def placement_statistics():
 
     if "user_id" not in session:
-        return redirect(url_for("auth.login"))
+        return redirect(
+            url_for("auth.login")
+        )
 
-    user = User.query.get(session["user_id"])
+    user = User.query.get(
+        session["user_id"]
+    )
 
-    student_record = Student.query.filter_by(
-        user_id=user.id
-    ).first_or_404()
+    # ==========================================
+    # ALL STUDENTS
+    # ==========================================
+
+    students = Student.query.all()
+
+    total_students = len(students)
+
+    # ==========================================
+    # PLACED STUDENTS
+    # ==========================================
+
+    placed_students = Student.query.filter(
+        Student.placements.any()
+    ).all()
+
+    total_placed = len(placed_students)
+
+    # ==========================================
+    # UNPLACED STUDENTS
+    # ==========================================
+
+    total_unplaced = (
+        total_students - total_placed
+    )
+
+    # ==========================================
+    # PLACEMENT PERCENTAGE
+    # ==========================================
+
+    if total_students > 0:
+
+        placement_percentage = round(
+            (total_placed / total_students) * 100,
+            2
+        )
+
+    else:
+
+        placement_percentage = 0
+
+    # ==========================================
+    # ALL PLACEMENTS
+    # ==========================================
+
+    placements = Placement.query.order_by(
+        Placement.placement_date.desc()
+    ).all()
+
+    total_placements = len(placements)
+
+    # ==========================================
+    # PACKAGES
+    # ==========================================
+
+    packages = []
+
+    for placement in placements:
+
+        if placement.package:
+
+            try:
+
+                packages.append(
+                    float(placement.package)
+                )
+
+            except (ValueError, TypeError):
+
+                pass
+
+    if packages:
+
+        highest_package = max(packages)
+
+        average_package = round(
+            sum(packages) / len(packages),
+            2
+        )
+
+    else:
+
+        highest_package = 0
+
+        average_package = 0
+
+    # ==========================================
+    # COMPANIES
+    # ==========================================
+
+    companies = set()
+
+    for placement in placements:
+
+        if placement.company:
+
+            companies.add(
+                placement.company
+            )
+
+    total_companies = len(companies)
+
+    # ==========================================
+    # RECENT PLACEMENTS
+    # ==========================================
+
+    recent_placements = Placement.query.order_by(
+        Placement.placement_date.desc()
+    ).limit(10).all()
+
+    # ==========================================
+    # DISPLAY PAGE
+    # ==========================================
 
     return render_template(
         "student/placement_statistics.html",
-        student=student_record,
+
         user=user,
+
+        students=students,
+
+        placements=placements,
+
+        recent_placements=recent_placements,
+
+        total_students=total_students,
+
+        total_placed=total_placed,
+
+        total_unplaced=total_unplaced,
+
+        total_placements=total_placements,
+
+        placement_percentage=placement_percentage,
+
+        highest_package=highest_package,
+
+        average_package=average_package,
+
+        total_companies=total_companies,
+
         current_year=datetime.now().year
     )
-
-
 # ==========================================
 # Explorer Dashboard
 # ==========================================
