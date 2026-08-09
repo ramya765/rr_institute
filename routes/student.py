@@ -11,14 +11,82 @@ from flask import (
 from datetime import datetime
 
 from database import db
-from models import Course, Lead, User, Student, StudyMaterial
-from models import Payment,Placement
+from models import Course, Lead, User, Student, StudyMaterial,InstituteSettings
+from models import Payment,Placement,Notification
+from routes.admin import create_notification
 
 student = Blueprint(
     "student",
     __name__,
     url_prefix="/student"
 )
+# ==========================================
+# STUDENT PORTAL MAINTENANCE CHECK
+# ==========================================
+
+@student.before_request
+def check_student_portal_status():
+
+    if "user_id" not in session:
+        return None
+
+
+    user = User.query.get(
+        session["user_id"]
+    )
+
+
+    if not user:
+        session.clear()
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+
+    # Admin should never be blocked
+    if user.role == "admin":
+        return None
+
+
+    settings = InstituteSettings.query.first()
+
+
+    if (
+        settings
+        and settings.maintenance_mode
+    ):
+
+        flash(
+            "Student portal is currently under maintenance. Please try again later.",
+            "warning"
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+
+    return None
+# ==========================================
+# STUDENT NOTIFICATION BADGE
+# ==========================================
+
+@student.context_processor
+def inject_student_notifications():
+
+    unread_count = 0
+
+    if "user_id" in session:
+
+        unread_count = Notification.query.filter_by(
+            user_id=session["user_id"],
+            is_read=False
+        ).count()
+
+    return {
+        "unread_count": unread_count
+    }
 
 # ==========================================
 # Student Dashboard
@@ -232,7 +300,7 @@ def enroll(course_id):
     course = Course.query.get_or_404(course_id)
 
     return render_template(
-        "enroll.html",
+        "student/enroll.html",
         course=course
     )
 
@@ -258,6 +326,13 @@ def submit_enrollment():
     )
 
     db.session.add(lead)
+    create_notification(
+        "lead",
+        "New Lead Notification",
+        f"New enquiry received from {lead.name} "
+        f"for {lead.course}."
+    )
+    
     db.session.commit()
 
     return redirect(
@@ -319,4 +394,98 @@ def view_material(filename):
     return send_from_directory(
         "static/study_materials",
         filename
+    )
+# ==========================================
+# MARK STUDENT NOTIFICATION READ
+# ==========================================
+
+# ==========================================
+# STUDENT NOTIFICATIONS
+# ==========================================
+
+@student.route("/notifications")
+def notifications():
+
+    if "user_id" not in session:
+        return redirect(
+            url_for("auth.login")
+        )
+
+    user_id = session["user_id"]
+
+    notifications = Notification.query.filter_by(
+        user_id=user_id
+    ).order_by(
+        Notification.created_at.desc()
+    ).all()
+
+    unread_count = Notification.query.filter_by(
+        user_id=user_id,
+        is_read=False
+    ).count()
+
+    return render_template(
+        "student/notifications.html",
+        notifications=notifications,
+        unread_count=unread_count
+    )
+
+
+# ==========================================
+# MARK STUDENT NOTIFICATION READ
+# ==========================================
+
+@student.route(
+    "/notifications/read/<int:notification_id>"
+)
+def mark_notification_read(notification_id):
+
+    if "user_id" not in session:
+        return redirect(
+            url_for("auth.login")
+        )
+
+    user_id = session["user_id"]
+
+    notification = Notification.query.filter_by(
+        id=notification_id,
+        user_id=user_id
+    ).first_or_404()
+
+    notification.is_read = True
+
+    db.session.commit()
+
+    return redirect(
+        url_for("student.notifications")
+    )
+
+
+# ==========================================
+# MARK ALL STUDENT NOTIFICATIONS READ
+# ==========================================
+
+@student.route(
+    "/notifications/read-all"
+)
+def mark_all_notifications_read():
+
+    if "user_id" not in session:
+        return redirect(
+            url_for("auth.login")
+        )
+
+    user_id = session["user_id"]
+
+    Notification.query.filter_by(
+        user_id=user_id,
+        is_read=False
+    ).update({
+        "is_read": True
+    })
+
+    db.session.commit()
+
+    return redirect(
+        url_for("student.notifications")
     )

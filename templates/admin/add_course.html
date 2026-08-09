@@ -1,359 +1,1400 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Course</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
+{% extends "admin/layout.html" %}
 
-<div class="flex min-h-screen">
+{% block content %}
 
-    <!-- ================= SIDEBAR ================= -->
+<style>
 
-    <aside class="w-64 bg-gray-900 text-white">
+/* =========================================================
+   ADD COURSE PAGE
+========================================================= */
 
-        <div class="text-center py-6 border-b border-gray-700">
+.add-course-page {
+    animation: pageFade .5s ease;
+}
 
-            <h1 class="text-2xl font-bold">
+@keyframes pageFade {
 
-                RR Institute
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
 
-            </h1>
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 
-            <p class="text-gray-400 mt-2">
+}
 
-                Admin Panel
 
-            </p>
+/* =========================================================
+   HERO
+========================================================= */
 
-        </div>
+.course-hero {
 
-        <nav class="mt-6">
+    position: relative;
 
-            <a href="{{ url_for('admin.dashboard') }}"
-               class="block px-6 py-3 hover:bg-gray-800">
+    overflow: hidden;
 
-                🏠 Dashboard
+    background:
+        linear-gradient(
+            135deg,
+            #071124,
+            #101f42,
+            #172554
+        );
 
-            </a>
+    border:
+        1px solid rgba(255,255,255,.09);
 
-            <a href="{{ url_for('admin.students') }}"
-               class="block px-6 py-3 hover:bg-gray-800">
+    border-radius: 22px;
 
-                👨‍🎓 Students
+    padding: 28px;
 
-            </a>
+    margin-bottom: 24px;
 
-            <a href="{{ url_for('admin.courses') }}"
-               class="block px-6 py-3 bg-blue-600">
+    box-shadow:
+        0 20px 55px rgba(0,0,0,.25);
 
-                📚 Courses
+}
 
-            </a>
 
-            <a href="{{ url_for('admin.companies') }}"
-               class="block px-6 py-3 hover:bg-gray-800">
+.course-hero::before {
 
-                🏢 Companies
+    content: "";
 
-            </a>
+    position: absolute;
 
-            <a href="{{ url_for('admin.placements') }}"
-               class="block px-6 py-3 hover:bg-gray-800">
+    width: 260px;
 
-                💼 Placements
+    height: 260px;
 
-            </a>
+    border-radius: 50%;
 
-            <a href="{{ url_for('admin.faculty') }}"
-               class="block px-6 py-3 hover:bg-gray-800">
+    background:
+        rgba(250,204,21,.06);
 
-                👨‍🏫 Faculty
+    top: -160px;
 
-            </a>
+    right: -60px;
 
-            
+}
 
-            <a href="{{ url_for('auth.logout') }}"
-               class="block px-6 py-3 text-red-300 hover:bg-red-700">
 
-                🚪 Logout
+.course-hero::after {
 
-            </a>
+    content: "";
 
-        </nav>
+    position: absolute;
 
-    </aside>
+    width: 190px;
 
-    <!-- ================= MAIN CONTENT ================= -->
+    height: 190px;
 
-    <div class="flex-1">
+    border-radius: 50%;
 
-        <div class="bg-white shadow px-8 py-5 flex justify-between items-center">
+    background:
+        rgba(99,102,241,.08);
 
-            <div>
+    bottom: -130px;
 
-                <h1 class="text-3xl font-bold">
+    left: 35%;
 
-                    Add New Course
+}
 
-                </h1>
 
-                <p class="text-gray-500 mt-1">
+.course-hero-content {
 
-                    Create a new course for RR Institute.
+    position: relative;
 
-                </p>
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+}
+
+
+.course-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 17px;
+
+}
+
+
+.course-icon {
+
+    width: 64px;
+
+    height: 64px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 18px;
+
+    font-size: 30px;
+
+    background:
+        rgba(250,204,21,.10);
+
+    border:
+        1px solid rgba(250,204,21,.20);
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.20);
+
+}
+
+
+.course-kicker {
+
+    color: #facc15;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+}
+
+
+.course-title {
+
+    color: white;
+
+    font-size: 30px;
+
+    font-weight: 900;
+
+    margin-top: 4px;
+
+}
+
+
+.course-subtitle {
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+    margin-top: 5px;
+
+}
+
+
+.back-course-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #e2e8f0;
+
+    background:
+        rgba(255,255,255,.07);
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    padding: 11px 17px;
+
+    border-radius: 10px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    transition: .3s ease;
+
+}
+
+
+.back-course-btn:hover {
+
+    background:
+        rgba(255,255,255,.12);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+/* =========================================================
+   FORM CARD
+========================================================= */
+
+.course-form-card {
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid rgba(255,255,255,.09);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.14);
+
+}
+
+
+.form-card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 20px 24px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.08);
+
+}
+
+
+.form-header-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background:
+        rgba(250,204,21,.09);
+
+    border:
+        1px solid rgba(250,204,21,.15);
+
+    font-size: 20px;
+
+}
+
+
+.form-header-title {
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+}
+
+
+.form-header-description {
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    margin-top: 3px;
+
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.course-form {
+
+    padding: 24px;
+
+}
+
+
+.form-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap: 22px;
+
+}
+
+
+.form-group {
+
+    position: relative;
+
+}
+
+
+.form-group.full-width {
+
+    grid-column:
+        1 / -1;
+
+}
+
+
+.form-label {
+
+    display: block;
+
+    color: #cbd5e1;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    margin-bottom: 8px;
+
+}
+
+
+.required-star {
+
+    color: #f87171;
+
+}
+
+
+.form-input,
+.form-select,
+.form-textarea {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    color: white;
+
+    background:
+        rgba(7,17,36,.85);
+
+    border:
+        1px solid rgba(255,255,255,.11);
+
+    border-radius: 10px;
+
+    outline: none;
+
+    transition: .25s ease;
+
+}
+
+
+.form-input,
+.form-select {
+
+    height: 48px;
+
+    padding:
+        0 14px;
+
+}
+
+
+.form-textarea {
+
+    padding:
+        13px 14px;
+
+    resize: vertical;
+
+    min-height: 135px;
+
+}
+
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+
+    color: #475569;
+
+}
+
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+
+    border-color:
+        #facc15;
+
+    box-shadow:
+        0 0 0 3px rgba(250,204,21,.08);
+
+}
+
+
+.form-select option {
+
+    background: #071124;
+
+    color: white;
+
+}
+
+
+/* =========================================================
+   FEATURED COURSE
+========================================================= */
+
+.featured-box {
+
+    margin-top: 22px;
+
+    padding: 18px;
+
+    border-radius: 14px;
+
+    background:
+        rgba(250,204,21,.045);
+
+    border:
+        1px solid rgba(250,204,21,.12);
+
+}
+
+
+.featured-heading {
+
+    color: #facc15;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+}
+
+
+.featured-description {
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    margin-top: 3px;
+
+}
+
+
+.featured-label {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 14px;
+
+    color: #cbd5e1;
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+}
+
+
+.featured-checkbox {
+
+    width: 18px;
+
+    height: 18px;
+
+    accent-color: #facc15;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================================================
+   FILE UPLOAD
+========================================================= */
+
+.file-box {
+
+    position: relative;
+
+    padding: 17px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px dashed rgba(255,255,255,.15);
+
+    transition: .3s ease;
+
+}
+
+
+.file-box:hover {
+
+    border-color:
+        rgba(250,204,21,.40);
+
+    background:
+        rgba(250,204,21,.035);
+
+}
+
+
+.file-input {
+
+    width: 100%;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+
+}
+
+
+.file-input::file-selector-button {
+
+    margin-right: 12px;
+
+    border: none;
+
+    background: #facc15;
+
+    color: #111827;
+
+    padding: 8px 12px;
+
+    border-radius: 7px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================================================
+   FORM ACTIONS
+========================================================= */
+
+.form-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding-top: 24px;
+
+    margin-top: 24px;
+
+    border-top:
+        1px solid rgba(255,255,255,.08);
+
+}
+
+
+.reset-btn,
+.cancel-btn,
+.save-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 11px 18px;
+
+    border-radius: 10px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    transition: .3s ease;
+
+}
+
+
+.reset-btn {
+
+    border:
+        1px solid rgba(250,204,21,.20);
+
+    color: #facc15;
+
+    background:
+        rgba(250,204,21,.07);
+
+    cursor: pointer;
+
+}
+
+
+.reset-btn:hover {
+
+    background:
+        rgba(250,204,21,.13);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+.cancel-btn {
+
+    color: #cbd5e1;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+}
+
+
+.cancel-btn:hover {
+
+    background:
+        rgba(255,255,255,.11);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+.save-btn {
+
+    border: none;
+
+    cursor: pointer;
+
+    color: #111827;
+
+    background: #facc15;
+
+    padding-left: 24px;
+
+    padding-right: 24px;
+
+    box-shadow:
+        0 10px 25px rgba(250,204,21,.10);
+
+}
+
+
+.save-btn:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 14px 32px rgba(250,204,21,.20);
+
+}
+
+
+/* =========================================================
+   INFORMATION STRIP
+========================================================= */
+
+.form-info {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+    gap: 14px;
+
+    margin-top: 20px;
+
+}
+
+
+.info-box {
+
+    padding: 15px;
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.04);
+
+    border:
+        1px solid rgba(255,255,255,.07);
+
+}
+
+
+.info-icon {
+
+    font-size: 20px;
+
+}
+
+
+.info-title {
+
+    color: #cbd5e1;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    margin-top: 8px;
+
+}
+
+
+.info-text {
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+    margin-top: 3px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:800px) {
+
+    .course-hero-content {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+
+    .form-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .form-group.full-width {
+
+        grid-column:
+            auto;
+
+    }
+
+
+    .form-info {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+@media(max-width:600px) {
+
+    .course-title {
+
+        font-size: 24px;
+
+    }
+
+
+    .course-hero {
+
+        padding: 22px;
+
+    }
+
+
+    .course-form {
+
+        padding: 18px;
+
+    }
+
+
+    .form-actions {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .reset-btn,
+    .cancel-btn,
+    .save-btn {
+
+        width: 100%;
+
+    }
+
+}
+
+</style>
+
+
+<div class="add-course-page">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="course-hero">
+
+
+        <div class="course-hero-content">
+
+
+            <div class="course-heading">
+
+
+                <div class="course-icon">
+
+                    📚
+
+                </div>
+
+
+                <div>
+
+                    <div class="course-kicker">
+
+                        ACADEMIC MANAGEMENT
+
+                    </div>
+
+
+                    <h1 class="course-title">
+
+                        Add New Course
+
+                    </h1>
+
+
+                    <p class="course-subtitle">
+
+                        Create a new course for RR Institute.
+
+                    </p>
+
+                </div>
+
 
             </div>
 
-            <a href="{{ url_for('admin.courses') }}"
-               class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg">
+
+            <a
+                href="{{ url_for('admin.courses') }}"
+                class="back-course-btn"
+            >
 
                 ← Back to Courses
 
             </a>
 
+
         </div>
 
-        <div class="p-8">
 
-           <form method="POST" enctype="multipart/form-data">
+    </section>
 
-                <div class="bg-white rounded-xl shadow">
 
-                    <div class="border-b px-6 py-4">
+    <!-- =====================================================
+         FORM CARD
+    ====================================================== -->
 
-                        <h2 class="text-2xl font-bold text-indigo-600">
+    <section class="course-form-card">
 
-                            📚 Course Information
 
-                        </h2>
+        <div class="form-card-header">
 
-                    </div>
 
-                    <div class="grid md:grid-cols-2 gap-6 p-6">
+            <div class="form-header-icon">
 
-                        <!-- Course Title -->
+                📚
 
-                        <div>
+            </div>
 
-                            <label class="font-semibold">
 
-                                Course Title *
+            <div>
 
-                            </label>
+                <div class="form-header-title">
 
-                            <input
-                            type="text"
-                            name="title"
-                            placeholder="Python Full Stack"
-                            class="w-full border rounded-lg px-4 py-3 mt-2"
-                            required>
+                    Course Information
 
-                        </div>
+                </div>
 
-                        <!-- Duration -->
 
-                        <div>
+                <div class="form-header-description">
 
-                            <label class="font-semibold">
+                    Enter the details of the new course below.
 
-                                Duration
+                </div>
 
-                            </label>
+            </div>
 
-                            <input
-                            type="text"
-                            name="duration"
-                            placeholder="6 Months"
-                            class="w-full border rounded-lg px-4 py-3 mt-2">
 
-                        </div>
+        </div>
 
-                        <!-- Trainer -->
 
-                        <div>
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="course-form"
+        >
 
-                            <label class="font-semibold">
 
-                                Trainer
+            <div class="form-grid">
 
-                            </label>
 
-                            <input
-                            type="text"
-                            name="trainer"
-                            placeholder="Trainer Name"
-                            class="w-full border rounded-lg px-4 py-3 mt-2">
+                <!-- =================================================
+                     COURSE TITLE
+                ================================================== -->
 
-                        </div>
+                <div class="form-group">
 
-                        <!-- Course Mode -->
 
-                        <div>
+                    <label class="form-label">
 
-                            <label class="font-semibold">
+                        Course Title
+                        <span class="required-star">*</span>
 
-                                Course Mode
+                    </label>
 
-                            </label>
 
-                            <select
-                            name="mode"
-                            class="w-full border rounded-lg px-4 py-3 mt-2">
+                    <input
+                        type="text"
+                        name="title"
+                        placeholder="Python Full Stack"
+                        class="form-input"
+                        required
+                    >
 
-                                <option>
+                </div>
 
-                                    Online
 
-                                </option>
+                <!-- =================================================
+                     DURATION
+                ================================================== -->
 
-                                <option>
+                <div class="form-group">
 
-                                    Offline
 
-                                </option>
+                    <label class="form-label">
 
-                                <option>
+                        Duration
 
-                                    Hybrid
+                    </label>
 
-                                </option>
 
-                            </select>
+                    <input
+                        type="text"
+                        name="duration"
+                        placeholder="6 Months"
+                        class="form-input"
+                    >
 
-                        </div>
+                </div>
 
-                        <!-- Price -->
 
-                        <div>
+                <!-- =================================================
+                     TRAINER
+                ================================================== -->
 
-                            <label class="font-semibold">
+                <div class="form-group">
 
-                                Course Fee
 
-                            </label>
+                    <label class="form-label">
 
-                            <input
-                            type="number"
-                            step="0.01"
-                            name="price"
-                            placeholder="25000"
-                            class="w-full border rounded-lg px-4 py-3 mt-2">
+                        Trainer
 
-                        </div>
+                    </label>
 
-                        <!-- Status -->
 
-                       <!-- Featured -->
+                    <input
+                        type="text"
+                        name="trainer"
+                        placeholder="Trainer Name"
+                        class="form-input"
+                    >
 
-<div>
+                </div>
 
-    <label class="font-semibold">
 
-        Featured Course
+                <!-- =================================================
+                     COURSE MODE
+                ================================================== -->
 
-    </label>
+                <div class="form-group">
 
-    <div class="mt-3">
 
-        <label class="inline-flex items-center">
+                    <label class="form-label">
 
-            <input
-                type="checkbox"
-                name="featured"
-                value="1"
-                class="mr-2">
+                        Course Mode
 
-            Show this course on Home Page
+                    </label>
 
-        </label>
 
-    </div>
+                    <select
+                        name="mode"
+                        class="form-select"
+                    >
 
-</div>
+                        <option>
 
-                        <!-- Description -->
+                            Online
 
-                        <div class="md:col-span-2">
+                        </option>
 
-                            <label class="font-semibold">
 
-                                Course Description
+                        <option>
 
-                            </label>
+                            Offline
 
-                            <textarea
-                            rows="5"
-                            name="description"
-                            placeholder="Enter detailed course description..."
-                            class="w-full border rounded-lg px-4 py-3 mt-2"
-                            required></textarea>
+                        </option>
 
-                        </div>
-                                                <!-- Course Image -->
 
-                        <div>
+                        <option>
 
-                            <label class="font-semibold">
+                            Hybrid
 
-                                Course Image
+                        </option>
 
-                            </label>
+                    </select>
 
-                            <input
+                </div>
+
+
+                <!-- =================================================
+                     PRICE
+                ================================================== -->
+
+                <div class="form-group">
+
+
+                    <label class="form-label">
+
+                        Course Fee
+
+                    </label>
+
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="price"
+                        placeholder="25000"
+                        class="form-input"
+                    >
+
+                </div>
+
+
+                <!-- =================================================
+                     COURSE IMAGE
+                ================================================== -->
+
+                <div class="form-group">
+
+
+                    <label class="form-label">
+
+                        Course Image
+
+                    </label>
+
+
+                    <div class="file-box">
+
+
+                        <input
                             type="file"
                             name="image"
-                            class="w-full border rounded-lg px-4 py-3 mt-2">
+                            class="file-input"
+                        >
 
-                        </div>
-
-                    
-
-
-                <!-- ================= BUTTONS ================= -->
-
-                <div class="bg-white rounded-xl shadow p-6 mt-8">
-
-                    <div class="flex justify-end gap-4">
-
-                        <button
-                        type="reset"
-                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg">
-
-                            🔄 Reset
-
-                        </button>
-
-                        <a
-                        href="{{ url_for('admin.courses') }}"
-                        class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg">
-
-                            ❌ Cancel
-
-                        </a>
-
-                        <button
-                        type="submit"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-semibold">
-
-                            💾 Save Course
-
-                        </button>
 
                     </div>
 
                 </div>
 
-            </form>
 
-        </div>
+                <!-- =================================================
+                     FEATURED COURSE
+                ================================================== -->
 
-    </div>
+                <div class="form-group full-width">
+
+
+                    <div class="featured-box">
+
+
+                        <div class="featured-heading">
+
+                            ⭐ Featured Course
+
+                        </div>
+
+
+                        <div class="featured-description">
+
+                            Choose whether this course should appear
+                            on the Home Page.
+
+                        </div>
+
+
+                        <label class="featured-label">
+
+
+                            <input
+                                type="checkbox"
+                                name="featured"
+                                value="1"
+                                class="featured-checkbox"
+                            >
+
+
+                            <span>
+
+                                Show this course on Home Page
+
+                            </span>
+
+
+                        </label>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================================
+                     DESCRIPTION
+                ================================================== -->
+
+                <div class="form-group full-width">
+
+
+                    <label class="form-label">
+
+                        Course Description
+                        <span class="required-star">*</span>
+
+                    </label>
+
+
+                    <textarea
+                        rows="5"
+                        name="description"
+                        placeholder="Enter detailed course description..."
+                        class="form-textarea"
+                        required
+                    ></textarea>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =====================================================
+                 INFORMATION
+            ====================================================== -->
+
+            <div class="form-info">
+
+
+                <div class="info-box">
+
+
+                    <div class="info-icon">
+
+                        💡
+
+                    </div>
+
+
+                    <div class="info-title">
+
+                        Course Information
+
+                    </div>
+
+
+                    <div class="info-text">
+
+                        Add accurate course details so students
+                        can understand the program clearly.
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="info-box">
+
+
+                    <div class="info-icon">
+
+                        ⭐
+
+                    </div>
+
+
+                    <div class="info-title">
+
+                        Featured Course
+
+                    </div>
+
+
+                    <div class="info-text">
+
+                        Featured courses can be displayed
+                        prominently on the Home Page.
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="info-box">
+
+
+                    <div class="info-icon">
+
+                        🖼️
+
+                    </div>
+
+
+                    <div class="info-title">
+
+                        Course Image
+
+                    </div>
+
+
+                    <div class="info-text">
+
+                        Upload a suitable image representing
+                        the course.
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =====================================================
+                 BUTTONS
+            ====================================================== -->
+
+            <div class="form-actions">
+
+
+                <button
+                    type="reset"
+                    class="reset-btn"
+                >
+
+                    🔄 Reset
+
+                </button>
+
+
+                <a
+                    href="{{ url_for('admin.courses') }}"
+                    class="cancel-btn"
+                >
+
+                    ❌ Cancel
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
+
+                    💾 Save Course
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+
+    </section>
+
 
 </div>
 
-</body>
 
-</html>
+{% endblock %}

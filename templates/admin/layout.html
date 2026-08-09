@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        RR IT Origin | Admin Panel
+    </title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family: 'Inter', sans-serif;
+
+            background: #071126;
+
+            color: white;
+
+            overflow-x: hidden;
+
+        }
+
+
+        /* ==================================================
+           BACKGROUND
+        ================================================== */
+
+        .admin-background {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: -10;
+
+            background:
+
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(250,204,21,.10),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 85% 30%,
+                    rgba(99,102,241,.12),
+                    transparent 30%
+                ),
+
+                #071126;
+
+        }
+
+
+        .admin-grid {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: -9;
+
+            opacity: .045;
+
+            background-image:
+
+                linear-gradient(
+                    rgba(255,255,255,.20) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.20) 1px,
+                    transparent 1px
+                );
+
+            background-size: 60px 60px;
+
+            pointer-events: none;
+
+        }
+
+
+        /* ==================================================
+           SIDEBAR
+        ================================================== */
+
+        .admin-sidebar {
+
+            position: fixed;
+
+            left: 0;
+
+            top: 0;
+
+            bottom: 0;
+
+            width: 275px;
+
+            z-index: 100;
+
+            overflow-y: auto;
+
+            background:
+
+                linear-gradient(
+                    180deg,
+                    #050f23,
+                    #071126
+                );
+
+            border-right:
+                1px solid
+                rgba(255,255,255,.10);
+
+            transition:
+                transform .3s ease;
+
+        }
+
+
+        /* ==================================================
+           LOGO
+        ================================================== */
+
+        .admin-logo {
+
+            padding: 24px 18px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.10);
+
+        }
+
+
+        .admin-logo-wrapper {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+
+        .admin-logo-image {
+
+            width: 58px;
+
+            height: 58px;
+
+            object-fit: cover;
+
+            border-radius: 14px;
+
+            border:
+                1px solid
+                rgba(250,204,21,.55);
+
+            box-shadow:
+                0 0 25px
+                rgba(250,204,21,.10);
+
+            transition: .3s ease;
+
+        }
+
+
+        .admin-logo-image:hover {
+
+            transform:
+                scale(1.05);
+
+            box-shadow:
+                0 0 30px
+                rgba(250,204,21,.25);
+
+        }
+
+
+        .admin-logo-title {
+
+            font-family:
+                'Playfair Display',
+                serif;
+
+            color: #facc15;
+
+            font-size: 20px;
+
+            font-weight: 800;
+
+            line-height: 1.1;
+
+        }
+
+
+        .admin-logo-subtitle {
+
+            color: #64748b;
+
+            font-size: 9px;
+
+            letter-spacing: 2.5px;
+
+            margin-top: 5px;
+
+        }
+
+
+        /* ==================================================
+           MENU TITLE
+        ================================================== */
+
+        .admin-menu-title {
+
+            padding:
+                22px 18px 8px;
+
+            color: #64748b;
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+        }
+
+
+        /* ==================================================
+           MENU LINKS
+        ================================================== */
+
+        .admin-nav-link {
+
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin:
+                4px 10px;
+
+            padding:
+                11px 13px;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            color: #cbd5e1;
+
+            font-size: 13px;
+
+            font-weight: 500;
+
+            transition:
+                all .25s ease;
+
+        }
+
+
+        .admin-nav-icon {
+
+            width: 24px;
+
+            min-width: 24px;
+
+            text-align: center;
+
+            font-size: 16px;
+
+            transition:
+                transform .25s ease;
+
+        }
+
+
+        .admin-nav-link:hover {
+
+            color: white;
+
+            background:
+                rgba(250,204,21,.08);
+
+            transform:
+                translateX(3px);
+
+        }
+
+
+        .admin-nav-link:hover
+        .admin-nav-icon {
+
+            transform:
+                scale(1.15);
+
+        }
+
+
+        /* ACTIVE */
+
+        .admin-nav-link.active {
+
+            color: #111827;
+
+            font-weight: 700;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #facc15,
+                    #fbbf24
+                );
+
+            box-shadow:
+
+                0 8px 25px
+                rgba(250,204,21,.18);
+
+        }
+
+
+        .admin-nav-link.active:hover {
+
+            transform:
+                translateX(0);
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #facc15,
+                    #fbbf24
+                );
+
+        }
+
+
+        /* ==================================================
+           ACCOUNT
+        ================================================== */
+
+        .admin-account {
+
+            margin-top: 18px;
+
+            padding-top: 10px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.08);
+
+        }
+
+
+        .admin-logout {
+
+            color: #fca5a5;
+
+        }
+
+
+        .admin-logout:hover {
+
+            color: #fecaca;
+
+            background:
+                rgba(239,68,68,.10);
+
+        }
+
+
+        /* ==================================================
+           MAIN AREA
+        ================================================== */
+
+        .admin-main {
+
+            margin-left: 275px;
+
+            min-height: 100vh;
+
+        }
+
+
+        /* ==================================================
+           TOP NAVBAR
+        ================================================== */
+
+        .admin-topbar {
+
+            height: 76px;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 50;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding:
+                0 30px;
+
+            background:
+                rgba(5,15,35,.88);
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.08);
+
+            backdrop-filter:
+                blur(18px);
+
+        }
+
+
+        .admin-page-label {
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+        }
+
+
+        .admin-page-label span {
+
+            color: #facc15;
+
+            font-weight: 700;
+
+        }
+
+
+        .admin-user {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+
+        .admin-user-info {
+
+            text-align: right;
+
+        }
+
+
+        .admin-user-info small {
+
+            display: block;
+
+            color: #64748b;
+
+            font-size: 10px;
+
+        }
+
+
+        .admin-user-info strong {
+
+            color: white;
+
+            font-size: 13px;
+
+        }
+
+
+        .admin-avatar {
+
+            width: 40px;
+
+            height: 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #facc15,
+                    #f59e0b
+                );
+
+            color: #111827;
+
+            font-weight: 800;
+
+        }
+
+
+        .admin-notification {
+
+            width: 40px;
+
+            height: 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 10px;
+
+            color: #cbd5e1;
+
+            background:
+                rgba(255,255,255,.05);
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            text-decoration: none;
+
+            transition: .3s ease;
+
+        }
+
+
+        .admin-notification:hover {
+
+            color: #facc15;
+
+            background:
+                rgba(250,204,21,.08);
+
+            transform:
+                translateY(-2px);
+
+        }
+
+
+        /* ==================================================
+           PAGE CONTENT
+        ================================================== */
+
+        .admin-content {
+
+            padding:
+                30px;
+
+            max-width:
+                1600px;
+
+            margin:
+                0 auto;
+
+        }
+
+
+        /* ==================================================
+           MOBILE BUTTON
+        ================================================== */
+
+        .admin-mobile-button {
+
+            display: none;
+
+            width: 40px;
+
+            height: 40px;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 10px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.10);
+
+            background:
+                rgba(255,255,255,.06);
+
+            color: white;
+
+            cursor: pointer;
+
+        }
+
+
+        /* ==================================================
+           MOBILE OVERLAY
+        ================================================== */
+
+        .sidebar-overlay {
+
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 90;
+
+            background:
+                rgba(0,0,0,.60);
+
+        }
+
+
+        /* ==================================================
+           RESPONSIVE
+        ================================================== */
+
+        @media(max-width:900px) {
+
+            .admin-sidebar {
+
+                transform:
+                    translateX(-100%);
+
+            }
+
+
+            .admin-sidebar.open {
+
+                transform:
+                    translateX(0);
+
+            }
+
+
+            .admin-main {
+
+                margin-left: 0;
+
+            }
+
+
+            .admin-mobile-button {
+
+                display: flex;
+
+            }
+
+
+            .sidebar-overlay.show {
+
+                display: block;
+
+            }
+
+
+            .admin-content {
+
+                padding:
+                    20px;
+
+            }
+
+        }
+
+
+        @media(max-width:600px) {
+
+            .admin-topbar {
+
+                padding:
+                    0 15px;
+
+            }
+
+
+            .admin-page-label {
+
+                display: none;
+
+            }
+
+
+            .admin-user-info {
+
+                display: none;
+
+            }
+
+
+            .admin-content {
+
+                padding:
+                    15px;
+
+            }
+
+        }
+
+    </style>
+
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+
+
+<body>
+
+
+<div class="admin-background"></div>
+
+<div class="admin-grid"></div>
+
+
+<!-- ==========================================================
+     MOBILE OVERLAY
+========================================================== -->
+
+<div
+    id="sidebarOverlay"
+    class="sidebar-overlay"
+    onclick="closeSidebar()">
+</div>
+
+
+<!-- ==========================================================
+     SIDEBAR
+========================================================== -->
+
+<aside
+    id="adminSidebar"
+    class="admin-sidebar">
+
+
+    <!-- LOGO -->
+
+    <div class="admin-logo">
+
+        <div class="admin-logo-wrapper">
+
+            <img
+                src="{{ url_for('static', filename='images/logo.jpeg') }}"
+                alt="RR IT Origin"
+                class="admin-logo-image"
+            >
+
+            <div>
+
+                <div class="admin-logo-title">
+                    RR IT Origin
+                </div>
+
+                <div class="admin-logo-subtitle">
+                    ADMIN PANEL
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN MENU -->
+
+    <div class="admin-menu-title">
+        Main Menu
+    </div>
+
+
+    <nav>
+
+
+        <!-- Dashboard -->
+
+        <a
+            href="{{ url_for('admin.dashboard') }}"
+            class="admin-nav-link
+            {% if request.endpoint == 'admin.dashboard' %}
+                active
+            {% endif %}"
+        >
+
+            <span class="admin-nav-icon">
+                🏠
+            </span>
+
+            <span>
+                Dashboard
+            </span>
+
+        </a>
+
+
+        <!-- Students -->
+
+        <a
+            href="{{ url_for('admin.students') }}"
+            class="admin-nav-link
+            {% if request.endpoint in ['admin.students', 'admin.add_student', 'admin.edit_student'] %}
+                active
+            {% endif %}"
+        >
+
+            <span class="admin-nav-icon">
+                👨‍🎓
+            </span>
+
+            <span>
+                Students
+            </span>
+
+        </a>
+
+
+        <!-- Courses -->
+
+        <a
+            href="{{ url_for('admin.courses') }}"
+            class="admin-nav-link
+            {% if request.endpoint in ['admin.courses', 'admin.add_course', 'admin.edit_course'] %}
+                active
+            {% endif %}"
+        >
+
+            <span class="admin-nav-icon">
+                📚
+            </span>
+
+            <span>
+                Courses
+            </span>
+
+        </a>
+
+
+        <!-- Faculty -->
+
+        <a
+            href="{{ url_for('admin.faculty') }}"
+            class="admin-nav-link
+            {% if request.endpoint in ['admin.faculty', 'admin.add_faculty', 'admin.edit_faculty'] %}
+                active
+            {% endif %}"
+        >
+
+            <span class="admin-nav-icon">
+                👨‍🏫
+            </span>
+
+            <span>
+                Faculty
+            </span>
+
+        </a>
+
+
+        <!-- Study Materials -->
+
+        <a
+            href="{{ url_for('admin.study_materials') }}"
+            class="admin-nav-link
+            {% if request.endpoint in ['admin.study_materials', 'admin.add_study_material'] %}
+                active
+            {% endif %}"
+        >
+
+            <span class="admin-nav-icon">
+                📂
+            </span>
+
+            <span>
+                Study Materials
+            </span>
+
+        </a>
+
+
+        <!-- Companies -->
+
+        <a
+            href="{{ url_for('admin.companies') }}"
+            class="admin-nav-link
+            {% if request.endpoint in ['admin.companies', 'admin.add_company', 'admin.edit_company'] %}
+                active
+            {% endif %}"
+        >
+
+            <span class="admin-nav-icon">
+                🏢
+            </span>
+
+            <span>
+                Companies
+            </span>
+
+        </a>
+
+
+        <!-- Placements -->
+
+        <a
+            href="{{ url_for('admin.placements') }}"
+            class="admin-nav-link
+            {% if request.endpoint in ['admin.placements', 'admin.add_placement'] %}
+                active
+            {% endif %}"
+        >
+
+            <span class="admin-nav-icon">
+                💼
+            </span>
+
+            <span>
+                Placements
+            </span>
+
+        </a>
+
+
+        <!-- Leads -->
+
+        <a
+            href="{{ url_for('admin.leads') }}"
+            class="admin-nav-link
+            {% if request.endpoint in ['admin.leads', 'admin.lead_details', 'admin.approve_lead', 'admin.reject_lead'] %}
+                active
+            {% endif %}"
+        >
+
+            <span class="admin-nav-icon">
+                🎯
+            </span>
+
+            <span>
+                Leads
+            </span>
+
+        </a>
+
+
+        <!-- Enquiries -->
+
+        <a
+            href="{{ url_for('admin.enquiries') }}"
+            class="admin-nav-link
+            {% if request.endpoint == 'admin.enquiries' %}
+                active
+            {% endif %}"
+        >
+
+            <span class="admin-nav-icon">
+                📝
+            </span>
+
+            <span>
+                Enquiries
+            </span>
+
+        </a>
+
+
+        <!-- Testimonials -->
+
+        <a
+            href="{{ url_for('admin.testimonials') }}"
+            class="admin-nav-link
+            {% if request.endpoint == 'admin.testimonials' %}
+                active
+            {% endif %}"
+        >
+
+            <span class="admin-nav-icon">
+                ⭐
+            </span>
+
+            <span>
+                Testimonials
+            </span>
+
+        </a>
+
+
+        <!-- Notifications -->
+
+        <a
+            href="{{ url_for('admin.notifications') }}"
+            class="admin-nav-link
+            {% if request.endpoint == 'admin.notifications' %}
+                active
+            {% endif %}"
+        >
+
+            <span class="admin-nav-icon">
+                🔔
+            </span>
+
+            <span>
+                Notifications
+            </span>
+
+        </a>
+
+
+        <!-- Settings -->
+
+        <a
+            href="{{ url_for('admin.settings') }}"
+            class="admin-nav-link
+            {% if request.endpoint == 'admin.settings' %}
+                active
+            {% endif %}"
+        >
+
+            <span class="admin-nav-icon">
+                ⚙️
+            </span>
+
+            <span>
+                Settings
+            </span>
+
+        </a>
+
+
+    </nav>
+
+
+    <!-- ACCOUNT -->
+
+    <div class="admin-account">
+
+        <div class="admin-menu-title">
+            Account
+        </div>
+
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="admin-nav-link admin-logout"
+        >
+
+            <span class="admin-nav-icon">
+                🚪
+            </span>
+
+            <span>
+                Logout
+            </span>
+
+        </a>
+
+    </div>
+
+
+</aside>
+
+
+<!-- ==========================================================
+     MAIN
+========================================================== -->
+
+<div class="admin-main">
+
+
+    <!-- ======================================================
+         TOP BAR
+    ======================================================= -->
+
+    <header class="admin-topbar">
+
+
+        <div class="flex items-center gap-4">
+
+
+            <button
+                class="admin-mobile-button"
+                onclick="openSidebar()"
+            >
+
+                ☰
+
+            </button>
+
+
+            <div class="admin-page-label">
+
+                RR IT Origin
+
+                <span>• Admin Panel</span>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="flex items-center gap-3">
+
+
+            <!-- Notification -->
+
+            <a
+                href="{{ url_for('admin.notifications') }}"
+                class="admin-notification"
+                title="Notifications"
+            >
+
+                🔔
+
+            </a>
+
+
+            <!-- User -->
+
+            <div class="admin-user">
+
+
+                <div class="admin-user-info">
+
+                    <small>
+                        Welcome back
+                    </small>
+
+                    <strong>
+                        {{ admin_name }}
+                    </strong>
+
+                </div>
+
+
+                <div class="admin-avatar">
+
+                    👤
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </header>
+
+
+    <!-- ======================================================
+         PAGE CONTENT
+    ======================================================= -->
+
+    <main class="admin-content">
+
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
+
+</div>
+
+
+<script>
+
+function openSidebar() {
+
+    document
+        .getElementById("adminSidebar")
+        .classList.add("open");
+
+    document
+        .getElementById("sidebarOverlay")
+        .classList.add("show");
+
+}
+
+
+function closeSidebar() {
+
+    document
+        .getElementById("adminSidebar")
+        .classList.remove("open");
+
+    document
+        .getElementById("sidebarOverlay")
+        .classList.remove("show");
+
+}
+
+
+/* Close mobile sidebar when menu item clicked */
+
+document
+    .querySelectorAll(".admin-nav-link")
+    .forEach(function(link) {
+
+        link.addEventListener(
+            "click",
+            function() {
+
+                if (window.innerWidth <= 900) {
+
+                    closeSidebar();
+
+                }
+
+            }
+        );
+
+    });
+
+</script>
+
+
+{% block extra_js %}
+{% endblock %}
+
+</body>
+
+</html>

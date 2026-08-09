@@ -1,267 +1,869 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "admin/layout.html" %}
 
-<head>
+{% block content %}
 
-<meta charset="UTF-8">
+<style>
 
-<title>Add Placement</title>
+/* =========================================================
+   ADD PLACEMENT PAGE
+========================================================= */
 
-<script src="https://cdn.tailwindcss.com"></script>
+.placement-page {
+    animation: pageEnter .55s ease;
+}
 
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
 
-</head>
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 
+/* =========================================================
+   HERO
+========================================================= */
 
-<body class="bg-gradient-to-br from-indigo-50 to-blue-100 min-h-screen">
+.placement-hero {
+    position: relative;
+    overflow: hidden;
 
+    background:
+        linear-gradient(
+            135deg,
+            #111827,
+            #312e81,
+            #4f46e5
+        );
 
+    border-radius: 22px;
 
-<div class="max-w-3xl mx-auto py-12 px-5">
+    padding: 28px 30px;
 
+    margin-bottom: 24px;
 
-<div class="bg-white shadow-2xl rounded-3xl p-10">
+    box-shadow:
+        0 18px 45px
+        rgba(15,23,42,.18);
+}
 
+.placement-hero::before {
+    content: "";
 
+    position: absolute;
 
-<h1 class="text-4xl font-bold text-gray-800 mb-3">
+    width: 260px;
+    height: 260px;
 
-Add Placement
+    border-radius: 50%;
 
-</h1>
+    background:
+        rgba(255,255,255,.06);
 
+    right: -100px;
+    top: -150px;
+}
 
+.placement-hero::after {
+    content: "";
 
-<p class="text-gray-500 mb-8">
+    position: absolute;
 
-Adding placement details for
+    width: 160px;
+    height: 160px;
 
-<span class="font-bold text-indigo-600">
+    border-radius: 50%;
 
-{{student.name}}
+    background:
+        rgba(250,204,21,.07);
 
-</span>
+    left: 45%;
+    bottom: -100px;
+}
 
+.hero-content {
+    position: relative;
 
-</p>
+    z-index: 2;
 
+    display: flex;
 
+    align-items: center;
 
+    justify-content: space-between;
 
+    gap: 20px;
+}
 
+.hero-left {
+    display: flex;
 
-<form method="POST"
+    align-items: center;
 
-class="space-y-6">
+    gap: 16px;
+}
 
+.hero-icon {
+    width: 58px;
+    height: 58px;
 
+    border-radius: 17px;
 
+    background:
+        rgba(255,255,255,.12);
 
+    border:
+        1px solid
+        rgba(255,255,255,.16);
 
-<!-- COMPANY DROPDOWN -->
+    display: flex;
 
+    align-items: center;
 
-<div>
+    justify-content: center;
 
+    font-size: 28px;
+}
 
-<label class="font-semibold text-gray-700">
+.hero-title {
+    color: white;
 
-Company Name
+    font-size: 28px;
 
-</label>
+    font-weight: 800;
 
+    margin: 0;
+}
 
+.hero-subtitle {
+    color: #c7d2fe;
 
-<select
+    font-size: 13px;
 
-name="company"
+    margin-top: 5px;
+}
 
-required
+.student-badge {
+    background:
+        rgba(255,255,255,.10);
 
-class="mt-2 w-full border border-gray-300 rounded-xl p-4">
+    border:
+        1px solid
+        rgba(255,255,255,.15);
 
+    color: white;
 
-<option value="">
+    padding: 11px 17px;
 
-Select Company
+    border-radius: 12px;
 
-</option>
+    font-size: 12px;
 
+    font-weight: 700;
 
+    white-space: nowrap;
+}
 
-{% for company in companies %}
 
+/* =========================================================
+   STUDENT CARD
+========================================================= */
 
-<option value="{{company.company}}">
+.student-card {
+    background: white;
 
-{{company.company}}
+    border:
+        1px solid
+        #e5e7eb;
 
-</option>
+    border-radius: 18px;
 
+    padding: 18px 20px;
 
+    margin-bottom: 20px;
 
-{% endfor %}
+    display: flex;
 
+    align-items: center;
 
+    gap: 15px;
 
-</select>
+    box-shadow:
+        0 8px 25px
+        rgba(15,23,42,.05);
+}
 
+.student-avatar {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef2ff,
+            #e0e7ff
+        );
+
+    color:
+        #4338ca;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+.student-label {
+    color: #6b7280;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .6px;
+}
+
+.student-name {
+    color: #111827;
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+    margin-top: 2px;
+}
+
+
+/* =========================================================
+   FORM CARD
+========================================================= */
+
+.form-card {
+    background: white;
+
+    border:
+        1px solid
+        #e5e7eb;
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 12px 35px
+        rgba(15,23,42,.07);
+}
+
+.form-header {
+    padding: 21px 25px;
+
+    border-bottom:
+        1px solid
+        #eef2f7;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+}
+
+.form-header-icon {
+    width: 43px;
+    height: 43px;
+
+    border-radius: 12px;
+
+    background:
+        #eef2ff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 20px;
+}
+
+.form-header-title {
+    color: #1f2937;
+
+    font-size: 17px;
+
+    font-weight: 800;
+}
+
+.form-header-text {
+    color: #6b7280;
+
+    font-size: 11px;
+
+    margin-top: 3px;
+}
+
+.form-body {
+    padding: 27px;
+}
+
+
+/* =========================================================
+   FORM FIELDS
+========================================================= */
+
+.field {
+    margin-bottom: 22px;
+}
+
+.field-label {
+    display: block;
+
+    color: #374151;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    margin-bottom: 8px;
+}
+
+.required {
+    color: #ef4444;
+}
+
+.field-input,
+.field-select {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        #d1d5db;
+
+    border-radius: 12px;
+
+    padding:
+        13px 14px;
+
+    background:
+        #ffffff;
+
+    color:
+        #1f2937;
+
+    font-size:
+        13px;
+
+    transition:
+        all .25s ease;
+}
+
+.field-input:hover,
+.field-select:hover {
+    border-color:
+        #a5b4fc;
+}
+
+.field-input:focus,
+.field-select:focus {
+    outline: none;
+
+    border-color:
+        #6366f1;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(99,102,241,.10);
+}
+
+.field-help {
+    color: #9ca3af;
+
+    font-size: 10px;
+
+    margin-top: 6px;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.form-footer {
+    padding:
+        20px 27px;
+
+    background:
+        #f8fafc;
+
+    border-top:
+        1px solid
+        #e5e7eb;
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+}
+
+.back-button {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    padding:
+        11px 18px;
+
+    border-radius:
+        11px;
+
+    color:
+        #475569;
+
+    background:
+        white;
+
+    border:
+        1px solid
+        #cbd5e1;
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    text-decoration:
+        none;
+
+    transition:
+        all .25s ease;
+}
+
+.back-button:hover {
+    background:
+        #f1f5f9;
+
+    transform:
+        translateY(-2px);
+}
+
+.save-button {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        8px;
+
+    padding:
+        12px 25px;
+
+    border:
+        none;
+
+    border-radius:
+        11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f46e5,
+            #6366f1
+        );
+
+    color:
+        white;
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 8px 20px
+        rgba(79,70,229,.25);
+
+    transition:
+        all .25s ease;
+}
+
+.save-button:hover {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 12px 25px
+        rgba(79,70,229,.35);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:768px) {
+
+    .hero-content {
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+    }
+
+    .student-badge {
+        width:
+            100%;
+
+        box-sizing:
+            border-box;
+
+        text-align:
+            center;
+    }
+
+    .hero-title {
+        font-size:
+            24px;
+    }
+
+    .form-body {
+        padding:
+            20px;
+    }
+
+    .form-footer {
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+    }
+
+    .back-button,
+    .save-button {
+        width:
+            100%;
+
+        box-sizing:
+            border-box;
+
+        text-align:
+            center;
+
+        justify-content:
+            center;
+    }
+
+}
+
+</style>
+
+
+<div class="placement-page">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <div class="placement-hero">
+
+        <div class="hero-content">
+
+            <div class="hero-left">
+
+                <div class="hero-icon">
+                    🎓
+                </div>
+
+                <div>
+
+                    <h1 class="hero-title">
+                        Add Placement
+                    </h1>
+
+                    <p class="hero-subtitle">
+                        Record a student's successful placement
+                        and career details.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="student-badge">
+                👨‍🎓 Student Placement
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         STUDENT INFORMATION
+    ====================================================== -->
+
+    <div class="student-card">
+
+        <div class="student-avatar">
+            {{ student.name[0]|upper }}
+        </div>
+
+        <div>
+
+            <div class="student-label">
+                Placement For
+            </div>
+
+            <div class="student-name">
+                {{ student.name }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
+
+    <div class="form-card">
+
+
+        <div class="form-header">
+
+            <div class="form-header-icon">
+                💼
+            </div>
+
+            <div>
+
+                <div class="form-header-title">
+                    Placement Details
+                </div>
+
+                <div class="form-header-text">
+                    Enter the company and placement information.
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <form
+            method="POST"
+            action="{{ url_for('admin.add_placement', student_id=student.id) }}">
+
+
+            <div class="form-body">
+
+
+                <div class="grid md:grid-cols-2 gap-6">
+
+
+                    <!-- =================================================
+                         COMPANY
+                    ================================================== -->
+
+                    <div class="field">
+
+                        <label class="field-label">
+                            Company Name
+                            <span class="required">*</span>
+                        </label>
+
+                        <select
+                            name="company"
+                            required
+                            class="field-select">
+
+                            <option value="">
+                                Select Company
+                            </option>
+
+                            {% for company in companies %}
+
+                            <option value="{{ company.company }}">
+
+                                {{ company.company }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                        <div class="field-help">
+                            Select the company where the student was placed.
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         DESIGNATION
+                    ================================================== -->
+
+                    <div class="field">
+
+                        <label class="field-label">
+                            Designation
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="designation"
+                            placeholder="Software Engineer"
+                            required
+                            class="field-input">
+
+                        <div class="field-help">
+                            Enter the student's job designation.
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         PACKAGE
+                    ================================================== -->
+
+                    <div class="field">
+
+                        <label class="field-label">
+                            Package (LPA)
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.1"
+                            min="0"
+                            name="package"
+                            placeholder="4.5"
+                            required
+                            class="field-input">
+
+                        <div class="field-help">
+                            Example: 4.5 means ₹4.5 LPA.
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         PLACEMENT DATE
+                    ================================================== -->
+
+                    <div class="field">
+
+                        <label class="field-label">
+                            Placement Date
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="date"
+                            name="placement_date"
+                            required
+                            class="field-input">
+
+                        <div class="field-help">
+                            Select the official placement date.
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =====================================================
+                 FOOTER BUTTONS
+            ====================================================== -->
+
+            <div class="form-footer">
+
+
+                <a
+                    href="{{ url_for('admin.placements') }}"
+                    class="back-button">
+
+                    ← Back to Placements
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="save-button">
+
+                    💼 Save Placement
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+    </div>
 
 
 </div>
 
-
-
-
-
-
-
-<!-- DESIGNATION -->
-
-
-<div>
-
-
-<label class="font-semibold text-gray-700">
-
-Designation
-
-</label>
-
-
-<input
-
-type="text"
-
-name="designation"
-
-placeholder="Software Engineer"
-
-required
-
-
-class="mt-2 w-full border border-gray-300 rounded-xl p-4">
-
-
-</div>
-
-
-
-
-
-
-
-
-<!-- PACKAGE -->
-
-
-<div>
-
-
-<label class="font-semibold text-gray-700">
-
-Package (LPA)
-
-</label>
-
-
-
-<input
-
-type="number"
-
-step="0.1"
-
-name="package"
-
-placeholder="4.5"
-
-required
-
-
-class="mt-2 w-full border border-gray-300 rounded-xl p-4">
-
-
-
-</div>
-
-
-
-
-
-
-
-
-<!-- DATE -->
-
-
-<div>
-
-
-<label class="font-semibold text-gray-700">
-
-Placement Date
-
-</label>
-
-
-
-<input
-
-type="date"
-
-name="placement_date"
-
-required
-
-
-class="mt-2 w-full border border-gray-300 rounded-xl p-4">
-
-
-
-</div>
-
-
-
-
-
-
-
-
-<button
-
-type="submit"
-
-
-class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold py-4 rounded-xl shadow-lg">
-
-
-Save Placement
-
-
-</button>
-
-
-
-
-
-
-</form>
-
-
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-</body>
-
-
-</html>
+{% endblock %}

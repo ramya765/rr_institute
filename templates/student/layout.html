@@ -680,6 +680,34 @@
             </span>
 
         </a>
+        <a
+    href="{{ url_for('student.notifications') }}"
+    class="nav-link">
+
+    <span class="nav-icon">
+        🔔
+    </span>
+
+    <span class="flex-1">
+        Notifications
+    </span>
+
+    {% if unread_count and unread_count > 0 %}
+
+        <span
+            class="bg-red-500 text-white text-xs font-bold
+                   min-w-[22px] h-[22px]
+                   rounded-full
+                   flex items-center justify-center
+                   px-1">
+
+            {{ unread_count }}
+
+        </span>
+
+    {% endif %}
+
+</a>
 
 
         <!-- PLACEMENT -->

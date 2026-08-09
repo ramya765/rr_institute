@@ -1,280 +1,1253 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
+{% extends "admin/layout.html" %}
 
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>
-        Settings | {{ settings.institute_name or "RR Institute" }}
-    </title>
+{% block content %}
 
-    <script src="https://cdn.tailwindcss.com"></script>
+<style>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-          rel="stylesheet">
+/* =========================================================
+   SETTINGS PAGE
+========================================================= */
 
-    <style>
+.settings-page {
+    animation: settingsEnter .6s ease forwards;
+}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f1f5f9;
-        }
+@keyframes settingsEnter {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 
-        .sidebar {
-            background: linear-gradient(
-                180deg,
-                #0f172a 0%,
-                #111827 100%
-            );
-        }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-        .section-card {
-            transition: all 0.2s ease;
-        }
 
-        .section-card:hover {
-            transform: translateY(-2px);
-        }
+/* =========================================================
+   HERO
+========================================================= */
 
-        .input-field {
-            transition: all 0.2s ease;
-        }
+.settings-hero {
+    position: relative;
+    overflow: hidden;
 
-        .input-field:focus {
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.10);
-            outline: none;
-        }
+    background:
+        linear-gradient(
+            135deg,
+            #111827,
+            #312e81,
+            #4f46e5
+        );
 
-        .toggle {
-            width: 46px;
-            height: 24px;
-            position: relative;
-            display: inline-block;
-        }
+    border-radius: 22px;
+    padding: 30px;
 
-        .toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+    margin-bottom: 25px;
 
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            inset: 0;
-            background: #cbd5e1;
-            border-radius: 999px;
-            transition: .3s;
-        }
+    box-shadow:
+        0 20px 55px
+        rgba(0,0,0,.20);
+}
 
-        .slider:before {
-            content: "";
-            position: absolute;
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            top: 3px;
-            background: white;
-            border-radius: 50%;
-            transition: .3s;
-        }
+.settings-hero::before {
+    content: "";
 
-        .toggle input:checked + .slider {
-            background: #4f46e5;
-        }
+    position: absolute;
 
-        .toggle input:checked + .slider:before {
-            transform: translateX(22px);
-        }
+    width: 280px;
+    height: 280px;
 
-    </style>
+    border-radius: 50%;
 
-</head>
+    background:
+        rgba(255,255,255,.07);
 
+    top: -150px;
+    right: -70px;
+}
 
-<body>
+.settings-hero::after {
+    content: "";
 
-<div class="min-h-screen flex">
+    position: absolute;
 
+    width: 180px;
+    height: 180px;
 
-    <!-- ===================================================== -->
-    <!-- SIDEBAR -->
-    <!-- ===================================================== -->
+    border-radius: 50%;
 
-    <aside class="sidebar w-64 text-white shadow-xl">
+    background:
+        rgba(250,204,21,.08);
 
-        <!-- Logo -->
+    bottom: -100px;
+    left: 35%;
+}
 
-        <div class="text-center py-7 border-b border-gray-700">
+.settings-hero-content {
+    position: relative;
+    z-index: 2;
 
-            <div class="text-4xl mb-2">
-                🏫
-            </div>
+    display: flex;
 
-            <h1 class="text-2xl font-bold">
-                {{ settings.institute_name or "RR Institute" }}
-            </h1>
+    align-items: center;
+    justify-content: space-between;
 
-            <p class="text-gray-400 text-sm mt-1">
-                Admin Panel
-            </p>
+    gap: 20px;
+}
 
-        </div>
+.settings-icon {
+    width: 62px;
+    height: 62px;
 
+    border-radius: 18px;
 
-        <!-- Navigation -->
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        <nav class="mt-5">
+    background:
+        rgba(255,255,255,.12);
 
+    border:
+        1px solid
+        rgba(255,255,255,.18);
 
-            <a href="{{ url_for('admin.dashboard') }}"
-               class="block px-6 py-3 hover:bg-gray-800 transition">
+    font-size: 28px;
 
-                🏠
-                <span class="ml-2">
-                    Dashboard
-                </span>
+    box-shadow:
+        0 10px 30px
+        rgba(0,0,0,.15);
+}
 
-            </a>
+.settings-label {
+    color: #facc15;
 
+    font-size: 11px;
 
-            <a href="{{ url_for('admin.students') }}"
-               class="block px-6 py-3 hover:bg-gray-800 transition">
+    font-weight: 800;
 
-                👨‍🎓
-                <span class="ml-2">
-                    Students
-                </span>
+    letter-spacing: 2px;
 
-            </a>
+    text-transform: uppercase;
+}
 
+.settings-title {
+    color: white;
 
-            <a href="{{ url_for('admin.courses') }}"
-               class="block px-6 py-3 hover:bg-gray-800 transition">
+    font-size: 31px;
 
-                📚
-                <span class="ml-2">
-                    Courses
-                </span>
+    font-weight: 800;
 
-            </a>
+    margin-top: 5px;
+}
 
+.settings-description {
+    color: #c7d2fe;
 
-            <a href="{{ url_for('admin.companies') }}"
-               class="block px-6 py-3 hover:bg-gray-800 transition">
+    font-size: 13px;
 
-                🏢
-                <span class="ml-2">
-                    Companies
-                </span>
+    margin-top: 6px;
+}
 
-            </a>
+.admin-badge {
+    background:
+        rgba(255,255,255,.10);
 
+    border:
+        1px solid
+        rgba(255,255,255,.15);
 
-            <a href="{{ url_for('admin.placements') }}"
-               class="block px-6 py-3 hover:bg-gray-800 transition">
+    color: white;
 
-                💼
-                <span class="ml-2">
-                    Placements
-                </span>
+    padding: 11px 16px;
 
-            </a>
+    border-radius: 12px;
 
+    font-size: 11px;
 
-            <a href="{{ url_for('admin.faculty') }}"
-               class="block px-6 py-3 hover:bg-gray-800 transition">
+    font-weight: 800;
 
-                👨‍🏫
-                <span class="ml-2">
-                    Faculty
-                </span>
+    white-space: nowrap;
+}
 
-            </a>
 
+/* =========================================================
+   FLASH MESSAGES
+========================================================= */
 
-            <a href="{{ url_for('admin.notifications') }}"
-               class="block px-6 py-3 hover:bg-gray-800 transition">
+.flash-message {
+    display: flex;
 
-                🔔
-                <span class="ml-2">
-                    Notifications
-                </span>
+    align-items: center;
 
-            </a>
+    gap: 12px;
 
+    padding: 15px 18px;
 
-            <!-- ACTIVE SETTINGS -->
+    border-radius: 14px;
 
-            <a href="{{ url_for('admin.settings') }}"
-               class="block px-6 py-3 bg-indigo-600 text-white">
+    margin-bottom: 18px;
 
-                ⚙️
-                <span class="ml-2 font-semibold">
-                    Settings
-                </span>
+    font-size: 13px;
 
-            </a>
+    font-weight: 600;
 
+    animation:
+        flashEnter .45s ease;
+}
 
-            <a href="{{ url_for('auth.logout') }}"
-               class="block px-6 py-3 mt-4 text-red-300 hover:bg-red-700 transition">
+@keyframes flashEnter {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
 
-                🚪
-                <span class="ml-2">
-                    Logout
-                </span>
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-            </a>
+.flash-success {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #047857;
+}
 
-        </nav>
+.flash-danger {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+}
 
-    </aside>
 
+/* =========================================================
+   SECTION CARD
+========================================================= */
 
+.settings-card {
+    background: white;
 
-    <!-- ===================================================== -->
-    <!-- MAIN -->
-    <!-- ===================================================== -->
+    border:
+        1px solid
+        #e5e7eb;
 
-    <main class="flex-1 min-w-0">
+    border-radius: 20px;
 
+    margin-bottom: 24px;
 
-        <!-- TOP HEADER -->
+    overflow: hidden;
 
-        <div class="bg-white border-b shadow-sm px-8 py-6">
+    box-shadow:
+        0 8px 30px
+        rgba(15,23,42,.06);
 
-            <div class="flex justify-between items-center">
+    transition:
+        all .35s ease;
+
+    animation:
+        cardEnter .6s ease both;
+}
+
+.settings-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 18px 40px
+        rgba(15,23,42,.09);
+}
+
+@keyframes cardEnter {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.settings-card-header {
+    padding: 20px 24px;
+
+    border-bottom:
+        1px solid
+        #eef2f7;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+}
+
+.section-icon {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 13px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 21px;
+}
+
+.icon-indigo {
+    background: #eef2ff;
+}
+
+.icon-green {
+    background: #ecfdf5;
+}
+
+.icon-purple {
+    background: #faf5ff;
+}
+
+.icon-yellow {
+    background: #fffbeb;
+}
+
+.icon-blue {
+    background: #eff6ff;
+}
+
+.section-title {
+    color: #1f2937;
+
+    font-size: 18px;
+
+    font-weight: 800;
+}
+
+.section-description {
+    color: #6b7280;
+
+    font-size: 12px;
+
+    margin-top: 3px;
+}
+
+
+/* =========================================================
+   CARD BODY
+========================================================= */
+
+.settings-card-body {
+    padding: 25px;
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.input-group {
+    position: relative;
+}
+
+.input-label {
+    display: block;
+
+    color: #374151;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    margin-bottom: 7px;
+}
+
+.input-field {
+    width: 100%;
+
+    border:
+        1px solid
+        #d1d5db;
+
+    background:
+        #ffffff;
+
+    border-radius:
+        12px;
+
+    padding:
+        12px 14px;
+
+    color:
+        #1f2937;
+
+    font-size:
+        13px;
+
+    transition:
+        all .25s ease;
+
+    box-sizing:
+        border-box;
+}
+
+.input-field:hover {
+    border-color:
+        #a5b4fc;
+}
+
+.input-field:focus {
+    outline: none;
+
+    border-color:
+        #6366f1;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(99,102,241,.10);
+}
+
+
+/* =========================================================
+   NOTIFICATION / TOGGLE ROW
+========================================================= */
+
+.setting-row {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 17px;
+
+    background:
+        #f8fafc;
+
+    border:
+        1px solid
+        #e5e7eb;
+
+    border-radius:
+        14px;
+
+    transition:
+        all .3s ease;
+}
+
+.setting-row:hover {
+    background:
+        #f1f5f9;
+
+    border-color:
+        #c7d2fe;
+
+    transform:
+        translateX(3px);
+}
+
+.setting-name {
+    color:
+        #1f2937;
+
+    font-size:
+        14px;
+
+    font-weight:
+        800;
+}
+
+.setting-description {
+    color:
+        #6b7280;
+
+    font-size:
+        11px;
+
+    margin-top:
+        4px;
+}
+
+
+/* =========================================================
+   TOGGLE
+========================================================= */
+
+.toggle {
+    width: 48px;
+    height: 26px;
+
+    position: relative;
+
+    display: inline-block;
+
+    flex-shrink: 0;
+}
+
+.toggle input {
+    opacity: 0;
+
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+
+    cursor: pointer;
+
+    inset: 0;
+
+    background:
+        #cbd5e1;
+
+    border-radius:
+        999px;
+
+    transition:
+        .3s;
+}
+
+.slider::before {
+    content: "";
+
+    position: absolute;
+
+    width: 20px;
+    height: 20px;
+
+    left: 3px;
+    top: 3px;
+
+    background:
+        white;
+
+    border-radius:
+        50%;
+
+    box-shadow:
+        0 2px 5px
+        rgba(0,0,0,.15);
+
+    transition:
+        .3s;
+}
+
+.toggle input:checked + .slider {
+    background:
+        #4f46e5;
+}
+
+.toggle input:checked + .slider::before {
+    transform:
+        translateX(22px);
+}
+
+
+/* =========================================================
+   MAINTENANCE ROW
+========================================================= */
+
+.maintenance-row {
+    background:
+        #fff7ed;
+
+    border:
+        1px solid
+        #fed7aa;
+}
+
+.maintenance-row:hover {
+    border-color:
+        #fdba74;
+}
+
+
+/* =========================================================
+   SAVE AREA
+========================================================= */
+
+.save-card {
+    background:
+        linear-gradient(
+            135deg,
+            #111827,
+            #1e293b
+        );
+
+    border-radius:
+        20px;
+
+    padding:
+        23px;
+
+    margin-bottom:
+        30px;
+
+    box-shadow:
+        0 15px 40px
+        rgba(15,23,42,.18);
+}
+
+.save-title {
+    color:
+        white;
+
+    font-size:
+        16px;
+
+    font-weight:
+        800;
+}
+
+.save-description {
+    color:
+        #94a3b8;
+
+    font-size:
+        11px;
+
+    margin-top:
+        4px;
+}
+
+.save-buttons {
+    display:
+        flex;
+
+    gap:
+        10px;
+}
+
+.reset-button {
+    background:
+        rgba(255,255,255,.10);
+
+    color:
+        #e2e8f0;
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    padding:
+        12px 20px;
+
+    border-radius:
+        11px;
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    transition:
+        all .3s ease;
+}
+
+.reset-button:hover {
+    background:
+        rgba(255,255,255,.18);
+
+    transform:
+        translateY(-2px);
+}
+
+.save-button {
+    background:
+        #6366f1;
+
+    color:
+        white;
+
+    border:
+        none;
+
+    padding:
+        12px 24px;
+
+    border-radius:
+        11px;
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+
+    transition:
+        all .3s ease;
+
+    box-shadow:
+        0 8px 20px
+        rgba(99,102,241,.25);
+}
+
+.save-button:hover {
+    background:
+        #4f46e5;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 12px 25px
+        rgba(99,102,241,.35);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:768px) {
+
+    .settings-hero-content {
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+    }
+
+    .admin-badge {
+        width:
+            100%;
+
+        text-align:
+            center;
+    }
+
+    .settings-title {
+        font-size:
+            26px;
+    }
+
+    .settings-card-body {
+        padding:
+            18px;
+    }
+
+    .settings-card-header {
+        padding:
+            18px;
+    }
+
+    .setting-row {
+        align-items:
+            flex-start;
+    }
+
+    .save-card {
+        padding:
+            18px;
+    }
+
+    .save-card > div {
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+    }
+
+    .save-buttons {
+        width:
+            100%;
+    }
+
+    .reset-button,
+    .save-button {
+        flex:
+            1;
+    }
+
+}
+
+</style>
+
+
+<div class="settings-page">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="settings-hero">
+
+        <div class="settings-hero-content">
+
+            <div class="flex items-center gap-4">
+
+                <div class="settings-icon">
+                    ⚙️
+                </div>
 
                 <div>
 
-                    <h1 class="text-3xl font-bold text-gray-800">
+                    <div class="settings-label">
+                        RR IT ORIGIN • ADMINISTRATION
+                    </div>
 
-                        ⚙️ Settings
-
+                    <h1 class="settings-title">
+                        Institute Settings
                     </h1>
 
-                    <p class="text-gray-500 mt-1">
-
+                    <p class="settings-description">
                         Manage your institute, communication,
                         website and student portal settings.
-
                     </p>
 
                 </div>
 
+            </div>
 
-                <div class="hidden md:block">
 
-                    <div class="bg-indigo-50 text-indigo-700
-                                px-4 py-2 rounded-lg">
+            <div class="admin-badge">
+                🔐 Administrator
+            </div>
 
-                        🔐 Administrator
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FLASH MESSAGES
+    ====================================================== -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div
+                    class="flash-message
+                    {% if category == 'success' %}
+                        flash-success
+                    {% else %}
+                        flash-danger
+                    {% endif %}">
+
+                    {% if category == 'success' %}
+                        ✅
+                    {% else %}
+                        ⚠️
+                    {% endif %}
+
+                    <span>
+                        {{ message }}
+                    </span>
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
+
+    <form method="POST">
+
+
+        <!-- =================================================
+             INSTITUTE INFORMATION
+        ================================================== -->
+
+        <section class="settings-card">
+
+            <div class="settings-card-header">
+
+                <div class="section-icon icon-indigo">
+                    🏫
+                </div>
+
+                <div>
+
+                    <h2 class="section-title">
+                        Institute Information
+                    </h2>
+
+                    <p class="section-description">
+                        Basic information about your institute.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-card-body">
+
+                <div class="grid md:grid-cols-2 gap-6">
+
+
+                    <div class="input-group">
+
+                        <label class="input-label">
+                            Institute Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="institute_name"
+                            value="{{ settings.institute_name or '' }}"
+                            placeholder="RR IT Origin"
+                            class="input-field">
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label class="input-label">
+                            Institute Email
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            value="{{ settings.email or '' }}"
+                            placeholder="info@example.com"
+                            class="input-field">
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label class="input-label">
+                            Phone Number
+                        </label>
+
+                        <input
+                            type="text"
+                            name="phone"
+                            value="{{ settings.phone or '' }}"
+                            placeholder="+91 9876543210"
+                            class="input-field">
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label class="input-label">
+                            WhatsApp Number
+                        </label>
+
+                        <input
+                            type="text"
+                            name="whatsapp"
+                            value="{{ settings.whatsapp or '' }}"
+                            placeholder="+91 9876543210"
+                            class="input-field">
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label class="input-label">
+                            Website
+                        </label>
+
+                        <input
+                            type="text"
+                            name="website"
+                            value="{{ settings.website or '' }}"
+                            placeholder="www.example.com"
+                            class="input-field">
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label class="input-label">
+                            City
+                        </label>
+
+                        <input
+                            type="text"
+                            name="city"
+                            value="{{ settings.city or '' }}"
+                            placeholder="Hyderabad"
+                            class="input-field">
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label class="input-label">
+                            State
+                        </label>
+
+                        <input
+                            type="text"
+                            name="state"
+                            value="{{ settings.state or '' }}"
+                            placeholder="Telangana"
+                            class="input-field">
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label class="input-label">
+                            Pincode
+                        </label>
+
+                        <input
+                            type="text"
+                            name="pincode"
+                            value="{{ settings.pincode or '' }}"
+                            placeholder="500001"
+                            class="input-field">
+
+                    </div>
+
+                </div>
+
+
+                <div class="mt-6">
+
+                    <label class="input-label">
+                        Complete Address
+                    </label>
+
+                    <textarea
+                        name="address"
+                        rows="4"
+                        placeholder="Enter institute address..."
+                        class="input-field">{{ settings.address or '' }}</textarea>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             COMMUNICATION
+        ================================================== -->
+
+        <section class="settings-card">
+
+            <div class="settings-card-header">
+
+                <div class="section-icon icon-green">
+                    📧
+                </div>
+
+                <div>
+
+                    <h2 class="section-title">
+                        Communication
+                    </h2>
+
+                    <p class="section-description">
+                        Manage emails used for institute communication.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-card-body">
+
+                <div class="grid md:grid-cols-2 gap-6">
+
+
+                    <div>
+
+                        <label class="input-label">
+                            Contact Email
+                        </label>
+
+                        <input
+                            type="email"
+                            name="contact_email"
+                            value="{{ settings.contact_email or '' }}"
+                            placeholder="contact@example.com"
+                            class="input-field">
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="input-label">
+                            Support Email
+                        </label>
+
+                        <input
+                            type="email"
+                            name="support_email"
+                            value="{{ settings.support_email or '' }}"
+                            placeholder="support@example.com"
+                            class="input-field">
+
+                    </div>
+
+                </div>
+
+
+                <div class="mt-6">
+
+                    <label class="input-label">
+                        Website Footer Text
+                    </label>
+
+                    <textarea
+                        name="footer_text"
+                        rows="3"
+                        placeholder="© 2026 RR IT Origin. All rights reserved."
+                        class="input-field">{{ settings.footer_text or '' }}</textarea>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             WEBSITE SETTINGS
+        ================================================== -->
+
+        <section class="settings-card">
+
+            <div class="settings-card-header">
+
+                <div class="section-icon icon-purple">
+                    🌐
+                </div>
+
+                <div>
+
+                    <h2 class="section-title">
+                        Website Settings
+                    </h2>
+
+                    <p class="section-description">
+                        Control how institute information appears on your website.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-card-body">
+
+
+                <div>
+
+                    <label class="input-label">
+                        Homepage Welcome Text
+                    </label>
+
+                    <textarea
+                        name="welcome_text"
+                        rows="3"
+                        placeholder="Learn. Practice. Get Placed."
+                        class="input-field">{{ settings.welcome_text or '' }}</textarea>
+
+                </div>
+
+
+                <div class="grid md:grid-cols-2 gap-6 mt-6">
+
+
+                    <div>
+
+                        <label class="input-label">
+                            Facebook
+                        </label>
+
+                        <input
+                            type="text"
+                            name="facebook"
+                            value="{{ settings.facebook or '' }}"
+                            placeholder="Facebook profile URL"
+                            class="input-field">
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="input-label">
+                            Instagram
+                        </label>
+
+                        <input
+                            type="text"
+                            name="instagram"
+                            value="{{ settings.instagram or '' }}"
+                            placeholder="Instagram profile URL"
+                            class="input-field">
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="input-label">
+                            LinkedIn
+                        </label>
+
+                        <input
+                            type="text"
+                            name="linkedin"
+                            value="{{ settings.linkedin or '' }}"
+                            placeholder="LinkedIn profile URL"
+                            class="input-field">
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="input-label">
+                            YouTube
+                        </label>
+
+                        <input
+                            type="text"
+                            name="youtube"
+                            value="{{ settings.youtube or '' }}"
+                            placeholder="YouTube channel URL"
+                            class="input-field">
 
                     </div>
 
@@ -282,1050 +1255,381 @@
 
             </div>
 
-        </div>
+        </section>
 
 
 
-        <!-- CONTENT -->
+        <!-- =================================================
+             NOTIFICATION SETTINGS
+        ================================================== -->
 
-        <div class="p-8 max-w-7xl mx-auto">
+        <section class="settings-card">
+
+            <div class="settings-card-header">
+
+                <div class="section-icon icon-yellow">
+                    🔔
+                </div>
+
+                <div>
+
+                    <h2 class="section-title">
+                        Notification Settings
+                    </h2>
+
+                    <p class="section-description">
+                        Choose which important events should generate notifications.
+                    </p>
+
+                </div>
+
+            </div>
 
 
-            <!-- FLASH MESSAGES -->
+            <div class="settings-card-body space-y-4">
 
-            {% with messages = get_flashed_messages(with_categories=true) %}
 
-                {% if messages %}
+                <!-- NEW LEAD -->
 
-                    {% for category, message in messages %}
+                <div class="setting-row">
 
-                        <div class="mb-6
-                            {% if category == 'success' %}
-                                bg-green-50 border border-green-200
-                                text-green-700
-                            {% else %}
-                                bg-red-50 border border-red-200
-                                text-red-700
-                            {% endif %}
-                            rounded-xl px-5 py-4">
+                    <div>
 
-                            <div class="flex items-center gap-3">
-
-                                {% if category == 'success' %}
-                                    ✅
-                                {% else %}
-                                    ⚠️
-                                {% endif %}
-
-                                <span>
-                                    {{ message }}
-                                </span>
-
-                            </div>
-
+                        <div class="setting-name">
+                            📨 New Lead Notification
                         </div>
 
-                    {% endfor %}
-
-                {% endif %}
-
-            {% endwith %}
-
-
-
-            <!-- ================================================= -->
-            <!-- FORM -->
-            <!-- ================================================= -->
-
-            <form method="POST">
-
-
-                <!-- ================================================= -->
-                <!-- INSTITUTE INFORMATION -->
-                <!-- ================================================= -->
-
-                <div class="section-card bg-white rounded-2xl shadow-sm
-                            border border-gray-200 mb-8 overflow-hidden">
-
-
-                    <div class="px-6 py-5 border-b bg-gradient-to-r
-                                from-indigo-50 to-white">
-
-                        <div class="flex items-center gap-3">
-
-                            <div class="w-11 h-11 bg-indigo-100
-                                        text-indigo-600 rounded-xl
-                                        flex items-center justify-center
-                                        text-xl">
-
-                                🏫
-
-                            </div>
-
-                            <div>
-
-                                <h2 class="text-xl font-bold text-gray-800">
-
-                                    Institute Information
-
-                                </h2>
-
-                                <p class="text-sm text-gray-500">
-
-                                    Basic information about your institute.
-
-                                </p>
-
-                            </div>
-
+                        <div class="setting-description">
+                            Notify admin when a new enquiry is received.
                         </div>
 
                     </div>
 
 
+                    <label class="toggle">
 
-                    <div class="p-6">
+                        <input
+                            type="checkbox"
+                            name="new_lead_notification"
+                            {% if settings.new_lead_notification %}
+                                checked
+                            {% endif %}>
 
+                        <span class="slider"></span>
 
-                        <div class="grid md:grid-cols-2 gap-6">
-
-
-                            <!-- Institute Name -->
-
-                            <div>
-
-                                <label class="font-semibold text-gray-700">
-
-                                    Institute Name
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="institute_name"
-                                    value="{{ settings.institute_name or '' }}"
-                                    placeholder="RR IT Origin"
-                                    class="input-field w-full mt-2
-                                           border border-gray-300
-                                           rounded-xl px-4 py-3">
-
-                            </div>
-
-
-
-                            <!-- Email -->
-
-                            <div>
-
-                                <label class="font-semibold text-gray-700">
-
-                                    Institute Email
-
-                                </label>
-
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value="{{ settings.email or '' }}"
-                                    placeholder="info@example.com"
-                                    class="input-field w-full mt-2
-                                           border border-gray-300
-                                           rounded-xl px-4 py-3">
-
-                            </div>
-
-
-
-                            <!-- Phone -->
-
-                            <div>
-
-                                <label class="font-semibold text-gray-700">
-
-                                    Phone Number
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="phone"
-                                    value="{{ settings.phone or '' }}"
-                                    placeholder="+91 9876543210"
-                                    class="input-field w-full mt-2
-                                           border border-gray-300
-                                           rounded-xl px-4 py-3">
-
-                            </div>
-
-
-
-                            <!-- WhatsApp -->
-
-                            <div>
-
-                                <label class="font-semibold text-gray-700">
-
-                                    WhatsApp Number
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="whatsapp"
-                                    value="{{ settings.whatsapp or '' }}"
-                                    placeholder="+91 9876543210"
-                                    class="input-field w-full mt-2
-                                           border border-gray-300
-                                           rounded-xl px-4 py-3">
-
-                            </div>
-
-
-
-                            <!-- Website -->
-
-                            <div>
-
-                                <label class="font-semibold text-gray-700">
-
-                                    Website
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="website"
-                                    value="{{ settings.website or '' }}"
-                                    placeholder="www.example.com"
-                                    class="input-field w-full mt-2
-                                           border border-gray-300
-                                           rounded-xl px-4 py-3">
-
-                            </div>
-
-
-
-                            <!-- City -->
-
-                            <div>
-
-                                <label class="font-semibold text-gray-700">
-
-                                    City
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="city"
-                                    value="{{ settings.city or '' }}"
-                                    placeholder="Hyderabad"
-                                    class="input-field w-full mt-2
-                                           border border-gray-300
-                                           rounded-xl px-4 py-3">
-
-                            </div>
-
-
-
-                            <!-- State -->
-
-                            <div>
-
-                                <label class="font-semibold text-gray-700">
-
-                                    State
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="state"
-                                    value="{{ settings.state or '' }}"
-                                    placeholder="Telangana"
-                                    class="input-field w-full mt-2
-                                           border border-gray-300
-                                           rounded-xl px-4 py-3">
-
-                            </div>
-
-
-
-                            <!-- Pincode -->
-
-                            <div>
-
-                                <label class="font-semibold text-gray-700">
-
-                                    Pincode
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="pincode"
-                                    value="{{ settings.pincode or '' }}"
-                                    placeholder="500001"
-                                    class="input-field w-full mt-2
-                                           border border-gray-300
-                                           rounded-xl px-4 py-3">
-
-                            </div>
-
-
-                        </div>
-
-
-
-                        <!-- Address -->
-
-                        <div class="mt-6">
-
-                            <label class="font-semibold text-gray-700">
-
-                                Complete Address
-
-                            </label>
-
-                            <textarea
-                                name="address"
-                                rows="4"
-                                placeholder="Enter institute address..."
-                                class="input-field w-full mt-2
-                                       border border-gray-300
-                                       rounded-xl px-4 py-3">{{ settings.address or '' }}</textarea>
-
-                        </div>
-
-
-                    </div>
+                    </label>
 
                 </div>
 
 
 
-                <!-- ================================================= -->
-                <!-- COMMUNICATION -->
-                <!-- ================================================= -->
+                <!-- ADMISSION -->
 
-                <div class="section-card bg-white rounded-2xl shadow-sm
-                            border border-gray-200 mb-8 overflow-hidden">
+                <div class="setting-row">
 
+                    <div>
 
-                    <div class="px-6 py-5 border-b bg-gradient-to-r
-                                from-emerald-50 to-white">
+                        <div class="setting-name">
+                            🎓 Admission Notification
+                        </div>
 
-                        <div class="flex items-center gap-3">
-
-                            <div class="w-11 h-11 bg-emerald-100
-                                        text-emerald-600 rounded-xl
-                                        flex items-center justify-center
-                                        text-xl">
-
-                                📧
-
-                            </div>
-
-                            <div>
-
-                                <h2 class="text-xl font-bold text-gray-800">
-
-                                    Communication
-
-                                </h2>
-
-                                <p class="text-sm text-gray-500">
-
-                                    Manage emails used for institute communication.
-
-                                </p>
-
-                            </div>
-
+                        <div class="setting-description">
+                            Notify when a student admission is completed.
                         </div>
 
                     </div>
 
 
+                    <label class="toggle">
 
-                    <div class="p-6">
+                        <input
+                            type="checkbox"
+                            name="admission_notification"
+                            {% if settings.admission_notification %}
+                                checked
+                            {% endif %}>
 
-                        <div class="grid md:grid-cols-2 gap-6">
+                        <span class="slider"></span>
 
-
-                            <div>
-
-                                <label class="font-semibold text-gray-700">
-
-                                    Contact Email
-
-                                </label>
-
-                                <input
-                                    type="email"
-                                    name="contact_email"
-                                    value="{{ settings.contact_email or '' }}"
-                                    placeholder="contact@example.com"
-                                    class="input-field w-full mt-2
-                                           border border-gray-300
-                                           rounded-xl px-4 py-3">
-
-                            </div>
-
-
-                            <div>
-
-                                <label class="font-semibold text-gray-700">
-
-                                    Support Email
-
-                                </label>
-
-                                <input
-                                    type="email"
-                                    name="support_email"
-                                    value="{{ settings.support_email or '' }}"
-                                    placeholder="support@example.com"
-                                    class="input-field w-full mt-2
-                                           border border-gray-300
-                                           rounded-xl px-4 py-3">
-
-                            </div>
-
-
-                            <div class="md:col-span-2">
-
-                               <label class="font-semibold text-gray-700">
-    Website Footer Text
-</label>
-
-<textarea
-    name="footer_text"
-    rows="3"
-    placeholder="© 2026 RR IT Origin. All rights reserved."
-    class="input-field w-full mt-2 border border-gray-300 rounded-xl px-4 py-3">{{ settings.footer_text or '' }}</textarea>
-
-                            </div>
-
-
-                        </div>
-
-                    </div>
+                    </label>
 
                 </div>
 
 
 
-                <!-- ================================================= -->
-                <!-- WEBSITE SETTINGS -->
-                <!-- ================================================= -->
+                <!-- PAYMENT -->
 
-                <div class="section-card bg-white rounded-2xl shadow-sm
-                            border border-gray-200 mb-8 overflow-hidden">
+                <div class="setting-row">
 
+                    <div>
 
-                    <div class="px-6 py-5 border-b bg-gradient-to-r
-                                from-purple-50 to-white">
+                        <div class="setting-name">
+                            💰 Payment Notification
+                        </div>
 
-                        <div class="flex items-center gap-3">
-
-                            <div class="w-11 h-11 bg-purple-100
-                                        text-purple-600 rounded-xl
-                                        flex items-center justify-center
-                                        text-xl">
-
-                                🌐
-
-                            </div>
-
-                            <div>
-
-                                <h2 class="text-xl font-bold text-gray-800">
-
-                                    Website Settings
-
-                                </h2>
-
-                                <p class="text-sm text-gray-500">
-
-                                    Control how institute information appears
-                                    on your website.
-
-                                </p>
-
-                            </div>
-
+                        <div class="setting-description">
+                            Notify admin whenever a payment is recorded.
                         </div>
 
                     </div>
 
 
+                    <label class="toggle">
 
-                    <div class="p-6">
+                        <input
+                            type="checkbox"
+                            name="payment_notification"
+                            {% if settings.payment_notification %}
+                                checked
+                            {% endif %}>
 
+                        <span class="slider"></span>
 
-                        <!-- Welcome Text -->
-
-                        <div>
-
-                            <label class="font-semibold text-gray-700">
-
-                                Homepage Welcome Text
-
-                            </label>
-
-                            <textarea
-                                name="welcome_text"
-                                rows="3"
-                                placeholder="Learn. Practice. Get Placed."
-                                class="input-field w-full mt-2
-                                       border border-gray-300
-                                       rounded-xl px-4 py-3">{{ settings.welcome_text or '' }}</textarea>
-
-                        </div>
-
-
-
-                        <!-- Social Links -->
-
-                        <div class="grid md:grid-cols-2 gap-6 mt-6">
-
-
-                            <div>
-
-                                <label class="font-semibold text-gray-700">
-
-                                    Facebook
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="facebook"
-                                    value="{{ settings.facebook or '' }}"
-                                    placeholder="Facebook profile URL"
-                                    class="input-field w-full mt-2
-                                           border border-gray-300
-                                           rounded-xl px-4 py-3">
-
-                            </div>
-
-
-                            <div>
-
-                                <label class="font-semibold text-gray-700">
-
-                                    Instagram
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="instagram"
-                                    value="{{ settings.instagram or '' }}"
-                                    placeholder="Instagram profile URL"
-                                    class="input-field w-full mt-2
-                                           border border-gray-300
-                                           rounded-xl px-4 py-3">
-
-                            </div>
-
-
-                            <div>
-
-                                <label class="font-semibold text-gray-700">
-
-                                    LinkedIn
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="linkedin"
-                                    value="{{ settings.linkedin or '' }}"
-                                    placeholder="LinkedIn profile URL"
-                                    class="input-field w-full mt-2
-                                           border border-gray-300
-                                           rounded-xl px-4 py-3">
-
-                            </div>
-
-
-                            <div>
-
-                                <label class="font-semibold text-gray-700">
-
-                                    YouTube
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="youtube"
-                                    value="{{ settings.youtube or '' }}"
-                                    placeholder="YouTube channel URL"
-                                    class="input-field w-full mt-2
-                                           border border-gray-300
-                                           rounded-xl px-4 py-3">
-
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
+                    </label>
 
                 </div>
 
 
 
-                <!-- ================================================= -->
-                <!-- NOTIFICATION SETTINGS -->
-                <!-- ================================================= -->
+                <!-- PLACEMENT -->
 
-                <div class="section-card bg-white rounded-2xl shadow-sm
-                            border border-gray-200 mb-8 overflow-hidden">
+                <div class="setting-row">
 
+                    <div>
 
-                    <div class="px-6 py-5 border-b bg-gradient-to-r
-                                from-amber-50 to-white">
+                        <div class="setting-name">
+                            💼 Placement Notification
+                        </div>
 
-                        <div class="flex items-center gap-3">
-
-                            <div class="w-11 h-11 bg-amber-100
-                                        text-amber-600 rounded-xl
-                                        flex items-center justify-center
-                                        text-xl">
-
-                                🔔
-
-                            </div>
-
-                            <div>
-
-                                <h2 class="text-xl font-bold text-gray-800">
-
-                                    Notification Settings
-
-                                </h2>
-
-                                <p class="text-sm text-gray-500">
-
-                                    Choose which important events should
-                                    generate notifications.
-
-                                </p>
-
-                            </div>
-
+                        <div class="setting-description">
+                            Notify when a student is placed.
                         </div>
 
                     </div>
 
 
+                    <label class="toggle">
 
-                    <div class="p-6 space-y-5">
+                        <input
+                            type="checkbox"
+                            name="placement_notification"
+                            {% if settings.placement_notification %}
+                                checked
+                            {% endif %}>
+
+                        <span class="slider"></span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+        </section>
 
 
-                        <!-- New Lead -->
 
-                        <div class="flex items-center justify-between
-                                    p-4 bg-gray-50 rounded-xl">
+        <!-- =================================================
+             STUDENT PORTAL
+        ================================================== -->
 
-                            <div>
+        <section class="settings-card">
 
-                                <h3 class="font-semibold text-gray-800">
+            <div class="settings-card-header">
 
-                                    New Lead Notification
+                <div class="section-icon icon-blue">
+                    🎓
+                </div>
 
-                                </h3>
+                <div>
 
-                                <p class="text-sm text-gray-500">
+                    <h2 class="section-title">
+                        Student Portal
+                    </h2>
 
-                                    Notify admin when a new enquiry is received.
+                    <p class="section-description">
+                        Control student access to the portal.
+                    </p>
 
-                                </p>
+                </div>
 
-                            </div>
+            </div>
 
-                            <label class="toggle">
 
-                                <input
-                                    type="checkbox"
-                                    name="new_lead_notification"
-                                    {% if settings.new_lead_notification %}
-                                        checked
-                                    {% endif %}>
+            <div class="settings-card-body space-y-4">
 
-                                <span class="slider"></span>
 
-                            </label>
+                <!-- REGISTRATION -->
 
+                <div class="setting-row">
+
+                    <div>
+
+                        <div class="setting-name">
+                            📝 Student Registration
                         </div>
 
-
-
-                        <!-- Admission -->
-
-                        <div class="flex items-center justify-between
-                                    p-4 bg-gray-50 rounded-xl">
-
-                            <div>
-
-                                <h3 class="font-semibold text-gray-800">
-
-                                    Admission Notification
-
-                                </h3>
-
-                                <p class="text-sm text-gray-500">
-
-                                    Notify when a student admission is completed.
-
-                                </p>
-
-                            </div>
-
-                            <label class="toggle">
-
-                                <input
-                                    type="checkbox"
-                                    name="admission_notification"
-                                    {% if settings.admission_notification %}
-                                        checked
-                                    {% endif %}>
-
-                                <span class="slider"></span>
-
-                            </label>
-
+                        <div class="setting-description">
+                            Allow new students to register.
                         </div>
-
-
-
-                        <!-- Payment -->
-
-                        <div class="flex items-center justify-between
-                                    p-4 bg-gray-50 rounded-xl">
-
-                            <div>
-
-                                <h3 class="font-semibold text-gray-800">
-
-                                    Payment Notification
-
-                                </h3>
-
-                                <p class="text-sm text-gray-500">
-
-                                    Notify admin whenever a payment is recorded.
-
-                                </p>
-
-                            </div>
-
-                            <label class="toggle">
-
-                                <input
-                                    type="checkbox"
-                                    name="payment_notification"
-                                    {% if settings.payment_notification %}
-                                        checked
-                                    {% endif %}>
-
-                                <span class="slider"></span>
-
-                            </label>
-
-                        </div>
-
-
-
-                        <!-- Placement -->
-
-                        <div class="flex items-center justify-between
-                                    p-4 bg-gray-50 rounded-xl">
-
-                            <div>
-
-                                <h3 class="font-semibold text-gray-800">
-
-                                    Placement Notification
-
-                                </h3>
-
-                                <p class="text-sm text-gray-500">
-
-                                    Notify when a student is placed.
-
-                                </p>
-
-                            </div>
-
-                            <label class="toggle">
-
-                                <input
-                                    type="checkbox"
-                                    name="placement_notification"
-                                    {% if settings.placement_notification %}
-                                        checked
-                                    {% endif %}>
-
-                                <span class="slider"></span>
-
-                            </label>
-
-                        </div>
-
 
                     </div>
+
+
+                    <label class="toggle">
+
+                        <input
+                            type="checkbox"
+                            name="student_registration"
+                            {% if settings.student_registration %}
+                                checked
+                            {% endif %}>
+
+                        <span class="slider"></span>
+
+                    </label>
 
                 </div>
 
 
 
-                <!-- ================================================= -->
-                <!-- STUDENT PORTAL SETTINGS -->
-                <!-- ================================================= -->
+                <!-- LOGIN -->
 
-                <div class="section-card bg-white rounded-2xl shadow-sm
-                            border border-gray-200 mb-8 overflow-hidden">
+                <div class="setting-row">
 
+                    <div>
 
-                    <div class="px-6 py-5 border-b bg-gradient-to-r
-                                from-blue-50 to-white">
+                        <div class="setting-name">
+                            🔐 Student Login
+                        </div>
 
-                        <div class="flex items-center gap-3">
-
-                            <div class="w-11 h-11 bg-blue-100
-                                        text-blue-600 rounded-xl
-                                        flex items-center justify-center
-                                        text-xl">
-
-                                🎓
-
-                            </div>
-
-                            <div>
-
-                                <h2 class="text-xl font-bold text-gray-800">
-
-                                    Student Portal
-
-                                </h2>
-
-                                <p class="text-sm text-gray-500">
-
-                                    Control student access to the portal.
-
-                                </p>
-
-                            </div>
-
+                        <div class="setting-description">
+                            Allow students to access their portal.
                         </div>
 
                     </div>
 
 
+                    <label class="toggle">
 
-                    <div class="p-6 space-y-5">
+                        <input
+                            type="checkbox"
+                            name="student_login"
+                            {% if settings.student_login %}
+                                checked
+                            {% endif %}>
 
+                        <span class="slider"></span>
 
-                        <!-- Registration -->
-
-                        <div class="flex items-center justify-between
-                                    p-4 bg-gray-50 rounded-xl">
-
-                            <div>
-
-                                <h3 class="font-semibold text-gray-800">
-
-                                    Student Registration
-
-                                </h3>
-
-                                <p class="text-sm text-gray-500">
-
-                                    Allow new students to register.
-
-                                </p>
-
-                            </div>
-
-                            <label class="toggle">
-
-                                <input
-                                    type="checkbox"
-                                    name="student_registration"
-                                    {% if settings.student_registration %}
-                                        checked
-                                    {% endif %}>
-
-                                <span class="slider"></span>
-
-                            </label>
-
-                        </div>
-
-
-
-                        <!-- Student Login -->
-
-                        <div class="flex items-center justify-between
-                                    p-4 bg-gray-50 rounded-xl">
-
-                            <div>
-
-                                <h3 class="font-semibold text-gray-800">
-
-                                    Student Login
-
-                                </h3>
-
-                                <p class="text-sm text-gray-500">
-
-                                    Allow students to access their portal.
-
-                                </p>
-
-                            </div>
-
-                            <label class="toggle">
-
-                                <input
-                                    type="checkbox"
-                                    name="student_login"
-                                    {% if settings.student_login %}
-                                        checked
-                                    {% endif %}>
-
-                                <span class="slider"></span>
-
-                            </label>
-
-                        </div>
-
-
-
-                        <!-- Maintenance -->
-
-                        <div class="flex items-center justify-between
-                                    p-4 bg-red-50 rounded-xl
-                                    border border-red-100">
-
-                            <div>
-
-                                <h3 class="font-semibold text-red-700">
-
-                                    Maintenance Mode
-
-                                </h3>
-
-                                <p class="text-sm text-red-500">
-
-                                    Temporarily disable access to the website.
-
-                                </p>
-
-                            </div>
-
-                            <label class="toggle">
-
-                                <input
-                                    type="checkbox"
-                                    name="maintenance_mode"
-                                    {% if settings.maintenance_mode %}
-                                        checked
-                                    {% endif %}>
-
-                                <span class="slider"></span>
-
-                            </label>
-
-                        </div>
-
-
-                    </div>
+                    </label>
 
                 </div>
 
 
 
-                <!-- ================================================= -->
-                <!-- SAVE BUTTON -->
-                <!-- ================================================= -->
+                <!-- MAINTENANCE -->
 
-                <div class="bg-white rounded-2xl shadow-sm
-                            border border-gray-200 p-6">
+                <div class="setting-row maintenance-row">
 
+                    <div>
 
-                    <div class="flex flex-col md:flex-row
-                                justify-between items-center gap-4">
-
-
-                        <div>
-
-                            <h3 class="font-bold text-gray-800">
-
-                                Save Changes
-
-                            </h3>
-
-                            <p class="text-sm text-gray-500">
-
-                                Changes will be applied across the institute portal.
-
-                            </p>
-
+                        <div class="setting-name text-red-700">
+                            ⚠️ Maintenance Mode
                         </div>
 
-
-                        <div class="flex gap-3">
-
-
-                            <button
-                                type="reset"
-                                class="px-6 py-3 rounded-xl
-                                       bg-gray-200 hover:bg-gray-300
-                                       text-gray-700 font-semibold">
-
-                                🔄 Reset
-
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                class="px-8 py-3 rounded-xl
-                                       bg-indigo-600 hover:bg-indigo-700
-                                       text-white font-semibold
-                                       shadow-lg">
-
-                                💾 Save Settings
-
-                            </button>
-
+                        <div class="setting-description text-red-500">
+                            Temporarily disable access to the website.
                         </div>
-
 
                     </div>
+
+
+                    <label class="toggle">
+
+                        <input
+                            type="checkbox"
+                            name="maintenance_mode"
+                            {% if settings.maintenance_mode %}
+                                checked
+                            {% endif %}>
+
+                        <span class="slider"></span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SAVE SETTINGS
+        ================================================== -->
+
+        <section class="save-card">
+
+            <div class="flex justify-between items-center gap-5">
+
+
+                <div>
+
+                    <div class="save-title">
+                        💾 Save Your Changes
+                    </div>
+
+                    <div class="save-description">
+                        Changes will be applied across the institute portal.
+                    </div>
+
+                </div>
+
+
+                <div class="save-buttons">
+
+
+                    <button
+                        type="reset"
+                        class="reset-button">
+
+                        🔄 Reset
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="save-button">
+
+                        💾 Save Settings
+
+                    </button>
 
 
                 </div>
 
 
-            </form>
+            </div>
+
+        </section>
 
 
-        </div>
+    </form>
 
 
-    </main>
+    <!-- FOOTER -->
+
+    <div class="text-center text-gray-500 text-xs py-5">
+
+        {{ settings.institute_name or "RR Institute" }}
+        • Administration Settings
+
+    </div>
 
 
 </div>
 
-</body>
 
-</html>
+{% endblock %}

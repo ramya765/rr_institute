@@ -1,843 +1,3189 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- remove batch , Gallery admins and batch  html course.description-->
-
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>RR Institute | Admin Dashboard</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<script src="https://cdn.tailwindcss.com"></script>
+    <title>RR IT Origin | Admin Dashboard</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Font -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+
+    <style>
+
+        /* ==========================================================
+           GLOBAL
+        ========================================================== */
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family: 'Inter', sans-serif;
+
+            background:
+                #071126;
+
+            color: white;
+
+            overflow-x: hidden;
+
+        }
+
+
+        /* ==========================================================
+           BACKGROUND
+        ========================================================== */
+
+        .page-background {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: -10;
+
+            background:
+
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(250,204,21,.12),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 85% 30%,
+                    rgba(99,102,241,.14),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 50% 90%,
+                    rgba(124,58,237,.10),
+                    transparent 35%
+                ),
+
+                #071126;
+
+        }
+
+
+        .background-grid {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: -9;
+
+            opacity: .08;
+
+            background-image:
+
+                linear-gradient(
+                    rgba(255,255,255,.15) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.15) 1px,
+                    transparent 1px
+                );
+
+            background-size: 60px 60px;
+
+            pointer-events: none;
+
+        }
+
+
+        /* ==========================================================
+           FLOATING LIGHTS
+        ========================================================== */
+
+        .floating-light {
+
+            position: fixed;
+
+            width: 250px;
+
+            height: 250px;
+
+            border-radius: 50%;
+
+            filter: blur(90px);
+
+            opacity: .12;
+
+            pointer-events: none;
+
+            z-index: -5;
+
+        }
+
+
+        .light-one {
+
+            background: #facc15;
+
+            top: 5%;
+
+            left: 15%;
+
+            animation: floatOne 8s ease-in-out infinite;
+
+        }
+
+
+        .light-two {
+
+            background: #6366f1;
+
+            right: 10%;
+
+            top: 35%;
+
+            animation: floatTwo 10s ease-in-out infinite;
+
+        }
+
+
+        .light-three {
+
+            background: #a855f7;
+
+            left: 45%;
+
+            bottom: 5%;
+
+            animation: floatThree 12s ease-in-out infinite;
+
+        }
+
+
+        @keyframes floatOne {
+
+            0%,100% {
+                transform: translate(0,0);
+            }
+
+            50% {
+                transform: translate(40px,30px);
+            }
+
+        }
+
+
+        @keyframes floatTwo {
+
+            0%,100% {
+                transform: translate(0,0);
+            }
+
+            50% {
+                transform: translate(-35px,45px);
+            }
+
+        }
+
+
+        @keyframes floatThree {
+
+            0%,100% {
+                transform: translate(0,0);
+            }
+
+            50% {
+                transform: translate(30px,-35px);
+            }
+
+        }
+
+
+        /* ==========================================================
+           SIDEBAR
+        ========================================================== */
+
+        .sidebar {
+
+            width: 275px;
+
+            min-height: 100vh;
+
+            position: fixed;
+
+            left: 0;
+
+            top: 0;
+
+            bottom: 0;
+
+            z-index: 50;
+
+            background:
+
+                linear-gradient(
+                    180deg,
+                    rgba(5,15,35,.97),
+                    rgba(4,12,29,.98)
+                );
+
+            border-right:
+                1px solid
+                rgba(255,255,255,.10);
+
+            backdrop-filter: blur(20px);
+
+            overflow-y: auto;
+
+        }
+
+
+        .sidebar-logo {
+
+            padding: 25px 20px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.10);
+
+        }
+
+
+        .logo-image {
+
+            width: 65px;
+
+            height: 65px;
+
+            object-fit: cover;
+
+            border-radius: 15px;
+
+            border:
+                2px solid
+                rgba(250,204,21,.55);
+
+            box-shadow:
+                0 0 30px
+                rgba(250,204,21,.12);
+
+            transition: .35s ease;
+
+        }
+
+
+        .logo-image:hover {
+
+            transform:
+                scale(1.06)
+                rotate(-2deg);
+
+            box-shadow:
+                0 0 35px
+                rgba(250,204,21,.25);
+
+        }
+
+
+        .logo-title {
+
+            font-family:
+                'Playfair Display',
+                serif;
+
+            color: #facc15;
+
+            font-size: 22px;
+
+            font-weight: 800;
+
+        }
+
+
+        .logo-subtitle {
+
+            font-size: 10px;
+
+            letter-spacing: 3px;
+
+            color: #94a3b8;
+
+            margin-top: 3px;
+
+        }
+
+
+        /* ==========================================================
+           SIDEBAR SECTION
+        ========================================================== */
+
+        .sidebar-section {
+
+            padding:
+                22px 18px 8px;
+
+            color: #64748b;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+        }
+
+
+        /* ==========================================================
+           SIDEBAR LINKS
+        ========================================================== */
+
+        .sidebar-link {
+
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            margin:
+                4px 12px;
+
+            padding:
+                12px 14px;
+
+            border-radius: 11px;
+
+            color: #cbd5e1;
+
+            font-size: 14px;
+
+            font-weight: 500;
+
+            text-decoration: none;
+
+            transition:
+                all .3s ease;
+
+        }
+
+
+        .sidebar-link span:first-child {
+
+            width: 25px;
+
+            text-align: center;
+
+            font-size: 17px;
+
+        }
+
+
+        .sidebar-link:hover {
+
+            color: white;
+
+            background:
+                rgba(250,204,21,.09);
+
+            transform:
+                translateX(5px);
+
+        }
+
+
+        .sidebar-link:hover span:first-child {
+
+            transform:
+                scale(1.15);
+
+        }
+
+
+        .sidebar-link.active {
+
+            color: #111827;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #facc15,
+                    #fbbf24
+                );
+
+            box-shadow:
+                0 10px 30px
+                rgba(250,204,21,.18);
+
+        }
+
+
+        .sidebar-link.active::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: -12px;
+
+            top: 8px;
+
+            bottom: 8px;
+
+            width: 4px;
+
+            border-radius: 0 5px 5px 0;
+
+            background: #facc15;
+
+        }
+
+
+        /* ==========================================================
+           LOGOUT
+        ========================================================== */
+
+        .logout-link {
+
+            color: #fca5a5;
+
+        }
+
+
+        .logout-link:hover {
+
+            background:
+                rgba(239,68,68,.12);
+
+            color: #fecaca;
+
+        }
+
+
+        /* ==========================================================
+           MAIN
+        ========================================================== */
+
+        .main-wrapper {
+
+            margin-left: 275px;
+
+            min-height: 100vh;
+
+        }
+
+
+        /* ==========================================================
+           TOP BAR
+        ========================================================== */
+
+        .topbar {
+
+            height: 82px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding:
+                0 35px;
+
+            background:
+                rgba(7,17,38,.82);
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.08);
+
+            backdrop-filter:
+                blur(20px);
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 40;
+
+        }
+
+
+        .topbar-title {
+
+            font-size: 14px;
+
+            color: #94a3b8;
+
+        }
+
+
+        .topbar-title strong {
+
+            color: #facc15;
+
+        }
+
+
+        .admin-profile {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+
+        .admin-avatar {
+
+            width: 42px;
+
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #facc15,
+                    #f59e0b
+                );
+
+            color: #111827;
+
+            font-weight: 800;
+
+            box-shadow:
+                0 8px 25px
+                rgba(250,204,21,.18);
+
+        }
+
+
+        .notification-button {
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #cbd5e1;
+
+            background:
+                rgba(255,255,255,.06);
+
+            border:
+                1px solid
+                rgba(255,255,255,.10);
+
+            transition: .3s ease;
+
+            text-decoration: none;
+
+        }
+
+
+        .notification-button:hover {
+
+            color: #facc15;
+
+            background:
+                rgba(250,204,21,.10);
+
+            transform:
+                translateY(-2px);
+
+        }
+
+
+        /* ==========================================================
+           CONTENT
+        ========================================================== */
+
+        .content {
+
+            padding:
+                35px;
+
+            max-width:
+                1600px;
+
+            margin:
+                0 auto;
+
+        }
+
+
+        /* ==========================================================
+           HERO
+        ========================================================== */
+
+        .hero {
+
+            position: relative;
+
+            overflow: hidden;
+
+            min-height: 300px;
+
+            border-radius: 28px;
+
+            padding:
+                42px;
+
+            display: flex;
+
+            align-items: center;
+
+            background:
+
+                linear-gradient(
+                    90deg,
+                    rgba(4,14,35,.97),
+                    rgba(7,17,38,.78),
+                    rgba(7,17,38,.55)
+                ),
+
+                url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1800&q=85");
+
+            background-size: cover;
+
+            background-position: center;
+
+            border:
+                1px solid
+                rgba(255,255,255,.12);
+
+            box-shadow:
+                0 25px 70px
+                rgba(0,0,0,.35);
+
+            animation:
+                heroIn .8s ease both;
+
+        }
+
+
+        @keyframes heroIn {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(20px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+
+            }
+
+        }
+
+
+        .hero::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 350px;
+
+            height: 350px;
+
+            right: -100px;
+
+            top: -120px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(250,204,21,.12);
+
+            filter:
+                blur(20px);
+
+        }
+
+
+        .hero-content {
+
+            position: relative;
+
+            z-index: 2;
+
+            max-width: 850px;
+
+        }
+
+
+        .hero-tag {
+
+            color: #facc15;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+        }
+
+
+        .hero-title {
+
+            font-family:
+                'Playfair Display',
+                serif;
+
+            font-size:
+                clamp(38px, 5vw, 68px);
+
+            line-height:
+                1.05;
+
+            font-weight: 800;
+
+            margin-top: 12px;
+
+        }
+
+
+        .hero-title span {
+
+            color: #facc15;
+
+        }
+
+
+        .hero-description {
+
+            color: #cbd5e1;
+
+            max-width: 700px;
+
+            line-height: 1.8;
+
+            margin-top: 18px;
+
+            font-size: 15px;
+
+        }
+
+
+        .hero-buttons {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 13px;
+
+            margin-top: 25px;
+
+        }
+
+
+        .hero-button {
+
+            padding:
+                12px 21px;
+
+            border-radius: 10px;
+
+            font-weight: 700;
+
+            text-decoration: none;
+
+            transition:
+                all .3s ease;
+
+        }
+
+
+        .gold-button {
+
+            color: #111827;
+
+            background: #facc15;
+
+            box-shadow:
+                0 12px 30px
+                rgba(250,204,21,.20);
+
+        }
+
+
+        .gold-button:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 18px 35px
+                rgba(250,204,21,.32);
+
+        }
+
+
+        .outline-button {
+
+            color: #facc15;
+
+            border:
+                1px solid
+                rgba(250,204,21,.65);
+
+            background:
+                rgba(250,204,21,.04);
+
+        }
+
+
+        .outline-button:hover {
+
+            background:
+                rgba(250,204,21,.10);
+
+            transform:
+                translateY(-3px);
+
+        }
+
+
+        /* ==========================================================
+           SECTION TITLE
+        ========================================================== */
+
+        .section-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-top: 35px;
+
+            margin-bottom: 17px;
+
+        }
+
+
+        .section-title {
+
+            font-family:
+                'Playfair Display',
+                serif;
+
+            font-size: 25px;
+
+            font-weight: 700;
+
+        }
+
+
+        .section-line {
+
+            height: 3px;
+
+            width: 55px;
+
+            margin-top: 7px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #facc15,
+                    transparent
+                );
+
+        }
+
+
+        /* ==========================================================
+           STATISTICS
+        ========================================================== */
+
+        .stats-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 18px;
+
+        }
+
+
+        .stat-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            padding: 23px;
+
+            min-height: 160px;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.09),
+                    rgba(255,255,255,.045)
+                );
+
+            border:
+                1px solid
+                rgba(255,255,255,.12);
+
+            backdrop-filter:
+                blur(18px);
+
+            transition:
+                all .4s ease;
+
+            animation:
+                cardIn .7s ease both;
+
+        }
+
+
+        .stat-card:nth-child(1) {
+            animation-delay: .1s;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: .2s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: .3s;
+        }
+
+        .stat-card:nth-child(4) {
+            animation-delay: .4s;
+        }
+
+
+        @keyframes cardIn {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(25px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+
+            }
+
+        }
+
+
+        .stat-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 120px;
+
+            height: 120px;
+
+            right: -40px;
+
+            top: -40px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(250,204,21,.08);
+
+            transition: .4s ease;
+
+        }
+
+
+        .stat-card:hover {
+
+            transform:
+                translateY(-8px);
+
+            border-color:
+                rgba(250,204,21,.40);
+
+            box-shadow:
+                0 20px 50px
+                rgba(0,0,0,.30);
+
+        }
+
+
+        .stat-card:hover::before {
+
+            transform:
+                scale(1.5);
+
+        }
+
+
+        .stat-top {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+        }
+
+
+        .stat-icon {
+
+            width: 48px;
+
+            height: 48px;
+
+            border-radius: 14px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 23px;
+
+            background:
+                rgba(250,204,21,.12);
+
+            border:
+                1px solid
+                rgba(250,204,21,.18);
+
+        }
+
+
+        .stat-label {
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+            font-weight: 500;
+
+        }
+
+
+        .stat-number {
+
+            font-size: 37px;
+
+            font-weight: 800;
+
+            margin-top: 12px;
+
+            color: #facc15;
+
+        }
+
+
+        .stat-footer {
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            margin-top: 4px;
+
+        }
+
+
+        /* ==========================================================
+           QUICK ACTIONS
+        ========================================================== */
+
+        .quick-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0,1fr));
+
+            gap: 15px;
+
+        }
+
+
+        .quick-action {
+
+            position: relative;
+
+            overflow: hidden;
+
+            padding: 20px;
+
+            border-radius: 16px;
+
+            text-decoration: none;
+
+            color: white;
+
+            border:
+                1px solid
+                rgba(255,255,255,.12);
+
+            background:
+                rgba(255,255,255,.055);
+
+            transition:
+                all .35s ease;
+
+        }
+
+
+        .quick-action:hover {
+
+            transform:
+                translateY(-6px);
+
+            border-color:
+                rgba(250,204,21,.40);
+
+            background:
+                rgba(250,204,21,.08);
+
+            box-shadow:
+                0 15px 35px
+                rgba(0,0,0,.25);
+
+        }
+
+
+        .quick-icon {
+
+            font-size: 28px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .quick-title {
+
+            font-weight: 700;
+
+        }
+
+
+        .quick-text {
+
+            color: #94a3b8;
+
+            font-size: 12px;
+
+            margin-top: 4px;
+
+        }
+
+
+        /* ==========================================================
+           MODULE CARDS
+        ========================================================== */
+
+        .modules-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0,1fr));
+
+            gap: 18px;
+
+        }
+
+
+        .module-card {
+
+            padding: 23px;
+
+            border-radius: 19px;
+
+            background:
+                rgba(255,255,255,.055);
+
+            border:
+                1px solid
+                rgba(255,255,255,.11);
+
+            transition:
+                all .35s ease;
+
+        }
+
+
+        .module-card:hover {
+
+            transform:
+                translateY(-6px);
+
+            background:
+                rgba(255,255,255,.085);
+
+            border-color:
+                rgba(250,204,21,.35);
+
+            box-shadow:
+                0 20px 45px
+                rgba(0,0,0,.25);
+
+        }
+
+
+        .module-icon {
+
+            width: 48px;
+
+            height: 48px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 13px;
+
+            font-size: 22px;
+
+            background:
+                rgba(250,204,21,.10);
+
+            margin-bottom: 16px;
+
+        }
+
+
+        .module-title {
+
+            font-size: 17px;
+
+            font-weight: 700;
+
+        }
+
+
+        .module-list {
+
+            margin-top: 13px;
+
+            display: grid;
+
+            gap: 8px;
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+        }
+
+
+        .module-list li {
+
+            list-style: none;
+
+        }
+
+
+        .module-list li::before {
+
+            content: "✓";
+
+            color: #facc15;
+
+            font-weight: 800;
+
+            margin-right: 8px;
+
+        }
+
+
+        /* ==========================================================
+           TABLE CONTAINER
+        ========================================================== */
+
+        .table-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0,1fr));
+
+            gap: 18px;
+
+        }
+
+
+        .table-card {
+
+            overflow: hidden;
+
+            border-radius: 20px;
+
+            background:
+                rgba(255,255,255,.055);
+
+            border:
+                1px solid
+                rgba(255,255,255,.11);
+
+            backdrop-filter:
+                blur(15px);
+
+        }
+
+
+        .table-header {
+
+            padding:
+                20px 22px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.09);
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+        }
+
+
+        .table-header h2 {
+
+            font-size: 18px;
+
+            font-weight: 700;
+
+        }
+
+
+        .table-view {
+
+            color: #facc15;
+
+            font-size: 12px;
+
+            text-decoration: none;
+
+        }
+
+
+        .table-view:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        .table-scroll {
+
+            overflow-x: auto;
+
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+        }
+
+
+        th {
+
+            text-align: left;
+
+            color: #64748b;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: .8px;
+
+            font-weight: 700;
+
+            padding:
+                14px 20px;
+
+            background:
+                rgba(0,0,0,.12);
+
+        }
+
+
+        td {
+
+            padding:
+                15px 20px;
+
+            color: #cbd5e1;
+
+            font-size: 13px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.06);
+
+        }
+
+
+        tbody tr {
+
+            transition: .25s ease;
+
+        }
+
+
+        tbody tr:hover {
+
+            background:
+                rgba(250,204,21,.045);
+
+        }
+
+
+        .student-name {
+
+            color: white;
+
+            font-weight: 600;
+
+        }
+
+
+        .status-badge {
+
+            display: inline-flex;
+
+            padding:
+                5px 10px;
+
+            border-radius: 30px;
+
+            background:
+                rgba(250,204,21,.10);
+
+            color: #facc15;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+        }
+
+
+        /* ==========================================================
+           PLACEMENT SUMMARY
+        ========================================================== */
+
+        .placement-summary {
+
+            padding: 28px;
+
+            border-radius: 22px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    rgba(250,204,21,.09),
+                    rgba(124,58,237,.08)
+                );
+
+            border:
+                1px solid
+                rgba(250,204,21,.16);
+
+        }
+
+
+        .placement-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4,1fr);
+
+            gap: 15px;
+
+        }
+
+
+        .placement-item {
+
+            padding: 18px;
+
+            border-radius: 15px;
+
+            background:
+                rgba(0,0,0,.15);
+
+            border:
+                1px solid
+                rgba(255,255,255,.07);
+
+            transition: .3s ease;
+
+        }
+
+
+        .placement-item:hover {
+
+            transform:
+                translateY(-4px);
+
+            border-color:
+                rgba(250,204,21,.30);
+
+        }
+
+
+        .placement-label {
+
+            color: #94a3b8;
+
+            font-size: 12px;
+
+        }
+
+
+        .placement-value {
+
+            color: #facc15;
+
+            font-size: 27px;
+
+            font-weight: 800;
+
+            margin-top: 7px;
+
+        }
+
+
+        /* ==========================================================
+           FOOTER
+        ========================================================== */
+
+        .footer {
+
+            margin-top: 45px;
+
+            padding:
+                25px 10px;
+
+            text-align: center;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.08);
+
+            color: #64748b;
+
+            font-size: 12px;
+
+        }
+
+
+        /* ==========================================================
+           MOBILE MENU
+        ========================================================== */
+
+        .mobile-menu-button {
+
+            display: none;
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 10px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.12);
+
+            background:
+                rgba(255,255,255,.06);
+
+            color: white;
+
+            cursor: pointer;
+
+        }
+
+
+        /* ==========================================================
+           RESPONSIVE
+        ========================================================== */
+
+        @media(max-width:1200px) {
+
+            .stats-grid {
+
+                grid-template-columns:
+                    repeat(2,1fr);
+
+            }
+
+            .quick-grid {
+
+                grid-template-columns:
+                    repeat(2,1fr);
+
+            }
+
+            .modules-grid {
+
+                grid-template-columns:
+                    repeat(2,1fr);
+
+            }
+
+            .placement-grid {
+
+                grid-template-columns:
+                    repeat(2,1fr);
+
+            }
+
+        }
+
+
+        @media(max-width:900px) {
+
+            .sidebar {
+
+                transform:
+                    translateX(-100%);
+
+                transition:
+                    transform .3s ease;
+
+            }
+
+
+            .sidebar.open {
+
+                transform:
+                    translateX(0);
+
+            }
+
+
+            .main-wrapper {
+
+                margin-left: 0;
+
+            }
+
+
+            .mobile-menu-button {
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: center;
+
+            }
+
+
+            .topbar {
+
+                padding:
+                    0 18px;
+
+            }
+
+
+            .content {
+
+                padding:
+                    20px;
+
+            }
+
+
+            .table-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+        }
+
+
+        @media(max-width:600px) {
+
+            .hero {
+
+                padding:
+                    28px 22px;
+
+                min-height: 350px;
+
+            }
+
+
+            .hero-title {
+
+                font-size: 38px;
+
+            }
+
+
+            .hero-description {
+
+                font-size: 13px;
+
+            }
+
+
+            .stats-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .quick-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .modules-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .placement-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .admin-profile > div:not(.admin-avatar) {
+
+                display: none;
+
+            }
+
+
+            .topbar-title {
+
+                display: none;
+
+            }
+
+        }
+
+    </style>
 
 </head>
 
-<body class="bg-gray-100">
 
-<div class="flex min-h-screen">
+<body>
 
-<!-- ===================== SIDEBAR ===================== -->
 
-<aside class="w-72 bg-indigo-900 text-white">
+<!-- ==========================================================
+     BACKGROUND
+========================================================== -->
 
-<div class="p-6 border-b border-indigo-700 text-center">
+<div class="page-background"></div>
 
-    <img 
-        src="{{ url_for('static', filename='images/logo.jpeg') }}"
-        alt="RR Institute Logo"
-        class="w-24 h-24 mx-auto rounded-full object-cover mb-3"
+<div class="background-grid"></div>
+
+<div class="floating-light light-one"></div>
+
+<div class="floating-light light-two"></div>
+
+<div class="floating-light light-three"></div>
+
+
+<!-- ==========================================================
+     SIDEBAR
+========================================================== -->
+
+<aside id="sidebar" class="sidebar">
+
+    <!-- LOGO -->
+
+    <div class="sidebar-logo">
+
+        <div class="flex items-center gap-3">
+
+            <img
+                src="{{ url_for('static', filename='images/logo.jpeg') }}"
+                alt="RR Institute Logo"
+                class="logo-image"
+            >
+
+            <div>
+
+                <div class="logo-title">
+                    RR IT Origin
+                </div>
+
+                <div class="logo-subtitle">
+                    ADMIN PANEL
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN MENU -->
+
+    <div class="sidebar-section">
+        Main Menu
+    </div>
+
+
+    <nav>
+
+        <a
+            href="{{ url_for('admin.dashboard') }}"
+            class="sidebar-link active"
+        >
+
+            <span>🏠</span>
+
+            <span>Dashboard</span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.students') }}"
+            class="sidebar-link"
+        >
+
+            <span>👨‍🎓</span>
+
+            <span>Students</span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.courses') }}"
+            class="sidebar-link"
+        >
+
+            <span>📚</span>
+
+            <span>Courses</span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.faculty') }}"
+            class="sidebar-link"
+        >
+
+            <span>👨‍🏫</span>
+
+            <span>Faculty</span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.study_materials') }}"
+            class="sidebar-link"
+        >
+
+            <span>📂</span>
+
+            <span>Study Materials</span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.companies') }}"
+            class="sidebar-link"
+        >
+
+            <span>🏢</span>
+
+            <span>Companies</span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.placements') }}"
+            class="sidebar-link"
+        >
+
+            <span>💼</span>
+
+            <span>Placements</span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.leads') }}"
+            class="sidebar-link"
+        >
+
+            <span>🎯</span>
+
+            <span>Leads</span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.enquiries') }}"
+            class="sidebar-link"
+        >
+
+            <span>📝</span>
+
+            <span>Enquiries</span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.testimonials') }}"
+            class="sidebar-link"
+        >
+
+            <span>⭐</span>
+
+            <span>Testimonials</span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.notifications') }}"
+            class="sidebar-link"
+        >
+
+            <span>🔔</span>
+
+            <span>Notifications</span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.settings') }}"
+            class="sidebar-link"
+        >
+
+            <span>⚙️</span>
+
+            <span>Settings</span>
+
+        </a>
+
+    </nav>
+
+
+    <!-- ACCOUNT -->
+
+    <div class="sidebar-section">
+        Account
+    </div>
+
+
+    <a
+        href="{{ url_for('auth.logout') }}"
+        class="sidebar-link logout-link"
     >
 
-    <h1 class="text-3xl font-bold">
+        <span>🚪</span>
 
-        RR Institute
+        <span>Logout</span>
 
-    </h1>
+    </a>
 
-    
-
-</div>
-
-<nav class="mt-5">
-
-<a href="{{ url_for('admin.dashboard') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
-
-📊 Dashboard
-
-</a>
-
-<a href="{{ url_for('admin.courses') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
-
-📚 Courses
-
-</a>
-
-<a href="{{ url_for('admin.students') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
-
-👨‍🎓 Students
-
-</a>
-<a href="{{ url_for('admin.leads') }}"
-   class="block px-6 py-3 hover:bg-indigo-700">
-
-    🎯 Leads
-
-</a>
-
-
-<a href="{{ url_for('admin.faculty') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
-
-👨‍🏫 Faculty
-
-</a>
-<a href="{{ url_for('admin.study_materials') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
-
-📂 Study Materials
-
-</a>
-
-<a href="{{ url_for('admin.enquiries') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
-
-📝 Enquiries
-
-</a>
-
-<a href="{{ url_for('admin.companies') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
-
-🏢 Companies
-
-</a>
-
-<a href="{{ url_for('admin.placements') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
-
-💼 Placements
-
-</a>
-
-
-
-<a href="{{ url_for('admin.testimonials') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
-
-⭐ Testimonials
-
-</a>
-
-<a href="{{ url_for('admin.notifications') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
-
-📢 Notifications
-
-</a>
-
-<a href="{{ url_for('admin.settings') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
-
-⚙ Settings
-
-</a>
-
-<a href="{{ url_for('auth.logout') }}"
-class="block mt-10 mx-4 bg-red-600 text-center rounded-lg py-3 hover:bg-red-700">
-
-Logout
-
-</a>
-
-</nav>
 
 </aside>
 
-<!-- ===================== MAIN CONTENT ===================== -->
 
-<div class="flex-1">
+<!-- ==========================================================
+     MAIN WRAPPER
+========================================================== -->
 
-<!-- Top Navbar -->
+<div class="main-wrapper">
 
-<div class="bg-white shadow flex justify-between items-center px-8 py-5">
 
-<div>
+    <!-- ======================================================
+         TOP NAVBAR
+    ======================================================= -->
 
-<h2 class="text-3xl font-bold text-gray-800">
+    <header class="topbar">
 
-Welcome Admin 👋
+        <div class="flex items-center gap-4">
 
-</h2>
+            <button
+                onclick="toggleSidebar()"
+                class="mobile-menu-button"
+            >
+                ☰
+            </button>
 
-<p class="text-gray-500 mt-1">
 
-Manage your institute efficiently.
+            <div class="topbar-title">
 
-</p>
+                RR IT Origin
+                <span class="mx-2">•</span>
+                <strong>Admin Dashboard</strong>
 
-</div>
-
-<div class="text-right">
-
-<h3 class="font-bold">
-
-{{ admin_name }}
-
-</h3>
-
-<p class="text-sm text-gray-500">
-
-{{ current_date }}
-
-</p>
-
-</div>
-
-</div>
-
-<!-- Main Body -->
-
-<div class="p-8">
-
-<!-- Dashboard Statistics -->
-
-<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-<!-- Students -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-<p class="text-gray-500">
-
-Total Students
-
-</p>
-
-<h2 class="text-4xl font-bold text-indigo-600 mt-3">
-
-{{ total_students }}
-
-</h2>
-
-<p class="text-green-600 mt-2">
-
-Active Admissions
-
-</p>
-
-</div>
-
-<!-- Courses -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-<p class="text-gray-500">
-
-Courses
-
-</p>
-
-<h2 class="text-4xl font-bold text-green-600 mt-3">
-
-{{ total_courses }}
-
-</h2>
-
-<p class="text-green-600 mt-2">
-
-Available Courses
-
-</p>
-
-</div>
-
-<!-- Companies -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-<p class="text-gray-500">
-
-Hiring Companies
-
-</p>
-
-<h2 class="text-4xl font-bold text-blue-600 mt-3">
-
-{{ total_companies }}
-
-</h2>
-
-<p class="text-green-600 mt-2">
-
-Placement Partners
-
-</p>
-
-</div>
-
-<!-- Placements -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-<p class="text-gray-500">
-
-Placed Students
-
-</p>
-
-<h2 class="text-4xl font-bold text-red-600 mt-3">
-
-{{ total_placements }}
-
-</h2>
-
-<p class="text-green-600 mt-2">
-
-Successful Placements
-
-</p>
-
-</div>
-
-</div>
-<!-- ===================== QUICK ACTIONS ===================== -->
-
-<div class="bg-white rounded-xl shadow mt-8 p-6">
-
-<h2 class="text-2xl font-bold">
-
-Quick Actions
-
-</h2>
-
-<div class="grid md:grid-cols-4 gap-5 mt-6">
-
-<a href="{{ url_for('admin.add_student') }}"
-class="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg p-5 text-center">
-
-➕ Add Student
-
-</a>
-
-<a href="{{ url_for('admin.add_course') }}"
-class="bg-green-600 hover:bg-green-700 text-white rounded-lg p-5 text-center">
-
-📚 Add Course
-
-</a>
-
-<a href="{{ url_for('admin.add_company') }}"
-class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-5 text-center">
-
-🏢 Add Company
-
-</a>
-
-<a href="{{ url_for('admin.placements') }}"
-class="bg-red-600 hover:bg-red-700 text-white rounded-lg p-5 text-center">
-
-💼 Add Placement
-
-</a>
-
-</div>
-
-</div>
-
-<!-- ===================== MANAGEMENT MODULES ===================== -->
-
-<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-
-<!-- Student -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-<h2 class="text-xl font-bold">
-
-👨‍🎓 Student Management
-
-</h2>
-
-<ul class="mt-4 space-y-2 text-gray-600">
-
-<li>✔ Add Student</li>
-<li>✔ Edit Student</li>
-<li>✔ Delete Student</li>
-<li>✔ Search Student</li>
-<li>✔ Admission Details</li>
-
-</ul>
-
-</div>
-
-<!-- Courses -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-<h2 class="text-xl font-bold">
-
-📚 Course Management
-
-</h2>
-
-<ul class="mt-4 space-y-2 text-gray-600">
-
-<li>✔ Add Course</li>
-<li>✔ Edit Course</li>
-<li>✔ Delete Course</li>
-<li>✔ Upload Course Image</li>
-<li>✔ Course Pricing</li>
-
-</ul>
-
-</div>
-
-<!-- Placements -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-<h2 class="text-xl font-bold">
-
-💼 Placement Management
-
-</h2>
-
-<ul class="mt-4 space-y-2 text-gray-600">
-
-<li>✔ Add Placement</li>
-<li>✔ Offer Letter</li>
-<li>✔ Placement Status</li>
-<li>✔ Package Details</li>
-<li>✔ Company Mapping</li>
-
-</ul>
-
-</div>
-
-<!-- Companies -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-<h2 class="text-xl font-bold">
-
-🏢 Company Management
-
-</h2>
-
-<ul class="mt-4 space-y-2 text-gray-600">
-
-<li>✔ Add Company</li>
-<li>✔ Edit Company</li>
-<li>✔ Upload Logo</li>
-<li>✔ Hiring Status</li>
-<li>✔ Company Profile</li>
-
-</ul>
-
-</div>
-
-<!-- Faculty -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-<h2 class="text-xl font-bold">
-
-👨‍🏫 Faculty Management
-
-</h2>
-
-<ul class="mt-4 space-y-2 text-gray-600">
-
-<li>✔ Add Faculty</li>
-<li>✔ Assign Course</li>
-<li>✔ Batch Allocation</li>
-<li>✔ Contact Details</li>
-<li>✔ Active Status</li>
-
-</ul>
-
-</div>
-
-<!-- Batches -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-<h2 class="text-xl font-bold">
-
-📅 Batch Management
-
-</h2>
-
-<ul class="mt-4 space-y-2 text-gray-600">
-
-<li>✔ Morning Batch</li>
-<li>✔ Evening Batch</li>
-<li>✔ Assign Trainer</li>
-<li>✔ Assign Students</li>
-<li>✔ Batch Schedule</li>
-
-</ul>
-
-</div>
-
-<!-- Gallery -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-<h2 class="text-xl font-bold">
-
-🖼 Gallery
-
-</h2>
-
-<ul class="mt-4 space-y-2 text-gray-600">
-
-<li>✔ Upload Photos</li>
-<li>✔ Upload Videos</li>
-<li>✔ Delete Media</li>
-
-</ul>
-
-</div>
-
-<!-- Testimonials -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-<h2 class="text-xl font-bold">
-
-⭐ Testimonials
-
-</h2>
-
-<ul class="mt-4 space-y-2 text-gray-600">
-
-<li>✔ Add Review</li>
-<li>✔ Edit Review</li>
-<li>✔ Delete Review</li>
-
-</ul>
-
-</div>
-
-<!-- Notifications -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-<h2 class="text-xl font-bold">
-
-📢 Notifications
-
-</h2>
-
-<ul class="mt-4 space-y-2 text-gray-600">
-
-<li>✔ Send Notice</li>
-<li>✔ Website Alert</li>
-<li>✔ Student Notification</li>
-
-</ul>
-
-</div>
-
-<!-- Enquiries -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-<h2 class="text-xl font-bold">
-
-📝 Enquiry Management
-
-</h2>
-
-<ul class="mt-4 space-y-2 text-gray-600">
-
-<li>✔ Website Enquiries</li>
-<li>✔ WhatsApp Enquiries</li>
-<li>✔ Follow Up</li>
-
-</ul>
-
-</div>
-
-
-</div>
-<!-- ===================== RECENT STUDENTS & ENQUIRIES ===================== -->
-
-<div class="grid lg:grid-cols-2 gap-8 mt-10">
-
-    <!-- Recent Students -->
-
-    <div class="bg-white rounded-xl shadow">
-
-        <div class="border-b px-6 py-4">
-
-            <h2 class="text-2xl font-bold">
-
-                👨‍🎓 Recent Students
-
-            </h2>
+            </div>
 
         </div>
 
-        <div class="overflow-x-auto">
 
-            <table class="w-full">
+        <div class="flex items-center gap-4">
 
-                <thead class="bg-gray-100">
 
-                    <tr>
+            <!-- NOTIFICATION -->
 
-                        <th class="p-4 text-left">Student</th>
-                        <th class="p-4 text-left">Course</th>
-                        <th class="p-4 text-left">Batch</th>
+            <a
+                href="{{ url_for('admin.notifications') }}"
+                class="notification-button"
+                title="Notifications"
+            >
 
-                    </tr>
+                🔔
 
-                </thead>
+            </a>
 
-                <tbody>
 
-                {% for student in recent_students %}
+            <!-- ADMIN -->
 
-                    <tr class="border-t hover:bg-gray-50">
+            <div class="admin-profile">
 
-                        <td class="p-4">
+                <div class="text-right">
 
-                            {{ student.name }}
+                    <p class="text-xs text-gray-500">
+                        Welcome back
+                    </p>
 
-                        </td>
+                    <p class="font-semibold text-white text-sm">
+                        {{ admin_name }}
+                    </p>
 
-                        <td class="p-4">
+                </div>
 
-                            {{ student.course }}
 
-                        </td>
+                <div class="admin-avatar">
 
-                        <td class="p-4">
+                    👤
 
-                            {{ student.batch }}
+                </div>
 
-                        </td>
-
-                    </tr>
-
-                {% else %}
-
-                    <tr>
-
-                        <td colspan="3"
-                            class="text-center text-gray-500 p-6">
-
-                            No Students Found
-
-                        </td>
-
-                    </tr>
-
-                {% endfor %}
-
-                </tbody>
-
-            </table>
+            </div>
 
         </div>
 
-    </div>
+    </header>
 
 
+    <!-- ======================================================
+         MAIN CONTENT
+    ======================================================= -->
 
-    <!-- Recent Enquiries -->
+    <main class="content">
 
-    <div class="bg-white rounded-xl shadow">
 
-        <div class="border-b px-6 py-4">
+        <!-- ==================================================
+             HERO
+        =================================================== -->
 
-            <h2 class="text-2xl font-bold">
+        <section class="hero">
 
-                📝 Recent Enquiries
+            <div class="hero-content">
 
-            </h2>
+                <div class="hero-tag">
 
-        </div>
+                    RR IT ORIGIN • ADMINISTRATION
 
-        <div class="overflow-x-auto">
+                </div>
 
-            <table class="w-full">
 
-                <thead class="bg-gray-100">
+                <h1 class="hero-title">
 
-                    <tr>
+                    Build a better
+                    <span>student future.</span>
 
-                        <th class="p-4 text-left">
+                </h1>
 
-                            Name
 
-                        </th>
+                <p class="hero-description">
 
-                        <th class="p-4 text-left">
+                    Manage students, courses, faculty, companies,
+                    placements and institute operations from one
+                    powerful dashboard.
 
-                            Course
+                </p>
 
-                        </th>
 
-                        <th class="p-4 text-left">
+                <div class="hero-buttons">
 
-                            Status
+                    <a
+                        href="{{ url_for('admin.add_student') }}"
+                        class="hero-button gold-button"
+                    >
 
-                        </th>
+                        + Add Student
 
-                    </tr>
+                    </a>
 
-                </thead>
 
-                <tbody>
+                    <a
+                        href="{{ url_for('admin.notifications') }}"
+                        class="hero-button outline-button"
+                    >
 
-                {% for enquiry in recent_enquiries %}
+                        View Notifications →
 
-                    <tr class="border-t hover:bg-gray-50">
+                    </a>
 
-                        <td class="p-4">
+                </div>
 
-                            {{ enquiry.name }}
+            </div>
 
-                        </td>
+        </section>
 
-                        <td class="p-4">
 
-                            {{ enquiry.course }}
+        <!-- ==================================================
+             STATISTICS
+        =================================================== -->
 
-                        </td>
+        <div class="section-header">
 
-                        <td class="p-4">
+            <div>
 
-                            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">
+                <div class="section-title">
+                    Institute Overview
+                </div>
 
-                                {{ enquiry.status }}
+                <div class="section-line"></div>
 
-                            </span>
-
-                        </td>
-
-                    </tr>
-
-                {% else %}
-
-                    <tr>
-
-                        <td colspan="3"
-                            class="text-center text-gray-500 p-6">
-
-                            No Enquiries
-
-                        </td>
-
-                    </tr>
-
-                {% endfor %}
-
-                </tbody>
-
-            </table>
+            </div>
 
         </div>
 
-    </div>
 
-</div>
-
+        <section class="stats-grid">
 
 
-<!-- ===================== PLACEMENT SUMMARY ===================== -->
+            <!-- STUDENTS -->
 
-<div class="bg-white rounded-xl shadow mt-10 p-8">
+            <div class="stat-card">
 
-    <h2 class="text-2xl font-bold mb-6">
+                <div class="stat-top">
 
-        💼 Placement Summary
+                    <div>
 
-    </h2>
+                        <div class="stat-label">
+                            Total Students
+                        </div>
 
-    <div class="grid md:grid-cols-4 gap-6">
+                        <div class="stat-number">
+                            {{ total_students }}
+                        </div>
 
-        <div>
+                    </div>
 
-            <p class="text-gray-500">
 
-                Highest Package
+                    <div class="stat-icon">
+                        👨‍🎓
+                    </div>
+
+                </div>
+
+
+                <div class="stat-footer">
+                    Active admissions
+                </div>
+
+            </div>
+
+
+            <!-- COURSES -->
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div>
+
+                        <div class="stat-label">
+                            Available Courses
+                        </div>
+
+                        <div class="stat-number">
+                            {{ total_courses }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-icon">
+                        📚
+                    </div>
+
+                </div>
+
+
+                <div class="stat-footer">
+                    Training programs
+                </div>
+
+            </div>
+
+
+            <!-- COMPANIES -->
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div>
+
+                        <div class="stat-label">
+                            Hiring Companies
+                        </div>
+
+                        <div class="stat-number">
+                            {{ total_companies }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-icon">
+                        🏢
+                    </div>
+
+                </div>
+
+
+                <div class="stat-footer">
+                    Placement partners
+                </div>
+
+            </div>
+
+
+            <!-- PLACEMENTS -->
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div>
+
+                        <div class="stat-label">
+                            Placed Students
+                        </div>
+
+                        <div class="stat-number">
+                            {{ total_placements }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-icon">
+                        💼
+                    </div>
+
+                </div>
+
+
+                <div class="stat-footer">
+                    Successful placements
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ==================================================
+             QUICK ACTIONS
+        =================================================== -->
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-title">
+                    Quick Actions
+                </div>
+
+                <div class="section-line"></div>
+
+            </div>
+
+        </div>
+
+
+        <section class="quick-grid">
+
+
+            <a
+                href="{{ url_for('admin.add_student') }}"
+                class="quick-action"
+            >
+
+                <div class="quick-icon">
+                    👨‍🎓
+                </div>
+
+                <div class="quick-title">
+                    Add Student
+                </div>
+
+                <div class="quick-text">
+                    Register a new student
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('admin.add_course') }}"
+                class="quick-action"
+            >
+
+                <div class="quick-icon">
+                    📚
+                </div>
+
+                <div class="quick-title">
+                    Add Course
+                </div>
+
+                <div class="quick-text">
+                    Create training program
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('admin.add_company') }}"
+                class="quick-action"
+            >
+
+                <div class="quick-icon">
+                    🏢
+                </div>
+
+                <div class="quick-title">
+                    Add Company
+                </div>
+
+                <div class="quick-text">
+                    Add placement partner
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('admin.placements') }}"
+                class="quick-action"
+            >
+
+                <div class="quick-icon">
+                    💼
+                </div>
+
+                <div class="quick-title">
+                    Placements
+                </div>
+
+                <div class="quick-text">
+                    Manage student placements
+                </div>
+
+            </a>
+
+
+        </section>
+
+
+        <!-- ==================================================
+             MANAGEMENT MODULES
+        =================================================== -->
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-title">
+                    Management Modules
+                </div>
+
+                <div class="section-line"></div>
+
+            </div>
+
+        </div>
+
+
+        <section class="modules-grid">
+
+
+            <!-- STUDENTS -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    👨‍🎓
+                </div>
+
+                <div class="module-title">
+                    Student Management
+                </div>
+
+                <ul class="module-list">
+
+                    <li>Add Student</li>
+                    <li>Edit Student</li>
+                    <li>Delete Student</li>
+                    <li>Search Student</li>
+                    <li>Admission Details</li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- COURSES -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    📚
+                </div>
+
+                <div class="module-title">
+                    Course Management
+                </div>
+
+                <ul class="module-list">
+
+                    <li>Add Course</li>
+                    <li>Edit Course</li>
+                    <li>Delete Course</li>
+                    <li>Course Images</li>
+                    <li>Course Pricing</li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- PLACEMENTS -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    💼
+                </div>
+
+                <div class="module-title">
+                    Placement Management
+                </div>
+
+                <ul class="module-list">
+
+                    <li>Add Placement</li>
+                    <li>Offer Letter</li>
+                    <li>Placement Status</li>
+                    <li>Package Details</li>
+                    <li>Company Mapping</li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- COMPANIES -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    🏢
+                </div>
+
+                <div class="module-title">
+                    Company Management
+                </div>
+
+                <ul class="module-list">
+
+                    <li>Add Company</li>
+                    <li>Edit Company</li>
+                    <li>Company Logo</li>
+                    <li>Hiring Status</li>
+                    <li>Company Profile</li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- FACULTY -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    👨‍🏫
+                </div>
+
+                <div class="module-title">
+                    Faculty Management
+                </div>
+
+                <ul class="module-list">
+
+                    <li>Add Faculty</li>
+                    <li>Assign Course</li>
+                    <li>Batch Allocation</li>
+                    <li>Contact Details</li>
+                    <li>Active Status</li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- STUDY MATERIAL -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    📂
+                </div>
+
+                <div class="module-title">
+                    Study Materials
+                </div>
+
+                <ul class="module-list">
+
+                    <li>Upload Materials</li>
+                    <li>Course Mapping</li>
+                    <li>PDF Resources</li>
+                    <li>Student Access</li>
+                    <li>Download Management</li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- TESTIMONIALS -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    ⭐
+                </div>
+
+                <div class="module-title">
+                    Testimonials
+                </div>
+
+                <ul class="module-list">
+
+                    <li>Add Review</li>
+                    <li>Edit Review</li>
+                    <li>Delete Review</li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- NOTIFICATIONS -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    🔔
+                </div>
+
+                <div class="module-title">
+                    Notifications
+                </div>
+
+                <ul class="module-list">
+
+                    <li>Send Notice</li>
+                    <li>Student Notification</li>
+                    <li>Payment Alerts</li>
+                    <li>Admission Alerts</li>
+                    <li>Placement Alerts</li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- ENQUIRIES -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    📝
+                </div>
+
+                <div class="module-title">
+                    Enquiry Management
+                </div>
+
+                <ul class="module-list">
+
+                    <li>Website Enquiries</li>
+                    <li>WhatsApp Enquiries</li>
+                    <li>Lead Follow-up</li>
+
+                </ul>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ==================================================
+             RECENT DATA
+        =================================================== -->
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-title">
+                    Recent Activity
+                </div>
+
+                <div class="section-line"></div>
+
+            </div>
+
+        </div>
+
+
+        <section class="table-grid">
+
+
+            <!-- =================================================
+                 RECENT STUDENTS
+            ================================================== -->
+
+            <div class="table-card">
+
+                <div class="table-header">
+
+                    <h2>
+                        👨‍🎓 Recent Students
+                    </h2>
+
+                    <a
+                        href="{{ url_for('admin.students') }}"
+                        class="table-view"
+                    >
+                        View All →
+                    </a>
+
+                </div>
+
+
+                <div class="table-scroll">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Student
+                                </th>
+
+                                <th>
+                                    Course
+                                </th>
+
+                                <th>
+                                    Batch
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        {% for student in recent_students %}
+
+                            <tr>
+
+                                <td>
+
+                                    <span class="student-name">
+
+                                        {{ student.name }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ student.course }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ student.batch }}
+
+                                </td>
+
+                            </tr>
+
+
+                        {% else %}
+
+                            <tr>
+
+                                <td
+                                    colspan="3"
+                                    class="text-center"
+                                >
+
+                                    No Students Found
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 RECENT ENQUIRIES
+            ================================================== -->
+
+            <div class="table-card">
+
+                <div class="table-header">
+
+                    <h2>
+                        📝 Recent Enquiries
+                    </h2>
+
+                    <a
+                        href="{{ url_for('admin.enquiries') }}"
+                        class="table-view"
+                    >
+                        View All →
+                    </a>
+
+                </div>
+
+
+                <div class="table-scroll">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Name
+                                </th>
+
+                                <th>
+                                    Course
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        {% for enquiry in recent_enquiries %}
+
+                            <tr>
+
+                                <td>
+
+                                    <span class="student-name">
+
+                                        {{ enquiry.name }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ enquiry.course }}
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="status-badge">
+
+                                        {{ enquiry.status }}
+
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+
+                        {% else %}
+
+                            <tr>
+
+                                <td
+                                    colspan="3"
+                                    class="text-center"
+                                >
+
+                                    No Enquiries
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ==================================================
+             PLACEMENT SUMMARY
+        =================================================== -->
+
+        <section class="placement-summary mt-8">
+
+
+            <div class="flex items-center justify-between mb-6">
+
+                <div>
+
+                    <div class="section-title">
+                        💼 Placement Performance
+                    </div>
+
+                    <p class="text-gray-400 text-sm mt-2">
+
+                        Overview of your institute's placement
+                        performance.
+
+                    </p>
+
+                </div>
+
+
+                <div class="text-3xl">
+                    📈
+                </div>
+
+            </div>
+
+
+            <div class="placement-grid">
+
+
+                <!-- HIGHEST PACKAGE -->
+
+                <div class="placement-item">
+
+                    <div class="placement-label">
+                        Highest Package
+                    </div>
+
+                    <div class="placement-value">
+
+                        ₹{{ highest_package }} LPA
+
+                    </div>
+
+                </div>
+
+
+                <!-- AVERAGE PACKAGE -->
+
+                <div class="placement-item">
+
+                    <div class="placement-label">
+                        Average Package
+                    </div>
+
+                    <div class="placement-value">
+
+                        ₹{{ average_package }} LPA
+
+                    </div>
+
+                </div>
+
+
+                <!-- HIRING COMPANIES -->
+
+                <div class="placement-item">
+
+                    <div class="placement-label">
+                        Hiring Companies
+                    </div>
+
+                    <div class="placement-value">
+
+                        {{ hiring_companies }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- PLACEMENT RATE -->
+
+                <div class="placement-item">
+
+                    <div class="placement-label">
+                        Placement Rate
+                    </div>
+
+                    <div class="placement-value">
+
+                        {{ placement_percentage }}%
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             FOOTER
+        =================================================== -->
+
+        <footer class="footer">
+
+            <p>
+                © {{ current_year }} RR Institute Management System
+            </p>
+
+            <p class="mt-2">
+
+                Learn
+                <span class="text-yellow-400">•</span>
+                Grow
+                <span class="text-yellow-400">•</span>
+                Succeed
 
             </p>
 
-            <h2 class="text-3xl font-bold text-green-600 mt-2">
+            <p class="mt-2 text-gray-600">
 
-                ₹{{ highest_package }} LPA
-
-            </h2>
-
-        </div>
-
-        <div>
-
-            <p class="text-gray-500">
-
-                Average Package
+                Developed using Flask • SQLAlchemy • Tailwind CSS
 
             </p>
 
-            <h2 class="text-3xl font-bold text-indigo-600 mt-2">
+        </footer>
 
-                ₹{{ average_package }} LPA
 
-            </h2>
-
-        </div>
-
-        <div>
-
-            <p class="text-gray-500">
-
-                Hiring Companies
-
-            </p>
-
-            <h2 class="text-3xl font-bold text-blue-600 mt-2">
-
-                {{ hiring_companies }}
-
-            </h2>
-
-        </div>
-
-        <div>
-
-            <p class="text-gray-500">
-
-                Placement Rate
-
-            </p>
-
-            <h2 class="text-3xl font-bold text-red-600 mt-2">
-
-                {{ placement_percentage }}%
-
-            </h2>
-
-        </div>
-
-    </div>
+    </main>
 
 </div>
 
 
+<!-- ==========================================================
+     MOBILE SIDEBAR SCRIPT
+========================================================== -->
 
-<!-- ===================== FOOTER ===================== -->
+<script>
 
-<div class="mt-12 text-center text-gray-500">
+    function toggleSidebar() {
 
-    <p>
+        const sidebar =
+            document.getElementById("sidebar");
 
-        © {{ current_year }} RR Institute Management System
+        sidebar.classList.toggle("open");
 
-    </p>
+    }
 
-    <p class="mt-2">
 
-        Developed using Flask • SQLAlchemy • Tailwind CSS
+    /* Close sidebar after clicking a link on mobile */
 
-    </p>
+    document
+        .querySelectorAll(".sidebar-link")
+        .forEach(function(link) {
 
-</div>
+            link.addEventListener(
+                "click",
+                function() {
 
-</div>
+                    if (
+                        window.innerWidth <= 900
+                    ) {
 
-</div>
+                        document
+                            .getElementById("sidebar")
+                            .classList.remove("open");
 
-</div>
+                    }
+
+                }
+            );
+
+        });
+
+</script>
+
 
 </body>
 

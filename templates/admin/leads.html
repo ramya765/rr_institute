@@ -1,113 +1,1123 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "admin/layout.html" %}
 
-<head>
+{% block content %}
 
-    <title>Lead Management</title>
+<style>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+/* =========================================================
+   LEAD MANAGEMENT
+========================================================= */
 
-</head>
+.leads-page {
+    animation: pageEnter .6s ease forwards;
+}
 
-<body class="bg-gray-100">
+@keyframes pageEnter {
 
-<div class="max-w-7xl mx-auto p-8">
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 
-<h1 class="text-3xl font-bold mb-6">
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 
-🎯 Lead Management
+}
 
-</h1>
 
-<div class="bg-white rounded-xl shadow overflow-hidden">
+/* =========================================================
+   HERO
+========================================================= */
 
-<table class="w-full">
+.leads-hero {
 
-<thead class="bg-indigo-600 text-white">
+    position: relative;
 
-<tr>
+    overflow: hidden;
 
-<th class="p-4">ID</th>
-<th>Name</th>
-<th>Mobile</th>
-<th>Email</th>
-<th>Course</th>
-<th>Status</th>
-<th>Action</th>
+    background:
+        linear-gradient(
+            135deg,
+            #111827,
+            #1e293b
+        );
 
-</tr>
+    border:
+        1px solid
+        rgba(255,255,255,.08);
 
-</thead>
+    border-radius:
+        22px;
 
-<tbody>
+    padding:
+        30px;
 
-{% for lead in leads %}
+    margin-bottom:
+        25px;
 
-<tr class="border-b hover:bg-gray-50">
+    box-shadow:
+        0 20px 55px
+        rgba(0,0,0,.25);
 
-<td class="p-4">{{ lead.id }}</td>
+}
 
-<td>{{ lead.name }}</td>
 
-<td>{{ lead.mobile }}</td>
+.leads-hero::before {
 
-<td>{{ lead.email }}</td>
+    content: "";
 
-<td>{{ lead.course }}</td>
+    position: absolute;
 
-<td>
+    width: 300px;
 
-{% if lead.status=="Approved" %}
+    height: 300px;
 
-<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full">
+    border-radius: 50%;
 
-Approved
+    background:
+        rgba(250,204,21,.07);
 
-</span>
+    top: -170px;
 
-{% elif lead.status=="Rejected" %}
+    right: -80px;
 
-<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full">
+}
 
-Rejected
 
-</span>
+.leads-hero::after {
 
-{% else %}
+    content: "";
 
-<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">
+    position: absolute;
 
-Pending
+    width: 180px;
 
-</span>
+    height: 180px;
 
-{% endif %}
+    border-radius: 50%;
 
-</td>
+    background:
+        rgba(99,102,241,.08);
 
-<td>
+    bottom: -100px;
 
-<a href="{{ url_for('admin.lead_details', lead_id=lead.id) }}"
-   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+    left: 35%;
 
-    View
+}
 
-</a>
 
-</td>
+.leads-hero-content {
 
-</tr>
+    position: relative;
 
-{% endfor %}
+    z-index: 2;
 
-</tbody>
+    display: flex;
 
-</table>
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+}
+
+
+.hero-label {
+
+    color:
+        #facc15;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.hero-title {
+
+    color:
+        white;
+
+    font-size:
+        32px;
+
+    font-weight:
+        800;
+
+    margin-top:
+        8px;
+
+}
+
+
+.hero-description {
+
+    color:
+        #94a3b8;
+
+    font-size:
+        14px;
+
+    margin-top:
+        8px;
+
+}
+
+
+/* =========================================================
+   LEAD COUNT
+========================================================= */
+
+.lead-count {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-width:
+        100px;
+
+    height:
+        85px;
+
+    border-radius:
+        18px;
+
+    background:
+        rgba(250,204,21,.08);
+
+    border:
+        1px solid
+        rgba(250,204,21,.18);
+
+}
+
+
+.lead-count-number {
+
+    color:
+        #facc15;
+
+    font-size:
+        27px;
+
+    font-weight:
+        800;
+
+}
+
+
+.lead-count-label {
+
+    color:
+        #94a3b8;
+
+    font-size:
+        10px;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+/* =========================================================
+   LEADS CONTAINER
+========================================================= */
+
+.leads-container {
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid
+        rgba(255,255,255,.09);
+
+    border-radius:
+        20px;
+
+    overflow:
+        hidden;
+
+    backdrop-filter:
+        blur(15px);
+
+    -webkit-backdrop-filter:
+        blur(15px);
+
+    box-shadow:
+        0 20px 50px
+        rgba(0,0,0,.18);
+
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.section-header {
+
+    padding:
+        22px 25px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.08);
+
+}
+
+
+.section-title {
+
+    color:
+        white;
+
+    font-size:
+        20px;
+
+    font-weight:
+        800;
+
+}
+
+
+.section-subtitle {
+
+    color:
+        #64748b;
+
+    font-size:
+        12px;
+
+    margin-top:
+        4px;
+
+}
+
+
+/* =========================================================
+   LEAD LIST
+========================================================= */
+
+.lead-list {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+}
+
+
+/* =========================================================
+   LEAD CARD
+========================================================= */
+
+.lead-card {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        20px;
+
+    padding:
+        20px 25px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.06);
+
+    transition:
+        all .3s ease;
+
+    animation:
+        leadEnter .5s ease both;
+
+}
+
+
+@keyframes leadEnter {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(15px);
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+.lead-card:last-child {
+
+    border-bottom:
+        none;
+
+}
+
+
+.lead-card:hover {
+
+    background:
+        rgba(255,255,255,.045);
+
+    transform:
+        translateX(3px);
+
+}
+
+
+/* =========================================================
+   LEAD AVATAR
+========================================================= */
+
+.lead-avatar {
+
+    width:
+        48px;
+
+    height:
+        48px;
+
+    min-width:
+        48px;
+
+    border-radius:
+        14px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #8b5cf6
+        );
+
+    color:
+        white;
+
+    font-size:
+        17px;
+
+    font-weight:
+        800;
+
+    box-shadow:
+        0 8px 20px
+        rgba(99,102,241,.18);
+
+}
+
+
+/* =========================================================
+   LEAD INFORMATION
+========================================================= */
+
+.lead-info {
+
+    flex:
+        1;
+
+    min-width:
+        0;
+
+}
+
+
+.lead-name {
+
+    color:
+        white;
+
+    font-size:
+        15px;
+
+    font-weight:
+        800;
+
+}
+
+
+.lead-course {
+
+    color:
+        #a5b4fc;
+
+    font-size:
+        12px;
+
+    margin-top:
+        4px;
+
+}
+
+
+.lead-contact {
+
+    color:
+        #64748b;
+
+    font-size:
+        11px;
+
+    margin-top:
+        5px;
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-badge {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+    padding:
+        7px 12px;
+
+    border-radius:
+        20px;
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        .4px;
+
+}
+
+
+/* APPROVED */
+
+.status-approved {
+
+    color:
+        #4ade80;
+
+    background:
+        rgba(34,197,94,.10);
+
+    border:
+        1px solid
+        rgba(34,197,94,.20);
+
+}
+
+
+/* REJECTED */
+
+.status-rejected {
+
+    color:
+        #f87171;
+
+    background:
+        rgba(239,68,68,.10);
+
+    border:
+        1px solid
+        rgba(239,68,68,.20);
+
+}
+
+
+/* PENDING */
+
+.status-pending {
+
+    color:
+        #facc15;
+
+    background:
+        rgba(250,204,21,.10);
+
+    border:
+        1px solid
+        rgba(250,204,21,.20);
+
+}
+
+
+/* =========================================================
+   VIEW BUTTON
+========================================================= */
+
+.view-button {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        6px;
+
+    background:
+        rgba(99,102,241,.12);
+
+    border:
+        1px solid
+        rgba(99,102,241,.20);
+
+    color:
+        #a5b4fc;
+
+    padding:
+        9px 15px;
+
+    border-radius:
+        9px;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    text-decoration:
+        none;
+
+    transition:
+        all .3s ease;
+
+}
+
+
+.view-button:hover {
+
+    background:
+        #6366f1;
+
+    color:
+        white;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(99,102,241,.20);
+
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-leads {
+
+    text-align:
+        center;
+
+    padding:
+        70px 20px;
+
+}
+
+
+.empty-icon {
+
+    width:
+        80px;
+
+    height:
+        80px;
+
+    margin:
+        0 auto 18px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        22px;
+
+    background:
+        rgba(99,102,241,.08);
+
+    border:
+        1px solid
+        rgba(99,102,241,.15);
+
+    font-size:
+        32px;
+
+}
+
+
+.empty-title {
+
+    color:
+        #cbd5e1;
+
+    font-size:
+        20px;
+
+    font-weight:
+        800;
+
+}
+
+
+.empty-description {
+
+    color:
+        #64748b;
+
+    font-size:
+        13px;
+
+    margin-top:
+        7px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:768px) {
+
+    .leads-hero-content {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+    }
+
+
+    .lead-count {
+
+        width:
+            100%;
+
+        height:
+            70px;
+
+        flex-direction:
+            row;
+
+        gap:
+            10px;
+
+    }
+
+
+    .lead-card {
+
+        flex-wrap:
+            wrap;
+
+        padding:
+            18px;
+
+    }
+
+
+    .lead-info {
+
+        min-width:
+            calc(100% - 70px);
+
+    }
+
+
+    .lead-card .status-badge {
+
+        margin-left:
+            60px;
+
+    }
+
+
+    .lead-card .view-button {
+
+        margin-left:
+            auto;
+
+    }
+
+
+    .hero-title {
+
+        font-size:
+            27px;
+
+    }
+
+}
+
+</style>
+
+
+<!-- =========================================================
+     LEAD MANAGEMENT PAGE
+========================================================= -->
+
+<div class="leads-page">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="leads-hero">
+
+
+        <div class="leads-hero-content">
+
+
+            <div>
+
+
+                <div class="hero-label">
+
+                    RR IT ORIGIN • ADMISSION MANAGEMENT
+
+                </div>
+
+
+                <h1 class="hero-title">
+
+                    🎯 Lead Management
+
+                </h1>
+
+
+                <p class="hero-description">
+
+                    Manage enquiries, track lead status
+                    and process student admissions.
+
+                </p>
+
+
+            </div>
+
+
+            <div class="lead-count">
+
+
+                <div class="lead-count-number">
+
+                    {{ leads|length }}
+
+                </div>
+
+
+                <div class="lead-count-label">
+
+                    Total Leads
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         LEADS
+    ====================================================== -->
+
+    <section class="leads-container">
+
+
+        <div class="section-header">
+
+
+            <h2 class="section-title">
+
+                📋 All Leads
+
+            </h2>
+
+
+            <p class="section-subtitle">
+
+                Review and manage student enquiries
+
+            </p>
+
+
+        </div>
+
+
+
+        {% if leads %}
+
+
+        <div class="lead-list">
+
+
+            {% for lead in leads %}
+
+
+            <div
+                class="lead-card"
+                style="animation-delay: {{ loop.index0 * 0.07 }}s;">
+
+
+                <!-- AVATAR -->
+
+                <div class="lead-avatar">
+
+                    {{ lead.name[0]|upper }}
+
+                </div>
+
+
+
+                <!-- INFORMATION -->
+
+                <div class="lead-info">
+
+
+                    <div class="lead-name">
+
+                        {{ lead.name }}
+
+                    </div>
+
+
+                    <div class="lead-course">
+
+                        📚 {{ lead.course }}
+
+                    </div>
+
+
+                    <div class="lead-contact">
+
+                        📱 {{ lead.mobile }}
+
+                        {% if lead.email %}
+
+                        &nbsp; • &nbsp;
+
+                        ✉️ {{ lead.email }}
+
+                        {% endif %}
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- STATUS -->
+
+                <div>
+
+
+                    {% if lead.status == "Approved" %}
+
+
+                    <span class="status-badge status-approved">
+
+                        ✓ Approved
+
+                    </span>
+
+
+                    {% elif lead.status == "Rejected" %}
+
+
+                    <span class="status-badge status-rejected">
+
+                        ✕ Rejected
+
+                    </span>
+
+
+                    {% else %}
+
+
+                    <span class="status-badge status-pending">
+
+                        ⏳ Pending
+
+                    </span>
+
+
+                    {% endif %}
+
+
+                </div>
+
+
+
+                <!-- VIEW -->
+
+                <div>
+
+
+                    <a
+                        href="{{ url_for(
+                            'admin.lead_details',
+                            lead_id=lead.id
+                        ) }}"
+                        class="view-button">
+
+                        👁 View
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- =================================================
+             EMPTY STATE
+        ================================================== -->
+
+        <div class="empty-leads">
+
+
+            <div class="empty-icon">
+
+                🎯
+
+            </div>
+
+
+            <h3 class="empty-title">
+
+                No Leads Available
+
+            </h3>
+
+
+            <p class="empty-description">
+
+                New student enquiries will appear here.
+
+            </p>
+
+
+        </div>
+
+
+        {% endif %}
+
+
+    </section>
+
+
+
+    <!-- FOOTER -->
+
+    <div class="text-center text-gray-600 text-xs py-8">
+
+        RR IT Origin • Lead Management
+
+    </div>
+
 
 </div>
 
-</div>
 
-</body>
-
-</html>
+{% endblock %}

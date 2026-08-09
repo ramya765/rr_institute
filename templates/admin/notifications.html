@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Notifications | RR IT Origin</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family: 'Inter', sans-serif;
+
+            min-height: 100vh;
+
+            color: white;
+
+            background:
+
+                linear-gradient(
+                    rgba(3, 14, 35, .92),
+                    rgba(3, 14, 35, .95)
+                ),
+
+                url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3");
+
+            background-size: cover;
+
+            background-position: center;
+
+            background-attachment: fixed;
+
+        }
+
+
+        /* ==========================================
+           NAVBAR
+        ========================================== */
+
+        .top-navbar {
+
+            background: rgba(5, 16, 38, .90);
+
+            border-bottom:
+                1px solid rgba(255,255,255,.12);
+
+            backdrop-filter: blur(18px);
+
+            -webkit-backdrop-filter: blur(18px);
+
+        }
+
+
+        .logo-image {
+
+            height: 52px;
+
+            width: auto;
+
+            border-radius: 10px;
+
+            object-fit: contain;
+
+        }
+
+
+        .logo-text {
+
+            color: #facc15;
+
+        }
+
+
+        /* ==========================================
+           GLASS CARD
+        ========================================== */
+
+        .glass-card {
+
+            background:
+                rgba(255,255,255,.07);
+
+            border:
+                1px solid rgba(255,255,255,.14);
+
+            backdrop-filter:
+                blur(18px);
+
+            -webkit-backdrop-filter:
+                blur(18px);
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 20px 60px rgba(0,0,0,.25);
+
+        }
+
+
+        /* ==========================================
+           HEADER
+        ========================================== */
+
+        .page-header {
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    rgba(67,56,202,.90),
+                    rgba(124,58,237,.90)
+                );
+
+            border:
+                1px solid rgba(255,255,255,.15);
+
+            border-radius: 22px;
+
+            box-shadow:
+                0 25px 70px rgba(0,0,0,.30);
+
+        }
+
+
+        /* ==========================================
+           NOTIFICATION
+        ========================================== */
+
+        .notification-card {
+
+            position: relative;
+
+            background:
+                rgba(255,255,255,.07);
+
+            border:
+                1px solid rgba(255,255,255,.12);
+
+            border-radius: 18px;
+
+            transition:
+                all .3s ease;
+
+        }
+
+
+        .notification-card:hover {
+
+            transform:
+                translateY(-3px);
+
+            background:
+                rgba(255,255,255,.11);
+
+            border-color:
+                rgba(250,204,21,.40);
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,.25);
+
+        }
+
+
+        .notification-unread {
+
+            border-left:
+                4px solid #facc15;
+
+            background:
+                rgba(250,204,21,.07);
+
+        }
+
+
+        /* ==========================================
+           ICON
+        ========================================== */
+
+        .notification-icon {
+
+            width: 52px;
+
+            height: 52px;
+
+            min-width: 52px;
+
+            border-radius: 15px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 24px;
+
+        }
+
+
+        .icon-lead {
+
+            background:
+                rgba(59,130,246,.18);
+
+            border:
+                1px solid rgba(59,130,246,.30);
+
+        }
+
+
+        .icon-admission {
+
+            background:
+                rgba(139,92,246,.18);
+
+            border:
+                1px solid rgba(139,92,246,.30);
+
+        }
+
+
+        .icon-payment {
+
+            background:
+                rgba(34,197,94,.18);
+
+            border:
+                1px solid rgba(34,197,94,.30);
+
+        }
+
+
+        .icon-placement {
+
+            background:
+                rgba(249,115,22,.18);
+
+            border:
+                1px solid rgba(249,115,22,.30);
+
+        }
+
+
+        .icon-default {
+
+            background:
+                rgba(148,163,184,.18);
+
+            border:
+                1px solid rgba(148,163,184,.30);
+
+        }
+
+
+        /* ==========================================
+           TYPE BADGES
+        ========================================== */
+
+        .badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            padding: 5px 10px;
+
+            border-radius: 999px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: .04em;
+
+        }
+
+
+        .badge-lead {
+
+            background: rgba(59,130,246,.15);
+
+            color: #60a5fa;
+
+        }
+
+
+        .badge-admission {
+
+            background: rgba(139,92,246,.15);
+
+            color: #c084fc;
+
+        }
+
+
+        .badge-payment {
+
+            background: rgba(34,197,94,.15);
+
+            color: #4ade80;
+
+        }
+
+
+        .badge-placement {
+
+            background: rgba(249,115,22,.15);
+
+            color: #fb923c;
+
+        }
+
+
+        .badge-default {
+
+            background: rgba(148,163,184,.15);
+
+            color: #cbd5e1;
+
+        }
+
+
+        /* ==========================================
+           FILTER BUTTON
+        ========================================== */
+
+        .filter-btn {
+
+            transition: all .25s ease;
+
+        }
+
+
+        .filter-btn.active {
+
+            background: #facc15;
+
+            color: #111827;
+
+        }
+
+
+        /* ==========================================
+           SETTINGS
+        ========================================== */
+
+        .setting-row {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 14px 0;
+
+            border-bottom:
+                1px solid rgba(255,255,255,.08);
+
+        }
+
+
+        .setting-row:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        /* ==========================================
+           TOGGLE
+        ========================================== */
+
+        .toggle {
+
+            position: relative;
+
+            width: 44px;
+
+            height: 24px;
+
+        }
+
+
+        .toggle input {
+
+            opacity: 0;
+
+            width: 0;
+
+            height: 0;
+
+        }
+
+
+        .slider {
+
+            position: absolute;
+
+            cursor: pointer;
+
+            inset: 0;
+
+            background: #475569;
+
+            border-radius: 999px;
+
+            transition: .3s;
+
+        }
+
+
+        .slider:before {
+
+            content: "";
+
+            position: absolute;
+
+            height: 18px;
+
+            width: 18px;
+
+            left: 3px;
+
+            top: 3px;
+
+            background: white;
+
+            border-radius: 50%;
+
+            transition: .3s;
+
+        }
+
+
+        .toggle input:checked + .slider {
+
+            background: #4f46e5;
+
+        }
+
+
+        .toggle input:checked + .slider:before {
+
+            transform:
+                translateX(20px);
+
+        }
+
+
+        /* ==========================================
+           EMPTY
+        ========================================== */
+
+        .empty-state {
+
+            text-align: center;
+
+            padding: 70px 20px;
+
+        }
+
+
+        /* ==========================================
+           ANIMATION
+        ========================================== */
+
+        .fade-up {
+
+            animation:
+                fadeUp .6s ease forwards;
+
+        }
+
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(20px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+
+            }
+
+        }
+
+
+        /* ==========================================
+           MOBILE
+        ========================================== */
+
+        @media(max-width:768px) {
+
+            body {
+
+                background-attachment:
+                    scroll;
+
+            }
+
+            .logo-image {
+
+                height: 42px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="top-navbar px-5 md:px-8 py-4">
+
+    <div
+        class="max-w-7xl mx-auto flex justify-between items-center">
+
+        <!-- LOGO -->
+
+        <div class="flex items-center gap-3">
+
+            <img
+                src="{{ url_for('static', filename='images/logo.jpeg') }}"
+                class="logo-image"
+                alt="RR IT Origin">
+
+            <div>
+
+                <h1
+                    class="text-xl md:text-2xl font-bold logo-text">
+
+                    RR IT Origin
+
+                </h1>
+
+                <p
+                    class="text-xs tracking-widest text-gray-400">
+
+                    ADMIN PORTAL
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT -->
+
+        <div class="flex items-center gap-3">
+
+            <a
+                href="{{ url_for('admin.dashboard') }}"
+                class="hidden sm:block bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg font-semibold">
+
+                Dashboard
+
+            </a>
+
+
+            <a
+                href="{{ url_for('auth.logout') }}"
+                class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg font-semibold">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main
+    class="max-w-7xl mx-auto px-5 md:px-8 py-8">
+
+
+    <!-- =================================================
+         HEADER
+    ================================================== -->
+
+    <div
+        class="page-header p-7 md:p-9 mb-8 fade-up">
+
+        <div
+            class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+
+            <div>
+
+                <p
+                    class="text-yellow-300 font-semibold tracking-wide">
+
+                    RR IT ORIGIN • ADMIN CENTER
+
+                </p>
+
+                <h1
+                    class="text-3xl md:text-4xl font-bold mt-2">
+
+                    🔔 Notifications
+
+                </h1>
+
+                <p
+                    class="text-indigo-100 mt-3">
+
+                    Stay updated with leads, admissions,
+                    payments and placement activities.
+
+                </p>
+
+            </div>
+
+
+            <!-- UNREAD COUNT -->
+
+            <div
+                class="bg-black/20 rounded-2xl px-6 py-5 text-center">
+
+                <p
+                    class="text-sm text-indigo-200">
+
+                    Unread Notifications
+
+                </p>
+
+                <p
+                    class="text-4xl font-bold text-yellow-300 mt-1">
+
+                    {{ unread_count }}
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         GRID
+    ================================================== -->
+
+    <div
+        class="grid lg:grid-cols-3 gap-8">
+
+
+        <!-- =================================================
+             LEFT - NOTIFICATIONS
+        ================================================== -->
+
+        <div
+            class="lg:col-span-2">
+
+
+            <!-- TOOLBAR -->
+
+            <div
+                class="glass-card p-5 mb-6">
+
+
+                <div
+                    class="flex flex-col md:flex-row gap-4 justify-between">
+
+
+                    <!-- SEARCH -->
+
+                    <div
+                        class="relative flex-1">
+
+                        <span
+                            class="absolute left-4 top-3 text-gray-400">
+
+                            🔎
+
+                        </span>
+
+                        <input
+                            id="notificationSearch"
+                            type="text"
+                            placeholder="Search notifications..."
+                            class="w-full bg-white/10 border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white placeholder-gray-400 outline-none focus:border-yellow-400">
+
+                    </div>
+
+
+                    <!-- MARK ALL -->
+
+                    {% if unread_count > 0 %}
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('admin.mark_all_notifications_read') }}">
+
+                        <button
+                            type="submit"
+                            class="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 px-5 py-3 rounded-xl font-semibold">
+
+                            ✓ Mark All Read
+
+                        </button>
+
+                    </form>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- FILTERS -->
+
+                <div
+                    class="flex flex-wrap gap-2 mt-5">
+
+                    <button
+                        onclick="filterNotifications('all', this)"
+                        class="filter-btn active px-4 py-2 rounded-lg bg-white/10 text-sm font-semibold">
+
+                        All
+
+                    </button>
+
+                    <button
+                        onclick="filterNotifications('lead', this)"
+                        class="filter-btn px-4 py-2 rounded-lg bg-white/10 text-sm font-semibold">
+
+                        👤 Leads
+
+                    </button>
+
+                    <button
+                        onclick="filterNotifications('admission', this)"
+                        class="filter-btn px-4 py-2 rounded-lg bg-white/10 text-sm font-semibold">
+
+                        🎓 Admissions
+
+                    </button>
+
+                    <button
+                        onclick="filterNotifications('payment', this)"
+                        class="filter-btn px-4 py-2 rounded-lg bg-white/10 text-sm font-semibold">
+
+                        💰 Payments
+
+                    </button>
+
+                    <button
+                        onclick="filterNotifications('placement', this)"
+                        class="filter-btn px-4 py-2 rounded-lg bg-white/10 text-sm font-semibold">
+
+                        💼 Placements
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 NOTIFICATION LIST
+            ================================================== -->
+
+            <div
+                id="notificationList"
+                class="space-y-4">
+
+
+                {% if notifications %}
+
+
+                    {% for notification in notifications %}
+
+
+                    <div
+                        class="notification-card
+                        {% if not notification.is_read %}
+                            notification-unread
+                        {% endif %}
+                        p-5 fade-up notification-item"
+                        data-type="{{ notification.notification_type }}"
+                        data-search="{{ notification.title|lower }} {{ notification.message|lower }}">
+
+
+                        <div
+                            class="flex gap-4">
+
+
+                            <!-- ICON -->
+
+                            <div
+                                class="notification-icon
+
+                                {% if notification.notification_type == 'lead' %}
+                                    icon-lead
+
+                                {% elif notification.notification_type == 'admission' %}
+                                    icon-admission
+
+                                {% elif notification.notification_type == 'payment' %}
+                                    icon-payment
+
+                                {% elif notification.notification_type == 'placement' %}
+                                    icon-placement
+
+                                {% else %}
+                                    icon-default
+
+                                {% endif %}">
+
+
+                                {% if notification.notification_type == 'lead' %}
+
+                                    👤
+
+                                {% elif notification.notification_type == 'admission' %}
+
+                                    🎓
+
+                                {% elif notification.notification_type == 'payment' %}
+
+                                    💰
+
+                                {% elif notification.notification_type == 'placement' %}
+
+                                    💼
+
+                                {% else %}
+
+                                    🔔
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                            <!-- CONTENT -->
+
+                            <div
+                                class="flex-1 min-w-0">
+
+
+                                <div
+                                    class="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
+
+
+                                    <div>
+
+                                        <h3
+                                            class="font-bold text-lg">
+
+                                            {{ notification.title }}
+
+                                        </h3>
+
+
+                                        <span
+                                            class="badge mt-2
+
+                                            {% if notification.notification_type == 'lead' %}
+                                                badge-lead
+
+                                            {% elif notification.notification_type == 'admission' %}
+                                                badge-admission
+
+                                            {% elif notification.notification_type == 'payment' %}
+                                                badge-payment
+
+                                            {% elif notification.notification_type == 'placement' %}
+                                                badge-placement
+
+                                            {% else %}
+                                                badge-default
+                                            {% endif %}">
+
+                                            {{ notification.notification_type }}
+
+                                        </span>
+
+                                    </div>
+
+
+                                    {% if not notification.is_read %}
+
+                                    <span
+                                        class="text-xs font-bold text-yellow-300">
+
+                                        ● NEW
+
+                                    </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <p
+                                    class="text-gray-300 mt-3 leading-relaxed">
+
+                                    {{ notification.message }}
+
+                                </p>
+
+
+                                <div
+                                    class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-4">
+
+
+                                    <p
+                                        class="text-xs text-gray-500 notification-time"
+                                        data-time="{{ notification.created_at.isoformat() }}">
+
+                                        {{ notification.created_at.strftime("%d %b %Y, %I:%M %p") }}
+
+                                    </p>
+
+
+                                    {% if not notification.is_read %}
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('admin.mark_notification_read', id=notification.id) }}">
+
+                                        <button
+                                            type="submit"
+                                            class="text-sm bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg">
+
+                                            ✓ Mark as Read
+
+                                        </button>
+
+                                    </form>
+
+                                    {% else %}
+
+                                    <span
+                                        class="text-xs text-green-400">
+
+                                        ✓ Read
+
+                                    </span>
+
+                                    {% endif %}
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {% endfor %}
+
+
+                {% else %}
+
+
+                    <!-- EMPTY -->
+
+                    <div
+                        class="glass-card empty-state">
+
+                        <div
+                            class="text-6xl">
+
+                            🔔
+
+                        </div>
+
+                        <h2
+                            class="text-2xl font-bold mt-5">
+
+                            No Notifications
+
+                        </h2>
+
+                        <p
+                            class="text-gray-400 mt-3">
+
+                            You're all caught up.
+                            New activities will appear here.
+
+                        </p>
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+            <!-- NO SEARCH RESULTS -->
+
+            <div
+                id="noResults"
+                class="hidden glass-card empty-state">
+
+                <div
+                    class="text-5xl">
+
+                    🔎
+
+                </div>
+
+                <h2
+                    class="text-xl font-bold mt-4">
+
+                    No matching notifications
+
+                </h2>
+
+                <p
+                    class="text-gray-400 mt-2">
+
+                    Try another search or filter.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             RIGHT - SETTINGS
+        ================================================== -->
+
+        <div>
+
+
+            <div
+                class="glass-card p-6 sticky top-6">
+
+
+                <div
+                    class="flex items-center gap-3 mb-6">
+
+                    <div
+                        class="w-12 h-12 rounded-xl bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-2xl">
+
+                        ⚙️
+
+                    </div>
+
+                    <div>
+
+                        <h2
+                            class="text-xl font-bold">
+
+                            Notification Settings
+
+                        </h2>
+
+                        <p
+                            class="text-xs text-gray-400">
+
+                            Control admin alerts
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for('admin.notifications') }}">
+
+
+                    <!-- LEADS -->
+
+                    <div
+                        class="setting-row">
+
+                        <div>
+
+                            <p
+                                class="font-semibold">
+
+                                New Leads
+
+                            </p>
+
+                            <p
+                                class="text-xs text-gray-400 mt-1">
+
+                                New enquiry alerts
+
+                            </p>
+
+                        </div>
+
+                        <label
+                            class="toggle">
+
+                            <input
+                                type="checkbox"
+                                name="new_lead_notification"
+                                {% if settings.new_lead_notification %}
+                                    checked
+                                {% endif %}>
+
+                            <span
+                                class="slider">
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- ADMISSION -->
+
+                    <div
+                        class="setting-row">
+
+                        <div>
+
+                            <p
+                                class="font-semibold">
+
+                                Admissions
+
+                            </p>
+
+                            <p
+                                class="text-xs text-gray-400 mt-1">
+
+                                New student admission
+
+                            </p>
+
+                        </div>
+
+                        <label
+                            class="toggle">
+
+                            <input
+                                type="checkbox"
+                                name="admission_notification"
+                                {% if settings.admission_notification %}
+                                    checked
+                                {% endif %}>
+
+                            <span
+                                class="slider">
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- PAYMENT -->
+
+                    <div
+                        class="setting-row">
+
+                        <div>
+
+                            <p
+                                class="font-semibold">
+
+                                Payments
+
+                            </p>
+
+                            <p
+                                class="text-xs text-gray-400 mt-1">
+
+                                Payment received alerts
+
+                            </p>
+
+                        </div>
+
+                        <label
+                            class="toggle">
+
+                            <input
+                                type="checkbox"
+                                name="payment_notification"
+                                {% if settings.payment_notification %}
+                                    checked
+                                {% endif %}>
+
+                            <span
+                                class="slider">
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- PLACEMENT -->
+
+                    <div
+                        class="setting-row">
+
+                        <div>
+
+                            <p
+                                class="font-semibold">
+
+                                Placements
+
+                            </p>
+
+                            <p
+                                class="text-xs text-gray-400 mt-1">
+
+                                Student placement alerts
+
+                            </p>
+
+                        </div>
+
+                        <label
+                            class="toggle">
+
+                            <input
+                                type="checkbox"
+                                name="placement_notification"
+                                {% if settings.placement_notification %}
+                                    checked
+                                {% endif %}>
+
+                            <span
+                                class="slider">
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 py-3 rounded-xl font-bold">
+
+                        Save Notification Settings
+
+                    </button>
+
+
+                </form>
+
+
+                <!-- INFO -->
+
+                <div
+                    class="mt-6 p-4 rounded-xl bg-white/5 border border-white/10">
+
+                    <p
+                        class="text-sm font-semibold">
+
+                        💡 How it works
+
+                    </p>
+
+                    <p
+                        class="text-xs text-gray-400 mt-2 leading-relaxed">
+
+                        Notifications are automatically created when
+                        a new lead, admission, payment or placement
+                        is recorded.
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         FOOTER
+    ================================================== -->
+
+    <footer
+        class="border-t border-white/10 mt-12 pt-6 pb-8 text-center">
+
+        <p
+            class="text-gray-500">
+
+            © {{ current_year if current_year is defined else '' }}
+            RR IT Origin
+
+        </p>
+
+        <p
+            class="text-xs text-gray-600 mt-2">
+
+            Admin Notification Center • Learn • Build • Succeed
+
+        </p>
+
+    </footer>
+
+
+</main>
+
+
+
+<script>
+
+
+/* =====================================================
+   FILTER
+===================================================== */
+
+function filterNotifications(type, button) {
+
+    const items =
+        document.querySelectorAll(".notification-item");
+
+    const buttons =
+        document.querySelectorAll(".filter-btn");
+
+    buttons.forEach(function(btn) {
+
+        btn.classList.remove("active");
+
+    });
+
+    button.classList.add("active");
+
+
+    let visible = 0;
+
+
+    items.forEach(function(item) {
+
+        const itemType =
+            item.dataset.type;
+
+
+        if (
+            type === "all" ||
+            itemType === type
+        ) {
+
+            item.style.display = "";
+
+            visible++;
+
+        }
+        else {
+
+            item.style.display = "none";
+
+        }
+
+    });
+
+
+    document.getElementById("noResults").classList.toggle(
+        "hidden",
+        visible !== 0
+    );
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+document
+    .getElementById("notificationSearch")
+    .addEventListener("input", function() {
+
+
+        const search =
+            this.value.toLowerCase().trim();
+
+
+        const items =
+            document.querySelectorAll(".notification-item");
+
+
+        let visible = 0;
+
+
+        items.forEach(function(item) {
+
+
+            const text =
+                item.dataset.search;
+
+
+            if (
+                text.includes(search)
+            ) {
+
+                item.style.display = "";
+
+                visible++;
+
+            }
+            else {
+
+                item.style.display = "none";
+
+            }
+
+        });
+
+
+        document
+            .getElementById("noResults")
+            .classList.toggle(
+                "hidden",
+                visible !== 0
+            );
+
+    });
+
+
+/* =====================================================
+   RELATIVE TIME
+===================================================== */
+
+document
+    .querySelectorAll(".notification-time")
+    .forEach(function(element) {
+
+
+        const date =
+            new Date(element.dataset.time);
+
+
+        if (isNaN(date)) {
+            return;
+        }
+
+
+        const now =
+            new Date();
+
+
+        const seconds =
+            Math.floor(
+                (now - date) / 1000
+            );
+
+
+        if (seconds < 60) {
+
+            element.innerText =
+                "Just now";
+
+        }
+
+        else if (seconds < 3600) {
+
+            const minutes =
+                Math.floor(
+                    seconds / 60
+                );
+
+            element.innerText =
+                minutes +
+                (minutes === 1
+                    ? " minute ago"
+                    : " minutes ago");
+
+        }
+
+        else if (seconds < 86400) {
+
+            const hours =
+                Math.floor(
+                    seconds / 3600
+                );
+
+            element.innerText =
+                hours +
+                (hours === 1
+                    ? " hour ago"
+                    : " hours ago");
+
+        }
+
+        else if (seconds < 604800) {
+
+            const days =
+                Math.floor(
+                    seconds / 86400
+                );
+
+            element.innerText =
+                days +
+                (days === 1
+                    ? " day ago"
+                    : " days ago");
+
+        }
+
+    });
+
+</script>
+
+
+</body>
+
+</html>

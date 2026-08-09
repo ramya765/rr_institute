@@ -1,772 +1,2053 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "admin/layout.html" %}
 
-<head>
+{% block content %}
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
 
-    <title>Add Student | RR Institute</title>
+/* =========================================================
+   ADD STUDENT PAGE
+========================================================= */
 
-    <script src="https://cdn.tailwindcss.com"></script>
+.add-student-page {
+    animation: pageEnter 0.6s ease;
+}
 
-</head>
+@keyframes pageEnter {
 
-<body class="bg-gray-100">
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
 
-<div class="flex min-h-screen">
-    
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 
-    <!-- ================= SIDEBAR ================= -->
+}
 
-    <aside class="w-64 bg-gray-900 text-white">
 
-        <div class="text-center py-6 border-b border-gray-700">
+/* =========================================================
+   HERO
+========================================================= */
 
-            <h1 class="text-2xl font-bold">
+.admission-hero {
 
-                RR Institute
+    position: relative;
 
-            </h1>
+    overflow: hidden;
 
-            <p class="text-gray-400 mt-2">
+    background:
+        linear-gradient(
+            135deg,
+            rgba(15,23,42,.98),
+            rgba(30,41,59,.96)
+        );
 
-                Admin Panel
+    border: 1px solid rgba(255,255,255,.10);
 
-            </p>
+    border-radius: 24px;
 
-        </div>
+    padding: 32px;
 
-        <nav class="mt-6">
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.28);
 
-            <a href="{{ url_for('admin.dashboard') }}"
-               class="block px-6 py-3 hover:bg-gray-800">
+}
 
-                🏠 Dashboard
 
-            </a>
+.admission-hero::before {
 
-            <a href="{{ url_for('admin.students') }}"
-               class="block px-6 py-3 bg-blue-600">
+    content: "";
 
-                👨‍🎓 Students
+    position: absolute;
 
-            </a>
+    width: 280px;
+    height: 280px;
 
-            <a href="{{ url_for('admin.courses') }}"
-               class="block px-6 py-3 hover:bg-gray-800">
+    border-radius: 50%;
 
-                📚 Courses
+    background:
+        rgba(250,204,21,.08);
 
-            </a>
+    top: -160px;
 
-            <a href="{{ url_for('admin.companies') }}"
-               class="block px-6 py-3 hover:bg-gray-800">
+    right: -70px;
 
-                🏢 Companies
+}
 
-            </a>
 
-            <a href="{{ url_for('admin.placements') }}"
-               class="block px-6 py-3 hover:bg-gray-800">
+.admission-hero::after {
 
-                💼 Placements
+    content: "";
 
-            </a>
+    position: absolute;
 
-            <a href="{{ url_for('admin.faculty') }}"
-               class="block px-6 py-3 hover:bg-gray-800">
+    width: 200px;
+    height: 200px;
 
-                👨‍🏫 Faculty
+    border-radius: 50%;
 
-            </a>
+    background:
+        rgba(99,102,241,.10);
 
-            
+    bottom: -120px;
 
-            <a href="{{ url_for('admin.gallery') }}"
-               class="block px-6 py-3 hover:bg-gray-800">
+    left: 30%;
 
-                🖼 Gallery
+}
 
-            </a>
 
-            <a href="{{ url_for('admin.notifications') }}"
-               class="block px-6 py-3 hover:bg-gray-800">
+.hero-content {
 
-                📢 Notifications
+    position: relative;
 
-            </a>
+    z-index: 2;
 
-            <a href="{{ url_for('admin.settings') }}"
-               class="block px-6 py-3 hover:bg-gray-800">
+}
 
-                ⚙ Settings
 
-            </a>
+.hero-top {
 
-        </nav>
+    display: flex;
 
-    </aside>
+    justify-content: space-between;
 
-    <!-- ================= MAIN CONTENT ================= -->
+    align-items: flex-start;
 
-    <div class="flex-1">
+    gap: 20px;
 
-        <!-- Header -->
+}
 
-        <div class="bg-white shadow px-8 py-5 flex justify-between items-center">
 
-            <div>
+.hero-label {
 
-                <h1 class="text-3xl font-bold">
+    color: #facc15;
 
-                    Student Admission Form
+    font-size: 12px;
 
-                </h1>
+    font-weight: 800;
 
-                <p class="text-gray-500 mt-1">
+    letter-spacing: 2px;
 
-                    Register a new student into RR Institute
+    text-transform: uppercase;
 
-                </p>
+}
 
-            </div>
 
-            <a href="{{ url_for('admin.students') }}"
-               class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg">
+.hero-title {
 
-                ← Back to Students
+    color: white;
 
-            </a>
+    font-size: 34px;
 
-        </div>
+    font-weight: 800;
 
-        <!-- Form -->
+    margin-top: 8px;
 
-        <div class="p-8">
+}
 
-            <form method="POST"
-                  enctype="multipart/form-data"
-                  class="space-y-8">
-                  
 
-                <!-- ================= PERSONAL INFORMATION ================= -->
+.hero-description {
 
-                <div class="bg-white rounded-xl shadow">
+    color: #94a3b8;
 
-                    <div class="border-b px-6 py-4">
+    margin-top: 8px;
 
-                        <h2 class="text-2xl font-bold text-indigo-600">
+    max-width: 650px;
 
-                            👨‍🎓 Student Personal Information
+}
 
-                        </h2>
+
+.back-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    border:
+        1px solid rgba(255,255,255,.15);
+
+    color: #e2e8f0;
+
+    padding: 11px 18px;
+
+    border-radius: 10px;
+
+    font-weight: 700;
+
+    transition: .3s ease;
+
+    white-space: nowrap;
+
+}
+
+
+.back-btn:hover {
+
+    background:
+        rgba(255,255,255,.14);
+
+    border-color:
+        rgba(250,204,21,.45);
+
+    color: #facc15;
+
+    transform: translateY(-2px);
+
+}
+
+
+/* =========================================================
+   PROGRESS / INFO STRIP
+========================================================= */
+
+.admission-strip {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap: 15px;
+
+    margin-top: 22px;
+
+}
+
+
+.admission-strip-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 15px;
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+}
+
+
+.strip-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 11px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        rgba(250,204,21,.12);
+
+    font-size: 20px;
+
+}
+
+
+.strip-title {
+
+    color: white;
+
+    font-weight: 700;
+
+    font-size: 13px;
+
+}
+
+
+.strip-text {
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    margin-top: 3px;
+
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.student-form {
+
+    margin-top: 25px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 22px;
+
+}
+
+
+/* =========================================================
+   SECTION CARD
+========================================================= */
+
+.form-section {
+
+    background:
+        rgba(255,255,255,.06);
+
+    border:
+        1px solid rgba(255,255,255,.11);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    backdrop-filter: blur(16px);
+
+    box-shadow:
+        0 15px 45px rgba(0,0,0,.16);
+
+    transition: .35s ease;
+
+}
+
+
+.form-section:hover {
+
+    border-color:
+        rgba(250,204,21,.22);
+
+    box-shadow:
+        0 20px 55px rgba(0,0,0,.22);
+
+}
+
+
+.section-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 20px 24px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.09);
+
+    background:
+        rgba(255,255,255,.025);
+
+}
+
+
+.section-icon {
+
+    width: 44px;
+
+    height: 44px;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        rgba(250,204,21,.12);
+
+    border:
+        1px solid rgba(250,204,21,.18);
+
+    font-size: 21px;
+
+}
+
+
+.section-heading {
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+}
+
+
+.section-subtitle {
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    margin-top: 3px;
+
+}
+
+
+.section-body {
+
+    padding: 24px;
+
+}
+
+
+.form-grid-3 {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+    gap: 20px;
+
+}
+
+
+.form-grid-4 {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4,minmax(0,1fr));
+
+    gap: 20px;
+
+}
+
+
+.form-grid-2 {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap: 20px;
+
+}
+
+
+.full-width {
+
+    grid-column:
+        1 / -1;
+
+}
+
+
+/* =========================================================
+   FORM FIELD
+========================================================= */
+
+.form-field {
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+.form-label {
+
+    color: #cbd5e1;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    margin-bottom: 8px;
+
+}
+
+
+.required {
+
+    color: #facc15;
+
+}
+
+
+.form-input,
+.form-select,
+.form-textarea {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    background:
+        rgba(15,23,42,.82);
+
+    color: white;
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    border-radius: 10px;
+
+    padding: 12px 14px;
+
+    outline: none;
+
+    transition: .25s ease;
+
+}
+
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+
+    color: #475569;
+
+}
+
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+
+    border-color:
+        #facc15;
+
+    box-shadow:
+        0 0 0 3px rgba(250,204,21,.09);
+
+}
+
+
+.form-select option {
+
+    background: #0f172a;
+
+    color: white;
+
+}
+
+
+.form-textarea {
+
+    resize: vertical;
+
+    min-height: 120px;
+
+}
+
+
+/* =========================================================
+   FILE INPUT
+========================================================= */
+
+.file-input {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    background:
+        rgba(15,23,42,.82);
+
+    color: #94a3b8;
+
+    border:
+        1px dashed rgba(255,255,255,.20);
+
+    border-radius: 10px;
+
+    padding: 10px;
+
+    cursor: pointer;
+
+    transition: .3s ease;
+
+}
+
+
+.file-input:hover {
+
+    border-color:
+        rgba(250,204,21,.50);
+
+    background:
+        rgba(15,23,42,.95);
+
+}
+
+
+.file-input::file-selector-button {
+
+    background:
+        #facc15;
+
+    color: #111827;
+
+    border: none;
+
+    padding: 8px 12px;
+
+    border-radius: 7px;
+
+    margin-right: 10px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================================================
+   LEAD INFORMATION
+========================================================= */
+
+.lead-notice {
+
+    margin-bottom: 22px;
+
+    padding: 15px 18px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(59,130,246,.10);
+
+    border:
+        1px solid rgba(59,130,246,.22);
+
+    color: #bfdbfe;
+
+}
+
+
+.lead-notice strong {
+
+    color: white;
+
+}
+
+
+/* =========================================================
+   FEE HIGHLIGHT
+========================================================= */
+
+.fee-section {
+
+    border-color:
+        rgba(34,197,94,.18);
+
+}
+
+
+.fee-section:hover {
+
+    border-color:
+        rgba(34,197,94,.35);
+
+}
+
+
+.fee-note {
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    margin-top: 6px;
+
+}
+
+
+/* =========================================================
+   BUTTON AREA
+========================================================= */
+
+.form-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 22px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    border-radius: 18px;
+
+}
+
+
+.reset-btn,
+.cancel-btn,
+.save-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 12px 20px;
+
+    border-radius: 10px;
+
+    font-weight: 800;
+
+    transition: .3s ease;
+
+}
+
+
+.reset-btn {
+
+    background:
+        rgba(234,179,8,.12);
+
+    border:
+        1px solid rgba(234,179,8,.22);
+
+    color: #facc15;
+
+}
+
+
+.reset-btn:hover {
+
+    background:
+        rgba(234,179,8,.20);
+
+    transform: translateY(-2px);
+
+}
+
+
+.cancel-btn {
+
+    background:
+        rgba(255,255,255,.07);
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    color: #cbd5e1;
+
+}
+
+
+.cancel-btn:hover {
+
+    background:
+        rgba(255,255,255,.12);
+
+    transform: translateY(-2px);
+
+}
+
+
+.save-btn {
+
+    background:
+        #facc15;
+
+    color: #111827;
+
+    border:
+        1px solid #facc15;
+
+    padding-left: 26px;
+
+    padding-right: 26px;
+
+}
+
+
+.save-btn:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 30px rgba(250,204,21,.22);
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.form-footer {
+
+    text-align: center;
+
+    color: #475569;
+
+    padding: 20px 0 5px;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1100px) {
+
+    .form-grid-4 {
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+    .form-grid-3 {
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+}
+
+
+@media(max-width:800px) {
+
+    .hero-top {
+
+        flex-direction: column;
+
+    }
+
+    .back-btn {
+
+        align-self: flex-start;
+
+    }
+
+    .admission-strip {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+@media(max-width:650px) {
+
+    .hero-title {
+
+        font-size: 27px;
+
+    }
+
+    .admission-hero {
+
+        padding: 23px;
+
+    }
+
+    .form-grid-4,
+    .form-grid-3,
+    .form-grid-2 {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .section-body {
+
+        padding: 18px;
+
+    }
+
+    .section-header {
+
+        padding: 17px;
+
+    }
+
+    .form-actions {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+    .reset-btn,
+    .cancel-btn,
+    .save-btn {
+
+        width: 100%;
+
+    }
+
+}
+
+</style>
+
+
+<div class="add-student-page">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="admission-hero">
+
+        <div class="hero-content">
+
+            <div class="hero-top">
+
+                <div>
+
+                    <div class="hero-label">
+
+                        RR IT ORIGIN • STUDENT MANAGEMENT
 
                     </div>
 
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                    <h1 class="hero-title">
 
-                        <!-- Student Name -->
+                        Student Admission
 
-                        <div>
+                    </h1>
 
-                            <label class="font-semibold">
+                    <p class="hero-description">
 
-                                Student Name *
+                        Register a new student and maintain
+                        their complete academic, personal,
+                        contact and fee information.
 
-                            </label>
+                    </p>
 
-                        <input
-    type="text"
-    name="name"
-    value="{{ lead.name if lead else '' }}"
-    required
-    class="w-full border rounded-lg px-4 py-3 mt-2">
+                </div>
 
+
+                <a
+                    href="{{ url_for('admin.students') }}"
+                    class="back-btn"
+                >
+
+                    ← Back to Students
+
+                </a>
+
+            </div>
+
+
+            <!-- INFORMATION STRIP -->
+
+            <div class="admission-strip">
+
+
+                <div class="admission-strip-item">
+
+                    <div class="strip-icon">
+                        👤
+                    </div>
+
+                    <div>
+
+                        <div class="strip-title">
+                            Personal Details
                         </div>
 
-                        <!-- Date of Birth -->
-
-                        <div>
-
-                            <label class="font-semibold">
-
-                                Date of Birth
-
-                            </label>
-
-                            <input
-                                type="date"
-                                name="dob"
-                                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-                        </div>
-
-                        <!-- Gender -->
-
-                        <div>
-
-                            <label class="font-semibold">
-
-                                Gender
-
-                            </label>
-
-                            <select
-                                name="gender"
-                                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-                                <option value="">Select Gender</option>
-
-                                <option>Male</option>
-
-                                <option>Female</option>
-
-                                <option>Other</option>
-
-                            </select>
-
-                        </div>
-
-                        <!-- Aadhaar -->
-
-                        <div>
-
-                            <label class="font-semibold">
-
-                                Aadhaar Number
-
-                            </label>
-
-                            <input
-type="text"
-name="aadhaar"
-required
-maxlength="12"
-minlength="12"
-pattern="[0-9]{12}"
-placeholder="Enter 12 digit Aadhaar number"
-class="w-full border rounded-lg px-4 py-3 mt-2">
-
-                        </div>
-
-                        <!-- Qualification -->
-
-                        <div>
-
-                            <label class="font-semibold">
-
-                                Highest Qualification
-
-                            </label>
-
-                            <input
-                                type="text"
-                                name="qualification"
-                                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-                        </div>
-
-                        <!-- Occupation -->
-
-                        <div>
-
-                            <label class="font-semibold">
-
-                                Occupation
-
-                            </label>
-
-                            <input
-                                type="text"
-                                name="occupation"
-                                class="w-full border rounded-lg px-4 py-3 mt-2">
-
+                        <div class="strip-text">
+                            Student information
                         </div>
 
                     </div>
 
                 </div>
-                <!-- ================= PARENT DETAILS ================= -->
 
-<div class="bg-white rounded-xl shadow">
 
-    <div class="border-b px-6 py-4">
+                <div class="admission-strip-item">
 
-        <h2 class="text-2xl font-bold text-indigo-600">
+                    <div class="strip-icon">
+                        📚
+                    </div>
 
-            👨‍👩‍👦 Parent / Guardian Details
+                    <div>
 
-        </h2>
+                        <div class="strip-title">
+                            Course Details
+                        </div>
 
-    </div>
+                        <div class="strip-text">
+                            Course and batch
+                        </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                    </div>
 
-        <div>
+                </div>
 
-            <label class="font-semibold">
 
-                Father Name *
+                <div class="admission-strip-item">
 
-            </label>
+                    <div class="strip-icon">
+                        💰
+                    </div>
 
-            <input
-                type="text"
-                name="father_name"
-                required
-                class="w-full border rounded-lg px-4 py-3 mt-2">
+                    <div>
 
-        </div>
+                        <div class="strip-title">
+                            Fee Information
+                        </div>
 
-        <div>
+                        <div class="strip-text">
+                            Payment details
+                        </div>
 
-            <label class="font-semibold">
+                    </div>
 
-                Mother Name
+                </div>
 
-            </label>
 
-            <input
-                type="text"
-                name="mother_name"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold">
-
-                Parent Mobile *
-
-            </label>
-
-            <input
-                type="text"
-                name="parent_mobile"
-                required
-                class="w-full border rounded-lg px-4 py-3 mt-2">
+            </div>
 
         </div>
 
-    </div>
-
-</div>
+    </section>
 
 
-<!-- ================= CONTACT DETAILS ================= -->
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
 
-<div class="bg-white rounded-xl shadow">
+    <form
+        method="POST"
+        enctype="multipart/form-data"
+        class="student-form"
+    >
 
-    <div class="border-b px-6 py-4">
 
-        <h2 class="text-2xl font-bold text-indigo-600">
+        <!-- =================================================
+             LEAD INFORMATION
+        ================================================== -->
 
-            📞 Contact Information
+        {% if lead %}
 
-        </h2>
+        <div class="lead-notice">
 
-    </div>
+            🎯
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+            <strong>
+                Lead Conversion
+            </strong>
 
-        <div>
-
-            <label class="font-semibold">
-
-                Student Mobile *
-
-            </label>
-
-            <input
-    type="text"
-    name="mobile"
-    value="{{ lead.mobile if lead else '' }}"
-    required
-    class="w-full border rounded-lg px-4 py-3 mt-2">
+            — This admission is being created from
+            the selected lead.
 
         </div>
 
-        <div>
-
-            <label class="font-semibold">
-
-                Alternate Mobile
-
-            </label>
-
-            <input
-                type="text"
-                name="alternate_mobile"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold">
-
-                Email Address
-
-            </label>
-
-           <input
-    type="email"
-    name="email"
-    value="{{ lead.email if lead else '' }}"
-    class="w-full border rounded-lg px-4 py-3 mt-2">
-
-        </div>
-
-        <div class="md:col-span-2 lg:col-span-3">
-
-            <label class="font-semibold">
-
-                Full Address
-
-            </label>
-
-            <textarea
-                rows="4"
-                name="address"
-                class="w-full border rounded-lg px-4 py-3 mt-2"></textarea>
-
-        </div>
-
-    </div>
-
-</div>
+        {% endif %}
 
 
-<!-- ================= COURSE DETAILS ================= -->
+        <!-- =================================================
+             PERSONAL INFORMATION
+        ================================================== -->
 
-<div class="bg-white rounded-xl shadow">
+        <section class="form-section">
 
-    <div class="border-b px-6 py-4">
+            <div class="section-header">
 
-        <h2 class="text-2xl font-bold text-indigo-600">
+                <div class="section-icon">
+                    👨‍🎓
+                </div>
 
-            📚 Course Details
+                <div>
 
-        </h2>
+                    <div class="section-heading">
 
-    </div>
+                        Student Personal Information
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+                    </div>
 
-        <div>
+                    <div class="section-subtitle">
 
-            <label class="font-semibold">
+                        Basic personal information of the student
 
-                Course *
+                    </div>
 
-            </label>
+                </div>
 
-            <select
-    name="course"
-    required
-    class="w-full border rounded-lg px-4 py-3 mt-2">
+            </div>
 
-    <option value="">Select Course</option>
 
-    {% for course in courses %}
-        <option value="{{ course.title }}">
-            {{ course.title }}
+            <div class="section-body">
+
+                <div class="form-grid-3">
+
+
+                    <!-- NAME -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Student Name
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="name"
+                            value="{{ lead.name if lead else '' }}"
+                            required
+                            placeholder="Enter student name"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                    <!-- DOB -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Date of Birth
+
+                        </label>
+
+                        <input
+                            type="date"
+                            name="dob"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                    <!-- GENDER -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Gender
+
+                        </label>
+
+                        <select
+                            name="gender"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                Select Gender
+                            </option>
+
+                            <option value="Male">
+                                Male
+                            </option>
+
+                            <option value="Female">
+                                Female
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- AADHAAR -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Aadhaar Number
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="aadhaar"
+                            required
+                            maxlength="12"
+                            minlength="12"
+                            pattern="[0-9]{12}"
+                            placeholder="Enter 12 digit Aadhaar"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                    <!-- QUALIFICATION -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Highest Qualification
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="qualification"
+                            placeholder="e.g. B.Tech, MCA"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                    <!-- OCCUPATION -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Occupation
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="occupation"
+                            placeholder="Enter occupation"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PARENT DETAILS
+        ================================================== -->
+
+        <section class="form-section">
+
+            <div class="section-header">
+
+                <div class="section-icon">
+                    👨‍👩‍👦
+                </div>
+
+                <div>
+
+                    <div class="section-heading">
+
+                        Parent / Guardian Details
+
+                    </div>
+
+                    <div class="section-subtitle">
+
+                        Parent or guardian contact information
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="section-body">
+
+                <div class="form-grid-3">
+
+
+                    <!-- FATHER -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Father Name
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="father_name"
+                            required
+                            placeholder="Enter father name"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                    <!-- MOTHER -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Mother Name
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="mother_name"
+                            placeholder="Enter mother name"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                    <!-- PARENT MOBILE -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Parent Mobile
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="parent_mobile"
+                            required
+                            placeholder="Enter parent mobile"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             CONTACT INFORMATION
+        ================================================== -->
+
+        <section class="form-section">
+
+            <div class="section-header">
+
+                <div class="section-icon">
+                    📞
+                </div>
+
+                <div>
+
+                    <div class="section-heading">
+
+                        Contact Information
+
+                    </div>
+
+                    <div class="section-subtitle">
+
+                        Student communication details
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="section-body">
+
+                <div class="form-grid-3">
+
+
+                    <!-- MOBILE -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Student Mobile
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="mobile"
+                            value="{{ lead.mobile if lead else '' }}"
+                            required
+                            placeholder="Enter mobile number"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                    <!-- ALTERNATE -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Alternate Mobile
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="alternate_mobile"
+                            placeholder="Alternate number"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Email Address
+
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            value="{{ lead.email if lead else '' }}"
+                            placeholder="student@example.com"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                    <!-- ADDRESS -->
+
+                    <div class="form-field full-width">
+
+                        <label class="form-label">
+
+                            Full Address
+
+                        </label>
+
+                        <textarea
+                            rows="4"
+                            name="address"
+                            placeholder="Enter complete address"
+                            class="form-textarea"
+                        ></textarea>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             COURSE DETAILS
+        ================================================== -->
+
+        <section class="form-section">
+
+            <div class="section-header">
+
+                <div class="section-icon">
+                    📚
+                </div>
+
+                <div>
+
+                    <div class="section-heading">
+
+                        Course Details
+
+                    </div>
+
+                    <div class="section-subtitle">
+
+                        Assign course, batch and trainer
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="section-body">
+
+                <div class="form-grid-4">
+
+
+                    <!-- COURSE -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Course
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <select
+                            name="course"
+                            required
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                Select Course
+                            </option>
+
+                            {% for course in courses %}
+
+                            <option value="{{ course.title }}">
+
+                                {{ course.title }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- BATCH -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Batch
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <select
+                            name="batch"
+                            required
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                Select Batch
+                            </option>
+
+                            <option value="Morning">
+                                Morning
+                            </option>
+
+                            <option value="Afternoon">
+                                Afternoon
+                            </option>
+
+                            <option value="Evening">
+                                Evening
+                            </option>
+
+                            <option value="Weekend">
+                                Weekend
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ADMISSION DATE -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Admission Date
+
+                        </label>
+
+                        <input
+                            type="date"
+                            name="admission_date"
+                            class="form-input"
+                        >
+
+                    </div>
+
+
+                    <!-- TRAINER -->
+
+                    <!-- TRAINER / FACULTY ASSIGNMENT -->
+
+<div class="form-field">
+
+    <label class="form-label">
+        Trainer / Faculty
+        <span class="required">*</span>
+    </label>
+
+    <select
+        name="trainer"
+        required
+        class="form-select">
+
+        <option value="">
+            Select Faculty
         </option>
-    {% endfor %}
 
-</select>
-        </div>
+        {% for faculty in faculties %}
 
-        <div>
+            {% if faculty.status == "Active" %}
 
-            <label class="font-semibold">
+                <option value="{{ faculty.name }}">
+                    {{ faculty.name }}
+                    {% if faculty.subject %}
+                        — {{ faculty.subject }}
+                    {% endif %}
+                </option>
 
-                Batch *
+            {% endif %}
 
-            </label>
+        {% endfor %}
 
-
-
-
-            <select
-    name="batch"
-    required
-    class="w-full border rounded-lg px-4 py-3 mt-2">
-
-    <option value="">Select Batch</option>
-
-    <option value="Morning">Morning</option>
-
-    <option value="Afternoon">Afternoon</option>
-
-    <option value="Evening">Evening</option>
-
-    <option value="Weekend">Weekend</option>
-
-</select>
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold">
-
-                Admission Date
-
-            </label>
-
-            <input
-                type="date"
-                name="admission_date"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold">
-
-                Trainer
-
-            </label>
-
-            <input
-                type="text"
-                name="trainer"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-        </div>
-
-    </div>
+    </select>
 
 </div>
 
+                </div>
 
-<!-- ================= FEE DETAILS ================= -->
+            </div>
 
-<div class="bg-white rounded-xl shadow">
+        </section>
 
-    <div class="border-b px-6 py-4">
 
-        <h2 class="text-2xl font-bold text-indigo-600">
+        <!-- =================================================
+             FEE DETAILS
+        ================================================== -->
 
-            💰 Fee Details
+        <section class="form-section fee-section">
 
-        </h2>
+            <div class="section-header">
+
+                <div class="section-icon">
+                    💰
+                </div>
+
+                <div>
+
+                    <div class="section-heading">
+
+                        Fee Details
+
+                    </div>
+
+                    <div class="section-subtitle">
+
+                        Course fee and initial payment information
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="section-body">
+
+                <div class="form-grid-4">
+
+
+                    <!-- COURSE FEE -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Course Fee
+
+                        </label>
+
+                        <input
+                            type="number"
+                            name="course_fee"
+                            step="0.01"
+                            min="0"
+                            placeholder="0.00"
+                            class="form-input"
+                        >
+
+                        <div class="fee-note">
+                            Total course fee
+                        </div>
+
+                    </div>
+
+
+                    <!-- PAID -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Paid Amount
+
+                        </label>
+
+                        <input
+                            type="number"
+                            name="paid_amount"
+                            step="0.01"
+                            min="0"
+                            placeholder="0.00"
+                            class="form-input"
+                        >
+
+                        <div class="fee-note">
+                            Amount already paid
+                        </div>
+
+                    </div>
+
+
+                    <!-- BALANCE -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Balance Amount
+
+                        </label>
+
+                        <input
+                            type="number"
+                            name="balance_amount"
+                            step="0.01"
+                            min="0"
+                            placeholder="0.00"
+                            class="form-input"
+                        >
+
+                        <div class="fee-note">
+                            Remaining amount
+                        </div>
+
+                    </div>
+
+
+                    <!-- PAYMENT MODE -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Payment Mode
+
+                        </label>
+
+                        <select
+                            name="payment_mode"
+                            class="form-select"
+                        >
+
+                            <option value="Cash">
+                                Cash
+                            </option>
+
+                            <option value="UPI">
+                                UPI
+                            </option>
+
+                            <option value="Card">
+                                Card
+                            </option>
+
+                            <option value="Bank Transfer">
+                                Bank Transfer
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             DOCUMENT UPLOADS
+        ================================================== -->
+
+        <section class="form-section">
+
+            <div class="section-header">
+
+                <div class="section-icon">
+                    📄
+                </div>
+
+                <div>
+
+                    <div class="section-heading">
+
+                        Document Uploads
+
+                    </div>
+
+                    <div class="section-subtitle">
+
+                        Upload student documents securely
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="section-body">
+
+                <div class="form-grid-3">
+
+
+                    <!-- PHOTO -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Student Photo
+
+                        </label>
+
+                        <input
+                            type="file"
+                            name="student_photo"
+                            accept="image/*"
+                            class="file-input"
+                        >
+
+                    </div>
+
+
+                    <!-- AADHAAR -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Aadhaar Card
+
+                        </label>
+
+                        <input
+                            type="file"
+                            name="aadhaar_file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            class="file-input"
+                        >
+
+                    </div>
+
+
+                    <!-- QUALIFICATION -->
+
+                    <div class="form-field">
+
+                        <label class="form-label">
+
+                            Qualification Certificates
+
+                        </label>
+
+                        <input
+                            type="file"
+                            name="qualification_files"
+                            multiple
+                            class="file-input"
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             REMARKS
+        ================================================== -->
+
+        <section class="form-section">
+
+            <div class="section-header">
+
+                <div class="section-icon">
+                    📝
+                </div>
+
+                <div>
+
+                    <div class="section-heading">
+
+                        Additional Remarks
+
+                    </div>
+
+                    <div class="section-subtitle">
+
+                        Add any notes related to this admission
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="section-body">
+
+                <div class="form-field">
+
+                    <label class="form-label">
+
+                        Remarks
+
+                    </label>
+
+                    <textarea
+                        name="remarks"
+                        rows="5"
+                        placeholder="Enter any additional remarks..."
+                        class="form-textarea"
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ACTIONS
+        ================================================== -->
+
+        <div class="form-actions">
+
+
+            <button
+                type="reset"
+                class="reset-btn"
+            >
+
+                🔄 Reset
+
+            </button>
+
+
+            <a
+                href="{{ url_for('admin.students') }}"
+                class="cancel-btn"
+            >
+
+                ❌ Cancel
+
+            </a>
+
+
+            <button
+                type="submit"
+                class="save-btn"
+            >
+
+                💾 Save Student
+
+            </button>
+
+
+        </div>
+
+
+    </form>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <div class="form-footer">
+
+        RR IT Origin • Student Management System
 
     </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
-
-        <div>
-
-            <label class="font-semibold">
-
-                Course Fee
-
-            </label>
-
-            <input
-                type="number"
-                name="course_fee"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold">
-
-                Paid Amount
-
-            </label>
-
-            <input
-                type="number"
-                name="paid_amount"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold">
-
-                Balance Amount
-
-            </label>
-
-            <input
-                type="number"
-                name="balance_amount"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold">
-
-                Payment Mode
-
-            </label>
-
-            <select
-                name="payment_mode"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-                <option>Cash</option>
-
-                <option>UPI</option>
-
-                <option>Card</option>
-
-                <option>Bank Transfer</option>
-
-            </select>
-
-        </div>
-
-    </div>
 
 </div>
-<!-- ================= DOCUMENT UPLOADS ================= -->
 
-<div class="bg-white rounded-xl shadow">
-
-    <div class="border-b px-6 py-4">
-
-        <h2 class="text-2xl font-bold text-indigo-600">
-
-            📄 Document Uploads
-
-        </h2>
-
-    </div>
-
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-
-        <div>
-
-            <label class="font-semibold">
-
-                Student Photo
-
-            </label>
-
-            <input
-                type="file"
-                name="student_photo"
-                accept="image/*"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold">
-
-                Aadhaar Card
-
-            </label>
-
-            <input
-                type="file"
-                name="aadhaar_file"
-                accept=".pdf,.jpg,.jpeg,.png"
-                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold">
-
-                Qualification Certificates
-
-            </label>
-
-            <input
-                type="file"
-                name="qualification_files"
-                multiple
-                class="w-full border rounded-lg px-4 py-3 mt-2">
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- ================= REMARKS ================= -->
-
-<div class="bg-white rounded-xl shadow">
-
-    <div class="border-b px-6 py-4">
-
-        <h2 class="text-2xl font-bold text-indigo-600">
-
-            📝 Additional Remarks
-
-        </h2>
-
-    </div>
-
-    <div class="p-6">
-
-        <textarea
-            name="remarks"
-            rows="5"
-            placeholder="Enter any additional remarks..."
-            class="w-full border rounded-lg px-4 py-3"></textarea>
-
-    </div>
-
-</div>
-
-
-<!-- ================= BUTTONS ================= -->
-
-<div class="bg-white rounded-xl shadow p-6">
-
-    <div class="flex flex-wrap gap-4 justify-end">
-
-        <button
-            type="reset"
-            class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg">
-
-            🔄 Reset
-
-        </button>
-
-        <a href="{{ url_for('admin.students') }}"
-           class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg">
-
-            ❌ Cancel
-
-        </a>
-
-        <button
-            type="submit"
-            class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold">
-
-            💾 Save Student
-
-        </button>
-
-    </div>
-
-</div>
-
-</form>
-
-</div>
-
-</div>
-
-</body>
-
-</html>
+{% endblock %}

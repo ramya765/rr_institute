@@ -1,687 +1,2143 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "admin/layout.html" %}
 
-<head>
+{% block content %}
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
 
-    <title>Manage Courses | RR Institute</title>
+/* =========================================================
+   COURSES PAGE
+========================================================= */
 
-    <script src="https://cdn.tailwindcss.com"></script>
+.courses-page {
+    animation: pageEnter .5s ease;
+}
 
-</head>
+@keyframes pageEnter {
 
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
 
-<body class="bg-gray-100">
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 
-<div class="flex min-h-screen">
+}
 
-    <!-- ================= SIDEBAR ================= -->
 
-    <!-- ===================== SIDEBAR ===================== -->
+/* =========================================================
+   PAGE HEADER
+========================================================= */
 
-<aside class="w-72 bg-indigo-900 text-white">
+.course-hero {
 
-<div class="p-6 border-b border-indigo-700 text-center">
+    position: relative;
 
-    <img 
-        src="{{ url_for('static', filename='images/logo.jpeg') }}"
-        alt="RR Institute Logo"
-        class="w-24 h-24 mx-auto rounded-full object-cover mb-3"
-    >
+    overflow: hidden;
 
-    <h1 class="text-3xl font-bold">
-        RR Institute
-    </h1>
+    background:
+        linear-gradient(
+            135deg,
+            #071124,
+            #0d1b3a
+        );
 
-</div>
+    border:
+        1px solid rgba(255,255,255,.08);
 
+    border-radius: 22px;
 
-<nav class="mt-5">
+    padding: 28px;
 
+    margin-bottom: 24px;
 
-<a href="{{ url_for('admin.dashboard') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+    box-shadow:
+        0 18px 50px rgba(0,0,0,.25);
 
-📊 Dashboard
+}
 
-</a>
 
+.course-hero::before {
 
-<a href="{{ url_for('admin.courses') }}"
-class="block px-6 py-3 bg-indigo-700">
+    content: "";
 
-📚 Courses
+    position: absolute;
 
-</a>
+    width: 280px;
 
+    height: 280px;
 
-<a href="{{ url_for('admin.students') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+    border-radius: 50%;
 
-👨‍🎓 Students
+    background:
+        rgba(250,204,21,.06);
 
-</a>
+    top: -170px;
 
+    right: -70px;
 
-<a href="{{ url_for('admin.leads') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+}
 
-🎯 Leads
 
-</a>
+.course-hero::after {
 
+    content: "";
 
+    position: absolute;
 
+    width: 220px;
 
-<a href="{{ url_for('admin.faculty') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+    height: 220px;
 
-👨‍🏫 Faculty
+    border-radius: 50%;
 
-</a>
+    background:
+        rgba(59,130,246,.06);
 
+    bottom: -150px;
 
-<a href="{{ url_for('admin.enquiries') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+    left: 35%;
 
-📝 Enquiries
+}
 
-</a>
 
+.course-hero-content {
 
-<a href="{{ url_for('admin.companies') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+    position: relative;
 
-🏢 Companies
+    z-index: 2;
 
-</a>
+    display: flex;
 
+    align-items: center;
 
-<a href="{{ url_for('admin.placements') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+    justify-content: space-between;
 
-💼 Placements
+    gap: 20px;
 
-</a>
+}
 
 
+.course-title-area {
 
+    display: flex;
 
-<a href="{{ url_for('admin.testimonials') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+    align-items: center;
 
-⭐ Testimonials
+    gap: 18px;
 
-</a>
+}
 
 
-<a href="{{ url_for('admin.notifications') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+.course-main-icon {
 
-📢 Notifications
+    width: 65px;
 
-</a>
+    height: 65px;
 
+    display: flex;
 
-<a href="{{ url_for('admin.settings') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+    align-items: center;
 
-⚙ Settings
+    justify-content: center;
 
-</a>
+    border-radius: 18px;
 
+    background:
+        rgba(250,204,21,.10);
 
-<a href="{{ url_for('auth.logout') }}"
-class="block mt-10 mx-4 bg-red-600 text-center rounded-lg py-3 hover:bg-red-700">
+    border:
+        1px solid rgba(250,204,21,.20);
 
-Logout
+    font-size: 30px;
 
-</a>
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.2);
 
+}
 
-</nav>
 
-</aside>
+.course-kicker {
 
-    <!-- ================= MAIN CONTENT ================= -->
+    color: #facc15;
 
-    <div class="flex-1">
+    font-size: 11px;
 
-        <!-- Header -->
+    font-weight: 800;
 
-        <div class="bg-white shadow px-8 py-5 flex justify-between items-center">
+    text-transform: uppercase;
 
-            <div>
+    letter-spacing: 2px;
 
-                <h1 class="text-3xl font-bold">
+}
 
-                    Course Management
 
-                </h1>
+.course-page-title {
 
-                <p class="text-gray-500 mt-1">
+    color: white;
 
-                    Manage all institute courses from one place.
+    font-size: 30px;
 
-                </p>
+    font-weight: 900;
+
+    margin-top: 4px;
+
+}
+
+
+.course-page-description {
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+    margin-top: 5px;
+
+}
+
+
+.add-course-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    background: #facc15;
+
+    color: #111827;
+
+    padding: 12px 18px;
+
+    border-radius: 11px;
+
+    font-weight: 800;
+
+    transition: .3s ease;
+
+    box-shadow:
+        0 10px 25px rgba(250,204,21,.12);
+
+}
+
+
+.add-course-btn:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 15px 32px rgba(250,204,21,.20);
+
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.course-stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4,minmax(0,1fr));
+
+    gap: 17px;
+
+    margin-bottom: 24px;
+
+}
+
+
+.stat-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid rgba(255,255,255,.09);
+
+    border-radius: 18px;
+
+    padding: 20px;
+
+    transition: .3s ease;
+
+}
+
+
+.stat-card:hover {
+
+    transform:
+        translateY(-4px);
+
+    border-color:
+        rgba(250,204,21,.22);
+
+}
+
+
+.stat-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 80px;
+
+    height: 80px;
+
+    border-radius: 50%;
+
+    right: -30px;
+
+    bottom: -35px;
+
+    background:
+        rgba(255,255,255,.025);
+
+}
+
+
+.stat-icon {
+
+    width: 40px;
+
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background:
+        rgba(250,204,21,.09);
+
+    border:
+        1px solid rgba(250,204,21,.14);
+
+    margin-bottom: 14px;
+
+}
+
+
+.stat-label {
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .7px;
+
+}
+
+
+.stat-number {
+
+    color: white;
+
+    font-size: 30px;
+
+    font-weight: 900;
+
+    margin-top: 5px;
+
+}
+
+
+.stat-number.gold {
+
+    color: #facc15;
+
+}
+
+
+.stat-number.green {
+
+    color: #4ade80;
+
+}
+
+
+.stat-number.blue {
+
+    color: #60a5fa;
+
+}
+
+
+.stat-number.red {
+
+    color: #f87171;
+
+}
+
+
+/* =========================================================
+   SEARCH PANEL
+========================================================= */
+
+.search-card {
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid rgba(255,255,255,.09);
+
+    border-radius: 18px;
+
+    padding: 20px;
+
+    margin-bottom: 24px;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.12);
+
+}
+
+
+.search-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.search-icon {
+
+    width: 40px;
+
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background:
+        rgba(250,204,21,.09);
+
+    border:
+        1px solid rgba(250,204,21,.15);
+
+}
+
+
+.search-title {
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+}
+
+
+.search-subtitle {
+
+    color: #64748b;
+
+    font-size: 11px;
+
+}
+
+
+.search-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr auto;
+
+    gap: 12px;
+
+}
+
+
+.course-filter {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 12px 14px;
+
+    border-radius: 10px;
+
+    color: white;
+
+    background:
+        rgba(7,17,36,.85);
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    outline: none;
+
+    transition: .25s ease;
+
+}
+
+
+.course-filter:focus {
+
+    border-color:
+        #facc15;
+
+    box-shadow:
+        0 0 0 3px rgba(250,204,21,.08);
+
+}
+
+
+.course-filter option {
+
+    background: #071124;
+
+    color: white;
+
+}
+
+
+.search-btn {
+
+    border: none;
+
+    cursor: pointer;
+
+    padding: 12px 22px;
+
+    border-radius: 10px;
+
+    background: #facc15;
+
+    color: #111827;
+
+    font-weight: 800;
+
+    transition: .3s ease;
+
+}
+
+
+.search-btn:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(250,204,21,.15);
+
+}
+
+
+/* =========================================================
+   COURSE TABLE CARD
+========================================================= */
+
+.course-table-card {
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid rgba(255,255,255,.09);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 15px 45px rgba(0,0,0,.14);
+
+}
+
+
+.table-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 20px 22px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.08);
+
+}
+
+
+.table-title-wrap {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.table-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background:
+        rgba(250,204,21,.09);
+
+    border:
+        1px solid rgba(250,204,21,.15);
+
+}
+
+
+.table-title {
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+}
+
+
+.table-subtitle {
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    margin-top: 2px;
+
+}
+
+
+.total-badge {
+
+    color: #facc15;
+
+    background:
+        rgba(250,204,21,.08);
+
+    border:
+        1px solid rgba(250,204,21,.16);
+
+    padding: 7px 12px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.course-table-wrapper {
+
+    overflow-x: auto;
+
+}
+
+
+.course-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+.course-table th {
+
+    text-align: left;
+
+    padding: 15px 16px;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .8px;
+
+    background:
+        rgba(7,17,36,.35);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.07);
+
+    white-space: nowrap;
+
+}
+
+
+.course-table td {
+
+    padding: 16px;
+
+    color: #cbd5e1;
+
+    font-size: 13px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.055);
+
+    vertical-align: middle;
+
+}
+
+
+.course-row {
+
+    transition: .25s ease;
+
+}
+
+
+.course-row:hover {
+
+    background:
+        rgba(255,255,255,.035);
+
+}
+
+
+.course-id {
+
+    color: #64748b;
+
+    font-weight: 800;
+
+}
+
+
+.course-name {
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+}
+
+
+.course-description {
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    margin-top: 3px;
+
+    max-width: 280px;
+
+}
+
+
+.duration-badge {
+
+    display: inline-flex;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    color: #93c5fd;
+
+    background:
+        rgba(59,130,246,.10);
+
+    border:
+        1px solid rgba(59,130,246,.15);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+.price-badge {
+
+    display: inline-flex;
+
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    color: #4ade80;
+
+    background:
+        rgba(34,197,94,.09);
+
+    border:
+        1px solid rgba(34,197,94,.15);
+
+    font-weight: 800;
+
+    font-size: 12px;
+
+}
+
+
+.mode-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+}
+
+
+.mode-online {
+
+    color: #4ade80;
+
+    background:
+        rgba(34,197,94,.09);
+
+    border:
+        1px solid rgba(34,197,94,.15);
+
+}
+
+
+.mode-offline {
+
+    color: #60a5fa;
+
+    background:
+        rgba(59,130,246,.09);
+
+    border:
+        1px solid rgba(59,130,246,.15);
+
+}
+
+
+.mode-hybrid {
+
+    color: #c084fc;
+
+    background:
+        rgba(168,85,247,.09);
+
+    border:
+        1px solid rgba(168,85,247,.15);
+
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.course-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+}
+
+
+.edit-course-btn,
+.delete-course-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 8px 11px;
+
+    border-radius: 8px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    transition: .25s ease;
+
+}
+
+
+.edit-course-btn {
+
+    color: #facc15;
+
+    background:
+        rgba(250,204,21,.08);
+
+    border:
+        1px solid rgba(250,204,21,.15);
+
+}
+
+
+.edit-course-btn:hover {
+
+    background:
+        rgba(250,204,21,.15);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+.delete-course-btn {
+
+    color: #f87171;
+
+    background:
+        rgba(239,68,68,.08);
+
+    border:
+        1px solid rgba(239,68,68,.15);
+
+}
+
+
+.delete-course-btn:hover {
+
+    background:
+        rgba(239,68,68,.15);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-state {
+
+    padding: 70px 20px;
+
+    text-align: center;
+
+}
+
+
+.empty-icon {
+
+    font-size: 60px;
+
+    opacity: .7;
+
+}
+
+
+.empty-title {
+
+    color: white;
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+    margin-top: 12px;
+
+}
+
+
+.empty-description {
+
+    color: #64748b;
+
+    margin-top: 7px;
+
+    font-size: 13px;
+
+}
+
+
+.empty-btn {
+
+    display: inline-flex;
+
+    margin-top: 20px;
+
+    padding: 11px 18px;
+
+    border-radius: 10px;
+
+    background: #facc15;
+
+    color: #111827;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.pagination-card {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-top: 18px;
+
+    padding: 16px 20px;
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid rgba(255,255,255,.09);
+
+    border-radius: 15px;
+
+}
+
+
+.pagination-text {
+
+    color: #64748b;
+
+    font-size: 12px;
+
+}
+
+
+.pagination-buttons {
+
+    display: flex;
+
+    gap: 7px;
+
+}
+
+
+.pagination-btn {
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    background:
+        rgba(255,255,255,.04);
+
+    color: #94a3b8;
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.pagination-btn.active {
+
+    color: #111827;
+
+    background: #facc15;
+
+    border-color: #facc15;
+
+}
+
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+.summary-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+    gap: 17px;
+
+    margin-top: 24px;
+
+}
+
+
+.summary-card {
+
+    padding: 21px;
+
+    border-radius: 17px;
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid rgba(255,255,255,.09);
+
+}
+
+
+.summary-label {
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+}
+
+
+.summary-value {
+
+    color: white;
+
+    font-size: 28px;
+
+    font-weight: 900;
+
+    margin-top: 7px;
+
+}
+
+
+.summary-value.gold {
+
+    color: #facc15;
+
+}
+
+
+.summary-value.green {
+
+    color: #4ade80;
+
+}
+
+
+.summary-value.red {
+
+    color: #f87171;
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.course-footer {
+
+    margin-top: 25px;
+
+    padding: 20px;
+
+    border-radius: 17px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid rgba(255,255,255,.07);
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+
+.footer-title {
+
+    color: white;
+
+    font-weight: 800;
+
+}
+
+
+.footer-subtitle {
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    margin-top: 3px;
+
+}
+
+
+.footer-year {
+
+    color: #64748b;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1000px) {
+
+    .course-stats {
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+    .search-grid {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+    .search-btn {
+
+        grid-column:
+            1 / -1;
+
+    }
+
+    .summary-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+@media(max-width:700px) {
+
+    .course-hero-content {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+    .course-page-title {
+
+        font-size: 24px;
+
+    }
+
+    .course-stats {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .search-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .search-btn {
+
+        grid-column:
+            auto;
+
+    }
+
+    .table-header {
+
+        align-items: flex-start;
+
+        gap: 10px;
+
+        flex-direction: column;
+
+    }
+
+    .pagination-card {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 12px;
+
+    }
+
+    .course-footer {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+
+    }
+
+}
+
+</style>
+
+
+<div class="courses-page">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <section class="course-hero">
+
+        <div class="course-hero-content">
+
+
+            <div class="course-title-area">
+
+                <div class="course-main-icon">
+
+                    📚
+
+                </div>
+
+
+                <div>
+
+                    <div class="course-kicker">
+
+                        ACADEMIC MANAGEMENT
+
+                    </div>
+
+
+                    <h1 class="course-page-title">
+
+                        Course Management
+
+                    </h1>
+
+
+                    <p class="course-page-description">
+
+                        Manage all institute courses from one place.
+
+                    </p>
+
+                </div>
 
             </div>
 
-            <a href="{{ url_for('admin.add_course') }}"
-               class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg shadow">
+
+            <a
+                href="{{ url_for('admin.add_course') }}"
+                class="add-course-btn"
+            >
 
                 ➕ Add New Course
 
             </a>
 
+
         </div>
 
-        <div class="p-8">
+    </section>
 
-            <!-- Statistics -->
 
-            <div class="grid md:grid-cols-4 gap-6 mb-8">
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
 
-                <div class="bg-white rounded-xl shadow p-6">
+    <section class="course-stats">
 
-                    <p class="text-gray-500">
 
-                        Total Courses
+        <div class="stat-card">
 
-                    </p>
+            <div class="stat-icon">
 
-                    <h2 class="text-4xl font-bold text-indigo-600 mt-3">
+                📚
 
-                        {{ courses|length }}
+            </div>
 
-                    </h2>
+            <div class="stat-label">
+
+                Total Courses
+
+            </div>
+
+            <div class="stat-number gold">
+
+                {{ courses|length }}
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+
+                🌐
+
+            </div>
+
+            <div class="stat-label">
+
+                Online Courses
+
+            </div>
+
+            <div class="stat-number green">
+
+                {{ courses|selectattr('mode','equalto','Online')|list|length }}
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+
+                🏫
+
+            </div>
+
+            <div class="stat-label">
+
+                Offline Courses
+
+            </div>
+
+            <div class="stat-number blue">
+
+                {{ courses|selectattr('mode','equalto','Offline')|list|length }}
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+
+                👨‍🏫
+
+            </div>
+
+            <div class="stat-label">
+
+                Total Trainers
+
+            </div>
+
+            <div class="stat-number red">
+
+                {{ courses|length }}
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
+
+    <section class="search-card">
+
+
+        <div class="search-header">
+
+            <div class="search-icon">
+
+                🔎
+
+            </div>
+
+
+            <div>
+
+                <div class="search-title">
+
+                    Find Courses
 
                 </div>
 
-                <div class="bg-white rounded-xl shadow p-6">
+                <div class="search-subtitle">
 
-                    <p class="text-gray-500">
-
-                        Online Courses
-
-                    </p>
-
-                    <h2 class="text-4xl font-bold text-green-600 mt-3">
-
-                        {{ courses|selectattr('mode','equalto','Online')|list|length }}
-
-                    </h2>
-
-                </div>
-
-                <div class="bg-white rounded-xl shadow p-6">
-
-                    <p class="text-gray-500">
-
-                        Offline Courses
-
-                    </p>
-
-                    <h2 class="text-4xl font-bold text-blue-600 mt-3">
-
-                        {{ courses|selectattr('mode','equalto','Offline')|list|length }}
-
-                    </h2>
-
-                </div>
-
-                <div class="bg-white rounded-xl shadow p-6">
-
-                    <p class="text-gray-500">
-
-                        Total Trainers
-
-                    </p>
-
-                    <h2 class="text-4xl font-bold text-red-600 mt-3">
-
-                        {{ courses|length }}
-
-                    </h2>
+                    Filter courses by name or learning mode.
 
                 </div>
 
             </div>
 
-            <!-- Search -->
-
-           <div class="grid md:grid-cols-4 gap-4">
-
-
-    <!-- Search -->
-
-    
-
-
-    <!-- Course Dropdown -->
-
-    <select
-        id="courseName"
-        class="border rounded-lg px-4 py-3">
-
-
-        <option value="">
-            All Courses
-        </option>
-
-
-        {% for course in courses %}
-
-        <option value="{{ course.title }}">
-            {{ course.title }}
-        </option>
-
-        {% endfor %}
-
-
-    </select>
-
-
-
-    <!-- Mode Dropdown -->
-
-    <select
-        id="courseMode"
-        class="border rounded-lg px-4 py-3">
-
-
-        <option value="">
-            All Modes
-        </option>
-
-
-        <option value="Online">
-            Online
-        </option>
-
-
-        <option value="Offline">
-            Offline
-        </option>
-
-
-        <option value="Hybrid">
-            Hybrid
-        </option>
-
-
-    </select>
-
-
-
-    <button
-        type="button"
-        id="searchButton"
-        class="bg-indigo-600 text-white rounded-lg">
-
-        Search
-
-    </button>
-
-
-</div>
-
-            </div>
-
-            <!-- ================= COURSE TABLE STARTS HERE ================= -->
-             <!-- ================= COURSES TABLE ================= -->
-
-<div class="bg-white rounded-xl shadow overflow-hidden">
-
-    <div class="flex justify-between items-center px-6 py-5 border-b">
-
-        <div>
-
-            <h2 class="text-2xl font-bold">
-
-                📚 Course List
-
-            </h2>
-
-            <p class="text-gray-500">
-
-                Total Courses : {{ courses|length }}
-
-            </p>
-
         </div>
 
-    </div>
 
-    <div class="overflow-x-auto">
+        <div class="search-grid">
 
-        <table class="min-w-full">
 
-            <thead class="bg-gray-100">
+            <!-- Course Dropdown -->
 
-                <tr>
+            <select
+                id="courseName"
+                class="course-filter"
+            >
 
-                    <th class="p-4 text-left">ID</th>
+                <option value="">
 
-                    <th class="p-4 text-left">Course</th>
+                    All Courses
 
-                    <th class="p-4 text-left">Duration</th>
+                </option>
 
-                    <th class="p-4 text-left">Mode</th>
-
-                    <th class="p-4 text-left">Trainer</th>
-
-                    <th class="p-4 text-left">Price</th>
-
-                    <th class="p-4 text-center">Actions</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-            {% if courses %}
 
                 {% for course in courses %}
 
-               <tr class="course-row border-b hover:bg-indigo-50 transition">
+                <option value="{{ course.title }}">
 
-                    <td class="p-4">
+                    {{ course.title }}
 
-                        {{ course.id }}
-
-                    </td>
-
-                    <td class="p-4">
-
-                        <div>
-
-                            <h3 class="font-semibold text-lg">
-
-                                {{ course.title }}
-
-                            </h3>
-
-                            <p class="text-sm text-gray-500">
-
-                                {{ course.description[:60] }}...
-
-                            </p>
-
-                        </div>
-
-                    </td>
-
-                    <td class="p-4">
-
-                        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
-
-                            {{ course.duration }}
-
-                        </span>
-
-                    </td>
-
-                    <td class="p-4">
-
-                        {% if course.mode=="Online" %}
-
-                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full">
-
-                            🟢 Online
-
-                        </span>
-
-                        {% elif course.mode=="Offline" %}
-
-                        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
-
-                            🔵 Offline
-
-                        </span>
-
-                        {% else %}
-
-                        <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full">
-
-                            🟣 Hybrid
-
-                        </span>
-
-                        {% endif %}
-
-                    </td>
-
-                    <td class="p-4">
-
-                        {{ course.trainer }}
-
-                    </td>
-
-                    <td class="p-4">
-
-                        <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full font-bold">
-
-                            ₹{{ course.price }}
-
-                        </span>
-
-                    </td>
-
-                    <td class="p-4">
-
-                        <div class="flex justify-center gap-2">
-
-                            <a href="{{ url_for('admin.edit_course', id=course.id) }}"
-                               class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-2 rounded">
-
-                                ✏ Edit
-
-                            </a>
-
-                            <a href="{{ url_for('admin.delete_course', id=course.id) }}"
-onclick="return confirm('Delete this course?')"
-class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">
-
-🗑 Delete
-
-</a>
-
-                        </div>
-
-                    </td>
-
-                </tr>
+                </option>
 
                 {% endfor %}
 
-            {% else %}
+            </select>
 
-                <tr>
 
-                    <td colspan="7">
+            <!-- Mode Dropdown -->
 
-                        <div class="flex flex-col items-center py-16">
+            <select
+                id="courseMode"
+                class="course-filter"
+            >
 
-                            <div class="text-7xl">
+                <option value="">
 
-                                📚
+                    All Modes
 
-                            </div>
+                </option>
 
-                            <h2 class="text-2xl font-bold mt-5">
 
-                                No Courses Available
+                <option value="Online">
 
-                            </h2>
+                    Online
 
-                            <p class="text-gray-500 mt-2">
+                </option>
 
-                                Click "Add New Course" to create your first course.
 
-                            </p>
+                <option value="Offline">
 
-                            <a href="{{ url_for('admin.add_course') }}"
-                               class="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg">
+                    Offline
 
-                                ➕ Add Course
+                </option>
 
-                            </a>
 
-                        </div>
+                <option value="Hybrid">
 
-                    </td>
+                    Hybrid
 
-                </tr>
+                </option>
 
-            {% endif %}
+            </select>
 
-            </tbody>
 
-        </table>
+            <button
+                type="button"
+                id="searchButton"
+                class="search-btn"
+            >
 
-    </div>
+                🔍 Search
 
-</div>
-<!-- ================= PAGINATION ================= -->
+            </button>
 
-<div class="bg-white rounded-xl shadow mt-6 px-6 py-4 flex flex-col md:flex-row justify-between items-center">
-
-    <p class="text-gray-600">
-
-        Showing {{ courses|length }} Course(s)
-
-    </p>
-
-    <div class="flex gap-2 mt-4 md:mt-0">
-
-        <button class="px-4 py-2 border rounded-lg hover:bg-gray-100">
-
-            Previous
-
-        </button>
-
-        <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg">
-
-            1
-
-        </button>
-
-        <button class="px-4 py-2 border rounded-lg hover:bg-gray-100">
-
-            Next
-
-        </button>
-
-    </div>
-
-</div>
-
-<!-- ================= COURSE SUMMARY ================= -->
-
-<div class="grid md:grid-cols-3 gap-6 mt-8">
-
-    <div class="bg-white rounded-xl shadow p-6">
-
-        <p class="text-gray-500">
-
-            Total Courses
-
-        </p>
-
-        <h2 class="text-4xl font-bold text-indigo-600 mt-3">
-
-            {{ courses|length }}
-
-        </h2>
-
-    </div>
-
-    <div class="bg-white rounded-xl shadow p-6">
-
-        <p class="text-gray-500">
-
-            Total Trainers
-
-        </p>
-
-        <h2 class="text-4xl font-bold text-green-600 mt-3">
-
-            {{ courses|map(attribute='trainer')|list|length }}
-
-        </h2>
-
-    </div>
-
-    <div class="bg-white rounded-xl shadow p-6">
-
-        <p class="text-gray-500">
-
-            Average Course Fee
-
-        </p>
-
-        <h2 class="text-4xl font-bold text-red-600 mt-3">
-
-            ₹{{ ((courses|sum(attribute='price')) / (courses|length))|round(0) if courses else 0 }}
-
-        </h2>
-
-    </div>
-
-</div>
-
-<!-- ================= FOOTER ================= -->
-
-<footer class="mt-10 bg-white rounded-xl shadow p-6">
-
-    <div class="flex flex-col md:flex-row justify-between items-center">
-
-        <div>
-
-            <h2 class="font-bold text-lg">
-
-                RR Institute Management System
-
-            </h2>
-
-            <p class="text-gray-500">
-
-                Course Management Module
-
-            </p>
 
         </div>
 
-        <div class="text-gray-500 mt-4 md:mt-0">
+    </section>
+
+
+    <!-- =====================================================
+         COURSE TABLE
+    ====================================================== -->
+
+    <section class="course-table-card">
+
+
+        <div class="table-header">
+
+
+            <div class="table-title-wrap">
+
+
+                <div class="table-icon">
+
+                    📚
+
+                </div>
+
+
+                <div>
+
+                    <div class="table-title">
+
+                        Course List
+
+                    </div>
+
+
+                    <div class="table-subtitle">
+
+                        All courses available in the institute
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="total-badge">
+
+                Total Courses :
+                {{ courses|length }}
+
+            </div>
+
+
+        </div>
+
+
+        <div class="course-table-wrapper">
+
+
+            <table class="course-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Course
+                        </th>
+
+                        <th>
+                            Duration
+                        </th>
+
+                        <th>
+                            Mode
+                        </th>
+
+                        <th>
+                            Trainer
+                        </th>
+
+                        <th>
+                            Price
+                        </th>
+
+                        <th style="text-align:center;">
+
+                            Actions
+
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                {% if courses %}
+
+
+                    {% for course in courses %}
+
+
+                    <tr class="course-row">
+
+
+                        <!-- ID -->
+
+                        <td>
+
+                            <span class="course-id">
+
+                                #{{ course.id }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- COURSE -->
+
+                        <td>
+
+                            <div class="course-name">
+
+                                {{ course.title }}
+
+                            </div>
+
+
+                            <div class="course-description">
+
+                                {{ course.description[:60] }}...
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- DURATION -->
+
+                        <td>
+
+                            <span class="duration-badge">
+
+                                ⏱ {{ course.duration }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- MODE -->
+
+                        <td>
+
+
+                            {% if course.mode=="Online" %}
+
+
+                            <span class="mode-badge mode-online">
+
+                                🟢 Online
+
+                            </span>
+
+
+                            {% elif course.mode=="Offline" %}
+
+
+                            <span class="mode-badge mode-offline">
+
+                                🔵 Offline
+
+                            </span>
+
+
+                            {% else %}
+
+
+                            <span class="mode-badge mode-hybrid">
+
+                                🟣 Hybrid
+
+                            </span>
+
+
+                            {% endif %}
+
+
+                        </td>
+
+
+                        <!-- TRAINER -->
+
+                        <td>
+
+                            {{ course.trainer }}
+
+                        </td>
+
+
+                        <!-- PRICE -->
+
+                        <td>
+
+                            <span class="price-badge">
+
+                                ₹{{ course.price }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- ACTIONS -->
+
+                        <td>
+
+
+                            <div class="course-actions">
+
+
+                                <a
+                                    href="{{ url_for('admin.edit_course', id=course.id) }}"
+                                    class="edit-course-btn"
+                                >
+
+                                    ✏ Edit
+
+                                </a>
+
+
+                                <a
+                                    href="{{ url_for('admin.delete_course', id=course.id) }}"
+                                    onclick="return confirm('Delete this course?')"
+                                    class="delete-course-btn"
+                                >
+
+                                    🗑 Delete
+
+                                </a>
+
+
+                            </div>
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                {% else %}
+
+
+                    <tr>
+
+                        <td colspan="7">
+
+
+                            <div class="empty-state">
+
+
+                                <div class="empty-icon">
+
+                                    📚
+
+                                </div>
+
+
+                                <div class="empty-title">
+
+                                    No Courses Available
+
+                                </div>
+
+
+                                <div class="empty-description">
+
+                                    Click "Add New Course" to create
+                                    your first course.
+
+                                </div>
+
+
+                                <a
+                                    href="{{ url_for('admin.add_course') }}"
+                                    class="empty-btn"
+                                >
+
+                                    ➕ Add Course
+
+                                </a>
+
+
+                            </div>
+
+
+                        </td>
+
+                    </tr>
+
+
+                {% endif %}
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         PAGINATION
+    ====================================================== -->
+
+    <div class="pagination-card">
+
+
+        <p class="pagination-text">
+
+            Showing {{ courses|length }} Course(s)
+
+        </p>
+
+
+        <div class="pagination-buttons">
+
+
+            <button
+                type="button"
+                class="pagination-btn"
+            >
+
+                Previous
+
+            </button>
+
+
+            <button
+                type="button"
+                class="pagination-btn active"
+            >
+
+                1
+
+            </button>
+
+
+            <button
+                type="button"
+                class="pagination-btn"
+            >
+
+                Next
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         COURSE SUMMARY
+    ====================================================== -->
+
+    <section class="summary-grid">
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+
+                Total Courses
+
+            </div>
+
+
+            <div class="summary-value gold">
+
+                {{ courses|length }}
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+
+                Total Trainers
+
+            </div>
+
+
+            <div class="summary-value green">
+
+                {{ courses|map(attribute='trainer')|list|length }}
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+
+                Average Course Fee
+
+            </div>
+
+
+            <div class="summary-value red">
+
+                ₹{{ ((courses|sum(attribute='price')) / (courses|length))|round(0) if courses else 0 }}
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="course-footer">
+
+
+        <div>
+
+            <div class="footer-title">
+
+                RR Institute Management System
+
+            </div>
+
+
+            <div class="footer-subtitle">
+
+                Course Management Module
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-year">
 
             © {{ current_year if current_year else 2026 }}
 
         </div>
 
-    </div>
 
-</footer>
+    </footer>
 
-</div>
 
 </div>
 
-<!-- ================= SEARCH SCRIPT ================= -->
+
+<!-- =========================================================
+     SEARCH SCRIPT
+     ORIGINAL FUNCTIONALITY PRESERVED
+========================================================= -->
+
 <script>
 
-const searchButton = document.getElementById("searchButton");
+const searchButton =
+    document.getElementById("searchButton");
 
-const modeSelect = document.getElementById("courseMode");
+const modeSelect =
+    document.getElementById("courseMode");
 
-const courseSelect = document.getElementById("courseName");
+const courseSelect =
+    document.getElementById("courseName");
 
 
-
-function searchCourses(){
+function searchCourses() {
 
 
     let selectedCourse =
@@ -692,18 +2148,15 @@ function searchCourses(){
         modeSelect.value.toLowerCase();
 
 
-
     let rows =
         document.querySelectorAll(".course-row");
 
 
-
-    rows.forEach(function(row){
+    rows.forEach(function(row) {
 
 
         let rowText =
             row.innerText.toLowerCase();
-
 
 
         let courseMatch =
@@ -711,19 +2164,20 @@ function searchCourses(){
             rowText.includes(selectedCourse);
 
 
-
         let modeMatch =
             modeValue === "" ||
             rowText.includes(modeValue);
 
 
-
-        if(courseMatch && modeMatch){
+        if (
+            courseMatch &&
+            modeMatch
+        ) {
 
             row.style.display = "";
 
         }
-        else{
+        else {
 
             row.style.display = "none";
 
@@ -736,12 +2190,10 @@ function searchCourses(){
 }
 
 
-
 searchButton.addEventListener(
     "click",
     searchCourses
 );
-
 
 
 courseSelect.addEventListener(
@@ -750,16 +2202,12 @@ courseSelect.addEventListener(
 );
 
 
-
 modeSelect.addEventListener(
     "change",
     searchCourses
 );
 
-
 </script>
 
 
-</body>
-
-</html>
+{% endblock %}

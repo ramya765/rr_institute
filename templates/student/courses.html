@@ -4,1258 +4,615 @@
 <head>
 
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <title>Browse Courses | RR IT Origin</title>
 
-    <title>
-        Available Courses | RR IT Origin
-    </title>
-
-    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Google Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
 
-        /* ==========================================
-           GLOBAL
-        ========================================== */
-
-        * {
-            scroll-behavior: smooth;
-            box-sizing: border-box;
+        body{
+            font-family:'Inter',sans-serif;
+            background:#f5f7fb;
         }
 
-
-        body {
-
-            margin: 0;
-
-            font-family: 'Inter', sans-serif;
-
-            background: #071329;
-
-            color: white;
-
-            overflow-x: hidden;
-
+        .course-card{
+            transition:.3s;
         }
 
-
-        .serif {
-
-            font-family:
-                'Playfair Display',
-                serif;
-
+        .course-card:hover{
+            transform:translateY(-8px);
+            box-shadow:0 20px 40px rgba(0,0,0,.12);
         }
 
-
-        /* ==========================================
-           PAGE BACKGROUND
-        ========================================== */
-
-        .courses-page {
-
-            min-height: 100vh;
-
-            background:
-
-                linear-gradient(
-                    rgba(3, 14, 35, .80),
-                    rgba(3, 14, 35, .96)
-                ),
-
-                url("{{ url_for('static', filename='images/institute.jpeg') }}");
-
-            background-size: cover;
-
-            background-position: center;
-
-            background-attachment: fixed;
-
-            position: relative;
-
-        }
-
-
-        /* ==========================================
-           NAVBAR
-        ========================================== */
-
-        .navbar {
-
-            background:
-
-                rgba(5, 16, 38, .92);
-
-            backdrop-filter:
-
-                blur(18px);
-
-            -webkit-backdrop-filter:
-
-                blur(18px);
-
-            border-bottom:
-
-                1px solid
-                rgba(255,255,255,.12);
-
-            position: sticky;
-
-            top: 0;
-
-            z-index: 1000;
-
-        }
-
-
-        /* ==========================================
-           GOLD
-        ========================================== */
-
-        .gold {
-
-            color: #facc15;
-
-        }
-
-
-        /* ==========================================
-           LOGO
-        ========================================== */
-
-        .logo-image {
-
-            height: 55px;
-
-            width: auto;
-
-            border-radius: 10px;
-
-            object-fit: contain;
-
-            transition: all .3s ease;
-
-        }
-
-
-        .logo-image:hover {
-
-            transform:
-                scale(1.05);
-
-        }
-
-
-        /* ==========================================
-           BACK BUTTON
-        ========================================== */
-
-        .back-button {
-
-            border:
-
-                1px solid #facc15;
-
-            color: #facc15;
-
-            transition: all .3s ease;
-
-        }
-
-
-        .back-button:hover {
-
-            background: #facc15;
-
-            color: #111827;
-
-            transform:
-                translateY(-3px);
-
-            box-shadow:
-
-                0 12px 30px
-                rgba(250,204,21,.25);
-
-        }
-
-
-        /* ==========================================
-           HERO
-        ========================================== */
-
-        .page-hero {
-
-            padding:
-
-                90px 20px 60px;
-
-            text-align: center;
-
-        }
-
-
-        .hero-badge {
-
-            display: inline-block;
-
-            border:
-
-                1px solid #facc15;
-
-            color: #facc15;
-
-            padding:
-
-                8px 18px;
-
-            border-radius:
-
-                999px;
-
-            font-size:
-
-                14px;
-
-            font-weight:
-
-                600;
-
-            letter-spacing:
-
-                .5px;
-
-        }
-
-
-        .gold-line {
-
-            width: 70px;
-
-            height: 4px;
-
-            background: #facc15;
-
-            margin:
-
-                20px auto;
-
-            border-radius:
-
-                20px;
-
-        }
-
-
-        /* ==========================================
-           COURSE GRID
-        ========================================== */
-
-        .course-grid {
-
-            display: grid;
-
-            grid-template-columns:
-
-                repeat(3, minmax(0, 1fr));
-
-            gap: 28px;
-
-        }
-
-
-        /* ==========================================
-           COURSE CARD
-        ========================================== */
-
-        .course-card {
-
-            background:
-
-                rgba(15, 31, 65, .78);
-
-            border:
-
-                1px solid
-                rgba(255,255,255,.16);
-
-            backdrop-filter:
-
-                blur(18px);
-
-            -webkit-backdrop-filter:
-
-                blur(18px);
-
-            border-radius:
-
-                22px;
-
-            padding:
-
-                30px;
-
-            position: relative;
-
-            overflow: hidden;
-
-            transition:
-
-                all .4s ease;
-
-        }
-
-
-        .course-card::before {
-
-            content: "";
-
-            position: absolute;
-
-            width: 180px;
-
-            height: 180px;
-
-            border-radius: 50%;
-
-            background:
-
-                rgba(250,204,21,.06);
-
-            top: -90px;
-
-            right: -70px;
-
-            transition:
-
-                all .4s ease;
-
-        }
-
-
-        .course-card:hover {
-
-            transform:
-
-                translateY(-10px);
-
-            border-color:
-
-                rgba(250,204,21,.65);
-
-            box-shadow:
-
-                0 25px 60px
-                rgba(0,0,0,.35);
-
-            background:
-
-                rgba(15,31,65,.90);
-
-        }
-
-
-        .course-card:hover::before {
-
-            transform:
-
-                scale(1.5);
-
-            background:
-
-                rgba(250,204,21,.10);
-
-        }
-
-
-        /* ==========================================
-           COURSE ICON
-        ========================================== */
-
-        .course-icon {
-
-            width: 65px;
-
-            height: 65px;
-
-            border-radius:
-
-                16px;
-
-            background:
-
-                rgba(250,204,21,.10);
-
-            border:
-
-                1px solid
-                rgba(250,204,21,.20);
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-size: 32px;
-
-            transition:
-
-                all .35s ease;
-
-        }
-
-
-        .course-card:hover .course-icon {
-
-            transform:
-
-                scale(1.1)
-                rotate(-4deg);
-
-            background:
-
-                rgba(250,204,21,.17);
-
-        }
-
-
-        /* ==========================================
-           COURSE TITLE
-        ========================================== */
-
-        .course-title {
-
-            color: white;
-
-            transition:
-
-                color .3s ease;
-
-        }
-
-
-        .course-card:hover .course-title {
-
-            color: #facc15;
-
-        }
-
-
-        /* ==========================================
-           COURSE DETAILS
-        ========================================== */
-
-        .detail-item {
-
-            color:
-
-                #cbd5e1;
-
-            padding:
-
-                8px 0;
-
-            border-bottom:
-
-                1px solid
-                rgba(255,255,255,.07);
-
-        }
-
-
-        .detail-item:last-child {
-
-            border-bottom:
-
-                none;
-
-        }
-
-
-        .detail-label {
-
-            color:
-
-                #94a3b8;
-
-        }
-
-
-        /* ==========================================
-           PRICE
-        ========================================== */
-
-        .course-price {
-
-            color:
-
-                #facc15;
-
-            font-size:
-
-                25px;
-
-            font-weight:
-
-                800;
-
-        }
-
-
-        /* ==========================================
-           ENROLL BUTTON
-        ========================================== */
-
-        .enroll-button {
-
-            display: block;
-
-            width: 100%;
-
-            text-align: center;
-
-            background:
-
-                #facc15;
-
-            color:
-
-                #111827;
-
-            padding:
-
-                13px 20px;
-
-            border-radius:
-
-                10px;
-
-            font-weight:
-
-                700;
-
-            transition:
-
-                all .3s ease;
-
-        }
-
-
-        .enroll-button:hover {
-
-            transform:
-
-                translateY(-3px);
-
-            box-shadow:
-
-                0 15px 35px
-                rgba(250,204,21,.28);
-
-            background:
-
-                #fde047;
-
-        }
-
-
-        /* ==========================================
-           WHATSAPP
-        ========================================== */
-
-        .whatsapp-button {
-
-            background:
-
-                #16a34a;
-
-            color:
-
-                white;
-
-            transition:
-
-                all .3s ease;
-
-        }
-
-
-        .whatsapp-button:hover {
-
-            background:
-
-                #15803d;
-
-            transform:
-
-                translateY(-3px);
-
-            box-shadow:
-
-                0 12px 30px
-                rgba(22,163,74,.25);
-
-        }
-
-
-        /* ==========================================
-           EMPTY STATE
-        ========================================== */
-
-        .empty-state {
-
-            background:
-
-                rgba(15,31,65,.80);
-
-            border:
-
-                1px solid
-                rgba(255,255,255,.15);
-
-            backdrop-filter:
-
-                blur(15px);
-
-            border-radius:
-
-                22px;
-
-        }
-
-
-        /* ==========================================
-           FOOTER
-        ========================================== */
-
-        footer {
-
-            background:
-
-                rgba(0,0,0,.65);
-
-            border-top:
-
-                1px solid
-                rgba(255,255,255,.10);
-
-        }
-
-
-        /* ==========================================
-           REVEAL ANIMATION
-        ========================================== */
-
-        .reveal {
-
-            opacity: 0;
-
-            transform:
-
-                translateY(35px);
-
-            animation:
-
-                revealAnimation
-                .7s ease forwards;
-
-        }
-
-
-        @keyframes revealAnimation {
-
-            to {
-
-                opacity: 1;
-
-                transform:
-                    translateY(0);
-
-            }
-
-        }
-
-
-        .delay-1 {
-            animation-delay: .1s;
-        }
-
-        .delay-2 {
-            animation-delay: .2s;
-        }
-
-        .delay-3 {
-            animation-delay: .3s;
-        }
-
-        .delay-4 {
-            animation-delay: .4s;
-        }
-
-        .delay-5 {
-            animation-delay: .5s;
-        }
-
-
-        /* ==========================================
-           MOBILE
-        ========================================== */
-
-        @media(max-width: 1024px) {
-
-            .course-grid {
-
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-
-            }
-
-        }
-
-
-        @media(max-width: 640px) {
-
-            .courses-page {
-
-                background-attachment:
-                    scroll;
-
-            }
-
-
-            .logo-image {
-
-                height: 45px;
-
-            }
-
-
-            .logo-subtitle {
-
-                display: none;
-
-            }
-
-
-            .page-hero {
-
-                padding:
-
-                    60px 20px 40px;
-
-            }
-
-
-            .page-hero h1 {
-
-                font-size:
-                    40px !important;
-
-            }
-
-
-            .course-grid {
-
-                grid-template-columns:
-                    1fr;
-
-            }
-
-
-            .course-card {
-
-                padding:
-                    24px;
-
-            }
-
-
+        .search-box{
+            box-shadow:0 10px 30px rgba(0,0,0,.08);
         }
 
     </style>
 
 </head>
 
-
 <body>
 
+<!-- HERO -->
 
-<div class="courses-page">
+<section class="bg-gradient-to-r from-indigo-700 via-indigo-600 to-blue-600 text-white">
 
+    <div class="max-w-7xl mx-auto px-6 py-14">
 
-    <!-- =====================================================
-         NAVBAR
-    ====================================================== -->
+        <div class="md:flex justify-between items-center">
 
-    <nav class="navbar">
+            <div>
 
-        <div
-            class="max-w-7xl mx-auto px-5 md:px-6">
+                <h1 class="text-5xl font-extrabold">
 
-            <div
-                class="flex items-center justify-between h-24">
+                    Browse Courses
 
+                </h1>
 
-                <!-- LOGO -->
+                <p class="mt-4 text-lg text-indigo-100">
 
-                <a
-                    href="/"
-                    class="flex items-center gap-3">
+                    Learn industry-ready skills and get placed with RR IT Origin.
 
+                </p>
 
-                    <img
-                        src="{{ url_for('static', filename='images/logo.jpeg') }}"
-                        class="logo-image"
-                        alt="RR IT Origin">
+            </div>
 
+            <div class="mt-8 md:mt-0">
 
-                    <div>
-
-                        <h1
-                            class="text-xl md:text-2xl font-bold gold">
-
-                            RR IT Origin
-
-                        </h1>
-
-
-                        <p
-                            class="logo-subtitle text-xs tracking-widest text-gray-300">
-
-                            LEARN • BUILD • SUCCEED
-
-                        </p>
-
-                    </div>
-
-
-                </a>
-
-
-                <!-- DASHBOARD -->
-
-                <a
-                    href="{{ url_for('student.dashboard') }}"
-                    class="back-button px-5 py-3 rounded-lg font-semibold">
+                <a href="{{ url_for('student.explorer_dashboard') }}"
+                   class="bg-white text-indigo-700 px-6 py-3 rounded-xl font-semibold hover:bg-indigo-100">
 
                     ← Dashboard
 
                 </a>
 
-
             </div>
 
         </div>
 
-    </nav>
+        <!-- Search -->
+
+        <div class="mt-12">
+
+            <input
+
+                id="searchCourse"
+
+                type="text"
+
+                placeholder="🔍 Search Courses..."
+
+                class="search-box w-full md:w-[450px] rounded-xl px-6 py-4 text-gray-700 outline-none text-lg"
+
+                onkeyup="searchCourses()">
+
+        </div>
+
+    </div>
+
+</section>
 
 
+<!-- Statistics -->
 
-    <!-- =====================================================
-         HERO
-    ====================================================== -->
+<section class="max-w-7xl mx-auto px-6 mt-10">
 
-    <section
-        class="page-hero">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
 
+        <div class="bg-white rounded-xl shadow p-6">
 
-        <div
-            class="max-w-5xl mx-auto">
-
-
-            <div
-                class="reveal">
-
-
-                <span
-                    class="hero-badge">
-
-                    RR IT ORIGIN • TRAINING PROGRAMS
-
-                </span>
-
-
-            </div>
-
-
-            <h1
-                class="reveal serif text-5xl md:text-6xl font-bold mt-7">
-
+            <h3 class="text-gray-500">
 
                 Available Courses
 
+            </h3>
+
+            <h1 class="text-4xl font-bold text-indigo-700 mt-2">
+
+                {{ courses|length }}
 
             </h1>
 
+        </div>
 
-            <div
-                class="gold-line">
+        <div class="bg-white rounded-xl shadow p-6">
 
+            <h3 class="text-gray-500">
 
-            </div>
+                Placement Support
 
+            </h3>
 
-            <p
-                class="reveal text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
+            <h1 class="text-4xl font-bold text-green-600">
 
+                100%
 
-                Choose the right technology course,
-                build industry-ready skills and start
-                your career journey.
-
-
-            </p>
-
+            </h1>
 
         </div>
 
+        <div class="bg-white rounded-xl shadow p-6">
 
-    </section>
+            <h3 class="text-gray-500">
 
+                Learning Mode
 
+            </h3>
 
-    <!-- =====================================================
-         COURSES
-    ====================================================== -->
+            <h1 class="text-2xl font-bold text-blue-600">
 
-    <main
-        class="max-w-7xl mx-auto px-5 md:px-6 pb-20">
+                Online + Offline
 
-
-        {% if courses %}
-
-
-        <div
-            class="course-grid">
-
-
-            {% for course in courses %}
-
-
-            <div
-                class="course-card reveal delay-{{ loop.index if loop.index <= 5 else 5 }}">
-
-
-                <!-- ICON -->
-
-                <div
-                    class="course-icon">
-
-
-                    {% if 'Java' in course.title %}
-
-                        ☕
-
-
-                    {% elif 'Python' in course.title %}
-
-                        🐍
-
-
-                    {% elif 'Salesforce' in course.title %}
-
-                        ☁️
-
-
-                    {% elif 'MERN' in course.title %}
-
-                        ⚛️
-
-
-                    {% elif 'Cloud' in course.title or 'Data' in course.title %}
-
-                        ☁️
-
-
-                    {% else %}
-
-                        🎓
-
-                    {% endif %}
-
-
-                </div>
-
-
-
-                <!-- TITLE -->
-
-                <h2
-                    class="course-title text-2xl font-bold mt-6">
-
-
-                    {{ course.title }}
-
-
-                </h2>
-
-
-
-                <!-- DESCRIPTION -->
-
-                <p
-                    class="text-gray-400 mt-4 leading-relaxed">
-
-
-                    {{ course.description }}
-
-
-                </p>
-
-
-
-                <!-- DETAILS -->
-
-                <div
-                    class="mt-6">
-
-
-                    <div
-                        class="detail-item flex justify-between gap-3">
-
-
-                        <span
-                            class="detail-label">
-
-                            Duration
-
-                        </span>
-
-
-                        <strong>
-
-                            {{ course.duration }}
-
-                        </strong>
-
-
-                    </div>
-
-
-
-                    <div
-                        class="detail-item flex justify-between gap-3">
-
-
-                        <span
-                            class="detail-label">
-
-                            Mode
-
-                        </span>
-
-
-                        <strong>
-
-                            {{ course.mode }}
-
-                        </strong>
-
-
-                    </div>
-
-
-
-                    <div
-                        class="detail-item flex justify-between gap-3">
-
-
-                        <span
-                            class="detail-label">
-
-                            Trainer
-
-                        </span>
-
-
-                        <strong>
-
-                            {{ course.trainer }}
-
-                        </strong>
-
-
-                    </div>
-
-
-                </div>
-
-
-
-                <!-- PRICE -->
-
-                <div
-                    class="mt-6">
-
-
-                    <p
-                        class="text-gray-400 text-sm">
-
-                        Course Fee
-
-                    </p>
-
-
-                    <p
-                        class="course-price mt-1">
-
-                        ₹{{ course.price }}
-
-                    </p>
-
-
-                </div>
-
-
-
-                <!-- ENROLL -->
-
-                <a
-                    href="https://wa.me/919676250930?text=Hi%20RR%20Institute,%20I%20want%20to%20enroll%20for%20{{ course.title }}"
-                    target="_blank"
-                    class="enroll-button mt-6">
-
-
-                    🚀 Enroll Now
-
-                </a>
-
-
-                <!-- WHATSAPP -->
-
-                <a
-                    href="https://wa.me/919676250930?text=Hi%20RR%20Institute,%20I%20want%20more%20details%20about%20{{ course.title }}"
-                    target="_blank"
-                    class="whatsapp-button block text-center mt-3 py-3 rounded-lg font-semibold">
-
-
-                    💬 Ask on WhatsApp
-
-                </a>
-
-
-            </div>
-
-
-            {% endfor %}
-
+            </h1>
 
         </div>
 
+        <div class="bg-white rounded-xl shadow p-6">
+
+            <h3 class="text-gray-500">
+
+                Certification
+
+            </h3>
+
+            <h1 class="text-2xl font-bold text-orange-600">
+
+                Included
+
+            </h1>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Courses -->
+
+<section class="max-w-7xl mx-auto px-6 mt-12 mb-20">
+
+    <div class="flex justify-between items-center mb-8">
+
+        <h2 class="text-4xl font-bold text-gray-800">
+
+            Popular Courses
+
+        </h2>
+
+        <span class="text-gray-500">
+
+            {{ courses|length }} Courses Found
+
+        </span>
+
+    </div>
+
+    <div
+
+        id="courseContainer"
+
+        class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
+
+        {% for course in courses %}
+
+        <!-- Course Card Starts Here -->
+         <!-- Course Card -->
+
+<div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
+
+    <!-- Image -->
+
+    <div class="relative">
+
+        {% if course.image %}
+
+        <img
+            src="{{ url_for('static', filename='uploads/' + course.image) }}"
+            class="w-full h-44 object-cover">
 
         {% else %}
 
+        <div class="h-44 bg-gradient-to-br from-indigo-600 to-blue-500 flex items-center justify-center">
 
-        <!-- EMPTY -->
+            <div class="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center">
 
-        <div
-            class="empty-state max-w-2xl mx-auto p-10 text-center">
+                <span class="text-5xl font-bold text-white">
 
+                    {{ course.title[0] }}
 
-            <div
-                class="text-6xl">
-
-                📚
+                </span>
 
             </div>
 
-
-            <h2
-                class="text-2xl font-bold mt-5">
-
-                No Courses Available
-
-            </h2>
-
-
-            <p
-                class="text-gray-400 mt-3">
-
-                Courses will be added soon.
-                Please check again later.
-
-            </p>
-
-
-            <a
-                href="{{ url_for('student.dashboard') }}"
-                class="inline-block mt-6 back-button px-6 py-3 rounded-lg font-semibold">
-
-                ← Back to Dashboard
-
-            </a>
-
-
         </div>
-
 
         {% endif %}
 
+        <!-- Featured Badge -->
 
-    </main>
+        {% if course.featured %}
 
+        <span class="absolute top-4 left-4 bg-yellow-400 text-gray-900 text-xs font-bold px-3 py-1 rounded-full">
 
+            ⭐ Featured
 
-    <!-- =====================================================
-         FOOTER
-    ====================================================== -->
+        </span>
 
-    <footer
-        class="py-10">
+        {% endif %}
 
+    </div>
 
-        <div
-            class="max-w-7xl mx-auto px-6 text-center">
+    <!-- Card Body -->
 
+    <div class="p-6">
 
-            <h2
-                class="text-xl font-bold gold">
+        <h2 class="text-2xl font-bold text-gray-800">
 
-                RR IT Origin
+            {{ course.title }}
 
-            </h2>
+        </h2>
 
+        <p class="text-gray-500 mt-3 text-sm leading-6">
 
-            <p
-                class="text-gray-400 mt-2">
+            {{ course.description[:90] }}...
 
-                Learn • Build • Succeed
+        </p>
 
-            </p>
+        <!-- Rating -->
 
+        <div class="flex items-center mt-4">
 
-            <div
-                class="border-t border-gray-800 mt-6 pt-6 text-gray-500 text-sm">
+            <span class="text-yellow-500 text-lg">
 
+                ★★★★★
 
-                © {{ current_year or 2026 }}
+            </span>
 
-                RR IT Origin.
+            <span class="text-gray-500 text-sm ml-2">
 
-                All Rights Reserved.
+                4.9 (2.3k Students)
 
-
-            </div>
-
+            </span>
 
         </div>
 
+        <!-- Details -->
 
-    </footer>
+        <div class="mt-5 space-y-3 text-sm">
 
+            <div class="flex justify-between">
+
+                <span class="text-gray-500">
+
+                    📅 Duration
+
+                </span>
+
+                <span class="font-semibold">
+
+                    {{ course.duration }}
+
+                </span>
+
+            </div>
+
+            <div class="flex justify-between">
+
+                <span class="text-gray-500">
+
+                    👨‍🏫 Trainer
+
+                </span>
+
+                <span class="font-semibold">
+
+                    {{ course.trainer }}
+
+                </span>
+
+            </div>
+
+            <div class="flex justify-between">
+
+                <span class="text-gray-500">
+
+                    💻 Mode
+
+                </span>
+
+                <span class="font-semibold">
+
+                    {{ course.mode }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <!-- Price -->
+
+        <div class="flex justify-between items-center mt-6">
+
+            <div>
+
+                <p class="text-xs text-gray-500">
+
+                    Course Fee
+
+                </p>
+
+                <h2 class="text-3xl font-bold text-indigo-700">
+
+                    ₹{{ course.price }}
+
+                </h2>
+
+            </div>
+
+            <div class="bg-green-100 text-green-700 px-3 py-2 rounded-lg text-sm font-semibold">
+
+                Placement Support
+
+            </div>
+
+        </div>
+
+        <!-- Buttons -->
+
+        <div class="grid grid-cols-2 gap-3 mt-7">
+
+            <a
+
+                href="{{ url_for('student.course_details', course_id=course.id) }}"
+
+                class="bg-indigo-600 hover:bg-indigo-700 transition text-white text-center py-3 rounded-xl font-semibold">
+
+                View Details
+
+            </a>
+
+            <a
+
+                 href="{{ url_for('student.enroll', course_id=course.id) }}"
+
+                class="bg-green-600 hover:bg-green-700 transition text-white text-center py-3 rounded-xl font-semibold">
+
+                Enroll
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+{% endfor %}
+
+</div>
+</section>
+<!-- No Results -->
+
+<div
+    id="noCourses"
+    class="hidden max-w-7xl mx-auto px-6 mb-16">
+
+    <div class="bg-white rounded-2xl shadow-lg p-12 text-center">
+
+        <div class="text-7xl">
+
+            📚
+
+        </div>
+
+        <h2 class="text-3xl font-bold mt-5 text-gray-800">
+
+            No Courses Found
+
+        </h2>
+
+        <p class="mt-3 text-gray-500">
+
+            Try searching with another course name.
+
+        </p>
+
+    </div>
 
 </div>
 
+<!-- Footer -->
+
+<footer class="bg-gray-900 text-gray-300 mt-16">
+
+    <div class="max-w-7xl mx-auto px-6 py-12">
+
+        <div class="grid md:grid-cols-3 gap-8">
+
+            <!-- About -->
+
+            <div>
+
+                <h2 class="text-2xl font-bold text-white">
+
+                    RR IT Origin
+
+                </h2>
+
+                <p class="mt-4 leading-7">
+
+                    Empowering students with industry-ready technical skills,
+                    practical training, internships and placement support.
+
+                </p>
+
+            </div>
+
+            <!-- Quick Links -->
+
+            <div>
+
+                <h3 class="text-xl font-semibold text-white mb-4">
+
+                    Quick Links
+
+                </h3>
+
+                <ul class="space-y-3">
+
+                    <li>
+
+                        <a href="{{ url_for('student.explorer_dashboard') }}"
+                           class="hover:text-white">
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="{{ url_for('student.courses') }}"
+                           class="hover:text-white">
+
+                            Courses
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="{{ url_for('auth.logout') }}"
+                           class="hover:text-white">
+
+                            Logout
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <!-- Contact -->
+
+            <div>
+
+                <h3 class="text-xl font-semibold text-white mb-4">
+
+                    Contact
+
+                </h3>
+
+                <p>
+
+                    📍 Hyderabad
+
+                </p>
+
+                <p class="mt-2">
+
+                    📧 info@rritorigin.com
+
+                </p>
+
+                <p class="mt-2">
+
+                    📞 +91 XXXXX XXXXX
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <hr class="border-gray-700 my-8">
+
+        <div class="flex flex-col md:flex-row justify-between items-center">
+
+            <p>
+
+                © 2026 RR IT Origin. All Rights Reserved.
+
+            </p>
+
+            <p class="mt-3 md:mt-0">
+
+                Learn • Build • Get Placed 🚀
+
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+<!-- Live Search -->
+
+<script>
+
+function searchCourses(){
+
+    let input = document
+        .getElementById("searchCourse")
+        .value
+        .toLowerCase();
+
+    let cards = document.querySelectorAll(".course-card");
+
+    let found = false;
+
+    cards.forEach(function(card){
+
+        let title = card.querySelector("h2")
+            .innerText
+            .toLowerCase();
+
+        if(title.includes(input)){
+
+            card.style.display="block";
+
+            found = true;
+
+        }
+
+        else{
+
+            card.style.display="none";
+
+        }
+
+    });
+
+    if(found){
+
+        document
+            .getElementById("noCourses")
+            .classList.add("hidden");
+
+    }
+
+    else{
+
+        document
+            .getElementById("noCourses")
+            .classList.remove("hidden");
+
+    }
+
+}
+
+</script>
 
 </body>
 

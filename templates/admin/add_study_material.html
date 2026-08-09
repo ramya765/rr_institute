@@ -1,188 +1,809 @@
-<!DOCTYPE html>
-<html>
+{% extends "admin/layout.html" %}
 
-<head>
+{% block content %}
 
-<title>
-Upload Study Material
-</title>
+<style>
 
-<script src="https://cdn.tailwindcss.com"></script>
+.material-page {
+    animation: pageEnter .5s ease;
+}
 
-</head>
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
 
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-<body class="bg-gray-100">
+/* HERO */
 
+.material-hero {
+    position: relative;
+    overflow: hidden;
 
-<div class="max-w-4xl mx-auto mt-10 bg-white p-8 rounded shadow">
+    background: linear-gradient(
+        135deg,
+        #111827,
+        #1d4ed8,
+        #2563eb
+    );
 
+    border-radius: 22px;
 
-<h1 class="text-3xl font-bold mb-6">
-Upload Study Material
-</h1>
+    padding: 28px 30px;
 
+    margin-bottom: 24px;
 
+    box-shadow:
+        0 18px 45px rgba(15,23,42,.18);
+}
 
-<form method="POST"
-      enctype="multipart/form-data">
+.material-hero::before {
+    content: "";
 
+    position: absolute;
 
-<!-- Title -->
+    width: 260px;
+    height: 260px;
 
-<label class="block mb-2">
-Title
-</label>
+    border-radius: 50%;
 
-<input
-type="text"
-name="title"
-required
-class="w-full border p-3 rounded mb-4"
->
+    background: rgba(255,255,255,.07);
 
+    right: -100px;
+    top: -150px;
+}
 
+.material-hero-content {
+    position: relative;
 
-<!-- Description -->
+    z-index: 2;
 
-<label>
-Description
-</label>
+    display: flex;
 
-<textarea
-name="description"
-class="w-full border p-3 rounded mb-4">
-</textarea>
+    align-items: center;
 
+    justify-content: space-between;
 
+    gap: 20px;
+}
 
-<!-- Course -->
+.material-hero-left {
+    display: flex;
 
-<label>
-Course
-</label>
+    align-items: center;
 
+    gap: 16px;
+}
 
-<select
-name="course"
-required
-class="w-full border p-3 rounded mb-4">
+.material-icon {
+    width: 58px;
+    height: 58px;
 
+    border-radius: 17px;
 
-<option value="">
-Select Course
-</option>
+    background: rgba(255,255,255,.12);
 
+    border: 1px solid rgba(255,255,255,.15);
 
-{% for course in courses %}
+    display: flex;
 
-<option value="{{course.title}}">
-{{course.title}}
-</option>
+    align-items: center;
 
-{% endfor %}
+    justify-content: center;
 
+    font-size: 27px;
+}
 
-</select>
+.material-title {
+    color: white;
 
+    font-size: 28px;
 
+    font-weight: 800;
+}
 
+.material-subtitle {
+    color: #bfdbfe;
 
+    font-size: 13px;
 
-<!-- Material Type -->
+    margin-top: 5px;
+}
 
-<label>
+.material-badge {
+    background: rgba(255,255,255,.10);
 
-Material Type
+    border: 1px solid rgba(255,255,255,.15);
 
-</label>
+    color: white;
 
+    padding: 11px 17px;
 
-<select
+    border-radius: 12px;
 
-name="material_type"
+    font-size: 12px;
 
-class="w-full border p-3 rounded mb-4">
+    font-weight: 700;
 
+    white-space: nowrap;
+}
 
-<option>
-PDF
-</option>
 
+/* FORM CARD */
 
-<option>
-Video
-</option>
+.material-card {
+    background: white;
 
+    border: 1px solid #e5e7eb;
 
-<option>
-Notes
-</option>
+    border-radius: 22px;
 
+    overflow: hidden;
 
-<option>
-Assignment
-</option>
+    box-shadow:
+        0 12px 35px rgba(15,23,42,.07);
+}
 
+.material-card-header {
+    padding: 21px 25px;
 
-</select>
+    border-bottom: 1px solid #eef2f7;
 
+    display: flex;
 
+    align-items: center;
 
+    gap: 13px;
+}
 
+.material-card-icon {
+    width: 44px;
+    height: 44px;
 
-<!-- Upload File -->
+    border-radius: 13px;
 
-<label>
+    background: #eff6ff;
 
-Upload File
+    display: flex;
 
-</label>
+    align-items: center;
 
+    justify-content: center;
 
-<input
+    font-size: 21px;
+}
 
-type="file"
+.material-card-title {
+    color: #1f2937;
 
-name="material"
+    font-size: 17px;
 
-required
+    font-weight: 800;
+}
 
-class="border p-3 w-full rounded mb-5"
+.material-card-description {
+    color: #6b7280;
 
->
+    font-size: 11px;
 
+    margin-top: 3px;
+}
 
+.material-card-body {
+    padding: 28px;
+}
 
 
+/* FIELDS */
 
-<button
+.material-field {
+    margin-bottom: 23px;
+}
 
-class="bg-blue-600 text-white px-6 py-3 rounded">
+.material-label {
+    display: block;
 
-Upload Material
+    color: #374151;
 
-</button>
+    font-size: 12px;
 
+    font-weight: 800;
 
+    margin-bottom: 8px;
+}
 
+.required {
+    color: #ef4444;
+}
 
-<a href="{{url_for('admin.study_materials')}}"
+.material-input,
+.material-select,
+.material-textarea {
+    width: 100%;
 
-class="ml-3 bg-gray-500 text-white px-6 py-3 rounded">
+    box-sizing: border-box;
 
-Cancel
+    border: 1px solid #d1d5db;
 
-</a>
+    border-radius: 12px;
 
+    padding: 13px 14px;
 
+    background: white;
 
-</form>
+    color: #1f2937;
+
+    font-size: 13px;
+
+    transition: all .25s ease;
+}
+
+.material-input:hover,
+.material-select:hover,
+.material-textarea:hover {
+    border-color: #93c5fd;
+}
+
+.material-input:focus,
+.material-select:focus,
+.material-textarea:focus {
+    outline: none;
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 4px rgba(37,99,235,.10);
+}
+
+.material-help {
+    color: #9ca3af;
+
+    font-size: 10px;
+
+    margin-top: 6px;
+}
+
+
+/* FILE UPLOAD */
+
+.material-upload {
+    border: 2px dashed #bfdbfe;
+
+    background: #f8fbff;
+
+    border-radius: 16px;
+
+    padding: 25px;
+
+    text-align: center;
+
+    transition: all .3s ease;
+}
+
+.material-upload:hover {
+    border-color: #3b82f6;
+
+    background: #eff6ff;
+
+    transform: translateY(-2px);
+}
+
+.material-upload-icon {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 15px;
+
+    background: #dbeafe;
+
+    color: #2563eb;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin: 0 auto 10px;
+
+    font-size: 24px;
+}
+
+.material-upload-title {
+    color: #374151;
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+.material-upload-text {
+    color: #9ca3af;
+
+    font-size: 11px;
+
+    margin-top: 4px;
+
+    margin-bottom: 14px;
+}
+
+.material-file {
+    width: 100%;
+
+    font-size: 12px;
+
+    color: #4b5563;
+}
+
+
+/* FOOTER */
+
+.material-footer {
+    padding: 20px 28px;
+
+    background: #f8fafc;
+
+    border-top: 1px solid #e5e7eb;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+}
+
+.material-cancel {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 11px 19px;
+
+    border-radius: 11px;
+
+    color: #475569;
+
+    background: white;
+
+    border: 1px solid #cbd5e1;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    transition: all .25s ease;
+}
+
+.material-cancel:hover {
+    background: #f1f5f9;
+
+    transform: translateY(-2px);
+}
+
+.material-submit {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    border: none;
+
+    cursor: pointer;
+
+    padding: 12px 25px;
+
+    border-radius: 11px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #3b82f6
+    );
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 8px 20px rgba(37,99,235,.25);
+
+    transition: all .25s ease;
+}
+
+.material-submit:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 25px rgba(37,99,235,.35);
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:768px) {
+
+    .material-hero-content {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .material-badge {
+        width: 100%;
+
+        box-sizing: border-box;
+
+        text-align: center;
+    }
+
+    .material-title {
+        font-size: 24px;
+    }
+
+    .material-card-body {
+        padding: 20px;
+    }
+
+    .material-footer {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .material-cancel,
+    .material-submit {
+        width: 100%;
+
+        box-sizing: border-box;
+    }
+}
+
+</style>
+
+
+<div class="material-page">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <div class="material-hero">
+
+        <div class="material-hero-content">
+
+            <div class="material-hero-left">
+
+                <div class="material-icon">
+                    📚
+                </div>
+
+                <div>
+
+                    <h1 class="material-title">
+                        Upload Study Material
+                    </h1>
+
+                    <p class="material-subtitle">
+                        Add learning resources for your students.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="material-badge">
+                📖 Study Materials
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORM CARD
+    ====================================================== -->
+
+    <div class="material-card">
+
+
+        <div class="material-card-header">
+
+            <div class="material-card-icon">
+                📄
+            </div>
+
+            <div>
+
+                <div class="material-card-title">
+                    Material Information
+                </div>
+
+                <div class="material-card-description">
+                    Enter the material details and upload the file.
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             FORM
+        ================================================== -->
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            action="{{ url_for('admin.add_study_material') }}">
+
+
+            <div class="material-card-body">
+
+
+                <div class="grid md:grid-cols-2 gap-6">
+
+
+                    <!-- =================================================
+                         TITLE
+                    ================================================== -->
+
+                    <div class="material-field">
+
+                        <label class="material-label">
+
+                            Material Title
+
+                            <span class="required">
+                                *
+                            </span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="title"
+                            placeholder="Example: Python Full Stack Notes"
+                            required
+                            class="material-input">
+
+                        <div class="material-help">
+                            Enter a clear name for the study material.
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         COURSE
+                    ================================================== -->
+
+                    <div class="material-field">
+
+                        <label class="material-label">
+
+                            Course
+
+                            <span class="required">
+                                *
+                            </span>
+
+                        </label>
+
+                        <select
+                            name="course"
+                            required
+                            class="material-select">
+
+                            <option value="">
+                                Select Course
+                            </option>
+
+                            {% for course in courses %}
+
+                            <option value="{{ course.title }}">
+
+                                {{ course.title }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                        <div class="material-help">
+                            Select the course for this material.
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         MATERIAL TYPE
+                    ================================================== -->
+
+                    <div class="material-field">
+
+                        <label class="material-label">
+
+                            Material Type
+
+                            <span class="required">
+                                *
+                            </span>
+
+                        </label>
+
+                        <select
+                            name="material_type"
+                            required
+                            class="material-select">
+
+                            <option value="">
+                                Select Material Type
+                            </option>
+
+                            <option value="Notes">
+                                Notes
+                            </option>
+
+                            <option value="PDF">
+                                PDF
+                            </option>
+
+                            <option value="Assignment">
+                                Assignment
+                            </option>
+
+                            <option value="Question Paper">
+                                Question Paper
+                            </option>
+
+                            <option value="Study Material">
+                                Study Material
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =================================================
+                     DESCRIPTION
+                ================================================== -->
+
+                <div class="material-field">
+
+                    <label class="material-label">
+
+                        Description
+
+                    </label>
+
+                    <textarea
+                        name="description"
+                        rows="4"
+                        placeholder="Enter a short description of this material..."
+                        class="material-textarea"></textarea>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FILE
+                ================================================== -->
+
+                <div class="material-field">
+
+                    <label class="material-label">
+
+                        Upload File
+
+                        <span class="required">
+                            *
+                        </span>
+
+                    </label>
+
+
+                    <div class="material-upload">
+
+                        <div class="material-upload-icon">
+                            📤
+                        </div>
+
+                        <div class="material-upload-title">
+                            Upload Study Material
+                        </div>
+
+                        <div class="material-upload-text">
+                            Select PDF, document, presentation or other
+                            supported study material.
+                        </div>
+
+                        <input
+                            type="file"
+                            name="material"
+                            required
+                            class="material-file">
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 BUTTONS
+            ================================================== -->
+
+            <div class="material-footer">
+
+
+                <a
+                    href="{{ url_for('admin.study_materials') }}"
+                    class="material-cancel">
+
+                    ← Cancel
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="material-submit">
+
+                    📤 Upload Material
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+    </div>
 
 
 </div>
 
 
-</body>
-
-</html>
+{% endblock %}

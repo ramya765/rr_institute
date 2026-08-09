@@ -1,212 +1,1234 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "admin/layout.html" %}
 
-<head>
+{% block content %}
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
 
-    <title>Add Faculty | RR Institute</title>
+/* =========================================================
+   ADD FACULTY PAGE
+========================================================= */
 
-    <script src="https://cdn.tailwindcss.com"></script>
+.faculty-page {
+    animation: pageFade .5s ease;
+}
 
-</head>
+@keyframes pageFade {
 
-<body class="bg-gray-100">
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
 
-<div class="max-w-5xl mx-auto py-10">
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 
-    <div class="bg-white rounded-xl shadow p-8">
+}
 
-        <div class="flex justify-between items-center mb-8">
 
-            <h1 class="text-3xl font-bold">
-                👨‍🏫 Add Faculty
-            </h1>
+/* =========================================================
+   HERO
+========================================================= */
 
-            <a href="{{ url_for('admin.faculty') }}"
-               class="bg-gray-600 text-white px-5 py-2 rounded-lg hover:bg-gray-700">
+.faculty-hero {
 
-                ← Back
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #071124,
+            #101f42,
+            #172554
+        );
+
+    border:
+        1px solid rgba(255,255,255,.09);
+
+    border-radius: 22px;
+
+    padding: 28px;
+
+    margin-bottom: 24px;
+
+    box-shadow:
+        0 20px 55px rgba(0,0,0,.25);
+
+}
+
+
+.faculty-hero::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 270px;
+
+    height: 270px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(250,204,21,.06);
+
+    top: -160px;
+
+    right: -70px;
+
+}
+
+
+.faculty-hero::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+
+    height: 180px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(99,102,241,.08);
+
+    bottom: -120px;
+
+    left: 35%;
+
+}
+
+
+.faculty-hero-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+}
+
+
+.faculty-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+}
+
+
+.faculty-icon {
+
+    width: 64px;
+
+    height: 64px;
+
+    border-radius: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 30px;
+
+    background:
+        rgba(250,204,21,.10);
+
+    border:
+        1px solid rgba(250,204,21,.20);
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.20);
+
+}
+
+
+.faculty-kicker {
+
+    color: #facc15;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+}
+
+
+.faculty-title {
+
+    color: white;
+
+    font-size: 30px;
+
+    font-weight: 900;
+
+    margin-top: 4px;
+
+}
+
+
+.faculty-subtitle {
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+    margin-top: 5px;
+
+}
+
+
+.back-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #e2e8f0;
+
+    background:
+        rgba(255,255,255,.07);
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    padding: 11px 18px;
+
+    border-radius: 10px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    transition: .3s ease;
+
+}
+
+
+.back-button:hover {
+
+    background:
+        rgba(255,255,255,.12);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+/* =========================================================
+   FORM CARD
+========================================================= */
+
+.faculty-form-card {
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid rgba(255,255,255,.09);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.15);
+
+}
+
+
+.form-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 20px 24px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.08);
+
+}
+
+
+.form-header-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background:
+        rgba(250,204,21,.08);
+
+    border:
+        1px solid rgba(250,204,21,.13);
+
+    font-size: 20px;
+
+}
+
+
+.form-title {
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+}
+
+
+.form-description {
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    margin-top: 3px;
+
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.faculty-form {
+
+    padding: 26px;
+
+}
+
+
+.form-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap: 22px;
+
+}
+
+
+.form-group {
+
+    position: relative;
+
+}
+
+
+.form-label {
+
+    display: block;
+
+    color: #cbd5e1;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    margin-bottom: 8px;
+
+}
+
+
+.required {
+
+    color: #f87171;
+
+}
+
+
+.form-input,
+.form-select,
+.form-textarea {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    color: white;
+
+    background:
+        rgba(7,17,36,.85);
+
+    border:
+        1px solid rgba(255,255,255,.11);
+
+    border-radius: 10px;
+
+    outline: none;
+
+    transition: .25s ease;
+
+}
+
+
+.form-input,
+.form-select {
+
+    height: 48px;
+
+    padding:
+        0 14px;
+
+}
+
+
+.form-textarea {
+
+    min-height: 120px;
+
+    padding: 13px 14px;
+
+    resize: vertical;
+
+}
+
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+
+    color: #475569;
+
+}
+
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+
+    border-color:
+        #facc15;
+
+    box-shadow:
+        0 0 0 3px rgba(250,204,21,.08);
+
+}
+
+
+.form-select option {
+
+    background: #071124;
+
+    color: white;
+
+}
+
+
+/* =========================================================
+   ADDRESS
+========================================================= */
+
+.address-section {
+
+    margin-top: 22px;
+
+}
+
+
+.section-label {
+
+    color: #cbd5e1;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    margin-bottom: 8px;
+
+}
+
+
+/* =========================================================
+   FORM HINT
+========================================================= */
+
+.input-hint {
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    margin-top: 5px;
+
+}
+
+
+/* =========================================================
+   STATUS SELECT
+========================================================= */
+
+.status-info {
+
+    margin-top: 20px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap: 14px;
+
+}
+
+
+.status-card {
+
+    padding: 15px;
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid rgba(255,255,255,.07);
+
+}
+
+
+.status-card-icon {
+
+    font-size: 21px;
+
+}
+
+
+.status-card-title {
+
+    color: #cbd5e1;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    margin-top: 7px;
+
+}
+
+
+.status-card-text {
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    margin-top: 3px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.form-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding-top: 24px;
+
+    margin-top: 25px;
+
+    border-top:
+        1px solid rgba(255,255,255,.08);
+
+}
+
+
+.cancel-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding:
+        11px 19px;
+
+    border-radius: 10px;
+
+    color: #cbd5e1;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    transition: .3s ease;
+
+}
+
+
+.cancel-button:hover {
+
+    background:
+        rgba(255,255,255,.11);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+.save-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding:
+        11px 24px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    color: #111827;
+
+    background: #facc15;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition: .3s ease;
+
+    box-shadow:
+        0 10px 25px rgba(250,204,21,.10);
+
+}
+
+
+.save-button:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 15px 35px rgba(250,204,21,.20);
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:800px) {
+
+    .faculty-hero-content {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+
+    .back-button {
+
+        width: 100%;
+
+        justify-content: center;
+
+    }
+
+
+    .form-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .status-info {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+@media(max-width:600px) {
+
+    .faculty-hero {
+
+        padding: 22px;
+
+    }
+
+
+    .faculty-title {
+
+        font-size: 24px;
+
+    }
+
+
+    .faculty-form {
+
+        padding: 18px;
+
+    }
+
+
+    .faculty-icon {
+
+        width: 54px;
+
+        height: 54px;
+
+        font-size: 25px;
+
+    }
+
+
+    .form-actions {
+
+        flex-direction: column;
+
+    }
+
+
+    .cancel-button,
+    .save-button {
+
+        width: 100%;
+
+    }
+
+}
+
+</style>
+
+
+<div class="faculty-page">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="faculty-hero">
+
+        <div class="faculty-hero-content">
+
+            <div class="faculty-heading">
+
+                <div class="faculty-icon">
+
+                    👨‍🏫
+
+                </div>
+
+                <div>
+
+                    <div class="faculty-kicker">
+
+                        ACADEMIC MANAGEMENT
+
+                    </div>
+
+                    <h1 class="faculty-title">
+
+                        Add Faculty
+
+                    </h1>
+
+                    <p class="faculty-subtitle">
+
+                        Add a new trainer or faculty member
+                        to RR Institute.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('admin.faculty') }}"
+                class="back-button"
+            >
+
+                ← Back to Faculty
 
             </a>
 
         </div>
 
-        <form action="{{ url_for('admin.add_faculty') }}" method="POST">
+    </div>
 
-            <div class="grid md:grid-cols-2 gap-6">
 
-                <div>
+    <!-- =====================================================
+         FORM CARD
+    ====================================================== -->
 
-                    <label class="block mb-2 font-medium">
+    <div class="faculty-form-card">
+
+
+        <!-- FORM HEADER -->
+
+        <div class="form-header">
+
+            <div class="form-header-icon">
+
+                👨‍🏫
+
+            </div>
+
+            <div>
+
+                <div class="form-title">
+
+                    Faculty Information
+
+                </div>
+
+                <div class="form-description">
+
+                    Enter the faculty member's professional
+                    and contact information.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             EXISTING FORM
+        ================================================== -->
+
+        <form
+            action="{{ url_for('admin.add_faculty') }}"
+            method="POST"
+            class="faculty-form"
+        >
+
+
+            <div class="form-grid">
+
+
+                <!-- FACULTY NAME -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
                         Faculty Name
+                        <span class="required">*</span>
+
                     </label>
 
                     <input
                         type="text"
                         name="name"
                         required
-                        class="w-full border rounded-lg p-3">
+                        placeholder="Enter faculty name"
+                        class="form-input"
+                    >
 
                 </div>
 
-                <div>
 
-                    <label class="block mb-2 font-medium">
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
                         Email
+                        <span class="required">*</span>
+
                     </label>
 
                     <input
                         type="email"
                         name="email"
                         required
-                        class="w-full border rounded-lg p-3">
+                        placeholder="faculty@example.com"
+                        class="form-input"
+                    >
 
                 </div>
 
-                <div>
 
-                    <label class="block mb-2 font-medium">
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
                         Phone Number
+                        <span class="required">*</span>
+
                     </label>
 
                     <input
                         type="text"
                         name="phone"
                         required
-                        class="w-full border rounded-lg p-3">
+                        placeholder="Enter phone number"
+                        class="form-input"
+                    >
 
                 </div>
 
-                <div>
 
-                    <label class="block mb-2 font-medium">
+                <!-- SUBJECT -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
                         Subject
+                        <span class="required">*</span>
+
                     </label>
 
                     <input
                         type="text"
                         name="subject"
                         required
-                        class="w-full border rounded-lg p-3">
+                        placeholder="Java / Python / AWS etc."
+                        class="form-input"
+                    >
 
                 </div>
 
-                <div>
 
-                    <label class="block mb-2 font-medium">
+                <!-- QUALIFICATION -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
                         Qualification
+
                     </label>
 
                     <input
                         type="text"
                         name="qualification"
-                        class="w-full border rounded-lg p-3">
+                        placeholder="B.Tech / M.Tech / MCA"
+                        class="form-input"
+                    >
 
                 </div>
 
-                <div>
 
-                    <label class="block mb-2 font-medium">
+                <!-- EXPERIENCE -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
                         Experience
+
                     </label>
 
                     <input
                         type="text"
                         name="experience"
                         placeholder="5 Years"
-                        class="w-full border rounded-lg p-3">
+                        class="form-input"
+                    >
+
+                    <p class="input-hint">
+
+                        Example: 5 Years
+
+                    </p>
 
                 </div>
 
-                <div>
 
-                    <label class="block mb-2 font-medium">
+                <!-- BATCH -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
                         Batch
+
                     </label>
 
                     <select
                         name="batch"
-                        class="w-full border rounded-lg p-3">
+                        class="form-select"
+                    >
 
-                        <option>Morning</option>
-                        <option>Afternoon</option>
-                        <option>Evening</option>
-                        <option>Night</option>
+                        <option value="Morning">
+
+                            Morning
+
+                        </option>
+
+                        <option value="Afternoon">
+
+                            Afternoon
+
+                        </option>
+
+                        <option value="Evening">
+
+                            Evening
+
+                        </option>
+
+                        <option value="Night">
+
+                            Night
+
+                        </option>
 
                     </select>
 
                 </div>
 
-                <div>
 
-                    <label class="block mb-2 font-medium">
+                <!-- PAYMENT -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
                         Monthly Payment
+
                     </label>
 
                     <input
                         type="number"
                         name="payment"
-                        class="w-full border rounded-lg p-3">
+                        placeholder="25000"
+                        class="form-input"
+                    >
+
+                    <p class="input-hint">
+
+                        Enter monthly faculty payment.
+
+                    </p>
 
                 </div>
 
-                <div>
 
-                    <label class="block mb-2 font-medium">
+                <!-- STATUS -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+
                         Status
+
                     </label>
 
                     <select
                         name="status"
-                        class="w-full border rounded-lg p-3">
+                        class="form-select"
+                    >
 
                         <option value="Active">
+
                             Active
+
                         </option>
 
                         <option value="Inactive">
+
                             Inactive
+
                         </option>
 
                     </select>
 
                 </div>
 
+
             </div>
 
-            <div class="mt-6">
 
-                <label class="block mb-2 font-medium">
+            <!-- =================================================
+                 ADDRESS
+            ================================================== -->
+
+            <div class="address-section">
+
+                <label class="section-label">
+
                     Address
+
                 </label>
 
                 <textarea
                     name="address"
                     rows="4"
-                    class="w-full border rounded-lg p-3"></textarea>
+                    placeholder="Enter faculty address"
+                    class="form-textarea"
+                ></textarea>
 
             </div>
 
-            <div class="mt-8">
+
+            <!-- =================================================
+                 INFORMATION CARDS
+            ================================================== -->
+
+            <div class="status-info">
+
+
+                <div class="status-card">
+
+                    <div class="status-card-icon">
+
+                        👨‍🏫
+
+                    </div>
+
+                    <div class="status-card-title">
+
+                        Faculty Profile
+
+                    </div>
+
+                    <div class="status-card-text">
+
+                        Add accurate professional details
+                        for the faculty member.
+
+                    </div>
+
+                </div>
+
+
+                <div class="status-card">
+
+                    <div class="status-card-icon">
+
+                        🟢
+
+                    </div>
+
+                    <div class="status-card-title">
+
+                        Faculty Status
+
+                    </div>
+
+                    <div class="status-card-text">
+
+                        Active faculty members can be
+                        assigned for training batches.
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 BUTTONS
+            ================================================== -->
+
+            <div class="form-actions">
+
+
+                <a
+                    href="{{ url_for('admin.faculty') }}"
+                    class="cancel-button"
+                >
+
+                    ❌ Cancel
+
+                </a>
+
 
                 <button
                     type="submit"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg">
+                    class="save-button"
+                >
 
-                    Save Faculty
+                    💾 Save Faculty
 
                 </button>
 
+
             </div>
+
 
         </form>
 
     </div>
 
+
 </div>
 
-</body>
 
-</html>
+{% endblock %}

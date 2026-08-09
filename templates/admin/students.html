@@ -1,659 +1,1891 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "admin/layout.html" %}
 
-<head>
+{% block content %}
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
 
-    <title>Student Management</title>
+/* ==========================================================
+   STUDENT PAGE
+========================================================== */
 
-    <script src="https://cdn.tailwindcss.com"></script>
+.students-page {
+    animation: pageFade .6s ease;
+}
 
-</head>
+@keyframes pageFade {
 
-<body class="bg-gray-100">
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
 
-<div class="flex min-h-screen">
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 
-    <!-- ================= SIDEBAR ================= -->
+}
 
-    <!-- ===================== SIDEBAR ===================== -->
 
-<aside class="w-72 bg-indigo-900 text-white">
+/* ==========================================================
+   PAGE HEADER
+========================================================== */
 
-<div class="p-6 border-b border-indigo-700 text-center">
+.students-hero {
 
-    <img 
-        src="{{ url_for('static', filename='images/logo.jpeg') }}"
-        alt="RR Institute Logo"
-        class="w-24 h-24 mx-auto rounded-full object-cover mb-3"
-    >
+    position: relative;
 
-    <h1 class="text-3xl font-bold">
-        RR Institute
-    </h1>
+    overflow: hidden;
 
-</div>
+    background:
+        linear-gradient(
+            135deg,
+            rgba(30,41,59,.96),
+            rgba(15,23,42,.98)
+        );
 
+    border: 1px solid rgba(255,255,255,.10);
 
-<nav class="mt-5">
+    border-radius: 22px;
 
+    padding: 32px;
 
-<a href="{{ url_for('admin.dashboard') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.25);
 
-📊 Dashboard
+}
 
-</a>
 
+.students-hero::before {
 
-<a href="{{ url_for('admin.courses') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+    content: "";
 
-📚 Courses
+    position: absolute;
 
-</a>
+    width: 260px;
+    height: 260px;
 
+    border-radius: 50%;
 
-<a href="{{ url_for('admin.students') }}"
-class="block px-6 py-3 bg-indigo-700">
+    background:
+        rgba(250,204,21,.08);
 
-👨‍🎓 Students
+    top: -140px;
+    right: -80px;
 
-</a>
+}
 
 
-<a href="{{ url_for('admin.leads') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+.students-hero::after {
 
-🎯 Leads
+    content: "";
 
-</a>
+    position: absolute;
 
+    width: 180px;
+    height: 180px;
 
+    border-radius: 50%;
 
+    background:
+        rgba(99,102,241,.12);
 
+    bottom: -100px;
+    left: 35%;
 
-<a href="{{ url_for('admin.faculty') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+}
 
-👨‍🏫 Faculty
 
-</a>
+.students-hero-content {
 
+    position: relative;
 
-<a href="{{ url_for('admin.enquiries') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+    z-index: 2;
 
-📝 Enquiries
+}
 
-</a>
 
+.page-tag {
 
-<a href="{{ url_for('admin.companies') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+    color: #facc15;
 
-🏢 Companies
+    font-size: 12px;
 
-</a>
+    font-weight: 700;
 
+    letter-spacing: 2px;
 
-<a href="{{ url_for('admin.placements') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+    text-transform: uppercase;
 
-💼 Placements
+}
 
-</a>
 
+.students-title {
 
+    color: white;
 
-<a href="{{ url_for('admin.testimonials') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+    font-size: 36px;
 
-⭐ Testimonials
+    font-weight: 800;
 
-</a>
+    margin-top: 8px;
 
+}
 
-<a href="{{ url_for('admin.notifications') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
 
-📢 Notifications
+.students-description {
 
-</a>
+    color: #cbd5e1;
 
+    margin-top: 8px;
 
-<a href="{{ url_for('admin.settings') }}"
-class="block px-6 py-3 hover:bg-indigo-700">
+    max-width: 650px;
 
-⚙ Settings
+}
 
-</a>
 
+.add-student-btn {
 
-<a href="{{ url_for('auth.logout') }}"
-class="block mt-10 mx-4 bg-red-600 text-center rounded-lg py-3 hover:bg-red-700">
+    display: inline-flex;
 
-Logout
+    align-items: center;
 
-</a>
+    gap: 8px;
 
+    margin-top: 22px;
 
-</nav>
+    background: #facc15;
 
-</aside>
+    color: #111827;
 
-    <!-- ================= MAIN CONTENT ================= -->
+    padding: 12px 20px;
 
-    <div class="flex-1">
+    border-radius: 10px;
 
-        <!-- Top Bar -->
+    font-weight: 800;
 
-        <div class="bg-white shadow flex justify-between items-center px-8 py-5">
+    transition: .3s ease;
 
-            <div>
+}
 
-                <h1 class="text-3xl font-bold">
 
-                    Student Management
+.add-student-btn:hover {
 
-                </h1>
+    transform: translateY(-3px);
 
-                <p class="text-gray-500 mt-1">
+    box-shadow:
+        0 12px 30px rgba(250,204,21,.25);
 
-                    Manage student admissions and records
+}
 
-                </p>
 
+/* ==========================================================
+   STAT CARDS
+========================================================== */
+
+.student-stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0,1fr));
+
+    gap: 18px;
+
+    margin-top: 24px;
+
+}
+
+
+.student-stat {
+
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    border-radius: 18px;
+
+    padding: 22px;
+
+    backdrop-filter: blur(15px);
+
+    transition: .35s ease;
+
+}
+
+
+.student-stat:hover {
+
+    transform: translateY(-6px);
+
+    border-color:
+        rgba(250,204,21,.45);
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.25);
+
+}
+
+
+.student-stat-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+
+.student-stat-label {
+
+    color: #94a3b8;
+
+    font-size: 14px;
+
+}
+
+
+.student-stat-number {
+
+    color: white;
+
+    font-size: 32px;
+
+    font-weight: 800;
+
+    margin-top: 5px;
+
+}
+
+
+.student-stat-icon {
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: 14px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        rgba(250,204,21,.12);
+
+    border:
+        1px solid rgba(250,204,21,.20);
+
+    font-size: 22px;
+
+}
+
+
+.student-stat-footer {
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    margin-top: 15px;
+
+}
+
+
+/* ==========================================================
+   SEARCH PANEL
+========================================================== */
+
+.student-filter {
+
+    margin-top: 28px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    border-radius: 20px;
+
+    padding: 22px;
+
+    backdrop-filter: blur(15px);
+
+}
+
+
+.filter-title {
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    margin-bottom: 15px;
+
+}
+
+
+.filter-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        2fr 1fr 1fr auto;
+
+    gap: 12px;
+
+}
+
+
+.filter-input,
+.filter-select {
+
+    width: 100%;
+
+    background:
+        rgba(15,23,42,.85);
+
+    color: white;
+
+    border:
+        1px solid rgba(255,255,255,.14);
+
+    border-radius: 10px;
+
+    padding: 12px 14px;
+
+    outline: none;
+
+    transition: .25s ease;
+
+}
+
+
+.filter-input::placeholder {
+
+    color: #64748b;
+
+}
+
+
+.filter-input:focus,
+.filter-select:focus {
+
+    border-color:
+        #facc15;
+
+    box-shadow:
+        0 0 0 3px rgba(250,204,21,.10);
+
+}
+
+
+.filter-select option {
+
+    background: #0f172a;
+
+    color: white;
+
+}
+
+
+.search-btn {
+
+    border: none;
+
+    cursor: pointer;
+
+    background: #facc15;
+
+    color: #111827;
+
+    padding: 12px 22px;
+
+    border-radius: 10px;
+
+    font-weight: 800;
+
+    transition: .3s ease;
+
+}
+
+
+.search-btn:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(250,204,21,.20);
+
+}
+
+
+/* ==========================================================
+   TABLE CARD
+========================================================== */
+
+.student-table-card {
+
+    margin-top: 28px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    backdrop-filter: blur(15px);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.18);
+
+}
+
+
+.table-heading {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 22px 24px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.10);
+
+}
+
+
+.table-heading h2 {
+
+    color: white;
+
+    font-size: 20px;
+
+    font-weight: 800;
+
+}
+
+
+.table-heading span {
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+}
+
+
+/* ==========================================================
+   TABLE
+========================================================== */
+
+.table-scroll {
+
+    overflow-x: auto;
+
+}
+
+
+.student-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 950px;
+
+}
+
+
+.student-table thead {
+
+    background:
+        rgba(15,23,42,.75);
+
+}
+
+
+.student-table th {
+
+    color: #94a3b8;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .7px;
+
+    font-weight: 700;
+
+    padding: 16px;
+
+    text-align: left;
+
+}
+
+
+.student-table td {
+
+    color: #cbd5e1;
+
+    padding: 17px 16px;
+
+    border-top:
+        1px solid rgba(255,255,255,.07);
+
+}
+
+
+.student-table tbody tr {
+
+    transition: .25s ease;
+
+}
+
+
+.student-table tbody tr:hover {
+
+    background:
+        rgba(255,255,255,.045);
+
+}
+
+
+/* ==========================================================
+   STUDENT PROFILE
+========================================================== */
+
+.student-profile {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.student-avatar {
+
+    width: 44px;
+    height: 44px;
+
+    min-width: 44px;
+
+    border-radius: 13px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4338ca,
+            #7c3aed
+        );
+
+    color: white;
+
+    font-weight: 800;
+
+    font-size: 17px;
+
+}
+
+
+.student-name {
+
+    color: white;
+
+    font-weight: 700;
+
+}
+
+
+.student-email {
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    margin-top: 3px;
+
+}
+
+
+/* ==========================================================
+   COURSE / BATCH
+========================================================== */
+
+.course-badge {
+
+    display: inline-block;
+
+    background:
+        rgba(99,102,241,.15);
+
+    color: #a5b4fc;
+
+    padding: 6px 10px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+
+.batch-badge {
+
+    display: inline-block;
+
+    background:
+        rgba(168,85,247,.15);
+
+    color: #c4b5fd;
+
+    padding: 6px 10px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+
+/* ==========================================================
+   STATUS
+========================================================== */
+
+.status-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.status-dot {
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+
+}
+
+
+/* ==========================================================
+   ACTION BUTTONS
+========================================================== */
+
+.action-group {
+
+    display: flex;
+
+    gap: 7px;
+
+}
+
+
+.action-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 7px 11px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition: .25s ease;
+
+}
+
+
+.edit-btn {
+
+    background:
+        rgba(59,130,246,.15);
+
+    color: #60a5fa;
+
+    border:
+        1px solid rgba(59,130,246,.20);
+
+}
+
+
+.edit-btn:hover {
+
+    background:
+        rgba(59,130,246,.25);
+
+    transform: translateY(-2px);
+
+}
+
+
+.delete-btn {
+
+    background:
+        rgba(239,68,68,.13);
+
+    color: #f87171;
+
+    border:
+        1px solid rgba(239,68,68,.20);
+
+}
+
+
+.delete-btn:hover {
+
+    background:
+        rgba(239,68,68,.25);
+
+    transform: translateY(-2px);
+
+}
+
+
+/* ==========================================================
+   EMPTY STATE
+========================================================== */
+
+.empty-state {
+
+    padding: 70px 20px;
+
+    text-align: center;
+
+}
+
+
+.empty-icon {
+
+    font-size: 60px;
+
+    opacity: .7;
+
+}
+
+
+.empty-title {
+
+    color: white;
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+    margin-top: 15px;
+
+}
+
+
+.empty-text {
+
+    color: #64748b;
+
+    margin-top: 8px;
+
+}
+
+
+/* ==========================================================
+   PAGINATION
+========================================================== */
+
+.pagination-card {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-top: 18px;
+
+    padding: 18px 22px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    border-radius: 16px;
+
+}
+
+
+.pagination-info {
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+}
+
+
+.pagination-buttons {
+
+    display: flex;
+
+    gap: 6px;
+
+}
+
+
+.pagination-btn {
+
+    min-width: 38px;
+
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 8px;
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    color: #cbd5e1;
+
+    background:
+        rgba(255,255,255,.05);
+
+}
+
+
+.pagination-btn:hover {
+
+    background:
+        rgba(255,255,255,.10);
+
+}
+
+
+.pagination-active {
+
+    background: #facc15;
+
+    color: #111827;
+
+    border-color: #facc15;
+
+    font-weight: 800;
+
+}
+
+
+/* ==========================================================
+   SUMMARY
+========================================================== */
+
+.summary-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap: 18px;
+
+    margin-top: 25px;
+
+}
+
+
+.summary-card {
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    border-radius: 18px;
+
+    padding: 22px;
+
+    transition: .3s ease;
+
+}
+
+
+.summary-card:hover {
+
+    transform: translateY(-4px);
+
+    border-color:
+        rgba(250,204,21,.35);
+
+}
+
+
+.summary-title {
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+}
+
+
+.summary-value {
+
+    color: white;
+
+    font-size: 30px;
+
+    font-weight: 800;
+
+    margin-top: 7px;
+
+}
+
+
+/* ==========================================================
+   FOOTER
+========================================================== */
+
+.students-footer {
+
+    text-align: center;
+
+    color: #475569;
+
+    padding: 35px 10px 10px;
+
+    font-size: 13px;
+
+}
+
+
+.students-footer span {
+
+    color: #facc15;
+
+}
+
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+@media(max-width:1000px) {
+
+    .student-stats {
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+    .filter-grid {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+}
+
+
+@media(max-width:700px) {
+
+    .students-title {
+
+        font-size: 28px;
+
+    }
+
+    .student-stats {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .filter-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .summary-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .pagination-card {
+
+        flex-direction: column;
+
+        gap: 15px;
+
+    }
+
+}
+
+</style>
+
+
+<div class="students-page">
+
+
+    <!-- ======================================================
+         HERO
+    ======================================================= -->
+
+    <section class="students-hero">
+
+        <div class="students-hero-content">
+
+            <div class="page-tag">
+                RR IT ORIGIN • STUDENT MANAGEMENT
             </div>
 
-            <a href="{{ url_for('admin.add_student') }}"
-               class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold">
-
-                ➕ Add Student
-
-            </a>
-
-        </div>
-
-        <!-- Page Content -->
-
-        <div class="p-8">
-
-            <!-- Statistics -->
-
-            <div class="grid md:grid-cols-4 gap-6">
-
-                <div class="bg-white rounded-xl shadow p-6">
-
-                    <p class="text-gray-500">
-                        Total Students
-                    </p>
-
-                    <h2 class="text-4xl font-bold text-blue-600 mt-3">
-
-                        {{ total_students }}
-
-                    </h2>
-
-                </div>
-
-                <div class="bg-white rounded-xl shadow p-6">
-
-                    <p class="text-gray-500">
-                        Active Students
-                    </p>
-
-                    <h2 class="text-4xl font-bold text-green-600 mt-3">
-
-                        {{ active_students }}
-
-                    </h2>
-
-                </div>
-
-                <div class="bg-white rounded-xl shadow p-6">
-
-                    <p class="text-gray-500">
-                        Placed Students
-                    </p>
-
-                    <h2 class="text-4xl font-bold text-purple-600 mt-3">
-
-                        {{ placed_students }}
-
-                    </h2>
-
-                </div>
-
-                <div class="bg-white rounded-xl shadow p-6">
-
-                    <p class="text-gray-500">
-                        Pending Fees
-                    </p>
-
-                    <h2 class="text-4xl font-bold text-red-600 mt-3">
-
-                        {{ pending_fees }}
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-            <!-- Search & Filters -->
-
-            <div class="bg-white rounded-xl shadow mt-8 p-6">
-
-<form method="GET" action="{{ url_for('admin.students') }}">
-
-<div class="grid md:grid-cols-4 gap-4">
-
-
-<input
-type="text"
-name="search"
-value="{{ request.args.get('search','') }}"
-placeholder="Search Student..."
-class="border rounded-lg px-4 py-3 w-full">
-
-
-<select name="course"
-class="border rounded-lg px-4 py-3">
-
-
-<option value="">
-All Courses
-</option>
-
-
-{% for course in courses %}
-
-<option value="{{ course.title }}"
-{% if request.args.get('course') == course.title %}
-selected
-{% endif %}
->
-
-{{ course.title }}
-
-</option>
-
-{% endfor %}
-
-</select>
-
-
-
-<select name="batch"
-class="border rounded-lg px-4 py-3">
-
-
-<option value="">
-All Batches
-</option>
-
-
-{% for batch in batches %}
-
-<option value="{{ batch }}"
-{% if request.args.get('batch') == batch %}
-selected
-{% endif %}
->
-
-{{ batch }}
-
-</option>
-
-{% endfor %}
-
-
-</select>
-
-<button
-type="submit"
-class="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">
-
-Search
-
-</button>
-
-
-</div>
-
-</form>
-
-</div>
-
-            <!-- Student Table -->
-
-            <div class="bg-white rounded-xl shadow mt-8 overflow-x-auto">
-
-                <table class="min-w-full">
-
-                    <thead class="bg-gray-100">
-
-                        <tr>
-
-                            <th class="p-4 text-left">ID</th>
-
-                            <th class="p-4 text-left">Student</th>
-
-                            <th class="p-4 text-left">Course</th>
-
-                            <th class="p-4 text-left">Batch</th>
-
-                            <th class="p-4 text-left">Phone</th>
-
-                            <th class="p-4 text-left">Status</th>
-
-                            <th class="p-4 text-center">Actions</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-                        {% for student in students %}
-
-<tr class="border-b hover:bg-gray-50 transition">
-
-    <td class="p-4">
-        {{ student.id }}
-    </td>
-
-    <td class="p-4">
-
-        <div class="flex items-center space-x-3">
-
-            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-
-                <span class="font-bold text-blue-600">
-
-                    {{ student.name[:1] }}
-
-                </span>
-
-            </div>
-
-            <div>
-
-                <h3 class="font-semibold">
-
-                    {{ student.name }}
-
-                </h3>
-
-                <p class="text-sm text-gray-500">
-
-                    {{ student.email }}
-
-                </p>
-
-            </div>
-
-        </div>
-
-    </td>
-
-    <td class="p-4">
-
-        {{ student.course }}
-
-    </td>
-
-    <td class="p-4">
-
-        {{ student.batch }}
-
-    </td>
-
-    <td class="p-4">
-
-        {{ student.mobile }}
-
-    </td>
-
-    <td class="p-4">
-
-    {% if student.status == "Active" %}
-
-<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-    Active
-</span>
-
-{% elif student.status == "Paid" %}
-    <span class="bg-green-100 
-    text-green-700 px-3 py-1 rounded-full text-sm">
-        Paid
-    </span>
-
-    {% elif student.status == "Partially Paid" %}
-
-    <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
-        Partially Paid
-    </span>
-
-    {% elif student.status == "Unpaid" %}
-
-    <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
-        Unpaid
-    </span>
-
-    {% elif student.status == "Placed" %}
-
-    <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
-        Placed
-    </span>
-
-    {% elif student.status == "Completed" %}
-
-    <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm">
-        Completed
-    </span>
-
-    {% endif %}
-
-</td>
-    <td class="px-4 py-3">
-
-    <a href="{{ url_for('admin.edit_student', id=student.id) }}"
-       class="bg-blue-500 text-white px-3 py-2 rounded">
-        Edit
-    </a>
-
-    <form
-        action="{{ url_for('admin.delete_student', id=student.id) }}"
-        method="POST"
-        style="display:inline;"
-        onsubmit="return confirm('Are you sure you want to delete this student?');">
-
-        <button
-            type="submit"
-            class="bg-red-600 text-white px-3 py-2 rounded">
-
-            Delete
-
-        </button>
-
-    </form>
-
-</td>
-</tr>
-
-{% else %}
-
-<tr>
-
-    <td colspan="7" class="text-center py-12">
-
-        <div class="flex flex-col items-center">
-
-            <div class="text-6xl">
-
-                👨‍🎓
-
-            </div>
-
-            <h2 class="text-2xl font-semibold mt-4">
-
-                No Students Found
-
-            </h2>
-
-            <p class="text-gray-500 mt-2">
-
-                Add your first student to get started.
+            <h1 class="students-title">
+                Student Management
+            </h1>
+
+            <p class="students-description">
+
+                Manage admissions, student profiles,
+                courses, batches, payments and placements
+                from one central dashboard.
 
             </p>
 
-            <a href="{{ url_for('admin.add_student') }}"
-               class="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">
+            <a
+                href="{{ url_for('admin.add_student') }}"
+                class="add-student-btn"
+            >
 
-                ➕ Add Student
+                ➕ Add New Student
 
             </a>
 
         </div>
 
-    </td>
+    </section>
 
-</tr>
 
-{% endfor %}
+    <!-- ======================================================
+         STATISTICS
+    ======================================================= -->
 
-</tbody>
+    <section class="student-stats">
 
-</table>
 
-</div>
-<!-- ================= PAGINATION ================= -->
+        <!-- TOTAL -->
 
-<div class="bg-white rounded-xl shadow mt-6 px-6 py-4 flex flex-col md:flex-row justify-between items-center">
+        <div class="student-stat">
 
-    <p class="text-gray-600">
+            <div class="student-stat-top">
 
-        Showing {{ students|length }} Students
+                <div>
 
-    </p>
+                    <div class="student-stat-label">
+                        Total Students
+                    </div>
 
-    <div class="flex gap-2 mt-4 md:mt-0">
+                    <div class="student-stat-number">
+                        {{ total_students }}
+                    </div>
 
-        <button class="px-4 py-2 border rounded-lg hover:bg-gray-100">
+                </div>
 
-            Previous
+                <div class="student-stat-icon">
+                    👨‍🎓
+                </div>
 
-        </button>
+            </div>
 
-        <button class="px-4 py-2 bg-blue-600 text-white rounded-lg">
+            <div class="student-stat-footer">
+                All registered students
+            </div>
 
-            1
+        </div>
 
-        </button>
 
-        <button class="px-4 py-2 border rounded-lg hover:bg-gray-100">
+        <!-- ACTIVE -->
 
-            2
+        <div class="student-stat">
 
-        </button>
+            <div class="student-stat-top">
 
-        <button class="px-4 py-2 border rounded-lg hover:bg-gray-100">
+                <div>
 
-            3
+                    <div class="student-stat-label">
+                        Active Students
+                    </div>
 
-        </button>
+                    <div class="student-stat-number">
+                        {{ active_students }}
+                    </div>
 
-        <button class="px-4 py-2 border rounded-lg hover:bg-gray-100">
+                </div>
 
-            Next
+                <div class="student-stat-icon">
+                    🟢
+                </div>
 
-        </button>
+            </div>
+
+            <div class="student-stat-footer">
+                Currently active
+            </div>
+
+        </div>
+
+
+        <!-- PLACED -->
+
+        <div class="student-stat">
+
+            <div class="student-stat-top">
+
+                <div>
+
+                    <div class="student-stat-label">
+                        Placed Students
+                    </div>
+
+                    <div class="student-stat-number">
+                        {{ placed_students }}
+                    </div>
+
+                </div>
+
+                <div class="student-stat-icon">
+                    💼
+                </div>
+
+            </div>
+
+            <div class="student-stat-footer">
+                Successfully placed
+            </div>
+
+        </div>
+
+
+        <!-- FEES -->
+
+        <div class="student-stat">
+
+            <div class="student-stat-top">
+
+                <div>
+
+                    <div class="student-stat-label">
+                        Pending Fees
+                    </div>
+
+                    <div class="student-stat-number">
+                        {{ pending_fees }}
+                    </div>
+
+                </div>
+
+                <div class="student-stat-icon">
+                    💰
+                </div>
+
+            </div>
+
+            <div class="student-stat-footer">
+                Students with pending fees
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- ======================================================
+         SEARCH / FILTER
+    ======================================================= -->
+
+    <section class="student-filter">
+
+        <div class="filter-title">
+
+            🔎 Search & Filter Students
+
+        </div>
+
+
+        <form
+            method="GET"
+            action="{{ url_for('admin.students') }}"
+        >
+
+            <div class="filter-grid">
+
+
+                <!-- SEARCH -->
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ request.args.get('search','') }}"
+                    placeholder="Search by name, email or mobile..."
+                    class="filter-input"
+                >
+
+
+                <!-- COURSE -->
+
+                <select
+                    name="course"
+                    class="filter-select"
+                >
+
+                    <option value="">
+                        All Courses
+                    </option>
+
+                    {% for course in courses %}
+
+                    <option
+                        value="{{ course.title }}"
+                        {% if request.args.get('course') == course.title %}
+                            selected
+                        {% endif %}
+                    >
+
+                        {{ course.title }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <!-- BATCH -->
+
+                <select
+                    name="batch"
+                    class="filter-select"
+                >
+
+                    <option value="">
+                        All Batches
+                    </option>
+
+                    {% for batch in batches %}
+
+                    <option
+                        value="{{ batch }}"
+                        {% if request.args.get('batch') == batch %}
+                            selected
+                        {% endif %}
+                    >
+
+                        {{ batch }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <!-- SEARCH -->
+
+                <button
+                    type="submit"
+                    class="search-btn"
+                >
+
+                    🔍 Search
+
+                </button>
+
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- ======================================================
+         STUDENT TABLE
+    ======================================================= -->
+
+    <section class="student-table-card">
+
+
+        <div class="table-heading">
+
+            <h2>
+                👨‍🎓 Student Records
+            </h2>
+
+            <span>
+                {{ students|length }} students displayed
+            </span>
+
+        </div>
+
+
+        <div class="table-scroll">
+
+            <table class="student-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Student
+                        </th>
+
+                        <th>
+                            Course
+                        </th>
+
+                        <th>
+                            Batch
+                        </th>
+
+                        <th>
+                            Phone
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                {% for student in students %}
+
+
+                    <tr>
+
+
+                        <!-- ID -->
+
+                        <td>
+
+                            #{{ student.id }}
+
+                        </td>
+
+
+                        <!-- STUDENT -->
+
+                        <td>
+
+                            <div class="student-profile">
+
+
+                                <div class="student-avatar">
+
+                                    {{ student.name[:1]|upper }}
+
+                                </div>
+
+
+                                <div>
+
+                                    <div class="student-name">
+
+                                        {{ student.name }}
+
+                                    </div>
+
+                                    <div class="student-email">
+
+                                        {{ student.email }}
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- COURSE -->
+
+                        <td>
+
+                            <span class="course-badge">
+
+                                {{ student.course }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- BATCH -->
+
+                        <td>
+
+                            <span class="batch-badge">
+
+                                {{ student.batch }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- PHONE -->
+
+                        <td>
+
+                            {{ student.mobile }}
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+
+                        {% if student.status == "Active" %}
+
+                            <span
+                                class="status-badge"
+                                style="background:rgba(34,197,94,.12);color:#4ade80;"
+                            >
+
+                                <span class="status-dot"></span>
+
+                                Active
+
+                            </span>
+
+
+                        {% elif student.status == "Paid" %}
+
+                            <span
+                                class="status-badge"
+                                style="background:rgba(34,197,94,.12);color:#4ade80;"
+                            >
+
+                                <span class="status-dot"></span>
+
+                                Paid
+
+                            </span>
+
+
+                        {% elif student.status == "Partially Paid" %}
+
+                            <span
+                                class="status-badge"
+                                style="background:rgba(234,179,8,.12);color:#facc15;"
+                            >
+
+                                <span class="status-dot"></span>
+
+                                Partially Paid
+
+                            </span>
+
+
+                        {% elif student.status == "Unpaid" %}
+
+                            <span
+                                class="status-badge"
+                                style="background:rgba(239,68,68,.12);color:#f87171;"
+                            >
+
+                                <span class="status-dot"></span>
+
+                                Unpaid
+
+                            </span>
+
+
+                        {% elif student.status == "Placed" %}
+
+                            <span
+                                class="status-badge"
+                                style="background:rgba(59,130,246,.12);color:#60a5fa;"
+                            >
+
+                                <span class="status-dot"></span>
+
+                                Placed
+
+                            </span>
+
+
+                        {% elif student.status == "Completed" %}
+
+                            <span
+                                class="status-badge"
+                                style="background:rgba(168,85,247,.12);color:#c084fc;"
+                            >
+
+                                <span class="status-dot"></span>
+
+                                Completed
+
+                            </span>
+
+
+                        {% endif %}
+
+
+                        </td>
+
+
+                        <!-- ACTIONS -->
+
+                        <td>
+
+
+                            <div class="action-group">
+
+
+                                <!-- EDIT -->
+
+                                <a
+                                    href="{{ url_for('admin.edit_student', id=student.id) }}"
+                                    class="action-btn edit-btn"
+                                >
+
+                                    ✏️ Edit
+
+                                </a>
+
+
+                                <!-- DELETE -->
+
+                                <form
+                                    action="{{ url_for('admin.delete_student', id=student.id) }}"
+                                    method="POST"
+                                    style="display:inline;"
+                                    onsubmit="return confirm('Are you sure you want to delete this student?');"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="action-btn delete-btn"
+                                    >
+
+                                        🗑 Delete
+
+                                    </button>
+
+                                </form>
+
+
+                            </div>
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                {% else %}
+
+
+                    <!-- EMPTY -->
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            style="padding:0;"
+                        >
+
+                            <div class="empty-state">
+
+                                <div class="empty-icon">
+                                    👨‍🎓
+                                </div>
+
+                                <div class="empty-title">
+
+                                    No Students Found
+
+                                </div>
+
+                                <div class="empty-text">
+
+                                    No student records match your
+                                    current search or filters.
+
+                                </div>
+
+                                <a
+                                    href="{{ url_for('admin.add_student') }}"
+                                    class="add-student-btn"
+                                >
+
+                                    ➕ Add First Student
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                {% endfor %}
+
+
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- ======================================================
+         PAGINATION
+    ======================================================= -->
+
+    <div class="pagination-card">
+
+
+        <div class="pagination-info">
+
+            Showing
+            <strong style="color:white;">
+                {{ students|length }}
+            </strong>
+
+            students
+
+        </div>
+
+
+        <div class="pagination-buttons">
+
+
+            <button
+                type="button"
+                class="pagination-btn"
+            >
+
+                ←
+
+            </button>
+
+
+            <button
+                type="button"
+                class="pagination-btn pagination-active"
+            >
+
+                1
+
+            </button>
+
+
+            <button
+                type="button"
+                class="pagination-btn"
+            >
+
+                2
+
+            </button>
+
+
+            <button
+                type="button"
+                class="pagination-btn"
+            >
+
+                3
+
+            </button>
+
+
+            <button
+                type="button"
+                class="pagination-btn"
+            >
+
+                →
+
+            </button>
+
+
+        </div>
+
 
     </div>
 
-</div>
 
-<!-- ================= QUICK SUMMARY ================= -->
+    <!-- ======================================================
+         QUICK SUMMARY
+    ======================================================= -->
 
-<div class="grid md:grid-cols-3 gap-6 mt-8">
+    <section class="summary-grid">
 
-    <div class="bg-white rounded-xl shadow p-6">
 
-        <h3 class="text-lg font-semibold text-gray-700">
+        <div class="summary-card">
 
-            Total Admissions
+            <div class="summary-title">
+                Total Admissions
+            </div>
 
-        </h3>
+            <div class="summary-value">
 
-        <p class="text-4xl font-bold text-blue-600 mt-3">
+                {{ total_students }}
 
-            {{ total_students }}
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-title">
+                Active Students
+            </div>
+
+            <div class="summary-value">
+
+                {{ active_students }}
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-title">
+                Placement Success
+            </div>
+
+            <div class="summary-value">
+
+                {{ placed_students }}
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- ======================================================
+         FOOTER
+    ======================================================= -->
+
+    <footer class="students-footer">
+
+        <p>
+
+            © {{ current_year }}
+            RR Institute Management System
 
         </p>
 
-    </div>
+        <p style="margin-top:6px;">
 
-    <div class="bg-white rounded-xl shadow p-6">
-
-        <h3 class="text-lg font-semibold text-gray-700">
-
-            Active Students
-
-        </h3>
-
-        <p class="text-4xl font-bold text-green-600 mt-3">
-
-            {{ active_students }}
+            Learn
+            <span>•</span>
+            Grow
+            <span>•</span>
+            Succeed
 
         </p>
 
-    </div>
+    </footer>
 
-    <div class="bg-white rounded-xl shadow p-6">
-
-        <h3 class="text-lg font-semibold text-gray-700">
-
-            Placement Success
-
-        </h3>
-
-        <p class="text-4xl font-bold text-purple-600 mt-3">
-
-            {{ placed_students }}
-
-        </p>
-
-    </div>
 
 </div>
 
-<!-- ================= FOOTER ================= -->
-
-<footer class="mt-10 text-center text-gray-500">
-
-    <hr class="mb-4">
-
-    <p>
-
-        © {{ current_year }} RR Institute Management System
-
-    </p>
-
-    <p class="mt-2">
-
-        Developed using Flask • SQLAlchemy • Tailwind CSS
-
-    </p>
-
-</footer>
-
-</div>
-
-</div>
-
-</body>
-
-</html>
+{% endblock %}

@@ -1,61 +1,801 @@
-<!DOCTYPE html>
-<html>
+{% extends "admin/layout.html" %}
 
-<head>
+{% block content %}
 
-<title>Add Company</title>
+<style>
 
-<script src="https://cdn.tailwindcss.com"></script>
+/* =========================================================
+   ADD COMPANY PAGE
+========================================================= */
 
-</head>
+.company-page {
+    animation: companyEnter .55s ease;
+}
 
-<body class="bg-gray-100">
+@keyframes companyEnter {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
 
-<div class="max-w-2xl mx-auto mt-10 bg-white p-8 rounded-xl shadow">
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-<h1 class="text-3xl font-bold mb-6">
 
-Add Placement Company
+/* =========================================================
+   HERO
+========================================================= */
 
-</h1>
+.company-hero {
+    position: relative;
+    overflow: hidden;
 
-<form method="POST"
-      enctype="multipart/form-data">
+    background:
+        linear-gradient(
+            135deg,
+            #111827,
+            #312e81,
+            #4f46e5
+        );
 
-    <label class="font-semibold">
+    border-radius: 22px;
 
-        Company Name
+    padding: 28px 30px;
 
-    </label>
+    margin-bottom: 24px;
 
-    <input
-        type="text"
-        name="company"
-        required
-        class="w-full border p-3 rounded mt-2 mb-5">
+    box-shadow:
+        0 18px 45px
+        rgba(15,23,42,.18);
+}
 
-    <label class="font-semibold">
+.company-hero::before {
+    content: "";
 
-        Company Logo
+    position: absolute;
 
-    </label>
+    width: 270px;
+    height: 270px;
 
-    <input
-        type="file"
-        name="photo"
-        required
-        class="w-full border p-3 rounded mt-2 mb-5">
+    border-radius: 50%;
 
-    <button
-        class="bg-indigo-600 text-white px-6 py-3 rounded">
+    background:
+        rgba(255,255,255,.06);
 
-        Save Company
+    right: -110px;
+    top: -150px;
+}
 
-    </button>
+.company-hero::after {
+    content: "";
 
-</form>
+    position: absolute;
+
+    width: 160px;
+    height: 160px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(250,204,21,.08);
+
+    left: 45%;
+    bottom: -100px;
+}
+
+.company-hero-content {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.company-hero-left {
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+}
+
+.company-icon {
+    width: 58px;
+    height: 58px;
+
+    border-radius: 17px;
+
+    background:
+        rgba(255,255,255,.12);
+
+    border:
+        1px solid
+        rgba(255,255,255,.16);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 28px;
+}
+
+.company-title {
+    color: white;
+
+    font-size: 28px;
+
+    font-weight: 800;
+}
+
+.company-subtitle {
+    color: #c7d2fe;
+
+    font-size: 13px;
+
+    margin-top: 5px;
+}
+
+.company-badge {
+    background:
+        rgba(255,255,255,.10);
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+    color: white;
+
+    padding: 11px 17px;
+
+    border-radius: 12px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   FORM CARD
+========================================================= */
+
+.company-form-card {
+    background: white;
+
+    border:
+        1px solid
+        #e5e7eb;
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 12px 35px
+        rgba(15,23,42,.07);
+}
+
+.company-form-header {
+    padding: 21px 25px;
+
+    border-bottom:
+        1px solid
+        #eef2f7;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+}
+
+.company-form-icon {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 13px;
+
+    background:
+        #eef2ff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 21px;
+}
+
+.company-form-title {
+    color: #1f2937;
+
+    font-size: 17px;
+
+    font-weight: 800;
+}
+
+.company-form-description {
+    color: #6b7280;
+
+    font-size: 11px;
+
+    margin-top: 3px;
+}
+
+.company-form-body {
+    padding: 28px;
+}
+
+
+/* =========================================================
+   FORM FIELD
+========================================================= */
+
+.company-field {
+    margin-bottom: 25px;
+}
+
+.company-label {
+    display: block;
+
+    color: #374151;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    margin-bottom: 8px;
+}
+
+.required {
+    color: #ef4444;
+}
+
+.company-input {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        #d1d5db;
+
+    border-radius: 12px;
+
+    padding:
+        13px 14px;
+
+    color:
+        #1f2937;
+
+    background:
+        white;
+
+    font-size:
+        13px;
+
+    transition:
+        all .25s ease;
+}
+
+.company-input:hover {
+    border-color:
+        #a5b4fc;
+}
+
+.company-input:focus {
+    outline: none;
+
+    border-color:
+        #6366f1;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(99,102,241,.10);
+}
+
+
+/* =========================================================
+   FILE UPLOAD
+========================================================= */
+
+.upload-box {
+    position: relative;
+
+    border:
+        2px dashed
+        #c7d2fe;
+
+    background:
+        #f8faff;
+
+    border-radius:
+        16px;
+
+    padding:
+        25px;
+
+    text-align:
+        center;
+
+    transition:
+        all .3s ease;
+}
+
+.upload-box:hover {
+    border-color:
+        #6366f1;
+
+    background:
+        #eef2ff;
+
+    transform:
+        translateY(-2px);
+}
+
+.upload-icon {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 15px;
+
+    background:
+        #eef2ff;
+
+    color:
+        #4f46e5;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    margin:
+        0 auto 10px;
+
+    font-size:
+        24px;
+}
+
+.upload-title {
+    color:
+        #374151;
+
+    font-size:
+        13px;
+
+    font-weight:
+        800;
+}
+
+.upload-description {
+    color:
+        #9ca3af;
+
+    font-size:
+        11px;
+
+    margin-top:
+        4px;
+
+    margin-bottom:
+        14px;
+}
+
+.upload-input {
+    width:
+        100%;
+
+    max-width:
+        430px;
+
+    margin:
+        0 auto;
+
+    font-size:
+        12px;
+
+    color:
+        #4b5563;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.company-form-footer {
+    padding:
+        20px 28px;
+
+    background:
+        #f8fafc;
+
+    border-top:
+        1px solid
+        #e5e7eb;
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+}
+
+.company-back {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    padding:
+        11px 18px;
+
+    border-radius:
+        11px;
+
+    color:
+        #475569;
+
+    background:
+        white;
+
+    border:
+        1px solid
+        #cbd5e1;
+
+    text-decoration:
+        none;
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    transition:
+        all .25s ease;
+}
+
+.company-back:hover {
+    background:
+        #f1f5f9;
+
+    transform:
+        translateY(-2px);
+}
+
+.company-save {
+    border:
+        none;
+
+    cursor:
+        pointer;
+
+    padding:
+        12px 25px;
+
+    border-radius:
+        11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f46e5,
+            #6366f1
+        );
+
+    color:
+        white;
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    box-shadow:
+        0 8px 20px
+        rgba(79,70,229,.25);
+
+    transition:
+        all .25s ease;
+}
+
+.company-save:hover {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 12px 25px
+        rgba(79,70,229,.35);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:768px) {
+
+    .company-hero-content {
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+    }
+
+    .company-badge {
+        width:
+            100%;
+
+        box-sizing:
+            border-box;
+
+        text-align:
+            center;
+    }
+
+    .company-title {
+        font-size:
+            24px;
+    }
+
+    .company-form-body {
+        padding:
+            20px;
+    }
+
+    .company-form-footer {
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+    }
+
+    .company-back,
+    .company-save {
+        width:
+            100%;
+
+        box-sizing:
+            border-box;
+
+        justify-content:
+            center;
+
+        text-align:
+            center;
+    }
+
+}
+
+</style>
+
+
+<div class="company-page">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <div class="company-hero">
+
+        <div class="company-hero-content">
+
+            <div class="company-hero-left">
+
+                <div class="company-icon">
+                    🏢
+                </div>
+
+                <div>
+
+                    <h1 class="company-title">
+                        Add Company
+                    </h1>
+
+                    <p class="company-subtitle">
+                        Register a new hiring company
+                        for placements.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="company-badge">
+                💼 Placement Management
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
+
+    <div class="company-form-card">
+
+
+        <!-- HEADER -->
+
+        <div class="company-form-header">
+
+            <div class="company-form-icon">
+                🏢
+            </div>
+
+            <div>
+
+                <div class="company-form-title">
+                    Company Information
+                </div>
+
+                <div class="company-form-description">
+                    Enter the company name and upload its logo.
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- FORM -->
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            action="{{ url_for('admin.add_company') }}">
+
+
+            <div class="company-form-body">
+
+
+                <!-- =================================================
+                     COMPANY NAME
+                ================================================== -->
+
+                <div class="company-field">
+
+                    <label class="company-label">
+
+                        Company Name
+
+                        <span class="required">
+                            *
+                        </span>
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="company"
+                        placeholder="Example: TCS"
+                        required
+                        class="company-input">
+
+                </div>
+
+
+
+                <!-- =================================================
+                     COMPANY LOGO
+                ================================================== -->
+
+                <div class="company-field">
+
+                    <label class="company-label">
+
+                        Company Logo
+
+                        <span class="required">
+                            *
+                        </span>
+
+                    </label>
+
+
+                    <div class="upload-box">
+
+                        <div class="upload-icon">
+                            🖼️
+                        </div>
+
+                        <div class="upload-title">
+                            Upload Company Logo
+                        </div>
+
+                        <div class="upload-description">
+                            Select the company's official logo.
+                        </div>
+
+                        <input
+                            type="file"
+                            name="photo"
+                            accept="image/*"
+                            required
+                            class="upload-input">
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 BUTTONS
+            ================================================== -->
+
+            <div class="company-form-footer">
+
+
+                <a
+                    href="{{ url_for('admin.companies') }}"
+                    class="company-back">
+
+                    ← Back to Companies
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="company-save">
+
+                    💾 Save Company
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+    </div>
+
 
 </div>
 
-</body>
-</html>
+
+{% endblock %}

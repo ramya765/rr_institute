@@ -1,9 +1,10 @@
 
 from database import db
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone, timedelta
 
 def ist_now():
     return datetime.now(timezone.utc) + timedelta(hours=5, minutes=30)
+IST = timezone(timedelta(hours=5, minutes=30))
 class Payment(db.Model):
     __tablename__ = "payments"
 
@@ -274,26 +275,55 @@ class InstituteSettings(db.Model):
         db.Boolean,
         default=False
     )
-
 # ==========================================
-# TESTIMONIALS TABLE
+# NOTIFICATIONS TABLE
 # ==========================================
-class Testimonial(db.Model):
-    __tablename__ = "testimonials"
 
-    id = db.Column(db.Integer, primary_key=True)
+class Notification(db.Model):
 
-    student_name = db.Column(db.String(100))
+    __tablename__ = "notifications"
 
-    company = db.Column(db.String(100))
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
 
-    review = db.Column(db.Text)
+    # NULL = admin/general notification
+    # user_id = notification for a particular student
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("users.id"),
+        nullable=True
+    )
 
-    photo = db.Column(db.String(255))
+    notification_type = db.Column(
+        db.String(50)
+    )
+
+    title = db.Column(
+        db.String(200)
+    )
+
+    message = db.Column(
+        db.Text
+    )
+
+    is_read = db.Column(
+        db.Boolean,
+        default=False
+    )
 
     created_at = db.Column(
-        db.DateTime,
-        default=datetime.utcnow
+    db.DateTime,
+    default=lambda: datetime.now(IST).replace(tzinfo=None)
+)
+
+    user = db.relationship(
+        "User",
+        backref=db.backref(
+            "notifications",
+            lazy=True
+        )
     )
 class Faculty(db.Model):
     __tablename__ = "faculty"

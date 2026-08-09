@@ -9,7 +9,8 @@ from flask import (
 )
 from models import Course, Student, Payment, Placement, Company, Lead, User
 from models import Course, Faculty,  StudyMaterial
-from models import InstituteSettings
+from models import InstituteSettings,Notification
+from sqlalchemy.exc import IntegrityError
 
 
 from flask import send_from_directory
@@ -68,6 +69,67 @@ os.makedirs(
     os.path.join(UPLOAD_FOLDER, "companies"),
     exist_ok=True
 )
+def create_notification(
+    notification_type,
+    title,
+    message,
+    user_id=None
+):
+
+    settings = InstituteSettings.query.first()
+
+    # ==========================================
+    # ADMIN NOTIFICATIONS
+    # ==========================================
+
+    # user_id=None means this is an ADMIN notification
+
+    if user_id is None:
+
+        if not settings:
+            return
+
+        if notification_type == "lead":
+
+            if not settings.new_lead_notification:
+                return
+
+        elif notification_type == "admission":
+
+            if not settings.admission_notification:
+                return
+
+        elif notification_type == "payment":
+
+            if not settings.payment_notification:
+                return
+
+        elif notification_type == "placement":
+
+            if not settings.placement_notification:
+                return
+
+    # ==========================================
+    # STUDENT NOTIFICATIONS
+    # ==========================================
+
+    # If user_id is provided, this notification
+    # belongs to that particular student.
+    #
+    # Student notifications are NOT controlled
+    # by the admin notification settings.
+
+    notification = Notification(
+        user_id=user_id,
+        notification_type=notification_type,
+        title=title,
+        message=message,
+        is_read=False
+    )
+
+    db.session.add(notification)
+
+    db.session.commit()
 
 
 
@@ -420,16 +482,137 @@ def add_student():
     if lead_id:
         lead = Lead.query.get_or_404(lead_id)
 
-
     courses = Course.query.all()
 
+    faculties = Faculty.query.all()
 
     if request.method == "POST":
 
+        # ==========================================================
+        # GET FORM VALUES
+        # ==========================================================
 
-        # ==============================
-        # Upload Photo
-        # ==============================
+        email = request.form.get("email")
+        aadhaar_number = request.form.get("aadhaar")
+        mobile_number = request.form.get("mobile")
+
+        # ==========================================================
+        # DUPLICATE EMAIL CHECK
+        # ==========================================================
+
+        if email:
+
+            existing_student = Student.query.filter_by(
+                email=email
+            ).first()
+
+            if existing_student:
+
+                flash(
+                    "Email already exists. This student is already registered.",
+                    "danger"
+                )
+
+                return redirect(
+                    url_for(
+                        "admin.add_student",
+                        lead_id=lead_id
+                    ) if lead_id else url_for(
+                        "admin.add_student"
+                    )
+                )
+
+        # ==========================================================
+        # DUPLICATE AADHAAR CHECK
+        # ==========================================================
+
+        if aadhaar_number:
+
+            existing_aadhaar = Student.query.filter_by(
+                aadhaar=aadhaar_number
+            ).first()
+
+            if existing_aadhaar:
+
+                flash(
+                    "Aadhaar number already exists. Please check the Aadhaar number.",
+                    "danger"
+                )
+
+                return redirect(
+                    url_for(
+                        "admin.add_student",
+                        lead_id=lead_id
+                    ) if lead_id else url_for(
+                        "admin.add_student"
+                    )
+                )
+
+        # ==========================================================
+        # DUPLICATE MOBILE CHECK
+        # ==========================================================
+
+        if mobile_number:
+
+            existing_mobile = Student.query.filter_by(
+                mobile=mobile_number
+            ).first()
+
+            if existing_mobile:
+
+                flash(
+                    "Mobile number already exists. Please use a different mobile number.",
+                    "danger"
+                )
+
+                return redirect(
+                    url_for(
+                        "admin.add_student",
+                        lead_id=lead_id
+                    ) if lead_id else url_for(
+                        "admin.add_student"
+                    )
+                )
+
+        # ==========================================================
+        # FIND EXISTING USER
+        # ==========================================================
+
+        user = None
+
+        if email:
+
+            user = User.query.filter_by(
+                email=email
+            ).first()
+
+        # ==========================================================
+        # CHECK IF USER ALREADY HAS A STUDENT
+        # ==========================================================
+
+        if user:
+
+            existing_user_student = Student.query.filter_by(
+                user_id=user.id
+            ).first()
+
+            if existing_user_student:
+
+                flash(
+                    "This user is already registered as a student.",
+                    "danger"
+                )
+
+                return redirect(
+                    url_for(
+                        "admin.edit_student",
+                        id=existing_user_student.id
+                    )
+                )
+
+        # ==========================================================
+        # UPLOAD PHOTO
+        # ==========================================================
 
         photo_name = None
 
@@ -449,16 +632,15 @@ def add_student():
                 )
             )
 
-
-
-        # ==============================
-        # Upload Aadhaar
-        # ==============================
+        # ==========================================================
+        # UPLOAD AADHAAR
+        # ==========================================================
 
         aadhaar_name = None
 
-        aadhaar = request.files.get("aadhaar_file")
-
+        aadhaar = request.files.get(
+            "aadhaar_file"
+        )
 
         if aadhaar and aadhaar.filename != "":
 
@@ -474,11 +656,9 @@ def add_student():
                 )
             )
 
-
-
-        # ==============================
-        # Upload Qualification
-        # ==============================
+        # ==========================================================
+        # UPLOAD QUALIFICATION
+        # ==========================================================
 
         qualification_name = None
 
@@ -486,13 +666,11 @@ def add_student():
             "qualification_files"
         )
 
-
         if qualification and qualification.filename != "":
 
             qualification_name = secure_filename(
                 qualification.filename
             )
-
 
             qualification.save(
                 os.path.join(
@@ -502,130 +680,212 @@ def add_student():
                 )
             )
 
+        # ==========================================================
+        # CREATE STUDENT
+        # ==========================================================
 
+        try:
 
-        # ==============================
-        # Create Student
-        # ==============================
+            student = Student(
 
+                name=request.form.get("name"),
 
-        student = Student(
+                dob=request.form.get("dob") or None,
 
-            name=request.form.get("name"),
+                gender=request.form.get("gender"),
 
-            dob=request.form.get("dob") or None,
+                aadhaar=request.form.get("aadhaar"),
 
-            gender=request.form.get("gender"),
+                qualification=request.form.get(
+                    "qualification"
+                ),
 
-            aadhaar=request.form.get("aadhaar"),
+                occupation=request.form.get(
+                    "occupation"
+                ),
 
-            qualification=request.form.get("qualification"),
+                father_name=request.form.get(
+                    "father_name"
+                ),
 
-            occupation=request.form.get("occupation"),
+                mother_name=request.form.get(
+                    "mother_name"
+                ),
 
-            father_name=request.form.get("father_name"),
+                parent_mobile=request.form.get(
+                    "parent_mobile"
+                ),
 
-            mother_name=request.form.get("mother_name"),
+                mobile=request.form.get(
+                    "mobile"
+                ),
 
-            parent_mobile=request.form.get("parent_mobile"),
+                alternate_mobile=request.form.get(
+                    "alternate_mobile"
+                ),
 
-            mobile=request.form.get("mobile"),
+                email=request.form.get(
+                    "email"
+                ),
 
-            alternate_mobile=request.form.get("alternate_mobile"),
+                address=request.form.get(
+                    "address"
+                ),
 
-            email=request.form.get("email"),
+                course=request.form.get(
+                    "course"
+                ),
 
-            address=request.form.get("address"),
+                batch=request.form.get(
+                    "batch"
+                ),
 
-            course=request.form.get("course"),
+                trainer=request.form.get(
+                    "trainer"
+                ),
 
-            batch=request.form.get("batch"),
+                status="Unpaid",
 
-            trainer=request.form.get("trainer"),
+                admission_date=request.form.get(
+                    "admission_date"
+                ) or None,
 
-            status="Unpaid",
+                course_fee=float(
+                    request.form.get(
+                        "course_fee"
+                    ) or 0
+                ),
 
-            admission_date=request.form.get(
-                "admission_date"
-            ) or None,
+                paid_amount=float(
+                    request.form.get(
+                        "paid_amount"
+                    ) or 0
+                ),
 
+                balance_amount=float(
+                    request.form.get(
+                        "balance_amount"
+                    ) or 0
+                ),
 
-            course_fee=float(
-                request.form.get("course_fee") or 0
-            ),
+                payment_mode=request.form.get(
+                    "payment_mode"
+                ),
 
+                photo=photo_name,
 
-            paid_amount=float(
-                request.form.get("paid_amount") or 0
-            ),
+                aadhaar_file=aadhaar_name,
 
+                qualification_file=qualification_name,
 
-            balance_amount=float(
-                request.form.get("balance_amount") or 0
-            ),
+                remarks=request.form.get(
+                    "remarks"
+                )
+            )
 
+            # ======================================================
+            # CONNECT WITH EXISTING USER
+            # ======================================================
 
-            payment_mode=request.form.get(
-                "payment_mode"
-            ),
+            if user:
 
+                student.user_id = user.id
 
-            photo=photo_name,
+            # ======================================================
+            # SAVE STUDENT
+            # ======================================================
 
-            aadhaar_file=aadhaar_name,
+            db.session.add(student)
 
-            qualification_file=qualification_name,
+            db.session.commit()
 
-            remarks=request.form.get("remarks")
-        )
+        except IntegrityError as e:
 
+            db.session.rollback()
 
+            error_message = str(e).lower()
 
-        db.session.add(student)
+            if "email" in error_message:
 
-        db.session.commit()
+                flash(
+                    "Email already exists. Please use a different email.",
+                    "danger"
+                )
 
+            elif "aadhaar" in error_message:
 
+                flash(
+                    "Aadhaar number already exists.",
+                    "danger"
+                )
 
-        # ==================================================
-        # CREATE LOGIN + SEND EMAIL ALWAYS
-        # ==================================================
+            elif "mobile" in error_message:
 
+                flash(
+                    "Mobile number already exists.",
+                    "danger"
+                )
+
+            elif "user_id" in error_message:
+
+                flash(
+                    "This user is already registered as a student.",
+                    "danger"
+                )
+
+            else:
+
+                flash(
+                    "Unable to add student. Please check the entered details.",
+                    "danger"
+                )
+
+            return redirect(
+                url_for(
+                    "admin.add_student",
+                    lead_id=lead_id
+                ) if lead_id else url_for(
+                    "admin.add_student"
+                )
+            )
+
+        # ==========================================================
+        # CREATE LOGIN ACCOUNT
+        # ==========================================================
 
         if student.email:
 
-
             plain_password = secrets.token_urlsafe(8)
-
-
 
             user = User.query.filter_by(
                 email=student.email
             ).first()
 
-
-
             if user:
 
-
-                # Existing user update
+                # ==================================================
+                # EXISTING USER
+                # ==================================================
 
                 user.name = student.name
 
                 user.phone = student.mobile
 
-                user.password = bcrypt.generate_password_hash(
-                    plain_password
-                ).decode("utf-8")
+                user.password = (
+                    bcrypt.generate_password_hash(
+                        plain_password
+                    ).decode("utf-8")
+                )
+
                 user.portal_stage = "explorer"
 
                 user.is_active = True
 
-
             else:
 
-
-                # New user create
+                # ==================================================
+                # NEW USER
+                # ==================================================
 
                 user = User(
 
@@ -635,41 +895,73 @@ def add_student():
 
                     phone=student.mobile,
 
-                    password=bcrypt.generate_password_hash(
-                        plain_password
-                    ).decode("utf-8"),
+                    password=(
+                        bcrypt.generate_password_hash(
+                            plain_password
+                        ).decode("utf-8")
+                    ),
 
                     role="student",
 
                     is_active=True,
 
                     portal_stage="explorer"
-
                 )
-
 
                 db.session.add(user)
 
-
-            
             db.session.commit()
 
-
-
-            # Connect student with user
+            # ======================================================
+            # CONNECT STUDENT WITH USER
+            # ======================================================
 
             student.user_id = user.id
 
-            db.session.commit()
-
-
-
-            # ==============================
-            # SEND EMAIL
-            # ==============================
-
             try:
 
+                db.session.commit()
+
+            except IntegrityError:
+
+                db.session.rollback()
+
+                flash(
+                    "This user is already registered as a student.",
+                    "danger"
+                )
+
+                return redirect(
+                    url_for(
+                        "admin.add_student",
+                        lead_id=lead_id
+                    ) if lead_id else url_for(
+                        "admin.add_student"
+                    )
+                )
+
+            # ======================================================
+            # ADMISSION NOTIFICATION
+            # ======================================================
+
+            create_notification(
+
+                "admission",
+
+                "Admission Confirmed 🎓",
+
+                f"Congratulations {student.name}! "
+                f"Your admission to {student.course} "
+                f"has been successfully confirmed.",
+
+                user_id=user.id
+            )
+
+            # ======================================================
+            # SEND LOGIN EMAIL
+            # ======================================================
+
+            try:
 
                 msg = Message(
 
@@ -678,37 +970,26 @@ def add_student():
                     recipients=[
                         student.email
                     ]
-
                 )
-
 
                 msg.body = f"""
 
 Hello {student.name},
 
-
 Welcome to RR Origin.
 
-
 Your Student Portal Login Details:
-
 
 Email:
 {student.email}
 
-
 Password:
 {plain_password}
 
-
 Login URL:
-
 http://127.0.0.1:5000/login
 
-
-
 Please change your password after login.
-
 
 Regards,
 
@@ -716,53 +997,67 @@ RR Origin Team
 
 """
 
-
                 mail.send(msg)
 
+                print(
+                    "=============================="
+                )
 
+                print(
+                    "EMAIL SENT SUCCESSFULLY"
+                )
 
-                print("==============================")
+                print(
+                    "TO:",
+                    student.email
+                )
 
-                print("EMAIL SENT SUCCESSFULLY")
-
-                print("TO:", student.email)
-
-                print("==============================")
-
-
+                print(
+                    "=============================="
+                )
 
             except Exception as e:
 
+                print(
+                    "=============================="
+                )
 
-                print("==============================")
+                print(
+                    "EMAIL ERROR:",
+                    e
+                )
 
-                print("EMAIL ERROR:", e)
+                print(
+                    "=============================="
+                )
 
-                print("==============================")
+            print(
+                "=============================="
+            )
 
+            print(
+                "STUDENT LOGIN CREATED"
+            )
 
+            print(
+                "EMAIL:",
+                student.email
+            )
 
+            print(
+                "PASSWORD:",
+                plain_password
+            )
 
-            print("==============================")
+            print(
+                "=============================="
+            )
 
-            print("STUDENT LOGIN CREATED")
-
-            print("EMAIL:", student.email)
-
-            print("PASSWORD:", plain_password)
-
-            print("==============================")
-
-
-
-
-        # ==================================================
+        # ==========================================================
         # INITIAL PAYMENT
-        # ==================================================
-
+        # ==========================================================
 
         if student.paid_amount > 0:
-
 
             receipt_number = (
                 "RR"
@@ -771,7 +1066,6 @@ RR Origin Team
                     "%Y%m%d%H%M%S"
                 )
             )
-
 
             payment = Payment(
 
@@ -788,28 +1082,46 @@ RR Origin Team
                 received_by="Admin",
 
                 remarks="Admission Payment"
-
             )
-
 
             db.session.add(payment)
 
             db.session.commit()
-
-
 
             generate_receipt(
                 student,
                 payment
             )
 
+            # ======================================================
+            # INITIAL PAYMENT NOTIFICATION
+            # ======================================================
 
+            if student.user_id:
+
+                create_notification(
+
+                    "payment",
+
+                    "Payment Received 💰",
+
+                    f"₹{student.paid_amount:,.2f} "
+                    f"payment received for "
+                    f"{student.course}. "
+                    f"Your remaining balance is "
+                    f"₹{student.balance_amount:,.2f}.",
+
+                    user_id=student.user_id
+                )
+
+        # ==========================================================
+        # SUCCESS MESSAGE
+        # ==========================================================
 
         flash(
             "Student added successfully!",
             "success"
         )
-
 
         return redirect(
             url_for(
@@ -817,12 +1129,16 @@ RR Origin Team
             )
         )
 
-
+    # ==========================================================
+    # DISPLAY ADD STUDENT PAGE
+    # ==========================================================
 
     return render_template(
         "admin/add_student.html",
         courses=courses,
+        faculties=faculties,
         lead=lead
+        
     )
 ## ==========================================================
 # Edit Student
@@ -1054,6 +1370,10 @@ def batch_students(id):
 # Add Payment
 # ==========================================================
 
+# ==============================
+# ADD PAYMENT
+# ==============================
+
 @admin.route("/students/<int:id>/payment", methods=["POST"])
 def add_payment(id):
 
@@ -1071,47 +1391,86 @@ def add_payment(id):
         )
 
         # Already Fully Paid
+
         if remaining <= 0:
+
             flash(
                 "Course fee is already fully paid. No more payments are allowed.",
                 "warning"
             )
+
             return redirect(
-                url_for("admin.edit_student", id=id)
+                url_for(
+                    "admin.edit_student",
+                    id=id
+                )
             )
 
         amount = float(
             request.form.get("amount") or 0
         )
 
+        # --------------------------------------------------
         # Invalid Amount
+        # --------------------------------------------------
+
         if amount <= 0:
+
             flash(
                 "Enter a valid payment amount.",
                 "danger"
             )
+
             return redirect(
-                url_for("admin.edit_student", id=id)
+                url_for(
+                    "admin.edit_student",
+                    id=id
+                )
             )
 
+        # --------------------------------------------------
         # Prevent Over Payment
+        # --------------------------------------------------
+
         if amount > remaining:
+
             flash(
-                f"Only Rs. {remaining:,.2f} is remaining. Please enter a valid amount.",
+                f"Only Rs. {remaining:,.2f} is remaining. "
+                f"Please enter a valid amount.",
                 "danger"
             )
+
             return redirect(
-                url_for("admin.edit_student", id=id)
+                url_for(
+                    "admin.edit_student",
+                    id=id
+                )
             )
 
         payment_mode = request.form.get("payment_mode")
-        transaction_id = request.form.get("transaction_id")
-        remarks = request.form.get("remarks")
+
+        transaction_id = request.form.get(
+            "transaction_id"
+        )
+
+        remarks = request.form.get(
+            "remarks"
+        )
+
+        # --------------------------------------------------
+        # Receipt Number
+        # --------------------------------------------------
 
         receipt_number = (
             "RR"
-            + datetime.now().strftime("%Y%m%d%H%M%S")
+            + datetime.now().strftime(
+                "%Y%m%d%H%M%S"
+            )
         )
+
+        # --------------------------------------------------
+        # Create Payment
+        # --------------------------------------------------
 
         payment = Payment(
 
@@ -1139,12 +1498,14 @@ def add_payment(id):
         student.paid_amount += amount
 
         student.balance_amount = (
-            student.course_fee - student.paid_amount
+            student.course_fee
+            - student.paid_amount
         )
 
         if student.balance_amount <= 0:
 
             student.balance_amount = 0
+
             student.status = "Paid"
 
         elif student.paid_amount > 0:
@@ -1155,13 +1516,44 @@ def add_payment(id):
 
             student.status = "Unpaid"
 
+        # --------------------------------------------------
+        # Save Payment
+        # --------------------------------------------------
+
         db.session.commit()
+
+        # ==================================================
+        # PAYMENT NOTIFICATION
+        # ==================================================
+
+        if student.user_id:
+
+            create_notification(
+
+                "payment",
+
+                "Payment Received 💰",
+
+                f"₹{amount:,.2f} payment received for "
+                f"{student.course}. "
+                f"Your remaining balance is "
+                f"₹{student.balance_amount:,.2f}.",
+
+                user_id=student.user_id
+            )
 
         # --------------------------------------------------
         # Generate Receipt
         # --------------------------------------------------
 
-        generate_receipt(student, payment)
+        generate_receipt(
+            student,
+            payment
+        )
+
+        # --------------------------------------------------
+        # Success Message
+        # --------------------------------------------------
 
         flash(
             "Payment Added Successfully",
@@ -1172,7 +1564,10 @@ def add_payment(id):
 
         db.session.rollback()
 
-        print("ERROR:", e)
+        print(
+            "ERROR:",
+            e
+        )
 
         flash(
             str(e),
@@ -1276,11 +1671,87 @@ def add_course():
 # Edit Course
 # ==========================================================
 
-@admin.route("/courses/edit/<int:id>")
+@admin.route("/courses/edit/<int:id>", methods=["GET", "POST"])
 def edit_course(id):
 
+    course = Course.query.get_or_404(id)
+
+    if request.method == "POST":
+
+        course.title = request.form.get("title")
+
+        course.duration = request.form.get("duration")
+
+        course.trainer = request.form.get("trainer")
+
+        course.mode = request.form.get("mode")
+
+        course.description = request.form.get("description")
+
+        course.featured = (
+            "featured" in request.form
+        )
+
+        price = request.form.get("price")
+
+        if price:
+            course.price = float(price)
+        else:
+            course.price = 0
+
+        # ==========================================
+        # COURSE IMAGE
+        # ==========================================
+
+        image = request.files.get("image")
+
+        if image and image.filename != "":
+
+            image_name = secure_filename(
+                image.filename
+            )
+
+            image.save(
+                os.path.join(
+                    UPLOAD_FOLDER,
+                    "courses",
+                    image_name
+                )
+            )
+
+            course.image = image_name
+
+        # ==========================================
+        # SAVE
+        # ==========================================
+
+        try:
+
+            db.session.commit()
+
+            flash(
+                "Course updated successfully!",
+                "success"
+            )
+
+            return redirect(
+                url_for("admin.courses")
+            )
+
+        except Exception as e:
+
+            db.session.rollback()
+
+            print("Edit Course Error:", e)
+
+            flash(
+                "Unable to update course.",
+                "danger"
+            )
+
     return render_template(
-        "admin/edit_course.html"
+        "admin/edit_course.html",
+        course=course
     )
     
 @admin.route('/course/delete/<int:id>')
@@ -1394,11 +1865,52 @@ def placements():
         students=students,
         courses=[c[0] for c in courses]
     )
+@admin.route("/faculty/status/<int:id>/<status>")
+def change_faculty_status(id, status):
+
+    faculty = Faculty.query.get_or_404(id)
+
+    if status not in ["Active", "Inactive"]:
+
+        flash(
+            "Invalid faculty status.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("admin.faculty")
+        )
+
+    faculty.status = status
+
+    db.session.commit()
+
+    if status == "Inactive":
+
+        flash(
+            f"{faculty.name} has been marked as inactive.",
+            "warning"
+        )
+
+    else:
+
+        flash(
+            f"{faculty.name} has been activated successfully.",
+            "success"
+        )
+
+    return redirect(
+        url_for("admin.faculty")
+    )
 
 
 # ==========================================================
 # Add Placement
 # ==========================================================
+
+# ================================
+# ADD PLACEMENT
+# ================================
 
 @admin.route("/add-placement/<int:student_id>", methods=["GET", "POST"])
 def add_placement(student_id):
@@ -1407,12 +1919,10 @@ def add_placement(student_id):
 
     companies = Company.query.all()
 
-
     if request.method == "POST":
 
         company = request.form.get("company")
         designation = request.form.get("designation")
-
 
         # CHECK DUPLICATE
 
@@ -1421,7 +1931,6 @@ def add_placement(student_id):
             company=company,
             designation=designation
         ).first()
-
 
         if existing:
 
@@ -1436,7 +1945,6 @@ def add_placement(student_id):
                     student_id=student.id
                 )
             )
-
 
         placement = Placement(
 
@@ -1458,29 +1966,47 @@ def add_placement(student_id):
             status="Placed"
         )
 
-
         db.session.add(placement)
+
         student.status = "Placed"
+
         db.session.commit()
 
+        # ================================
+        # STUDENT PLACEMENT NOTIFICATION
+        # ================================
+
+        if student.user_id:
+
+            create_notification(
+
+                "placement",
+
+                "Congratulations! 🎉",
+
+                f"Congratulations {student.name}! "
+                f"You have been placed at {company} "
+                f"as {designation} "
+                f"with a package of "
+                f"₹{placement.package:,.2f}.",
+
+                user_id=student.user_id
+            )
 
         flash(
             "Placement Added Successfully",
             "success"
         )
 
-
         return redirect(
             url_for("admin.placements")
         )
-
 
     return render_template(
         "admin/add_placement.html",
         student=student,
         companies=companies
     )
-
 # ==========================================================
 # Faculty
 # ==========================================================
@@ -1491,7 +2017,9 @@ def add_placement(student_id):
 @admin.route("/faculty")
 def faculty():
 
-    faculties = Faculty.query.all()
+    faculties = Faculty.query.filter_by(
+    status="Active"
+).all()
 
     return render_template(
         "admin/faculty.html",
@@ -1644,14 +2172,148 @@ def testimonials():
 # Notifications
 # ==========================================================
 
-@admin.route("/notifications")
+# ==========================================================
+# Notifications
+# ==========================================================
+
+@admin.route(
+    "/notifications",
+    methods=["GET", "POST"]
+)
 def notifications():
 
+    if "user_id" not in session:
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+    settings = InstituteSettings.query.first()
+
+    if not settings:
+
+        settings = InstituteSettings(
+            institute_name="RR IT Origin",
+            new_lead_notification=True,
+            admission_notification=True,
+            payment_notification=True,
+            placement_notification=True,
+            student_registration=True,
+            student_login=True,
+            maintenance_mode=False
+        )
+
+        db.session.add(settings)
+        db.session.commit()
+
+    # ==========================================
+    # SAVE NOTIFICATION SETTINGS
+    # ==========================================
+
+    if request.method == "POST":
+
+        settings.new_lead_notification = (
+            "new_lead_notification"
+            in request.form
+        )
+
+        settings.admission_notification = (
+            "admission_notification"
+            in request.form
+        )
+
+        settings.payment_notification = (
+            "payment_notification"
+            in request.form
+        )
+
+        settings.placement_notification = (
+            "placement_notification"
+            in request.form
+        )
+
+        db.session.commit()
+
+        flash(
+            "Notification settings updated successfully!",
+            "success"
+        )
+
+        return redirect(
+            url_for("admin.notifications")
+        )
+
+    # ==========================================
+    # GET NOTIFICATIONS
+    # ==========================================
+
+    notification_list = Notification.query.filter(
+    Notification.user_id.is_(None)
+    ).order_by(
+    Notification.created_at.desc()
+    ).all()
+
+    unread_count = Notification.query.filter(
+    Notification.user_id.is_(None),
+    Notification.is_read == False
+    ).count()
+
     return render_template(
-        "admin/notifications.html"
+        "admin/notifications.html",
+
+        settings=settings,
+
+        notifications=notification_list,
+
+        unread_count=unread_count
+    )
+# ==========================================================
+# Mark Notification as Read
+# ==========================================================
+
+@admin.route(
+    "/notifications/read/<int:id>",
+    methods=["POST"]
+)
+def mark_notification_read(id):
+
+    notification = Notification.query.get_or_404(id)
+
+    notification.is_read = True
+
+    db.session.commit()
+
+    return redirect(
+        url_for("admin.notifications")
+    )
+# ==========================================================
+# Mark All Notifications as Read
+# ==========================================================
+
+@admin.route(
+    "/notifications/read-all",
+    methods=["POST"]
+)
+def mark_all_notifications_read():
+
+    Notification.query.filter_by(
+        is_read=False
+    ).update(
+        {
+            "is_read": True
+        }
     )
 
+    db.session.commit()
 
+    flash(
+        "All notifications marked as read.",
+        "success"
+    )
+
+    return redirect(
+        url_for("admin.notifications")
+    )
 # ==========================================================
 # STUDY MATERIALS
 # ==========================================================
@@ -1707,15 +2369,20 @@ os.makedirs(
     exist_ok=True
 )
     
+# ==========================================================
+# ADD STUDY MATERIAL
+# ==========================================================
+
 @admin.route("/study-materials/add", methods=["GET", "POST"])
 def add_study_material():
 
-
     courses = Course.query.all()
 
-
-
     if request.method == "POST":
+
+        # --------------------------------------------------
+        # Upload File
+        # --------------------------------------------------
 
         file = request.files.get("material")
 
@@ -1723,61 +2390,69 @@ def add_study_material():
 
         if file and file.filename != "":
 
-            filename = secure_filename(file.filename)
+            filename = secure_filename(
+                file.filename
+            )
 
             file.save(
-
                 os.path.join(
-
                     MATERIAL_UPLOAD_FOLDER,
-
                     filename
-
                 )
-
             )
+
+        # --------------------------------------------------
+        # Create Study Material
+        # --------------------------------------------------
 
         material = StudyMaterial(
 
             title=request.form.get("title"),
 
-            description=request.form.get("description"),
+            description=request.form.get(
+                "description"
+            ),
 
-            course=request.form.get("course"),
+            course=request.form.get(
+                "course"
+            ),
 
-
-
-            material_type=request.form.get("material_type"),
+            material_type=request.form.get(
+                "material_type"
+            ),
 
             file_name=filename,
 
             uploaded_by="Admin"
-
         )
 
         db.session.add(material)
 
         db.session.commit()
 
+        # --------------------------------------------------
+        # Success Message
+        # --------------------------------------------------
+
         flash(
-
             "Study Material Uploaded Successfully",
-
             "success"
-
         )
 
         return redirect(
-
-            url_for("admin.study_materials")
-
+            url_for(
+                "admin.study_materials"
+            )
         )
 
+    # --------------------------------------------------
+    # GET Request
+    # --------------------------------------------------
+
     return render_template(
-    "admin/add_study_material.html",
-    courses=courses,
-)
-    
+        "admin/add_study_material.html",
+        courses=courses
+    ) 
 @admin.route("/study-materials/delete/<int:id>", methods=["POST"])
 def delete_study_material(id):
 
@@ -2068,3 +2743,7 @@ def reject_lead(lead_id):
     flash("Lead Rejected Successfully", "warning")
 
     return redirect(url_for("admin.leads"))
+# ==========================================================
+# CREATE NOTIFICATION
+# ==========================================================
+
