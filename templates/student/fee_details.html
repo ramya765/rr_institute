@@ -2,96 +2,920 @@
 
 {% block content %}
 
-<div class="bg-white rounded-2xl shadow-lg p-8">
+<style>
 
-    <h1 class="text-3xl font-bold text-indigo-700 mb-8">
-        💰 Fee Details
-    </h1>
+    /* =====================================================
+       FEE DETAILS PAGE
+    ===================================================== */
 
-    <!-- Summary -->
-    <div class="grid md:grid-cols-3 gap-6">
+    .fee-page {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
 
-        <div class="bg-blue-50 rounded-xl p-6 shadow">
 
-            <p class="text-gray-500">
+    /* =====================================================
+       HERO
+    ===================================================== */
+
+    .fee-hero {
+
+        background:
+            linear-gradient(
+                135deg,
+                #4f46e5,
+                #9333ea,
+                #c026d3
+            );
+
+        border-radius: 20px;
+
+        padding: 28px;
+
+        color: white;
+
+        box-shadow:
+            0 15px 40px rgba(0,0,0,.20);
+
+    }
+
+
+    .fee-hero-label {
+
+        font-size: 12px;
+
+        font-weight: 800;
+
+        letter-spacing: 1.5px;
+
+        text-transform: uppercase;
+
+        color: #fef08a;
+
+        margin-bottom: 6px;
+
+    }
+
+
+    .fee-hero-title {
+
+        font-size: 32px;
+
+        font-weight: 800;
+
+        margin: 0;
+
+    }
+
+
+    .fee-hero-description {
+
+        margin-top: 8px;
+
+        color: rgba(255,255,255,.88);
+
+        font-size: 14px;
+
+    }
+
+
+    /* =====================================================
+       STUDENT INFO
+    ===================================================== */
+
+    .student-info-card {
+
+        margin-top: 22px;
+
+        background: #101f3f;
+
+        border: 1px solid rgba(255,255,255,.12);
+
+        border-radius: 18px;
+
+        padding: 20px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 20px;
+
+    }
+
+
+    .student-info-left {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 15px;
+
+        min-width: 0;
+
+    }
+
+
+    .student-avatar {
+
+        width: 48px;
+
+        height: 48px;
+
+        min-width: 48px;
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: #facc15;
+
+        color: #111827;
+
+        font-size: 20px;
+
+        font-weight: 800;
+
+    }
+
+
+    .student-name {
+
+        color: white;
+
+        font-size: 18px;
+
+        font-weight: 800;
+
+        overflow-wrap: anywhere;
+
+    }
+
+
+    .student-course {
+
+        color: #94a3b8;
+
+        font-size: 13px;
+
+        margin-top: 4px;
+
+    }
+
+
+    .student-course span {
+
+        color: #facc15;
+
+        font-weight: 700;
+
+    }
+
+
+    .fee-status {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 6px;
+
+        padding: 7px 12px;
+
+        border-radius: 999px;
+
+        background: rgba(34,197,94,.10);
+
+        border: 1px solid rgba(34,197,94,.25);
+
+        color: #4ade80;
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        white-space: nowrap;
+
+    }
+
+
+    .fee-status-dot {
+
+        width: 7px;
+
+        height: 7px;
+
+        background: currentColor;
+
+        border-radius: 50%;
+
+    }
+
+
+    /* =====================================================
+       SUMMARY
+    ===================================================== */
+
+    .fee-summary {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, minmax(0,1fr));
+
+        gap: 18px;
+
+        margin-top: 22px;
+
+    }
+
+
+    .fee-summary-card {
+
+        border-radius: 18px;
+
+        padding: 22px;
+
+        border: 1px solid rgba(255,255,255,.10);
+
+        background: #101f3f;
+
+        min-width: 0;
+
+    }
+
+
+    .fee-summary-card.blue {
+
+        background:
+            linear-gradient(
+                135deg,
+                #102a50,
+                #132d55
+            );
+
+    }
+
+
+    .fee-summary-card.green {
+
+        background:
+            linear-gradient(
+                135deg,
+                #0e3329,
+                #123d30
+            );
+
+    }
+
+
+    .fee-summary-card.red {
+
+        background:
+            linear-gradient(
+                135deg,
+                #401d28,
+                #4a202c
+            );
+
+    }
+
+
+    .fee-label {
+
+        color: #94a3b8;
+
+        font-size: 13px;
+
+    }
+
+
+    .fee-amount {
+
+        margin-top: 7px;
+
+        font-size: 30px;
+
+        font-weight: 800;
+
+        overflow-wrap: anywhere;
+
+    }
+
+
+    .fee-amount.blue-text {
+
+        color: #60a5fa;
+
+    }
+
+
+    .fee-amount.green-text {
+
+        color: #4ade80;
+
+    }
+
+
+    .fee-amount.red-text {
+
+        color: #f87171;
+
+    }
+
+
+    /* =====================================================
+       PAYMENT HISTORY
+    ===================================================== */
+
+    .payment-card {
+
+        margin-top: 22px;
+
+        background: #101f3f;
+
+        border: 1px solid rgba(255,255,255,.10);
+
+        border-radius: 18px;
+
+        overflow: hidden;
+
+    }
+
+
+    .payment-header {
+
+        padding: 20px 22px;
+
+        border-bottom:
+            1px solid rgba(255,255,255,.09);
+
+    }
+
+
+    .payment-title {
+
+        color: white;
+
+        font-size: 20px;
+
+        font-weight: 800;
+
+    }
+
+
+    .payment-subtitle {
+
+        color: #64748b;
+
+        font-size: 12px;
+
+        margin-top: 4px;
+
+    }
+
+
+    .payment-table-wrapper {
+
+        width: 100%;
+
+        overflow-x: auto;
+
+        -webkit-overflow-scrolling: touch;
+
+    }
+
+
+    .payment-table {
+
+        width: 100%;
+
+        min-width: 700px;
+
+        border-collapse: collapse;
+
+    }
+
+
+    .payment-table thead {
+
+        background: #4f46e5;
+
+    }
+
+
+    .payment-table th {
+
+        color: white;
+
+        padding: 14px;
+
+        font-size: 12px;
+
+        text-transform: uppercase;
+
+        letter-spacing: .5px;
+
+        text-align: center;
+
+        white-space: nowrap;
+
+    }
+
+
+    .payment-table td {
+
+        color: #cbd5e1;
+
+        padding: 16px 14px;
+
+        text-align: center;
+
+        border-top:
+            1px solid rgba(255,255,255,.07);
+
+        font-size: 13px;
+
+        overflow-wrap: anywhere;
+
+    }
+
+
+    .payment-table tbody tr:hover {
+
+        background:
+            rgba(255,255,255,.035);
+
+    }
+
+
+    .amount-cell {
+
+        color: #4ade80 !important;
+
+        font-weight: 800;
+
+    }
+
+
+    .receipt-number {
+
+        color: #a5b4fc;
+
+        font-weight: 600;
+
+    }
+
+
+    .download-btn {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 5px;
+
+        background: #2563eb;
+
+        color: white;
+
+        padding: 8px 13px;
+
+        border-radius: 8px;
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        text-decoration: none;
+
+        white-space: nowrap;
+
+        transition: .25s ease;
+
+    }
+
+
+    .download-btn:hover {
+
+        background: #1d4ed8;
+
+        transform: translateY(-2px);
+
+    }
+
+
+    .no-payment {
+
+        padding: 45px 20px;
+
+        text-align: center;
+
+        color: #64748b;
+
+    }
+
+
+    .no-payment-icon {
+
+        font-size: 42px;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .no-payment-title {
+
+        color: #facc15;
+
+        font-size: 17px;
+
+        font-weight: 800;
+
+    }
+
+
+    .no-payment-text {
+
+        margin-top: 5px;
+
+        font-size: 13px;
+
+    }
+
+
+    /* =====================================================
+       BACK BUTTON
+    ===================================================== */
+
+    .back-section {
+
+        margin-top: 22px;
+
+    }
+
+
+    .back-btn {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: #facc15;
+
+        color: #111827;
+
+        padding: 11px 18px;
+
+        border-radius: 8px;
+
+        font-size: 13px;
+
+        font-weight: 800;
+
+        text-decoration: none;
+
+        transition: .25s ease;
+
+    }
+
+
+    .back-btn:hover {
+
+        background: #fbbf24;
+
+        transform: translateY(-2px);
+
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 900px) {
+
+        .fee-summary {
+
+            grid-template-columns:
+                repeat(2, minmax(0,1fr));
+
+        }
+
+    }
+
+
+    @media (max-width: 650px) {
+
+        .fee-hero {
+
+            padding: 22px;
+
+        }
+
+
+        .fee-hero-title {
+
+            font-size: 26px;
+
+        }
+
+
+        .student-info-card {
+
+            flex-direction: column;
+
+            align-items: flex-start;
+
+        }
+
+
+        .fee-summary {
+
+            grid-template-columns: 1fr;
+
+        }
+
+
+        .fee-amount {
+
+            font-size: 26px;
+
+        }
+
+
+        .payment-table {
+
+            min-width: 680px;
+
+        }
+
+
+        .back-btn {
+
+            width: 100%;
+
+        }
+
+    }
+
+
+    @media (max-width: 400px) {
+
+        .fee-hero-title {
+
+            font-size: 23px;
+
+        }
+
+
+        .student-name {
+
+            font-size: 16px;
+
+        }
+
+
+        .fee-summary-card {
+
+            padding: 18px;
+
+        }
+
+    }
+
+</style>
+
+
+<div class="fee-page">
+
+
+    <!-- =====================================================
+         HERO
+    ===================================================== -->
+
+    <section class="fee-hero">
+
+        <div class="fee-hero-label">
+            STUDENT PORTAL
+        </div>
+
+        <h1 class="fee-hero-title">
+            💰 Fee Details
+        </h1>
+
+        <p class="fee-hero-description">
+            View your course fee, payments and remaining balance.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         STUDENT INFORMATION
+    ===================================================== -->
+
+    <section class="student-info-card">
+
+
+        <div class="student-info-left">
+
+            <div class="student-avatar">
+
+                {{ student.name[:1]|upper }}
+
+            </div>
+
+
+            <div>
+
+                <div class="student-name">
+
+                    {{ student.name }}
+
+                </div>
+
+
+                <div class="student-course">
+
+                    📘 Course :
+
+                    <span>
+                        {{ student.course }}
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="fee-status">
+
+            <span class="fee-status-dot"></span>
+
+            {{ student.status }}
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         FEE SUMMARY
+    ===================================================== -->
+
+    <section class="fee-summary">
+
+
+        <!-- COURSE FEE -->
+
+        <div class="fee-summary-card blue">
+
+            <div class="fee-label">
                 Course Fee
-            </p>
+            </div>
 
-            <h2 class="text-3xl font-bold text-indigo-700 mt-2">
+            <div class="fee-amount blue-text">
+
                 ₹{{ student.course_fee }}
-            </h2>
+
+            </div>
 
         </div>
 
-        <div class="bg-green-50 rounded-xl p-6 shadow">
 
-            <p class="text-gray-500">
+        <!-- PAID -->
+
+        <div class="fee-summary-card green">
+
+            <div class="fee-label">
                 Paid Amount
-            </p>
+            </div>
 
-            <h2 class="text-3xl font-bold text-green-600 mt-2">
+            <div class="fee-amount green-text">
+
                 ₹{{ student.paid_amount }}
-            </h2>
+
+            </div>
 
         </div>
 
-        <div class="bg-red-50 rounded-xl p-6 shadow">
 
-            <p class="text-gray-500">
+        <!-- BALANCE -->
+
+        <div class="fee-summary-card red">
+
+            <div class="fee-label">
                 Balance Amount
-            </p>
+            </div>
 
-            <h2 class="text-3xl font-bold text-red-600 mt-2">
+            <div class="fee-amount red-text">
+
                 ₹{{ student.balance_amount }}
-            </h2>
+
+            </div>
 
         </div>
 
-    </div>
 
-    <!-- Payment History -->
+    </section>
 
-    <div class="mt-10">
 
-        <h2 class="text-2xl font-bold mb-5">
-            📄 Payment History
-        </h2>
+    <!-- =====================================================
+         PAYMENT HISTORY
+    ===================================================== -->
 
-        <div class="overflow-x-auto">
+    <section class="payment-card">
 
-            <table class="w-full border border-gray-200 rounded-lg">
 
-                <thead class="bg-indigo-600 text-white">
+        <div class="payment-header">
+
+            <div class="payment-title">
+
+                📄 Payment History
+
+            </div>
+
+            <div class="payment-subtitle">
+
+                Your previous payment transactions
+
+            </div>
+
+        </div>
+
+
+        <div class="payment-table-wrapper">
+
+            <table class="payment-table">
+
+
+                <thead>
 
                     <tr>
 
-                        <th class="p-4">Date</th>
-                        <th class="p-4">Amount</th>
-                        <th class="p-4">Mode</th>
-                        <th class="p-4">Receipt No</th>
-                        <th class="p-4">Receipt</th>
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Mode
+                        </th>
+
+                        <th>
+                            Receipt No
+                        </th>
+
+                        <th>
+                            Receipt
+                        </th>
 
                     </tr>
 
                 </thead>
 
+
                 <tbody>
+
 
                     {% for payment in payments %}
 
-                    <tr class="border-b text-center hover:bg-gray-50">
+                    <tr>
 
-                        <td class="p-4">
+
+                        <td>
 
                             {{ payment.payment_date.strftime("%d-%m-%Y") }}
 
                         </td>
 
-                        <td>
+
+                        <td class="amount-cell">
 
                             ₹{{ payment.amount }}
 
                         </td>
+
 
                         <td>
 
@@ -99,18 +923,25 @@
 
                         </td>
 
-                        <td>
+
+                        <td class="receipt-number">
 
                             {{ payment.receipt_number }}
 
                         </td>
 
+
                         <td>
 
-                            <a href="{{ url_for('static', filename='receipts/' + payment.receipt_number + '.pdf') }}"
-                               target="_blank"
-                               download
-                               class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                            <a
+                                href="{{ url_for(
+                                    'static',
+                                    filename='receipts/' + payment.receipt_number + '.pdf'
+                                ) }}"
+                                target="_blank"
+                                download
+                                class="download-btn"
+                            >
 
                                 📄 Download
 
@@ -118,22 +949,40 @@
 
                         </td>
 
+
                     </tr>
+
 
                     {% else %}
 
+
                     <tr>
 
-                        <td colspan="5"
-                            class="py-8 text-center text-gray-500">
+                        <td colspan="5">
 
-                            No Payment Records Found
+                            <div class="no-payment">
+
+                                <div class="no-payment-icon">
+                                    📄
+                                </div>
+
+                                <div class="no-payment-title">
+                                    No Payment Records Found
+                                </div>
+
+                                <div class="no-payment-text">
+                                    No payment transactions are available yet.
+                                </div>
+
+                            </div>
 
                         </td>
 
                     </tr>
 
+
                     {% endfor %}
+
 
                 </tbody>
 
@@ -141,18 +990,26 @@
 
         </div>
 
-    </div>
+    </section>
 
-    <div class="mt-10">
 
-        <a href="{{ url_for('student.explorer_dashboard') }}"
-           class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg">
+    <!-- =====================================================
+         BACK
+    ===================================================== -->
+
+    <div class="back-section">
+
+        <a
+            href="{{ url_for('student.explorer_dashboard') }}"
+            class="back-btn"
+        >
 
             ← Back to Dashboard
 
         </a>
 
     </div>
+
 
 </div>
 

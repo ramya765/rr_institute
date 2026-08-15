@@ -2066,22 +2066,9 @@
             </a>
 
 
-            <a
-                href="{{ url_for('student.placement_statistics') }}"
-                class="nav-link">
-
-                Results
-
-            </a>
 
 
-            <a
-                href="{{ url_for('student.profile') }}"
-                class="nav-link">
-
-                Profile
-
-            </a>
+           
 
 
             <a
@@ -2482,37 +2469,25 @@
 
                 {% if course.image %}
 
+    <img
+        src="{{ url_for(
+            'static',
+            filename='uploads/courses/' + course.image
+        ) }}"
+        class="course-image"
+        alt="{{ course.title }}">
 
-                <img
+{% else %}
 
-                    src="{{ url_for(
-                        'static',
-                        filename='uploads/' + course.image
-                    ) }}"
+    <div class="default-course-image">
 
-                    class="course-image"
+        <div class="course-letter">
+            {{ course.title[0] }}
+        </div>
 
-                    alt="{{ course.title }}">
+    </div>
 
-
-                {% else %}
-
-
-                <div
-                    class="default-course-image">
-
-
-                    <div class="course-letter">
-
-                        {{ course.title[0] }}
-
-                    </div>
-
-
-                </div>
-
-
-                {% endif %}
+{% endif %}
 
 
 

@@ -2,130 +2,938 @@
 
 {% block content %}
 
-<div class="bg-white rounded-2xl shadow-lg p-8">
+<style>
 
-    <h1 class="text-3xl font-bold text-indigo-700 mb-8">
+    /* =====================================================
+       PLACEMENT DETAILS PAGE
+    ===================================================== */
 
-        💼 Placement Details
+    .placement-page {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
 
-    </h1>
+
+    /* =====================================================
+       HERO
+    ===================================================== */
+
+    .placement-hero {
+
+        background:
+            linear-gradient(
+                135deg,
+                #4f46e5,
+                #9333ea,
+                #c026d3
+            );
+
+        border-radius: 20px;
+
+        padding: 28px;
+
+        color: white;
+
+        box-shadow:
+            0 15px 40px rgba(0,0,0,.20);
+
+    }
+
+
+    .placement-hero-label {
+
+        font-size: 12px;
+
+        font-weight: 800;
+
+        letter-spacing: 1.5px;
+
+        text-transform: uppercase;
+
+        color: #fef08a;
+
+        margin-bottom: 6px;
+
+    }
+
+
+    .placement-hero-title {
+
+        font-size: 32px;
+
+        font-weight: 800;
+
+        margin: 0;
+
+    }
+
+
+    .placement-hero-description {
+
+        margin-top: 8px;
+
+        color: rgba(255,255,255,.88);
+
+        font-size: 14px;
+
+    }
+
+
+    /* =====================================================
+       STUDENT INFORMATION
+    ===================================================== */
+
+    .placement-student-card {
+
+        margin-top: 22px;
+
+        background: #101f3f;
+
+        border: 1px solid rgba(255,255,255,.12);
+
+        border-radius: 18px;
+
+        padding: 20px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 20px;
+
+    }
+
+
+    .placement-student-left {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 15px;
+
+        min-width: 0;
+
+    }
+
+
+    .placement-avatar {
+
+        width: 48px;
+
+        height: 48px;
+
+        min-width: 48px;
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: #facc15;
+
+        color: #111827;
+
+        font-size: 20px;
+
+        font-weight: 800;
+
+    }
+
+
+    .placement-student-name {
+
+        color: white;
+
+        font-size: 18px;
+
+        font-weight: 800;
+
+        overflow-wrap: anywhere;
+
+    }
+
+
+    .placement-student-subtitle {
+
+        color: #94a3b8;
+
+        font-size: 13px;
+
+        margin-top: 4px;
+
+    }
+
+
+    .placed-badge {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 6px;
+
+        padding: 7px 13px;
+
+        border-radius: 999px;
+
+        background: rgba(34,197,94,.10);
+
+        border: 1px solid rgba(34,197,94,.25);
+
+        color: #4ade80;
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        white-space: nowrap;
+
+    }
+
+
+    .placed-dot {
+
+        width: 7px;
+
+        height: 7px;
+
+        border-radius: 50%;
+
+        background: currentColor;
+
+    }
+
+
+    /* =====================================================
+       PLACEMENT DETAILS
+    ===================================================== */
+
+    .placement-grid {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0,1fr));
+
+        gap: 18px;
+
+        margin-top: 22px;
+
+    }
+
+
+    .placement-card {
+
+        min-width: 0;
+
+        padding: 22px;
+
+        border-radius: 18px;
+
+        border: 1px solid rgba(255,255,255,.10);
+
+        background: #101f3f;
+
+        transition: .25s ease;
+
+        overflow: hidden;
+
+    }
+
+
+    .placement-card:hover {
+
+        transform: translateY(-3px);
+
+        border-color:
+            rgba(250,204,21,.25);
+
+    }
+
+
+    .placement-card.blue {
+
+        background:
+            linear-gradient(
+                135deg,
+                #102a50,
+                #132d55
+            );
+
+    }
+
+
+    .placement-card.green {
+
+        background:
+            linear-gradient(
+                135deg,
+                #0e3329,
+                #123d30
+            );
+
+    }
+
+
+    .placement-card.purple {
+
+        background:
+            linear-gradient(
+                135deg,
+                #2e1557,
+                #3b1d68
+            );
+
+    }
+
+
+    .placement-card.orange {
+
+        background:
+            linear-gradient(
+                135deg,
+                #42260b,
+                #4c2c0d
+            );
+
+    }
+
+
+    .placement-card.indigo {
+
+        background:
+            linear-gradient(
+                135deg,
+                #172554,
+                #1e2d63
+            );
+
+    }
+
+
+    .placement-icon {
+
+        width: 42px;
+
+        height: 42px;
+
+        border-radius: 11px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background:
+            rgba(255,255,255,.08);
+
+        border:
+            1px solid rgba(255,255,255,.10);
+
+        font-size: 20px;
+
+        margin-bottom: 14px;
+
+    }
+
+
+    .placement-label {
+
+        color: #94a3b8;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+    }
+
+
+    .placement-value {
+
+        color: white;
+
+        font-size: 24px;
+
+        font-weight: 800;
+
+        margin-top: 6px;
+
+        overflow-wrap: anywhere;
+
+        word-break: break-word;
+
+    }
+
+
+    .placement-card.blue .placement-value {
+
+        color: #60a5fa;
+
+    }
+
+
+    .placement-card.green .placement-value {
+
+        color: #4ade80;
+
+    }
+
+
+    .placement-card.purple .placement-value {
+
+        color: #c084fc;
+
+    }
+
+
+    .placement-card.orange .placement-value {
+
+        color: #fb923c;
+
+    }
+
+
+    /* =====================================================
+       PACKAGE
+    ===================================================== */
+
+    .package-value {
+
+        color: #4ade80 !important;
+
+        font-size: 26px;
+
+    }
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+
+    .placement-status {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        margin-top: 8px;
+
+        padding: 8px 14px;
+
+        border-radius: 999px;
+
+        background: rgba(34,197,94,.12);
+
+        border: 1px solid rgba(34,197,94,.25);
+
+        color: #4ade80;
+
+        font-size: 13px;
+
+        font-weight: 800;
+
+    }
+
+
+    .status-dot {
+
+        width: 7px;
+
+        height: 7px;
+
+        border-radius: 50%;
+
+        background: currentColor;
+
+    }
+
+
+    /* =====================================================
+       NOT PLACED STATE
+    ===================================================== */
+
+    .not-placed-card {
+
+        margin-top: 22px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #3b2a08,
+                #49350b
+            );
+
+        border:
+            1px solid rgba(250,204,21,.22);
+
+        border-radius: 20px;
+
+        padding: 45px 25px;
+
+        text-align: center;
+
+    }
+
+
+    .not-placed-icon {
+
+        width: 70px;
+
+        height: 70px;
+
+        margin: 0 auto 18px;
+
+        border-radius: 20px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background:
+            rgba(250,204,21,.12);
+
+        border:
+            1px solid rgba(250,204,21,.20);
+
+        font-size: 38px;
+
+    }
+
+
+    .not-placed-title {
+
+        color: #facc15;
+
+        font-size: 24px;
+
+        font-weight: 800;
+
+    }
+
+
+    .not-placed-text {
+
+        max-width: 700px;
+
+        margin: 12px auto 0;
+
+        color: #cbd5e1;
+
+        font-size: 14px;
+
+        line-height: 1.7;
+
+    }
+
+
+    /* =====================================================
+       BACK BUTTON
+    ===================================================== */
+
+    .placement-back {
+
+        margin-top: 22px;
+
+    }
+
+
+    .back-btn {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: #facc15;
+
+        color: #111827;
+
+        padding: 11px 18px;
+
+        border-radius: 8px;
+
+        font-size: 13px;
+
+        font-weight: 800;
+
+        text-decoration: none;
+
+        transition: .25s ease;
+
+    }
+
+
+    .back-btn:hover {
+
+        background: #fbbf24;
+
+        transform: translateY(-2px);
+
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 800px) {
+
+        .placement-grid {
+
+            grid-template-columns: 1fr;
+
+        }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+        .placement-hero {
+
+            padding: 22px;
+
+        }
+
+
+        .placement-hero-title {
+
+            font-size: 26px;
+
+        }
+
+
+        .placement-student-card {
+
+            flex-direction: column;
+
+            align-items: flex-start;
+
+        }
+
+
+        .placement-value {
+
+            font-size: 21px;
+
+        }
+
+
+        .package-value {
+
+            font-size: 23px;
+
+        }
+
+
+        .back-btn {
+
+            width: 100%;
+
+        }
+
+    }
+
+
+    @media (max-width: 400px) {
+
+        .placement-hero-title {
+
+            font-size: 23px;
+
+        }
+
+
+        .placement-student-name {
+
+            font-size: 16px;
+
+        }
+
+
+        .placement-card {
+
+            padding: 18px;
+
+        }
+
+
+        .not-placed-card {
+
+            padding: 35px 18px;
+
+        }
+
+
+        .not-placed-title {
+
+            font-size: 20px;
+
+        }
+
+    }
+
+</style>
+
+
+<div class="placement-page">
+
+
+    <!-- =====================================================
+         HERO
+    ===================================================== -->
+
+    <section class="placement-hero">
+
+        <div class="placement-hero-label">
+            STUDENT PORTAL
+        </div>
+
+        <h1 class="placement-hero-title">
+            💼 Placement Details
+        </h1>
+
+        <p class="placement-hero-description">
+            View your placement information, company details,
+            designation and package.
+        </p>
+
+    </section>
+
 
     {% if placement %}
 
-    <div class="grid md:grid-cols-2 gap-6">
 
-        <div class="bg-blue-50 rounded-xl shadow p-6">
+    <!-- =====================================================
+         STUDENT INFORMATION
+    ===================================================== -->
 
-            <p class="text-gray-500">
+    <section class="placement-student-card">
+
+
+        <div class="placement-student-left">
+
+            <div class="placement-avatar">
+
+                👨‍🎓
+
+            </div>
+
+
+            <div>
+
+                <div class="placement-student-name">
+
+                    Placement Achievement
+
+                </div>
+
+
+                <div class="placement-student-subtitle">
+
+                    🎉 Congratulations on your placement!
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="placed-badge">
+
+            <span class="placed-dot"></span>
+
+            {{ placement.status }}
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         PLACEMENT DETAILS
+    ===================================================== -->
+
+    <section class="placement-grid">
+
+
+        <!-- COMPANY -->
+
+        <div class="placement-card blue">
+
+            <div class="placement-icon">
+                🏢
+            </div>
+
+            <div class="placement-label">
                 Company
-            </p>
+            </div>
 
-            <h2 class="text-2xl font-bold mt-2">
+            <div class="placement-value">
 
                 {{ placement.company }}
 
-            </h2>
+            </div>
 
         </div>
 
-        <div class="bg-green-50 rounded-xl shadow p-6">
 
-            <p class="text-gray-500">
+        <!-- DESIGNATION -->
+
+        <div class="placement-card green">
+
+            <div class="placement-icon">
+                💼
+            </div>
+
+            <div class="placement-label">
                 Designation
-            </p>
+            </div>
 
-            <h2 class="text-2xl font-bold mt-2">
+            <div class="placement-value">
 
                 {{ placement.designation }}
 
-            </h2>
+            </div>
 
         </div>
 
-        <div class="bg-purple-50 rounded-xl shadow p-6">
 
-            <p class="text-gray-500">
+        <!-- PACKAGE -->
+
+        <div class="placement-card purple">
+
+            <div class="placement-icon">
+                💰
+            </div>
+
+            <div class="placement-label">
                 Package
-            </p>
+            </div>
 
-            <h2 class="text-2xl font-bold text-green-600 mt-2">
+            <div class="placement-value package-value">
 
                 ₹ {{ placement.package }} LPA
 
-            </h2>
+            </div>
 
         </div>
 
-        <div class="bg-orange-50 rounded-xl shadow p-6">
 
-            <p class="text-gray-500">
+        <!-- PLACEMENT DATE -->
+
+        <div class="placement-card orange">
+
+            <div class="placement-icon">
+                📅
+            </div>
+
+            <div class="placement-label">
                 Placement Date
-            </p>
+            </div>
 
-            <h2 class="text-2xl font-bold mt-2">
+            <div class="placement-value">
 
                 {{ placement.placement_date.strftime("%d-%m-%Y") }}
 
-            </h2>
+            </div>
 
         </div>
 
-        <div class="bg-indigo-50 rounded-xl shadow p-6">
 
-            <p class="text-gray-500">
+        <!-- STATUS -->
+
+        <div class="placement-card indigo">
+
+            <div class="placement-icon">
+                🏆
+            </div>
+
+            <div class="placement-label">
                 Status
-            </p>
+            </div>
 
-            <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full">
+            <div class="placement-status">
+
+                <span class="status-dot"></span>
 
                 {{ placement.status }}
 
-            </span>
+            </div>
 
         </div>
 
-    </div>
+
+    </section>
+
 
     {% else %}
 
-    <div class="bg-yellow-50 border border-yellow-300 rounded-xl p-10 text-center">
 
-        <div class="text-6xl mb-5">
+    <!-- =====================================================
+         NOT PLACED
+    ===================================================== -->
 
+    <div class="not-placed-card">
+
+        <div class="not-placed-icon">
             🎓
-
         </div>
 
-        <h2 class="text-3xl font-bold text-yellow-700">
+
+        <div class="not-placed-title">
 
             Placement Yet To Be Updated
 
-        </h2>
+        </div>
 
-        <p class="mt-4 text-gray-600 text-lg">
+
+        <p class="not-placed-text">
 
             You have not been placed yet.
-
             Keep attending training sessions and placement drives.
-
             Once you get placed, your company details will automatically appear here.
 
         </p>
 
     </div>
 
+
     {% endif %}
 
-    <div class="mt-10">
 
-        <a href="{{ url_for('student.explorer_dashboard') }}"
-           class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg">
+    <!-- =====================================================
+         BACK BUTTON
+    ===================================================== -->
+
+    <div class="placement-back">
+
+        <a
+            href="{{ url_for('student.explorer_dashboard') }}"
+            class="back-btn"
+        >
 
             ← Back to Dashboard
 
         </a>
 
     </div>
+
 
 </div>
 

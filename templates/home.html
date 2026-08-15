@@ -626,13 +626,13 @@
 
                 </button>
 
-                <button
-                    onclick="openModal('demoModal')"
-                    class="gold-button px-6 py-3 rounded-lg font-bold">
+                <a
+    href="{{ url_for('auth.register') }}"
+    class="gold-button px-6 py-3 rounded-lg font-bold">
 
-                    Book Demo
+    Book Demo
 
-                </button>
+</a>
 
             </div>
 
@@ -707,13 +707,13 @@
 
                 </button>
 
-                <button
-                    onclick="openModal('demoModal')"
-                    class="w-full py-3 bg-yellow-400 text-black rounded-lg font-bold">
+              <a
+    href="{{ url_for('auth.register') }}"
+    class="block w-full py-3 bg-yellow-400 text-black rounded-lg font-bold text-center">
 
-                    Book Demo
+    Book Demo
 
-                </button>
+</a>
 
             </div>
 
@@ -846,13 +846,13 @@
             <div
                 class="reveal flex flex-wrap justify-center gap-5 mt-10">
 
-                <button
-                    onclick="openModal('demoModal')"
-                    class="gold-button px-9 py-4 rounded-xl font-bold text-lg">
+               <a
+    href="{{ url_for('auth.register') }}"
+    class="block w-full py-3 bg-yellow-400 text-black rounded-lg font-bold text-center">
 
-                    Book Free Demo
+    Book For Demo
 
-                </button>
+</a>
 
 
                <button
@@ -1595,13 +1595,13 @@
             <div
                 class="flex flex-wrap justify-center gap-5 mt-8">
 
-                <button
-                    onclick="openModal('demoModal')"
-                    class="gold-button px-8 py-4 rounded-xl font-bold">
+                <a
+    href="{{ url_for('auth.register') }}"
+    class="block w-full py-3 bg-yellow-400 text-black rounded-lg font-bold text-center">
 
-                    Book Free Demo
+    Book Demo
 
-                </button>
+</a>
 
 
                 <a
@@ -2184,121 +2184,7 @@
      BOOK DEMO MODAL
 ===================================================== -->
 
-<div
-    id="demoModal"
-    class="modal"
-    onclick="closeOutside(event,'demoModal')">
 
-
-    <div class="modal-box">
-
-
-        <div class="flex justify-between">
-
-            <div>
-
-                <h2
-                    class="text-3xl font-bold">
-
-                    Book Free Demo
-
-                </h2>
-
-                <p
-                    class="text-gray-400 mt-2">
-
-                    Start your learning journey today.
-
-                </p>
-
-            </div>
-
-
-            <button
-                onclick="closeModal('demoModal')"
-                class="text-2xl text-gray-400">
-
-                ×
-
-            </button>
-
-        </div>
-
-
-        <form
-            method="POST"
-            action="{{ url_for('main.enroll') }}"
-            class="space-y-4 mt-7">
-
-
-            <input
-                type="text"
-                name="name"
-                required
-                class="dark-input"
-                placeholder="Your Name">
-
-
-            <input
-                type="tel"
-                name="mobile"
-                required
-                class="dark-input"
-                placeholder="Mobile Number">
-
-
-            <input
-                type="email"
-                name="email"
-                required
-                class="dark-input"
-                placeholder="Email Address">
-
-
-            <select
-                name="course"
-                class="dark-input">
-
-                <option>
-
-                    Select Course
-
-                </option>
-
-                <option>
-
-                    Java Full Stack
-
-                </option>
-
-                <option>
-
-                    Python & AI
-
-                </option>
-
-                <option>
-
-                    Cloud & Data Engineering
-
-                </option>
-
-            </select>
-
-
-            <button
-                type="submit"
-                class="gold-button w-full py-3 rounded-lg font-bold">
-
-                Submit Request
-
-            </button>
-
-        </form>
-
-    </div>
-
-</div>
 
 
 <!-- =====================================================

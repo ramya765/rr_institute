@@ -2,286 +2,1098 @@
 
 {% block content %}
 
-<div class="bg-white rounded-2xl shadow-lg p-8">
+<style>
 
-    <div class="flex items-center gap-6">
+    /* =====================================================
+       PROFILE PAGE
+    ===================================================== */
 
-        <div class="w-28 h-28 rounded-full bg-indigo-600 text-white flex items-center justify-center text-5xl font-bold">
+    .profile-page {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+
+    /* =====================================================
+       HERO
+    ===================================================== */
+
+    .profile-hero {
+
+        background:
+            linear-gradient(
+                135deg,
+                #4f46e5,
+                #9333ea,
+                #c026d3
+            );
+
+        border-radius: 20px;
+
+        padding: 28px;
+
+        color: white;
+
+        box-shadow:
+            0 15px 40px rgba(0,0,0,.20);
+
+    }
+
+
+    .profile-hero-label {
+
+        font-size: 12px;
+
+        font-weight: 800;
+
+        letter-spacing: 1.5px;
+
+        text-transform: uppercase;
+
+        color: #fef08a;
+
+        margin-bottom: 6px;
+
+    }
+
+
+    .profile-hero-title {
+
+        font-size: 32px;
+
+        font-weight: 800;
+
+        margin: 0;
+
+    }
+
+
+    .profile-hero-description {
+
+        margin-top: 8px;
+
+        color: rgba(255,255,255,.88);
+
+        font-size: 14px;
+
+    }
+
+
+    /* =====================================================
+       PROFILE HEADER CARD
+    ===================================================== */
+
+    .profile-header-card {
+
+        margin-top: 22px;
+
+        background: #101f3f;
+
+        border: 1px solid rgba(255,255,255,.12);
+
+        border-radius: 18px;
+
+        padding: 25px;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 20px;
+
+    }
+
+
+    .profile-avatar {
+
+        width: 82px;
+
+        height: 82px;
+
+        min-width: 82px;
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background:
+            linear-gradient(
+                135deg,
+                #4f46e5,
+                #7c3aed
+            );
+
+        border:
+            3px solid rgba(250,204,21,.45);
+
+        color: white;
+
+        font-size: 36px;
+
+        font-weight: 800;
+
+        box-shadow:
+            0 10px 30px rgba(79,70,229,.25);
+
+    }
+
+
+    .profile-name {
+
+        color: white;
+
+        font-size: 28px;
+
+        font-weight: 800;
+
+        overflow-wrap: anywhere;
+
+    }
+
+
+    .profile-contact {
+
+        color: #94a3b8;
+
+        font-size: 13px;
+
+        margin-top: 5px;
+
+        overflow-wrap: anywhere;
+
+        word-break: break-word;
+
+    }
+
+
+    .profile-contact-row {
+
+        margin-top: 4px;
+
+    }
+
+
+    /* =====================================================
+       INFORMATION CARDS
+    ===================================================== */
+
+    .profile-section {
+
+        margin-top: 22px;
+
+        background: #101f3f;
+
+        border: 1px solid rgba(255,255,255,.10);
+
+        border-radius: 18px;
+
+        overflow: hidden;
+
+    }
+
+
+    .profile-section-header {
+
+        padding: 20px 22px;
+
+        border-bottom:
+            1px solid rgba(255,255,255,.08);
+
+        background:
+            rgba(255,255,255,.025);
+
+    }
+
+
+    .profile-section-title {
+
+        color: white;
+
+        font-size: 20px;
+
+        font-weight: 800;
+
+    }
+
+
+    .profile-section-subtitle {
+
+        color: #64748b;
+
+        font-size: 12px;
+
+        margin-top: 4px;
+
+    }
+
+
+    .profile-section-body {
+
+        padding: 22px;
+
+    }
+
+
+    .profile-info-grid {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0,1fr));
+
+        gap: 16px;
+
+    }
+
+
+    .profile-info-item {
+
+        min-width: 0;
+
+        padding: 18px;
+
+        border-radius: 14px;
+
+        background:
+            rgba(255,255,255,.035);
+
+        border:
+            1px solid rgba(255,255,255,.07);
+
+        transition: .25s ease;
+
+    }
+
+
+    .profile-info-item:hover {
+
+        border-color:
+            rgba(250,204,21,.22);
+
+        transform:
+            translateY(-2px);
+
+    }
+
+
+    .profile-info-label {
+
+        color: #64748b;
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        text-transform: uppercase;
+
+        letter-spacing: .5px;
+
+    }
+
+
+    .profile-info-value {
+
+        color: #e2e8f0;
+
+        font-size: 16px;
+
+        font-weight: 600;
+
+        margin-top: 7px;
+
+        overflow-wrap: anywhere;
+
+        word-break: break-word;
+
+    }
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+
+    .profile-status {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        padding: 7px 13px;
+
+        border-radius: 999px;
+
+        background:
+            rgba(34,197,94,.10);
+
+        border:
+            1px solid rgba(34,197,94,.25);
+
+        color: #4ade80;
+
+        font-size: 12px;
+
+        font-weight: 800;
+
+    }
+
+
+    .profile-status-dot {
+
+        width: 7px;
+
+        height: 7px;
+
+        border-radius: 50%;
+
+        background: currentColor;
+
+    }
+
+
+    /* =====================================================
+       BACK BUTTON
+    ===================================================== */
+
+    .profile-back {
+
+        margin-top: 22px;
+
+    }
+
+
+    .back-btn {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: #facc15;
+
+        color: #111827;
+
+        padding: 11px 18px;
+
+        border-radius: 8px;
+
+        font-size: 13px;
+
+        font-weight: 800;
+
+        text-decoration: none;
+
+        transition: .25s ease;
+
+    }
+
+
+    .back-btn:hover {
+
+        background: #fbbf24;
+
+        transform: translateY(-2px);
+
+    }
+    /* =====================================================
+   SECURITY / PASSWORD
+===================================================== */
+
+.security-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    padding: 20px;
+
+    background:
+        rgba(250,204,21,.035);
+
+    border:
+        1px solid rgba(250,204,21,.14);
+
+    border-radius: 16px;
+
+    transition: .25s ease;
+}
+
+.security-card:hover {
+    border-color:
+        rgba(250,204,21,.30);
+
+    transform: translateY(-2px);
+}
+
+.security-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background:
+        rgba(250,204,21,.10);
+
+    border:
+        1px solid rgba(250,204,21,.25);
+
+    font-size: 24px;
+}
+
+.security-content {
+    flex: 1;
+}
+
+.security-title {
+    color: white;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.security-description {
+    color: #94a3b8;
+    font-size: 13px;
+    margin-top: 5px;
+    line-height: 1.5;
+}
+
+.reset-password-btn {
+    background: #facc15;
+    color: #111827;
+
+    border: none;
+    border-radius: 9px;
+
+    padding: 11px 16px;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+}
+
+.reset-password-btn:hover {
+    background: #fbbf24;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(250,204,21,.18);
+}
+
+.security-note {
+    margin-top: 14px;
+
+    padding: 12px 14px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(59,130,246,.06);
+
+    border:
+        1px solid rgba(59,130,246,.12);
+
+    color: #94a3b8;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+@media(max-width: 700px) {
+
+    .security-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .security-card form {
+        width: 100%;
+    }
+
+    .reset-password-btn {
+        width: 100%;
+    }
+}
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 800px) {
+
+        .profile-info-grid {
+
+            grid-template-columns: 1fr;
+
+        }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+        .profile-hero {
+
+            padding: 22px;
+
+        }
+
+
+        .profile-hero-title {
+
+            font-size: 26px;
+
+        }
+
+
+        .profile-header-card {
+
+            flex-direction: column;
+
+            align-items: flex-start;
+
+            padding: 22px;
+
+        }
+
+
+        .profile-avatar {
+
+            width: 70px;
+
+            height: 70px;
+
+            min-width: 70px;
+
+            font-size: 30px;
+
+        }
+
+
+        .profile-name {
+
+            font-size: 23px;
+
+        }
+
+
+        .profile-section-body {
+
+            padding: 16px;
+
+        }
+
+
+        .profile-info-item {
+
+            padding: 15px;
+
+        }
+
+
+        .back-btn {
+
+            width: 100%;
+
+        }
+
+    }
+
+
+    @media (max-width: 400px) {
+
+        .profile-hero-title {
+
+            font-size: 23px;
+
+        }
+
+
+        .profile-name {
+
+            font-size: 20px;
+
+        }
+
+
+        .profile-info-value {
+
+            font-size: 14px;
+
+        }
+
+    }
+
+</style>
+
+
+<div class="profile-page">
+
+
+    <!-- =====================================================
+         HERO
+    ===================================================== -->
+
+    <section class="profile-hero">
+
+        <div class="profile-hero-label">
+            STUDENT PORTAL
+        </div>
+
+        <h1 class="profile-hero-title">
+            👤 My Profile
+        </h1>
+
+        <p class="profile-hero-description">
+            View and manage your personal and academic information.
+        </p>
+
+    </section>
+    <!-- =====================================================
+     SECURITY / PASSWORD
+===================================================== -->
+
+<section class="profile-section">
+
+    <div class="profile-section-header">
+
+        <div class="profile-section-title">
+            🔐 Account Security
+        </div>
+
+        <div class="profile-section-subtitle">
+            Manage your account password securely
+        </div>
+
+    </div>
+
+    <div class="profile-section-body">
+
+        <div class="security-card">
+
+            <div class="security-icon">
+                🔑
+            </div>
+
+            <div class="security-content">
+
+                <div class="security-title">
+                    Reset Password
+                </div>
+
+                <div class="security-description">
+                    Send a secure password reset link to your
+                    registered email address.
+                </div>
+
+            </div>
+
+            <form
+                method="POST"
+                action="{{ url_for('student.request_password_reset') }}"
+            >
+
+                <button
+                    type="submit"
+                    class="reset-password-btn"
+                >
+                    Send Reset Link →
+                </button>
+
+            </form>
+
+        </div>
+
+        <div class="security-note">
+
+            🛡️ For your security, the reset link will expire
+            automatically and can only be used once.
+
+        </div>
+
+    </div>
+
+</section>
+
+
+    <!-- =====================================================
+         PROFILE HEADER
+    ===================================================== -->
+
+    <section class="profile-header-card">
+
+
+        <div class="profile-avatar">
 
             {{ student.name[0] }}
 
         </div>
 
+
         <div>
 
-            <h1 class="text-4xl font-bold text-indigo-700">
+            <h2 class="profile-name">
 
                 {{ student.name }}
 
-            </h1>
+            </h2>
 
-            <p class="text-gray-500 mt-2">
 
-                {{ student.email }}
+            <p class="profile-contact profile-contact-row">
+
+                📧 {{ student.email }}
 
             </p>
 
-            <p class="text-gray-500">
 
-                {{ student.mobile }}
+            <p class="profile-contact profile-contact-row">
+
+                📱 {{ student.mobile }}
 
             </p>
 
         </div>
 
+
+    </section>
+
+
+    <!-- =====================================================
+         PERSONAL INFORMATION
+    ===================================================== -->
+
+    <section class="profile-section">
+
+
+        <div class="profile-section-header">
+
+            <div class="profile-section-title">
+
+                👤 Personal Information
+
+            </div>
+
+            <div class="profile-section-subtitle">
+
+                Your personal and contact details
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-section-body">
+
+
+            <div class="profile-info-grid">
+
+
+                <!-- FULL NAME -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-label">
+                        Full Name
+                    </div>
+
+                    <div class="profile-info-value">
+
+                        {{ student.name }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-label">
+                        Email
+                    </div>
+
+                    <div class="profile-info-value">
+
+                        {{ student.email }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- MOBILE -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-label">
+                        Mobile
+                    </div>
+
+                    <div class="profile-info-value">
+
+                        {{ student.mobile }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- GENDER -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-label">
+                        Gender
+                    </div>
+
+                    <div class="profile-info-value">
+
+                        {{ student.gender or "-" }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- FATHER -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-label">
+                        Father Name
+                    </div>
+
+                    <div class="profile-info-value">
+
+                        {{ student.father_name or "-" }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- MOTHER -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-label">
+                        Mother Name
+                    </div>
+
+                    <div class="profile-info-value">
+
+                        {{ student.mother_name or "-" }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- ADDRESS -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-label">
+                        Address
+                    </div>
+
+                    <div class="profile-info-value">
+
+                        {{ student.address or "-" }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- DOB -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-label">
+                        Date of Birth
+                    </div>
+
+                    <div class="profile-info-value">
+
+                        {{ student.dob or "-" }}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ACADEMIC INFORMATION
+    ===================================================== -->
+
+    <section class="profile-section">
+
+
+        <div class="profile-section-header">
+
+            <div class="profile-section-title">
+
+                🎓 Academic Information
+
+            </div>
+
+            <div class="profile-section-subtitle">
+
+                Your course and training information
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-section-body">
+
+
+            <div class="profile-info-grid">
+
+
+                <!-- COURSE -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-label">
+                        Course
+                    </div>
+
+                    <div class="profile-info-value">
+
+                        {{ student.course }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- TRAINER -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-label">
+                        Trainer
+                    </div>
+
+                    <div class="profile-info-value">
+
+                        {{ student.trainer }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- BATCH -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-label">
+                        Batch
+                    </div>
+
+                    <div class="profile-info-value">
+
+                        {{ student.batch }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- ADMISSION DATE -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-label">
+                        Admission Date
+                    </div>
+
+                    <div class="profile-info-value">
+
+                        {{ student.admission_date }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-label">
+                        Status
+                    </div>
+
+                    <div class="profile-info-value">
+
+                        <span class="profile-status">
+
+                            <span class="profile-status-dot"></span>
+
+                            {{ student.status }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         BACK BUTTON
+    ===================================================== -->
+
+    <div class="profile-back">
+
+        <a
+            href="{{ url_for('student.explorer_dashboard') }}"
+            class="back-btn"
+        >
+
+            ← Back to Dashboard
+
+        </a>
+H
     </div>
 
-</div>
-
-<div class="bg-white rounded-2xl shadow-lg mt-8 p-8">
-
-    <h2 class="text-2xl font-bold text-indigo-700 mb-6">
-
-        👤 Personal Information
-
-    </h2>
-
-    <div class="grid md:grid-cols-2 gap-6">
-
-        <div>
-
-            <label class="font-semibold text-gray-500">
-
-                Full Name
-
-            </label>
-
-            <p class="text-lg mt-2">
-
-                {{ student.name }}
-
-            </p>
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold text-gray-500">
-
-                Email
-
-            </label>
-
-            <p class="text-lg mt-2">
-
-                {{ student.email }}
-
-            </p>
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold text-gray-500">
-
-                Mobile
-
-            </label>
-
-            <p class="text-lg mt-2">
-
-                {{ student.mobile }}
-
-            </p>
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold text-gray-500">
-
-                Gender
-
-            </label>
-
-            <p class="text-lg mt-2">
-
-                {{ student.gender or "-" }}
-
-            </p>
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold text-gray-500">
-
-                Father Name
-
-            </label>
-
-            <p class="text-lg mt-2">
-
-                {{ student.father_name or "-" }}
-
-            </p>
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold text-gray-500">
-
-                Mother Name
-
-            </label>
-
-            <p class="text-lg mt-2">
-
-                {{ student.mother_name or "-" }}
-
-            </p>
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold text-gray-500">
-
-                Address
-
-            </label>
-
-            <p class="text-lg mt-2">
-
-                {{ student.address or "-" }}
-
-            </p>
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold text-gray-500">
-
-                Date of Birth
-
-            </label>
-
-            <p class="text-lg mt-2">
-
-                {{ student.dob or "-" }}
-
-            </p>
-
-        </div>
-
-    </div>
-
-</div>
-
-<div class="bg-white rounded-2xl shadow-lg mt-8 p-8">
-
-    <h2 class="text-2xl font-bold text-indigo-700 mb-6">
-
-        🎓 Academic Information
-
-    </h2>
-
-    <div class="grid md:grid-cols-2 gap-6">
-
-        <div>
-
-            <label class="font-semibold text-gray-500">
-
-                Course
-
-            </label>
-
-            <p class="text-lg mt-2">
-
-                {{ student.course }}
-
-            </p>
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold text-gray-500">
-
-                Trainer
-
-            </label>
-
-            <p class="text-lg mt-2">
-
-                {{ student.trainer }}
-
-            </p>
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold text-gray-500">
-
-                Batch
-
-            </label>
-
-            <p class="text-lg mt-2">
-
-                {{ student.batch }}
-
-            </p>
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold text-gray-500">
-
-                Admission Date
-
-            </label>
-
-            <p class="text-lg mt-2">
-
-                {{ student.admission_date }}
-
-            </p>
-
-        </div>
-
-        <div>
-
-            <label class="font-semibold text-gray-500">
-
-                Status
-
-            </label>
-
-            <p class="text-lg mt-2">
-
-                {{ student.status }}
-
-            </p>
-
-        </div>
-
-    </div>
-
-</div>
-
-<div class="mt-8">
-
-    <a href="{{ url_for('student.explorer_dashboard') }}"
-       class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg">
-
-        ← Back to Dashboard
-
-    </a>
 
 </div>
 

@@ -8,13 +8,19 @@ from flask import (
     flash,
     send_from_directory
 )
-from datetime import datetime
-
 from database import db
-from models import Course, Lead, User, Student, StudyMaterial,InstituteSettings
-from models import Payment,Placement,Notification
+from datetime import datetime, timedelta
+
+from models import Course, Lead, User, Student, StudyMaterial, InstituteSettings
+from models import Payment, Placement, Notification, PasswordResetToken
+
 from routes.admin import create_notification
 
+from flask_mail import Message
+from mail_config import mail
+
+import secrets
+import hashlib
 
 
 student = Blueprint(
@@ -448,7 +454,96 @@ def enroll(course_id):
         "student/enroll.html",
         course=course
     )
+# ==========================================
+# PASSWORD RESET EMAIL
+# ==========================================
 
+def send_password_reset_email(to_email, reset_url):
+
+    msg = Message(
+        subject="RR IT Origin - Password Reset",
+        recipients=[to_email]
+    )
+
+    msg.body = f"""
+Hello,
+
+We received a request to reset your RR IT Origin Student Portal password.
+
+Please click the link below to reset your password:
+
+{reset_url}
+
+This password reset link will expire in 20 minutes.
+
+If you did not request this password reset, please ignore this email.
+
+Regards,
+RR IT Origin
+"""
+
+    mail.send(msg)
+
+
+# ==========================================
+# REQUEST PASSWORD RESET
+# ==========================================
+
+@student.route("/request-password-reset", methods=["POST"])
+def request_password_reset():
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    user = User.query.get(session["user_id"])
+
+    if not user:
+        flash("Unable to process your request.", "danger")
+        return redirect(url_for("auth.login"))
+
+    # Generate secure random token
+    raw_token = secrets.token_urlsafe(48)
+
+    # Store HASH of token in database
+    token_hash = hashlib.sha256(
+        raw_token.encode()
+    ).hexdigest()
+
+    # Token expiry: 20 minutes
+    expires_at = datetime.utcnow() + timedelta(minutes=20)
+
+    # Save token record
+    reset_token = PasswordResetToken(
+        user_id=user.id,
+        token_hash=token_hash,
+        expires_at=expires_at,
+        used=False
+    )
+
+    db.session.add(reset_token)
+    db.session.commit()
+
+    # Secure reset URL
+    reset_url = url_for(
+        "auth.reset_password",
+        token=raw_token,
+        _external=True
+    )
+
+    # Send email
+    send_password_reset_email(
+        user.email,
+        reset_url
+    )
+
+    flash(
+        "A secure password reset link has been sent to your registered email address.",
+        "success"
+    )
+
+    return redirect(
+        url_for("student.profile")
+    )
 
 # ==========================================
 # Submit Enrollment

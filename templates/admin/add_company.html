@@ -9,18 +9,28 @@
 ========================================================= */
 
 .company-page {
-    animation: companyEnter .55s ease;
+
+    animation:
+        companyEnter .55s ease;
 }
 
+
 @keyframes companyEnter {
+
     from {
+
         opacity: 0;
-        transform: translateY(18px);
+
+        transform:
+            translateY(18px);
     }
 
     to {
+
         opacity: 1;
-        transform: translateY(0);
+
+        transform:
+            translateY(0);
     }
 }
 
@@ -30,7 +40,9 @@
 ========================================================= */
 
 .company-hero {
+
     position: relative;
+
     overflow: hidden;
 
     background:
@@ -52,7 +64,9 @@
         rgba(15,23,42,.18);
 }
 
+
 .company-hero::before {
+
     content: "";
 
     position: absolute;
@@ -66,10 +80,13 @@
         rgba(255,255,255,.06);
 
     right: -110px;
+
     top: -150px;
 }
 
+
 .company-hero::after {
+
     content: "";
 
     position: absolute;
@@ -83,10 +100,13 @@
         rgba(250,204,21,.08);
 
     left: 45%;
+
     bottom: -100px;
 }
 
+
 .company-hero-content {
+
     position: relative;
 
     z-index: 2;
@@ -100,7 +120,9 @@
     gap: 20px;
 }
 
+
 .company-hero-left {
+
     display: flex;
 
     align-items: center;
@@ -108,7 +130,9 @@
     gap: 16px;
 }
 
+
 .company-icon {
+
     width: 58px;
     height: 58px;
 
@@ -118,8 +142,7 @@
         rgba(255,255,255,.12);
 
     border:
-        1px solid
-        rgba(255,255,255,.16);
+        1px solid rgba(255,255,255,.16);
 
     display: flex;
 
@@ -128,9 +151,13 @@
     justify-content: center;
 
     font-size: 28px;
+
+    flex-shrink: 0;
 }
 
+
 .company-title {
+
     color: white;
 
     font-size: 28px;
@@ -138,7 +165,9 @@
     font-weight: 800;
 }
 
+
 .company-subtitle {
+
     color: #c7d2fe;
 
     font-size: 13px;
@@ -146,13 +175,14 @@
     margin-top: 5px;
 }
 
+
 .company-badge {
+
     background:
         rgba(255,255,255,.10);
 
     border:
-        1px solid
-        rgba(255,255,255,.15);
+        1px solid rgba(255,255,255,.15);
 
     color: white;
 
@@ -173,11 +203,11 @@
 ========================================================= */
 
 .company-form-card {
+
     background: white;
 
     border:
-        1px solid
-        #e5e7eb;
+        1px solid #e5e7eb;
 
     border-radius: 22px;
 
@@ -188,12 +218,13 @@
         rgba(15,23,42,.07);
 }
 
+
 .company-form-header {
+
     padding: 21px 25px;
 
     border-bottom:
-        1px solid
-        #eef2f7;
+        1px solid #eef2f7;
 
     display: flex;
 
@@ -202,7 +233,9 @@
     gap: 13px;
 }
 
+
 .company-form-icon {
+
     width: 44px;
     height: 44px;
 
@@ -220,7 +253,9 @@
     font-size: 21px;
 }
 
+
 .company-form-title {
+
     color: #1f2937;
 
     font-size: 17px;
@@ -228,7 +263,9 @@
     font-weight: 800;
 }
 
+
 .company-form-description {
+
     color: #6b7280;
 
     font-size: 11px;
@@ -236,7 +273,9 @@
     margin-top: 3px;
 }
 
+
 .company-form-body {
+
     padding: 28px;
 }
 
@@ -246,10 +285,13 @@
 ========================================================= */
 
 .company-field {
+
     margin-bottom: 25px;
 }
 
+
 .company-label {
+
     display: block;
 
     color: #374151;
@@ -261,43 +303,47 @@
     margin-bottom: 8px;
 }
 
+
 .required {
+
     color: #ef4444;
 }
 
+
 .company-input {
+
     width: 100%;
 
     box-sizing: border-box;
 
     border:
-        1px solid
-        #d1d5db;
+        1px solid #d1d5db;
 
     border-radius: 12px;
 
     padding:
         13px 14px;
 
-    color:
-        #1f2937;
+    color: #1f2937;
 
-    background:
-        white;
+    background: white;
 
-    font-size:
-        13px;
+    font-size: 13px;
 
     transition:
         all .25s ease;
 }
 
+
 .company-input:hover {
+
     border-color:
         #a5b4fc;
 }
 
+
 .company-input:focus {
+
     outline: none;
 
     border-color:
@@ -314,11 +360,11 @@
 ========================================================= */
 
 .upload-box {
+
     position: relative;
 
     border:
-        2px dashed
-        #c7d2fe;
+        2px dashed #c7d2fe;
 
     background:
         #f8faff;
@@ -327,7 +373,7 @@
         16px;
 
     padding:
-        25px;
+        28px 25px;
 
     text-align:
         center;
@@ -336,7 +382,9 @@
         all .3s ease;
 }
 
+
 .upload-box:hover {
+
     border-color:
         #6366f1;
 
@@ -347,11 +395,13 @@
         translateY(-2px);
 }
 
-.upload-icon {
-    width: 52px;
-    height: 52px;
 
-    border-radius: 15px;
+.upload-icon {
+
+    width: 56px;
+    height: 56px;
+
+    border-radius: 16px;
 
     background:
         #eef2ff;
@@ -371,11 +421,12 @@
     margin:
         0 auto 10px;
 
-    font-size:
-        24px;
+    font-size: 25px;
 }
 
+
 .upload-title {
+
     color:
         #374151;
 
@@ -386,7 +437,9 @@
         800;
 }
 
+
 .upload-description {
+
     color:
         #9ca3af;
 
@@ -400,7 +453,9 @@
         14px;
 }
 
+
 .upload-input {
+
     width:
         100%;
 
@@ -419,10 +474,61 @@
 
 
 /* =========================================================
+   IMAGE PREVIEW
+========================================================= */
+
+.image-preview {
+
+    display: none;
+
+    margin-top: 18px;
+
+    padding: 15px;
+
+    border-radius: 15px;
+
+    background:
+        white;
+
+    border:
+        1px solid #e5e7eb;
+}
+
+
+.image-preview img {
+
+    width: 110px;
+
+    height: 110px;
+
+    object-fit: contain;
+
+    display: block;
+
+    margin: auto;
+
+    border-radius: 14px;
+}
+
+
+.preview-text {
+
+    text-align: center;
+
+    color: #6b7280;
+
+    font-size: 11px;
+
+    margin-top: 8px;
+}
+
+
+/* =========================================================
    FOOTER
 ========================================================= */
 
 .company-form-footer {
+
     padding:
         20px 28px;
 
@@ -430,8 +536,7 @@
         #f8fafc;
 
     border-top:
-        1px solid
-        #e5e7eb;
+        1px solid #e5e7eb;
 
     display:
         flex;
@@ -446,7 +551,9 @@
         12px;
 }
 
+
 .company-back {
+
     display:
         inline-flex;
 
@@ -469,8 +576,7 @@
         white;
 
     border:
-        1px solid
-        #cbd5e1;
+        1px solid #cbd5e1;
 
     text-decoration:
         none;
@@ -485,7 +591,9 @@
         all .25s ease;
 }
 
+
 .company-back:hover {
+
     background:
         #f1f5f9;
 
@@ -493,7 +601,9 @@
         translateY(-2px);
 }
 
+
 .company-save {
+
     border:
         none;
 
@@ -530,7 +640,9 @@
         all .25s ease;
 }
 
+
 .company-save:hover {
+
     transform:
         translateY(-2px);
 
@@ -547,6 +659,7 @@
 @media(max-width:768px) {
 
     .company-hero-content {
+
         flex-direction:
             column;
 
@@ -554,7 +667,9 @@
             flex-start;
     }
 
+
     .company-badge {
+
         width:
             100%;
 
@@ -565,17 +680,23 @@
             center;
     }
 
+
     .company-title {
+
         font-size:
             24px;
     }
 
+
     .company-form-body {
+
         padding:
             20px;
     }
 
+
     .company-form-footer {
+
         flex-direction:
             column;
 
@@ -583,8 +704,10 @@
             stretch;
     }
 
+
     .company-back,
     .company-save {
+
         width:
             100%;
 
@@ -597,7 +720,50 @@
         text-align:
             center;
     }
+}
 
+
+@media(max-width:480px) {
+
+    .company-hero {
+
+        padding:
+            22px;
+    }
+
+
+    .company-hero-left {
+
+        align-items:
+            flex-start;
+    }
+
+
+    .company-icon {
+
+        width:
+            50px;
+
+        height:
+            50px;
+
+        font-size:
+            23px;
+    }
+
+
+    .company-form-header {
+
+        padding:
+            18px;
+    }
+
+
+    .upload-box {
+
+        padding:
+            22px 15px;
+    }
 }
 
 </style>
@@ -617,18 +783,24 @@
             <div class="company-hero-left">
 
                 <div class="company-icon">
+
                     🏢
+
                 </div>
 
                 <div>
 
                     <h1 class="company-title">
+
                         Add Company
+
                     </h1>
 
                     <p class="company-subtitle">
+
                         Register a new hiring company
                         for placements.
+
                     </p>
 
                 </div>
@@ -637,13 +809,14 @@
 
 
             <div class="company-badge">
+
                 💼 Placement Management
+
             </div>
 
         </div>
 
     </div>
-
 
 
     <!-- =====================================================
@@ -658,17 +831,23 @@
         <div class="company-form-header">
 
             <div class="company-form-icon">
+
                 🏢
+
             </div>
 
             <div>
 
                 <div class="company-form-title">
+
                     Company Information
+
                 </div>
 
                 <div class="company-form-description">
+
                     Enter the company name and upload its logo.
+
                 </div>
 
             </div>
@@ -676,8 +855,9 @@
         </div>
 
 
-
-        <!-- FORM -->
+        <!-- =================================================
+             FORM
+        ================================================== -->
 
         <form
             method="POST"
@@ -688,9 +868,7 @@
             <div class="company-form-body">
 
 
-                <!-- =================================================
-                     COMPANY NAME
-                ================================================== -->
+                <!-- COMPANY NAME -->
 
                 <div class="company-field">
 
@@ -699,10 +877,13 @@
                         Company Name
 
                         <span class="required">
+
                             *
+
                         </span>
 
                     </label>
+
 
                     <input
                         type="text"
@@ -714,10 +895,7 @@
                 </div>
 
 
-
-                <!-- =================================================
-                     COMPANY LOGO
-                ================================================== -->
+                <!-- COMPANY LOGO -->
 
                 <div class="company-field">
 
@@ -726,7 +904,9 @@
                         Company Logo
 
                         <span class="required">
+
                             *
+
                         </span>
 
                     </label>
@@ -735,23 +915,54 @@
                     <div class="upload-box">
 
                         <div class="upload-icon">
+
                             🖼️
+
                         </div>
+
 
                         <div class="upload-title">
+
                             Upload Company Logo
+
                         </div>
 
+
                         <div class="upload-description">
+
                             Select the company's official logo.
+
                         </div>
+
 
                         <input
                             type="file"
                             name="photo"
                             accept="image/*"
                             required
-                            class="upload-input">
+                            class="upload-input"
+                            onchange="previewCompanyLogo(event)">
+
+
+                        <!-- IMAGE PREVIEW -->
+
+                        <div
+                            id="imagePreview"
+                            class="image-preview">
+
+                            <img
+                                id="previewImage"
+                                src=""
+                                alt="Logo Preview">
+
+                            <div
+                                class="preview-text">
+
+                                Logo Preview
+
+                            </div>
+
+                        </div>
 
                     </div>
 
@@ -761,10 +972,7 @@
             </div>
 
 
-
-            <!-- =================================================
-                 BUTTONS
-            ================================================== -->
+            <!-- BUTTONS -->
 
             <div class="company-form-footer">
 
@@ -794,8 +1002,68 @@
 
     </div>
 
-
 </div>
 
+
+<script>
+
+/* =========================================================
+   COMPANY LOGO PREVIEW
+   Only UI preview - does not change form submission
+========================================================= */
+
+function previewCompanyLogo(event) {
+
+    const file =
+        event.target.files[0];
+
+    const preview =
+        document.getElementById(
+            "imagePreview"
+        );
+
+    const image =
+        document.getElementById(
+            "previewImage"
+        );
+
+
+    if (!file) {
+
+        preview.style.display =
+            "none";
+
+        return;
+    }
+
+
+    if (!file.type.startsWith("image/")) {
+
+        preview.style.display =
+            "none";
+
+        return;
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function(e) {
+
+            image.src =
+                e.target.result;
+
+            preview.style.display =
+                "block";
+        };
+
+
+    reader.readAsDataURL(file);
+}
+
+</script>
 
 {% endblock %}

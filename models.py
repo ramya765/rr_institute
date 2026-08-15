@@ -111,6 +111,55 @@ class User(db.Model):
         db.DateTime,
         default=datetime.utcnow
     )
+# ==========================================
+# PASSWORD RESET TOKENS TABLE
+# ==========================================
+
+class PasswordResetToken(db.Model):
+
+    __tablename__ = "password_reset_tokens"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    token_hash = db.Column(
+        db.String(64),
+        unique=True,
+        nullable=False
+    )
+
+    expires_at = db.Column(
+        db.DateTime,
+        nullable=False
+    )
+
+    used = db.Column(
+        db.Boolean,
+        default=False,
+        nullable=False
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+    user = db.relationship(
+        "User",
+        backref=db.backref(
+            "password_reset_tokens",
+            lazy=True,
+            cascade="all, delete-orphan"
+        )
+    )
 
 # ==========================================
 # COURSES TABLE
@@ -130,7 +179,7 @@ class Course(db.Model):
 
     trainer = db.Column(db.String(100))
 
-    price = db.Column(db.Float)
+    price = db.Column(db.Numeric(10, 2))
 
     image = db.Column(db.String(255))
 

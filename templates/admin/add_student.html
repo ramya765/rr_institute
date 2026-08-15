@@ -918,6 +918,68 @@
     }
 
 }
+/* =========================================================
+   UNIQUE FIELD VALIDATION
+========================================================= */
+
+.unique-status {
+
+    min-height: 18px;
+
+    margin-top: 6px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.unique-status.success {
+
+    color: #4ade80;
+
+}
+
+
+.unique-status.error {
+
+    color: #f87171;
+
+}
+
+
+.form-input.input-valid {
+
+    border-color: #22c55e !important;
+
+    box-shadow:
+        0 0 0 3px rgba(34,197,94,.08);
+
+}
+
+
+.form-input.input-invalid {
+
+    border-color: #ef4444 !important;
+
+    box-shadow:
+        0 0 0 3px rgba(239,68,68,.08);
+
+}
+
+
+.save-btn:disabled {
+
+    opacity: .45;
+
+    cursor: not-allowed;
+
+    transform: none !important;
+
+    box-shadow: none !important;
+
+}
 
 </style>
 
@@ -1206,15 +1268,21 @@
                         </label>
 
                         <input
-                            type="text"
-                            name="aadhaar"
-                            required
-                            maxlength="12"
-                            minlength="12"
-                            pattern="[0-9]{12}"
-                            placeholder="Enter 12 digit Aadhaar"
-                            class="form-input"
-                        >
+    type="text"
+    name="aadhaar"
+    id="student_aadhaar"
+    required
+    maxlength="12"
+    minlength="12"
+    pattern="[0-9]{12}"
+    placeholder="Enter 12 digit Aadhaar"
+    class="form-input"
+>
+
+<div
+    id="aadhaar-status"
+    class="unique-status"
+></div>
 
                     </div>
 
@@ -1413,24 +1481,31 @@
 
                     <div class="form-field">
 
-                        <label class="form-label">
+    <label class="form-label">
 
-                            Student Mobile
-                            <span class="required">*</span>
+        Student Mobile
+        <span class="required">*</span>
 
-                        </label>
+    </label>
 
-                        <input
-                            type="text"
-                            name="mobile"
-                            value="{{ lead.mobile if lead else '' }}"
-                            required
-                            placeholder="Enter mobile number"
-                            class="form-input"
-                        >
+    <input
+        type="text"
+        name="mobile"
+        id="student_mobile"
+        value="{{ lead.mobile if lead else '' }}"
+        required
+        maxlength="10"
+        pattern="[0-9]{10}"
+        placeholder="Enter mobile number"
+        class="form-input"
+    >
 
-                    </div>
+    <div
+        id="mobile-status"
+        class="unique-status"
+    ></div>
 
+</div>
 
                     <!-- ALTERNATE -->
 
@@ -1463,12 +1538,18 @@
                         </label>
 
                         <input
-                            type="email"
-                            name="email"
-                            value="{{ lead.email if lead else '' }}"
-                            placeholder="student@example.com"
-                            class="form-input"
-                        >
+    type="email"
+    name="email"
+    id="student_email"
+    value="{{ lead.email if lead else '' }}"
+    placeholder="student@example.com"
+    class="form-input"
+>
+
+<div
+    id="email-status"
+    class="unique-status"
+></div>
 
                     </div>
 
@@ -1637,16 +1718,16 @@
 
                     <!-- TRAINER / FACULTY ASSIGNMENT -->
 
+<!-- TRAINER / FACULTY ASSIGNMENT -->
+
 <div class="form-field">
 
     <label class="form-label">
         Trainer / Faculty
-        <span class="required">*</span>
     </label>
 
     <select
         name="trainer"
-        required
         class="form-select">
 
         <option value="">
@@ -1659,9 +1740,11 @@
 
                 <option value="{{ faculty.name }}">
                     {{ faculty.name }}
+
                     {% if faculty.subject %}
                         — {{ faculty.subject }}
                     {% endif %}
+
                 </option>
 
             {% endif %}
@@ -1671,7 +1754,6 @@
     </select>
 
 </div>
-
                 </div>
 
             </div>
@@ -2022,13 +2104,12 @@
 
 
             <button
-                type="submit"
-                class="save-btn"
-            >
-
-                💾 Save Student
-
-            </button>
+    type="submit"
+    id="save-student-btn"
+    class="save-btn"
+>
+    💾 Save Student
+</button>
 
 
         </div>
@@ -2049,5 +2130,395 @@
 
 
 </div>
+<script>
 
+document.addEventListener("DOMContentLoaded", function () {
+
+    const mobileInput =
+        document.getElementById("student_mobile");
+
+    const aadhaarInput =
+        document.getElementById("student_aadhaar");
+
+    const emailInput =
+        document.getElementById("student_email");
+
+    const mobileStatus =
+        document.getElementById("mobile-status");
+
+    const aadhaarStatus =
+        document.getElementById("aadhaar-status");
+
+    const emailStatus =
+        document.getElementById("email-status");
+
+    const saveButton =
+        document.getElementById("save-student-btn");
+
+
+    let mobileValid = false;
+    let aadhaarValid = false;
+    let emailValid = true;
+
+
+    function updateSaveButton() {
+
+        if (
+            mobileValid &&
+            aadhaarValid &&
+            emailValid
+        ) {
+
+            saveButton.disabled = false;
+
+        } else {
+            if (mobileInput.value.trim()) {
+    mobileInput.dispatchEvent(new Event("input"));
+}
+
+if (emailInput.value.trim()) {
+    emailInput.dispatchEvent(new Event("input"));
+}
+
+            saveButton.disabled = true;
+
+        }
+
+    }
+
+
+    function showSuccess(input, status, message) {
+
+        input.classList.remove(
+            "input-invalid"
+        );
+
+        input.classList.add(
+            "input-valid"
+        );
+
+        status.className =
+            "unique-status success";
+
+        status.innerHTML =
+            "✓ " + message;
+
+    }
+
+
+    function showError(input, status, message) {
+
+        input.classList.remove(
+            "input-valid"
+        );
+
+        input.classList.add(
+            "input-invalid"
+        );
+
+        status.className =
+            "unique-status error";
+
+        status.innerHTML =
+            "✕ " + message;
+
+    }
+
+
+    /* =====================================================
+       MOBILE CHECK
+    ===================================================== */
+
+    mobileInput.addEventListener(
+        "input",
+        async function () {
+
+            const mobile =
+                mobileInput.value.trim();
+
+
+            mobileValid = false;
+
+            if (mobile.length === 0) {
+
+                mobileStatus.innerHTML = "";
+
+                mobileInput.classList.remove(
+                    "input-valid",
+                    "input-invalid"
+                );
+
+                updateSaveButton();
+
+                return;
+
+            }
+
+
+            if (!/^[0-9]{10}$/.test(mobile)) {
+
+                showError(
+                    mobileInput,
+                    mobileStatus,
+                    "Enter a valid 10 digit mobile number."
+                );
+
+                updateSaveButton();
+
+                return;
+
+            }
+
+
+            try {
+
+                const response = await fetch(
+                    "{{ url_for('admin.check_student_mobile') }}?mobile="
+                    + encodeURIComponent(mobile)
+                );
+
+                const data =
+                    await response.json();
+
+
+                if (data.exists) {
+
+                    showError(
+                        mobileInput,
+                        mobileStatus,
+                        "Mobile number already exists."
+                    );
+
+                    mobileValid = false;
+
+                } else {
+
+                    showSuccess(
+                        mobileInput,
+                        mobileStatus,
+                        "Mobile number is unique."
+                    );
+
+                    mobileValid = true;
+
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                mobileValid = false;
+
+                showError(
+                    mobileInput,
+                    mobileStatus,
+                    "Unable to verify mobile number."
+                );
+
+            }
+
+
+            updateSaveButton();
+
+        }
+    );
+
+
+    /* =====================================================
+       AADHAAR CHECK
+    ===================================================== */
+
+    aadhaarInput.addEventListener(
+        "input",
+        async function () {
+
+            const aadhaar =
+                aadhaarInput.value.trim();
+
+
+            aadhaarValid = false;
+
+
+            if (aadhaar.length === 0) {
+
+                aadhaarStatus.innerHTML = "";
+
+                aadhaarInput.classList.remove(
+                    "input-valid",
+                    "input-invalid"
+                );
+
+                updateSaveButton();
+
+                return;
+
+            }
+
+
+            if (!/^[0-9]{12}$/.test(aadhaar)) {
+
+                showError(
+                    aadhaarInput,
+                    aadhaarStatus,
+                    "Enter a valid 12 digit Aadhaar number."
+                );
+
+                updateSaveButton();
+
+                return;
+
+            }
+
+
+            try {
+
+                const response = await fetch(
+                    "{{ url_for('admin.check_student_aadhaar') }}?aadhaar="
+                    + encodeURIComponent(aadhaar)
+                );
+
+                const data =
+                    await response.json();
+
+
+                if (data.exists) {
+
+                    showError(
+                        aadhaarInput,
+                        aadhaarStatus,
+                        "Aadhaar number already exists."
+                    );
+
+                    aadhaarValid = false;
+
+                } else {
+
+                    showSuccess(
+                        aadhaarInput,
+                        aadhaarStatus,
+                        "Aadhaar number is unique."
+                    );
+
+                    aadhaarValid = true;
+
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                aadhaarValid = false;
+
+                showError(
+                    aadhaarInput,
+                    aadhaarStatus,
+                    "Unable to verify Aadhaar number."
+                );
+
+            }
+
+
+            updateSaveButton();
+
+        }
+    );
+
+
+    /* =====================================================
+       EMAIL CHECK
+    ===================================================== */
+
+    emailInput.addEventListener(
+        "input",
+        async function () {
+
+            const email =
+                emailInput.value.trim();
+
+
+            emailValid = true;
+
+
+            if (email.length === 0) {
+
+                emailStatus.innerHTML = "";
+
+                emailInput.classList.remove(
+                    "input-valid",
+                    "input-invalid"
+                );
+
+                updateSaveButton();
+
+                return;
+
+            }
+
+
+            try {
+
+                const response = await fetch(
+                    "{{ url_for('admin.check_student_email') }}?email="
+                    + encodeURIComponent(email)
+                );
+
+                const data =
+                    await response.json();
+
+
+                if (data.exists) {
+
+                    showError(
+                        emailInput,
+                        emailStatus,
+                        "Email address already exists."
+                    );
+
+                    emailValid = false;
+
+                } else {
+
+                    showSuccess(
+                        emailInput,
+                        emailStatus,
+                        "Email address is unique."
+                    );
+
+                    emailValid = true;
+
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                emailValid = false;
+
+                showError(
+                    emailInput,
+                    emailStatus,
+                    "Unable to verify email address."
+                );
+
+            }
+
+
+            updateSaveButton();
+
+        }
+    );
+
+
+    /*
+       Initially disable save button
+       until required unique fields
+       are verified.
+    */
+
+    saveButton.disabled = true;
+
+
+});
+
+</script>
 {% endblock %}

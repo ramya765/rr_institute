@@ -2144,13 +2144,7 @@
             </a>
 
 
-            <a
-                href="{{ url_for('student.profile') }}"
-                class="nav-link">
-
-                Profile
-
-            </a>
+       
 
 
             <a
@@ -2303,7 +2297,7 @@
 
                     src="{{ url_for(
                         'static',
-                        filename='uploads/' + course.image
+                        filename='uploads/courses/' + course.image
                     ) }}"
 
                     class="hero-image"
@@ -2784,7 +2778,7 @@
 
                         src="{{ url_for(
                             'static',
-                            filename='uploads/' + course.image
+                            filename='uploads/courses/' + course.image
                         ) }}"
 
                         class="price-image"

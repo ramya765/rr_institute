@@ -1,7 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 
 from database import db, bcrypt
-from models import User, Student, InstituteSettings
+from models import User, Student, InstituteSettings,PasswordResetToken
+import hashlib
+from datetime import datetime
+
 
 
 auth = Blueprint("auth", __name__)
@@ -401,35 +404,104 @@ def forgot_password():
     return render_template(
         "forgot_password.html"
     )
-@auth.route("/reset-password", methods=["GET","POST"])
+
+@auth.route("/reset-password", methods=["GET", "POST"])
 def reset_password():
 
-    email = request.args.get("email")
+    token = request.args.get("token") \
+        if request.method == "GET" \
+        else request.form.get("token")
 
-    if request.method == "POST":
+    if not token:
+        flash(
+            "Invalid password reset link.",
+            "danger"
+        )
+        return redirect(url_for("auth.login"))
 
-        email = request.form["email"]
+    token_hash = hashlib.sha256(
+        token.encode()
+    ).hexdigest()
 
-        password = request.form["password"]
+    reset_record = PasswordResetToken.query.filter_by(
+        token_hash=token_hash,
+        used=False
+    ).first()
 
-        user = User.query.filter_by(
-            email=email
-        ).first()
-
-        user.password = bcrypt.generate_password_hash(password).decode("utf-8")
-
-        db.session.commit()
+    if not reset_record:
 
         flash(
-            "Password Updated Successfully",
-            "success"
+            "This password reset link is invalid or has already been used.",
+            "danger"
         )
 
         return redirect(
             url_for("auth.login")
         )
 
-    return render_template(
-        "reset_password.html",
-        email=email
+    if reset_record.expires_at < datetime.utcnow():
+
+        flash(
+            "This password reset link has expired. Please request a new one.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("auth.forgot_password")
+        )
+
+    if request.method == "GET":
+
+        return render_template(
+            "reset_password.html",
+            token=token
+        )
+
+    password = request.form.get("password")
+    confirm_password = request.form.get(
+        "confirm_password"
+    )
+
+    if password != confirm_password:
+
+        flash(
+            "Passwords do not match.",
+            "danger"
+        )
+
+        return render_template(
+            "auth/reset_password.html",
+            token=token
+        )
+
+    if len(password) < 8:
+
+        flash(
+            "Password must contain at least 8 characters.",
+            "danger"
+        )
+
+        return render_template(
+            "auth/reset_password.html",
+            token=token
+        )
+
+    user = User.query.get(
+        reset_record.user_id
+    )
+
+    user.password = bcrypt.generate_password_hash(password).decode("utf-8")
+
+    # Make token unusable
+    reset_record.used = True
+
+    db.session.commit()
+
+    flash(
+        "Your password has been updated successfully.",
+        "success"
+    )
+
+    return redirect(
+        url_for("auth.login")
     )

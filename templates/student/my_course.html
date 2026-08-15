@@ -2,52 +2,694 @@
 
 {% block content %}
 
-<div class="bg-white rounded-xl shadow-lg p-8">
+<style>
 
-    <h1 class="text-3xl font-bold text-indigo-700 mb-8">
-        📘 My Course
-    </h1>
+    /* =====================================================
+       MY COURSE PAGE
+    ===================================================== */
 
-    <div class="grid md:grid-cols-2 gap-6">
+    .course-page {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
 
-        <div class="bg-indigo-50 rounded-xl p-6">
-            <h3 class="text-gray-500">Course</h3>
-            <p class="text-3xl font-bold text-indigo-700">
+
+    /* =====================================================
+       HERO
+    ===================================================== */
+
+    .course-hero {
+
+        background:
+            linear-gradient(
+                135deg,
+                #4f46e5,
+                #9333ea,
+                #c026d3
+            );
+
+        border-radius: 20px;
+
+        padding: 28px;
+
+        color: white;
+
+        box-shadow:
+            0 15px 40px rgba(0,0,0,.20);
+
+    }
+
+
+    .course-hero-label {
+
+        font-size: 12px;
+
+        font-weight: 800;
+
+        letter-spacing: 1.5px;
+
+        text-transform: uppercase;
+
+        color: #fef08a;
+
+        margin-bottom: 6px;
+
+    }
+
+
+    .course-hero-title {
+
+        font-size: 32px;
+
+        font-weight: 800;
+
+        margin: 0;
+
+    }
+
+
+    .course-hero-description {
+
+        margin-top: 8px;
+
+        color: rgba(255,255,255,.88);
+
+        font-size: 14px;
+
+    }
+
+
+    /* =====================================================
+       STUDENT COURSE CARD
+    ===================================================== */
+
+    .course-student-card {
+
+        margin-top: 22px;
+
+        background: #101f3f;
+
+        border: 1px solid rgba(255,255,255,.12);
+
+        border-radius: 18px;
+
+        padding: 20px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 20px;
+
+    }
+
+
+    .course-student-left {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 15px;
+
+        min-width: 0;
+
+    }
+
+
+    .course-avatar {
+
+        width: 48px;
+
+        height: 48px;
+
+        min-width: 48px;
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: #facc15;
+
+        color: #111827;
+
+        font-size: 20px;
+
+        font-weight: 800;
+
+    }
+
+
+    .course-student-name {
+
+        color: white;
+
+        font-size: 18px;
+
+        font-weight: 800;
+
+        overflow-wrap: anywhere;
+
+    }
+
+
+    .course-student-status {
+
+        color: #94a3b8;
+
+        font-size: 13px;
+
+        margin-top: 4px;
+
+    }
+
+
+    .active-badge {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 6px;
+
+        padding: 7px 12px;
+
+        border-radius: 999px;
+
+        background: rgba(34,197,94,.10);
+
+        border: 1px solid rgba(34,197,94,.25);
+
+        color: #4ade80;
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        white-space: nowrap;
+
+    }
+
+
+    .active-dot {
+
+        width: 7px;
+
+        height: 7px;
+
+        border-radius: 50%;
+
+        background: currentColor;
+
+    }
+
+
+    /* =====================================================
+       COURSE INFORMATION
+    ===================================================== */
+
+    .course-info-grid {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 18px;
+
+        margin-top: 22px;
+
+    }
+
+
+    .course-info-card {
+
+        position: relative;
+
+        min-width: 0;
+
+        padding: 22px;
+
+        border-radius: 18px;
+
+        border: 1px solid rgba(255,255,255,.10);
+
+        background: #101f3f;
+
+        overflow: hidden;
+
+        transition: .25s ease;
+
+    }
+
+
+    .course-info-card:hover {
+
+        transform: translateY(-3px);
+
+        border-color: rgba(250,204,21,.25);
+
+    }
+
+
+    .course-info-card.indigo {
+
+        background:
+            linear-gradient(
+                135deg,
+                #172554,
+                #1e2d63
+            );
+
+    }
+
+
+    .course-info-card.green {
+
+        background:
+            linear-gradient(
+                135deg,
+                #0e3329,
+                #123d30
+            );
+
+    }
+
+
+    .course-info-card.purple {
+
+        background:
+            linear-gradient(
+                135deg,
+                #2e1557,
+                #3b1d68
+            );
+
+    }
+
+
+    .course-info-card.yellow {
+
+        background:
+            linear-gradient(
+                135deg,
+                #3b2a08,
+                #49350b
+            );
+
+    }
+
+
+    .course-info-icon {
+
+        width: 42px;
+
+        height: 42px;
+
+        border-radius: 11px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: rgba(255,255,255,.08);
+
+        border: 1px solid rgba(255,255,255,.10);
+
+        font-size: 20px;
+
+        margin-bottom: 14px;
+
+    }
+
+
+    .course-info-label {
+
+        color: #94a3b8;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+    }
+
+
+    .course-info-value {
+
+        color: white;
+
+        font-size: 24px;
+
+        font-weight: 800;
+
+        margin-top: 6px;
+
+        overflow-wrap: anywhere;
+
+        word-break: break-word;
+
+    }
+
+
+    .course-info-card.indigo .course-info-value {
+        color: #818cf8;
+    }
+
+
+    .course-info-card.green .course-info-value {
+        color: #4ade80;
+    }
+
+
+    .course-info-card.purple .course-info-value {
+        color: #c084fc;
+    }
+
+
+    .course-info-card.yellow .course-info-value {
+        color: #facc15;
+    }
+
+
+    /* =====================================================
+       BACK BUTTON
+    ===================================================== */
+
+    .course-back {
+
+        margin-top: 22px;
+
+    }
+
+
+    .back-btn {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: #facc15;
+
+        color: #111827;
+
+        padding: 11px 18px;
+
+        border-radius: 8px;
+
+        font-size: 13px;
+
+        font-weight: 800;
+
+        text-decoration: none;
+
+        transition: .25s ease;
+
+    }
+
+
+    .back-btn:hover {
+
+        background: #fbbf24;
+
+        transform: translateY(-2px);
+
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 800px) {
+
+        .course-info-grid {
+
+            grid-template-columns: 1fr;
+
+        }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+        .course-hero {
+
+            padding: 22px;
+
+        }
+
+
+        .course-hero-title {
+
+            font-size: 26px;
+
+        }
+
+
+        .course-student-card {
+
+            flex-direction: column;
+
+            align-items: flex-start;
+
+        }
+
+
+        .course-info-value {
+
+            font-size: 21px;
+
+        }
+
+
+        .back-btn {
+
+            width: 100%;
+
+        }
+
+    }
+
+
+    @media (max-width: 400px) {
+
+        .course-hero-title {
+
+            font-size: 23px;
+
+        }
+
+
+        .course-student-name {
+
+            font-size: 16px;
+
+        }
+
+
+        .course-info-card {
+
+            padding: 18px;
+
+        }
+
+    }
+
+</style>
+
+
+<div class="course-page">
+
+
+    <!-- =====================================================
+         HERO
+    ===================================================== -->
+
+    <section class="course-hero">
+
+        <div class="course-hero-label">
+            STUDENT PORTAL
+        </div>
+
+        <h1 class="course-hero-title">
+            📘 My Course
+        </h1>
+
+        <p class="course-hero-description">
+            View your enrolled course, trainer, batch and admission details.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         STUDENT INFORMATION
+    ===================================================== -->
+
+    <section class="course-student-card">
+
+        <div class="course-student-left">
+
+            <div class="course-avatar">
+
+                {{ student.name[:1]|upper }}
+
+            </div>
+
+
+            <div>
+
+                <div class="course-student-name">
+
+                    {{ student.name }}
+
+                </div>
+
+                <div class="course-student-status">
+
+                    📘 Enrolled Student
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="active-badge">
+
+            <span class="active-dot"></span>
+
+            {{ student.status }}
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         COURSE DETAILS
+    ===================================================== -->
+
+    <section class="course-info-grid">
+
+
+        <!-- COURSE -->
+
+        <div class="course-info-card indigo">
+
+            <div class="course-info-icon">
+                📘
+            </div>
+
+            <div class="course-info-label">
+                Course
+            </div>
+
+            <div class="course-info-value">
+
                 {{ student.course }}
-            </p>
+
+            </div>
+
         </div>
 
-        <div class="bg-green-50 rounded-xl p-6">
-            <h3 class="text-gray-500">Trainer</h3>
-            <p class="text-3xl font-bold text-green-600">
+
+        <!-- TRAINER -->
+
+        <div class="course-info-card green">
+
+            <div class="course-info-icon">
+                👨‍🏫
+            </div>
+
+            <div class="course-info-label">
+                Trainer
+            </div>
+
+            <div class="course-info-value">
+
                 {{ student.trainer }}
-            </p>
+
+            </div>
+
         </div>
 
-        <div class="bg-purple-50 rounded-xl p-6">
-            <h3 class="text-gray-500">Batch</h3>
-            <p class="text-3xl font-bold text-purple-600">
+
+        <!-- BATCH -->
+
+        <div class="course-info-card purple">
+
+            <div class="course-info-icon">
+                🕐
+            </div>
+
+            <div class="course-info-label">
+                Batch
+            </div>
+
+            <div class="course-info-value">
+
                 {{ student.batch }}
-            </p>
+
+            </div>
+
         </div>
 
-        <div class="bg-yellow-50 rounded-xl p-6">
-            <h3 class="text-gray-500">Admission Date</h3>
-            <p class="text-xl font-bold">
+
+        <!-- ADMISSION DATE -->
+
+        <div class="course-info-card yellow">
+
+            <div class="course-info-icon">
+                📅
+            </div>
+
+            <div class="course-info-label">
+                Admission Date
+            </div>
+
+            <div class="course-info-value">
+
                 {{ student.admission_date }}
-            </p>
+
+            </div>
+
         </div>
 
-    </div>
 
-    <div class="mt-8">
-        <a href="{{ url_for('student.explorer_dashboard') }}"
-           class="bg-indigo-600 text-white px-6 py-3 rounded-lg">
+    </section>
+
+
+    <!-- =====================================================
+         BACK BUTTON
+    ===================================================== -->
+
+    <div class="course-back">
+
+        <a
+            href="{{ url_for('student.explorer_dashboard') }}"
+            class="back-btn"
+        >
 
             ← Back to Dashboard
 
         </a>
+
     </div>
+
 
 </div>
 

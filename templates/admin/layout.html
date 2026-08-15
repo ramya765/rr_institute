@@ -3,6 +3,7 @@
 
 <head>
 
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -24,6 +25,13 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
         rel="stylesheet">
+    
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/admin-responsive.css') }}"
+>
 
 
     <style>
@@ -988,65 +996,53 @@
 
         <!-- Enquiries -->
 
-        <a
-            href="{{ url_for('admin.enquiries') }}"
-            class="admin-nav-link
-            {% if request.endpoint == 'admin.enquiries' %}
-                active
-            {% endif %}"
-        >
-
-            <span class="admin-nav-icon">
-                📝
-            </span>
-
-            <span>
-                Enquiries
-            </span>
-
-        </a>
+       
 
 
         <!-- Testimonials -->
 
-        <a
-            href="{{ url_for('admin.testimonials') }}"
-            class="admin-nav-link
-            {% if request.endpoint == 'admin.testimonials' %}
-                active
-            {% endif %}"
-        >
-
-            <span class="admin-nav-icon">
-                ⭐
-            </span>
-
-            <span>
-                Testimonials
-            </span>
-
-        </a>
+       
 
 
         <!-- Notifications -->
 
-        <a
-            href="{{ url_for('admin.notifications') }}"
-            class="admin-nav-link
-            {% if request.endpoint == 'admin.notifications' %}
-                active
-            {% endif %}"
+       <!-- Notification -->
+
+<a
+    href="{{ url_for('admin.notifications') }}"
+    class="admin-notification"
+    title="Notifications"
+    style="position: relative;"
+>
+
+    🔔
+
+    {% if admin_unread_count > 0 %}
+        <span
+            style="
+                position: absolute;
+                top: -6px;
+                right: -6px;
+                min-width: 20px;
+                height: 20px;
+                padding: 0 5px;
+                background: #ef4444;
+                color: white;
+                border-radius: 999px;
+                font-size: 11px;
+                font-weight: 800;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 2px solid #071126;
+                box-shadow: 0 0 10px rgba(239,68,68,.5);
+            "
         >
+            {{ admin_unread_count }}
+        </span>
+    {% endif %}
 
-            <span class="admin-nav-icon">
-                🔔
-            </span>
-
-            <span>
-                Notifications
-            </span>
-
-        </a>
+</a>
 
 
         <!-- Settings -->

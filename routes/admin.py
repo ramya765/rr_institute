@@ -12,7 +12,7 @@ from models import Course, Faculty,  StudyMaterial
 from models import InstituteSettings,Notification
 from sqlalchemy.exc import IntegrityError
 
-
+from decimal import Decimal
 from flask import send_from_directory
 from database import db, bcrypt
 from sqlalchemy import func
@@ -75,6 +75,7 @@ def create_notification(
     message,
     user_id=None
 ):
+    
 
     settings = InstituteSettings.query.first()
 
@@ -130,6 +131,7 @@ def create_notification(
     db.session.add(notification)
 
     db.session.commit()
+
 
 
 
@@ -287,6 +289,18 @@ def generate_receipt(student, payment):
     c.save()
 
     return pdf_path
+@admin.context_processor
+def inject_admin_notifications():
+
+    unread_count = Notification.query.filter(
+        Notification.user_id.is_(None),
+        Notification.is_read == False
+    ).count()
+
+    return {
+        "admin_unread_count": unread_count
+    }
+
 
 
 # ==========================================================
@@ -410,6 +424,25 @@ def students():
 
 
     students = query.all()
+    # ==========================================================
+# PAYMENT STATUS FOR STUDENTS PAGE
+# ==========================================================
+
+    for student in students:
+
+        course_fee = float(student.course_fee or 0)
+        paid_amount = float(student.paid_amount or 0)
+        balance_amount = float(student.balance_amount or 0)
+
+        if course_fee > 0 and balance_amount <= 0:
+            student.payment_status = "Paid"
+
+        elif paid_amount > 0:
+            student.payment_status = "Partially Paid"
+
+        else:
+            student.payment_status = "Unpaid"
+        
 
 
 
@@ -467,6 +500,52 @@ def students():
 
         batches=[b[0] for b in batches]
     )
+    
+@admin.route("/check-student-mobile")
+def check_student_mobile():
+
+    mobile = request.args.get("mobile", "").strip()
+
+    exists = Student.query.filter_by(
+        mobile=mobile
+    ).first() is not None
+
+    return {
+        "exists": exists
+    }
+
+@admin.route("/check-student-aadhaar")
+def check_student_aadhaar():
+
+    aadhaar = request.args.get("aadhaar", "").strip()
+
+    exists = Student.query.filter_by(
+        aadhaar=aadhaar
+    ).first() is not None
+
+    return {
+        "exists": exists
+    }
+
+
+@admin.route("/check-student-email")
+def check_student_email():
+
+    email = request.args.get("email", "").strip()
+
+    if not email:
+
+        return {
+            "exists": False
+        }
+
+    exists = Student.query.filter_by(
+        email=email
+    ).first() is not None
+
+    return {
+        "exists": exists
+    }
 # ==========================================================
 # Add Student
 # ==========================================================
@@ -486,215 +565,406 @@ def add_student():
 
     faculties = Faculty.query.all()
 
+    # ==========================================================
+    # POST
+    # ==========================================================
+
     if request.method == "POST":
-
-        # ==========================================================
-        # GET FORM VALUES
-        # ==========================================================
-
-        email = request.form.get("email")
-        aadhaar_number = request.form.get("aadhaar")
-        mobile_number = request.form.get("mobile")
-
-        # ==========================================================
-        # DUPLICATE EMAIL CHECK
-        # ==========================================================
-
-        if email:
-
-            existing_student = Student.query.filter_by(
-                email=email
-            ).first()
-
-            if existing_student:
-
-                flash(
-                    "Email already exists. This student is already registered.",
-                    "danger"
-                )
-
-                return redirect(
-                    url_for(
-                        "admin.add_student",
-                        lead_id=lead_id
-                    ) if lead_id else url_for(
-                        "admin.add_student"
-                    )
-                )
-
-        # ==========================================================
-        # DUPLICATE AADHAAR CHECK
-        # ==========================================================
-
-        if aadhaar_number:
-
-            existing_aadhaar = Student.query.filter_by(
-                aadhaar=aadhaar_number
-            ).first()
-
-            if existing_aadhaar:
-
-                flash(
-                    "Aadhaar number already exists. Please check the Aadhaar number.",
-                    "danger"
-                )
-
-                return redirect(
-                    url_for(
-                        "admin.add_student",
-                        lead_id=lead_id
-                    ) if lead_id else url_for(
-                        "admin.add_student"
-                    )
-                )
-
-        # ==========================================================
-        # DUPLICATE MOBILE CHECK
-        # ==========================================================
-
-        if mobile_number:
-
-            existing_mobile = Student.query.filter_by(
-                mobile=mobile_number
-            ).first()
-
-            if existing_mobile:
-
-                flash(
-                    "Mobile number already exists. Please use a different mobile number.",
-                    "danger"
-                )
-
-                return redirect(
-                    url_for(
-                        "admin.add_student",
-                        lead_id=lead_id
-                    ) if lead_id else url_for(
-                        "admin.add_student"
-                    )
-                )
-
-        # ==========================================================
-        # FIND EXISTING USER
-        # ==========================================================
-
-        user = None
-
-        if email:
-
-            user = User.query.filter_by(
-                email=email
-            ).first()
-
-        # ==========================================================
-        # CHECK IF USER ALREADY HAS A STUDENT
-        # ==========================================================
-
-        if user:
-
-            existing_user_student = Student.query.filter_by(
-                user_id=user.id
-            ).first()
-
-            if existing_user_student:
-
-                flash(
-                    "This user is already registered as a student.",
-                    "danger"
-                )
-
-                return redirect(
-                    url_for(
-                        "admin.edit_student",
-                        id=existing_user_student.id
-                    )
-                )
-
-        # ==========================================================
-        # UPLOAD PHOTO
-        # ==========================================================
-
-        photo_name = None
-
-        photo = request.files.get("student_photo")
-
-        if photo and photo.filename != "":
-
-            photo_name = secure_filename(
-                photo.filename
-            )
-
-            photo.save(
-                os.path.join(
-                    UPLOAD_FOLDER,
-                    "photos",
-                    photo_name
-                )
-            )
-
-        # ==========================================================
-        # UPLOAD AADHAAR
-        # ==========================================================
-
-        aadhaar_name = None
-
-        aadhaar = request.files.get(
-            "aadhaar_file"
-        )
-
-        if aadhaar and aadhaar.filename != "":
-
-            aadhaar_name = secure_filename(
-                aadhaar.filename
-            )
-
-            aadhaar.save(
-                os.path.join(
-                    UPLOAD_FOLDER,
-                    "aadhaar",
-                    aadhaar_name
-                )
-            )
-
-        # ==========================================================
-        # UPLOAD QUALIFICATION
-        # ==========================================================
-
-        qualification_name = None
-
-        qualification = request.files.get(
-            "qualification_files"
-        )
-
-        if qualification and qualification.filename != "":
-
-            qualification_name = secure_filename(
-                qualification.filename
-            )
-
-            qualification.save(
-                os.path.join(
-                    UPLOAD_FOLDER,
-                    "qualification",
-                    qualification_name
-                )
-            )
-
-        # ==========================================================
-        # CREATE STUDENT
-        # ==========================================================
 
         try:
 
+            # ======================================================
+            # GET FORM VALUES
+            # ======================================================
+
+            name = request.form.get("name", "").strip()
+
+            email = request.form.get(
+                "email", ""
+            ).strip().lower()
+
+            aadhaar_number = request.form.get(
+                "aadhaar", ""
+            ).strip()
+
+            mobile_number = request.form.get(
+                "mobile", ""
+            ).strip()
+
+            course = request.form.get(
+                "course", ""
+            ).strip()
+
+            batch = request.form.get(
+                "batch", ""
+            ).strip()
+
+            trainer = request.form.get(
+                "trainer", ""
+            ).strip()
+
+            # ======================================================
+            # BASIC VALIDATION
+            # ======================================================
+
+            if not name:
+                flash(
+                    "Student name is required.",
+                    "danger"
+                )
+
+                return redirect(
+                    url_for(
+                        "admin.add_student",
+                        lead_id=lead_id
+                    ) if lead_id else url_for(
+                        "admin.add_student"
+                    )
+                )
+
+            if not mobile_number:
+                flash(
+                    "Mobile number is required.",
+                    "danger"
+                )
+
+                return redirect(
+                    url_for(
+                        "admin.add_student",
+                        lead_id=lead_id
+                    ) if lead_id else url_for(
+                        "admin.add_student"
+                    )
+                )
+
+            if not course:
+                flash(
+                    "Please select a course.",
+                    "danger"
+                )
+
+                return redirect(
+                    url_for(
+                        "admin.add_student",
+                        lead_id=lead_id
+                    ) if lead_id else url_for(
+                        "admin.add_student"
+                    )
+                )
+
+            if not batch:
+                flash(
+                    "Please select a batch.",
+                    "danger"
+                )
+
+                return redirect(
+                    url_for(
+                        "admin.add_student",
+                        lead_id=lead_id
+                    ) if lead_id else url_for(
+                        "admin.add_student"
+                    )
+                )
+
+            # ======================================================
+            # DUPLICATE EMAIL
+            # ======================================================
+
+            if email:
+
+                existing_student = Student.query.filter_by(
+                    email=email
+                ).first()
+
+                if existing_student:
+
+                    flash(
+                        "Email already exists. This student is already registered.",
+                        "danger"
+                    )
+
+                    return redirect(
+                        url_for(
+                            "admin.add_student",
+                            lead_id=lead_id
+                        ) if lead_id else url_for(
+                            "admin.add_student"
+                        )
+                    )
+
+            # ======================================================
+            # DUPLICATE AADHAAR
+            # ======================================================
+
+            if aadhaar_number:
+
+                existing_aadhaar = Student.query.filter_by(
+                    aadhaar=aadhaar_number
+                ).first()
+
+                if existing_aadhaar:
+
+                    flash(
+                        "Aadhaar number already exists.",
+                        "danger"
+                    )
+
+                    return redirect(
+                        url_for(
+                            "admin.add_student",
+                            lead_id=lead_id
+                        ) if lead_id else url_for(
+                            "admin.add_student"
+                        )
+                    )
+
+            # ======================================================
+            # DUPLICATE MOBILE
+            # ======================================================
+
+            if mobile_number:
+
+                existing_mobile = Student.query.filter_by(
+                    mobile=mobile_number
+                ).first()
+
+                if existing_mobile:
+
+                    flash(
+                        "Mobile number already exists.",
+                        "danger"
+                    )
+
+                    return redirect(
+                        url_for(
+                            "admin.add_student",
+                            lead_id=lead_id
+                        ) if lead_id else url_for(
+                            "admin.add_student"
+                        )
+                    )
+
+            # ======================================================
+            # FIND EXISTING USER
+            # ======================================================
+
+            user = None
+
+            if email:
+
+                user = User.query.filter_by(
+                    email=email
+                ).first()
+
+                # --------------------------------------------------
+                # USER ALREADY LINKED TO STUDENT
+                # --------------------------------------------------
+
+                if user:
+
+                    existing_user_student = Student.query.filter_by(
+                        user_id=user.id
+                    ).first()
+
+                    if existing_user_student:
+
+                        flash(
+                            "This user is already registered as a student.",
+                            "danger"
+                        )
+
+                        return redirect(
+                            url_for(
+                                "admin.edit_student",
+                                id=existing_user_student.id
+                            )
+                        )
+
+            # ======================================================
+            # FILE UPLOAD - PHOTO
+            # ======================================================
+
+            photo_name = None
+
+            photo = request.files.get(
+                "student_photo"
+            )
+
+            if photo and photo.filename:
+
+                photo_name = secure_filename(
+                    photo.filename
+                )
+
+                photo.save(
+                    os.path.join(
+                        UPLOAD_FOLDER,
+                        "photos",
+                        photo_name
+                    )
+                )
+
+            # ======================================================
+            # FILE UPLOAD - AADHAAR
+            # ======================================================
+
+            aadhaar_name = None
+
+            aadhaar_file = request.files.get(
+                "aadhaar_file"
+            )
+
+            if aadhaar_file and aadhaar_file.filename:
+
+                aadhaar_name = secure_filename(
+                    aadhaar_file.filename
+                )
+
+                aadhaar_file.save(
+                    os.path.join(
+                        UPLOAD_FOLDER,
+                        "aadhaar",
+                        aadhaar_name
+                    )
+                )
+
+            # ======================================================
+            # FILE UPLOAD - QUALIFICATION
+            # ======================================================
+
+            qualification_name = None
+
+            qualification_file = request.files.get(
+                "qualification_files"
+            )
+
+            if (
+                qualification_file
+                and qualification_file.filename
+            ):
+
+                qualification_name = secure_filename(
+                    qualification_file.filename
+                )
+
+                qualification_file.save(
+                    os.path.join(
+                        UPLOAD_FOLDER,
+                        "qualification",
+                        qualification_name
+                    )
+                )
+
+            # ======================================================
+            # FEE DETAILS
+            # ======================================================
+
+            try:
+
+                course_fee = float(
+                    request.form.get(
+                        "course_fee"
+                    ) or 0
+                )
+
+                paid_amount = float(
+                    request.form.get(
+                        "paid_amount"
+                    ) or 0
+                )
+
+            except ValueError:
+
+                flash(
+                    "Please enter valid fee amounts.",
+                    "danger"
+                )
+
+                return redirect(
+                    url_for(
+                        "admin.add_student",
+                        lead_id=lead_id
+                    ) if lead_id else url_for(
+                        "admin.add_student"
+                    )
+                )
+
+            # ------------------------------------------------------
+            # Prevent negative values
+            # ------------------------------------------------------
+
+            if course_fee < 0:
+                course_fee = 0
+
+            if paid_amount < 0:
+                paid_amount = 0
+
+            # ------------------------------------------------------
+            # Prevent overpayment
+            # ------------------------------------------------------
+
+            if paid_amount > course_fee:
+
+                flash(
+                    "Paid amount cannot be greater than course fee.",
+                    "danger"
+                )
+
+                return redirect(
+                    url_for(
+                        "admin.add_student",
+                        lead_id=lead_id
+                    ) if lead_id else url_for(
+                        "admin.add_student"
+                    )
+                )
+
+            # ------------------------------------------------------
+            # CALCULATE BALANCE
+            # ------------------------------------------------------
+
+            balance_amount = (
+                course_fee - paid_amount
+            )
+
+            # ======================================================
+            # STATUS
+            # ======================================================
+
+            if course_fee > 0 and balance_amount <= 0:
+
+                student_status = "Paid"
+
+            elif paid_amount > 0:
+
+                student_status = "Partially Paid"
+
+            else:
+
+                student_status = "Unpaid"
+
+            # ======================================================
+            # CREATE STUDENT
+            # ======================================================
+
             student = Student(
 
-                name=request.form.get("name"),
+                name=name,
 
-                dob=request.form.get("dob") or None,
+                dob=request.form.get(
+                    "dob"
+                ) or None,
 
-                gender=request.form.get("gender"),
+                gender=request.form.get(
+                    "gender"
+                ),
 
-                aadhaar=request.form.get("aadhaar"),
+                aadhaar=(
+                    aadhaar_number
+                    if aadhaar_number
+                    else None
+                ),
 
                 qualification=request.form.get(
                     "qualification"
@@ -716,61 +986,48 @@ def add_student():
                     "parent_mobile"
                 ),
 
-                mobile=request.form.get(
-                    "mobile"
-                ),
+                mobile=mobile_number,
 
                 alternate_mobile=request.form.get(
                     "alternate_mobile"
                 ),
 
-                email=request.form.get(
-                    "email"
+                email=(
+                    email
+                    if email
+                    else None
                 ),
 
                 address=request.form.get(
                     "address"
                 ),
 
-                course=request.form.get(
-                    "course"
-                ),
+                course=course,
 
-                batch=request.form.get(
-                    "batch"
-                ),
+                batch=batch,
 
-                trainer=request.form.get(
-                    "trainer"
+                # TRAINER IS OPTIONAL
+                trainer=(
+                    trainer
+                    if trainer
+                    else None
                 ),
-
-                status="Unpaid",
 
                 admission_date=request.form.get(
                     "admission_date"
                 ) or None,
 
-                course_fee=float(
-                    request.form.get(
-                        "course_fee"
-                    ) or 0
-                ),
+                course_fee=course_fee,
 
-                paid_amount=float(
-                    request.form.get(
-                        "paid_amount"
-                    ) or 0
-                ),
+                paid_amount=paid_amount,
 
-                balance_amount=float(
-                    request.form.get(
-                        "balance_amount"
-                    ) or 0
-                ),
+                balance_amount=balance_amount,
 
                 payment_mode=request.form.get(
                     "payment_mode"
                 ),
+
+                status=student_status,
 
                 photo=photo_name,
 
@@ -784,7 +1041,7 @@ def add_student():
             )
 
             # ======================================================
-            # CONNECT WITH EXISTING USER
+            # CONNECT EXISTING USER
             # ======================================================
 
             if user:
@@ -797,18 +1054,397 @@ def add_student():
 
             db.session.add(student)
 
+            db.session.flush()
+
+            print(
+                "STUDENT CREATED:",
+                student.id,
+                student.name
+            )
+
+            # ======================================================
+            # CREATE / UPDATE LOGIN ACCOUNT
+            # ======================================================
+
+            plain_password = None
+
+            if email:
+
+                plain_password = secrets.token_urlsafe(8)
+
+                # --------------------------------------------------
+                # EXISTING USER
+                # --------------------------------------------------
+
+                if user:
+
+                    user.name = student.name
+
+                    user.phone = student.mobile
+
+                    user.password = (
+                        bcrypt
+                        .generate_password_hash(
+                            plain_password
+                        )
+                        .decode("utf-8")
+                    )
+
+                    user.portal_stage = "explorer"
+
+                    user.is_active = True
+
+                # --------------------------------------------------
+                # NEW USER
+                # --------------------------------------------------
+
+                else:
+
+                    user = User(
+
+                        name=student.name,
+
+                        email=student.email,
+
+                        phone=student.mobile,
+
+                        password=(
+                            bcrypt
+                            .generate_password_hash(
+                                plain_password
+                            )
+                            .decode("utf-8")
+                        ),
+
+                        role="student",
+
+                        is_active=True,
+
+                        portal_stage="explorer"
+                    )
+
+                    db.session.add(user)
+
+                    db.session.flush()
+
+                    print(
+                        "USER CREATED:",
+                        user.id
+                    )
+
+                # --------------------------------------------------
+                # CONNECT STUDENT
+                # --------------------------------------------------
+
+                student.user_id = user.id
+
+            # ======================================================
+            # INITIAL PAYMENT
+            # ======================================================
+
+            payment = None
+
+            if paid_amount > 0:
+
+                receipt_number = (
+                    "RR"
+                    + datetime.now().strftime(
+                        "%Y%m%d%H%M%S%f"
+                    )
+                )
+
+                payment = Payment(
+
+                    student_id=student.id,
+
+                    amount=paid_amount,
+
+                    payment_mode=(
+                        request.form.get(
+                            "payment_mode"
+                        ) or "Cash"
+                    ),
+
+                    transaction_id="",
+
+                    receipt_number=receipt_number,
+
+                    received_by="Admin",
+
+                    remarks="Admission Payment"
+                )
+
+                db.session.add(payment)
+
+                db.session.flush()
+
+            # ======================================================
+            # FINAL COMMIT
+            # ======================================================
+
             db.session.commit()
+
+            print(
+                "================================"
+            )
+
+            print(
+                "STUDENT SAVED SUCCESSFULLY"
+            )
+
+            print(
+                "ID:",
+                student.id
+            )
+
+            print(
+                "NAME:",
+                student.name
+            )
+
+            print(
+                "COURSE:",
+                student.course
+            )
+
+            print(
+                "FEE:",
+                student.course_fee
+            )
+
+            print(
+                "PAID:",
+                student.paid_amount
+            )
+
+            print(
+                "BALANCE:",
+                student.balance_amount
+            )
+
+            print(
+                "USER ID:",
+                student.user_id
+            )
+
+            print(
+                "================================"
+            )
+
+            # ======================================================
+            # RECEIPT
+            # ======================================================
+
+            if payment:
+
+                try:
+
+                    generate_receipt(
+                        student,
+                        payment
+                    )
+
+                except Exception as e:
+
+                    print(
+                        "RECEIPT ERROR:",
+                        e
+                    )
+
+                        # ======================================================
+            # ADMISSION NOTIFICATIONS
+            # ======================================================
+
+            # ------------------------------------------------------
+            # 1. STUDENT NOTIFICATION
+            # ------------------------------------------------------
+
+            if student.user_id:
+
+                try:
+
+                    create_notification(
+                        "admission",
+                        "Admission Confirmed 🎓",
+
+                        f"Congratulations {student.name}! "
+                        f"Your admission to {student.course} "
+                        f"has been successfully confirmed.",
+
+                        user_id=student.user_id
+                    )
+
+                    print(
+                        "STUDENT ADMISSION NOTIFICATION CREATED:",
+                        student.user_id
+                    )
+
+                except Exception as e:
+
+                    print(
+                        "STUDENT ADMISSION NOTIFICATION ERROR:",
+                        repr(e)
+                    )
+
+
+            # ------------------------------------------------------
+            # 2. ADMIN NOTIFICATION
+            # ------------------------------------------------------
+
+            try:
+
+                create_notification(
+                    "admission",
+                    "New Student Admission 🎓",
+
+                    f"New student {student.name} "
+                    f"has been admitted to {student.course}.",
+
+                    user_id=None
+                )
+
+                print(
+                    "ADMIN ADMISSION NOTIFICATION CREATED"
+                )
+
+            except Exception as e:
+
+                print(
+                    "ADMIN ADMISSION NOTIFICATION ERROR:",
+                    repr(e)
+                )
+
+
+            # ======================================================
+            # PAYMENT NOTIFICATION
+            # ======================================================
+
+            # ======================================================
+            # PAYMENT NOTIFICATION
+            # ======================================================
+
+            if (
+                student.user_id
+                and paid_amount > 0
+            ):
+
+                try:
+
+                    create_notification(
+
+                        "payment",
+
+                        "Payment Received 💰",
+
+                        f"₹{paid_amount:,.2f} payment received "
+                        f"for {student.course}. "
+                        f"Your remaining balance is "
+                        f"₹{balance_amount:,.2f}.",
+
+                        user_id=student.user_id
+                    )
+
+                except Exception as e:
+
+                    print(
+                        "PAYMENT NOTIFICATION ERROR:",
+                        e
+                    )
+
+            # ======================================================
+            # SEND LOGIN EMAIL
+            # ======================================================
+
+            if (
+                student.email
+                and plain_password
+            ):
+
+                try:
+
+                    msg = Message(
+
+                        subject=(
+                            "RR Origin Student Portal Login"
+                        ),
+
+                        recipients=[
+                            student.email
+                        ]
+                    )
+
+                    msg.body = f"""
+Hello {student.name},
+
+Welcome to RR Origin.
+
+Your Student Portal Login Details:
+
+Email:
+{student.email}
+
+Password:
+{plain_password}
+
+Login URL:
+http://127.0.0.1:5000/login
+
+Please change your password after login.
+
+Regards,
+RR Origin Team
+"""
+
+                    mail.send(msg)
+
+                    print(
+                        "LOGIN EMAIL SENT:",
+                        student.email
+                    )
+
+                except Exception as e:
+
+                    print(
+                        "EMAIL ERROR:",
+                        e
+                    )
+
+            # ======================================================
+            # SUCCESS
+            # ======================================================
+
+            flash(
+                "Student added successfully!",
+                "success"
+            )
+
+            return redirect(
+                url_for(
+                    "admin.students"
+                )
+            )
+
+        # ==========================================================
+        # DATABASE ERROR
+        # ==========================================================
 
         except IntegrityError as e:
 
             db.session.rollback()
 
-            error_message = str(e).lower()
+            print(
+                "DATABASE INTEGRITY ERROR:",
+                e
+            )
+
+            error_message = str(
+                e
+            ).lower()
 
             if "email" in error_message:
 
                 flash(
-                    "Email already exists. Please use a different email.",
+                    "Email already exists.",
                     "danger"
                 )
 
@@ -836,7 +1472,8 @@ def add_student():
             else:
 
                 flash(
-                    "Unable to add student. Please check the entered details.",
+                    "Unable to add student. "
+                    "Please check the entered details.",
                     "danger"
                 )
 
@@ -850,295 +1487,56 @@ def add_student():
             )
 
         # ==========================================================
-        # CREATE LOGIN ACCOUNT
+        # ANY OTHER ERROR
         # ==========================================================
 
-        if student.email:
+        except Exception as e:
 
-            plain_password = secrets.token_urlsafe(8)
-
-            user = User.query.filter_by(
-                email=student.email
-            ).first()
-
-            if user:
-
-                # ==================================================
-                # EXISTING USER
-                # ==================================================
-
-                user.name = student.name
-
-                user.phone = student.mobile
-
-                user.password = (
-                    bcrypt.generate_password_hash(
-                        plain_password
-                    ).decode("utf-8")
-                )
-
-                user.portal_stage = "explorer"
-
-                user.is_active = True
-
-            else:
-
-                # ==================================================
-                # NEW USER
-                # ==================================================
-
-                user = User(
-
-                    name=student.name,
-
-                    email=student.email,
-
-                    phone=student.mobile,
-
-                    password=(
-                        bcrypt.generate_password_hash(
-                            plain_password
-                        ).decode("utf-8")
-                    ),
-
-                    role="student",
-
-                    is_active=True,
-
-                    portal_stage="explorer"
-                )
-
-                db.session.add(user)
-
-            db.session.commit()
-
-            # ======================================================
-            # CONNECT STUDENT WITH USER
-            # ======================================================
-
-            student.user_id = user.id
-
-            try:
-
-                db.session.commit()
-
-            except IntegrityError:
-
-                db.session.rollback()
-
-                flash(
-                    "This user is already registered as a student.",
-                    "danger"
-                )
-
-                return redirect(
-                    url_for(
-                        "admin.add_student",
-                        lead_id=lead_id
-                    ) if lead_id else url_for(
-                        "admin.add_student"
-                    )
-                )
-
-            # ======================================================
-            # ADMISSION NOTIFICATION
-            # ======================================================
-
-            create_notification(
-
-                "admission",
-
-                "Admission Confirmed 🎓",
-
-                f"Congratulations {student.name}! "
-                f"Your admission to {student.course} "
-                f"has been successfully confirmed.",
-
-                user_id=user.id
-            )
-
-            # ======================================================
-            # SEND LOGIN EMAIL
-            # ======================================================
-
-            try:
-
-                msg = Message(
-
-                    subject="RR Origin Student Portal Login",
-
-                    recipients=[
-                        student.email
-                    ]
-                )
-
-                msg.body = f"""
-
-Hello {student.name},
-
-Welcome to RR Origin.
-
-Your Student Portal Login Details:
-
-Email:
-{student.email}
-
-Password:
-{plain_password}
-
-Login URL:
-http://127.0.0.1:5000/login
-
-Please change your password after login.
-
-Regards,
-
-RR Origin Team
-
-"""
-
-                mail.send(msg)
-
-                print(
-                    "=============================="
-                )
-
-                print(
-                    "EMAIL SENT SUCCESSFULLY"
-                )
-
-                print(
-                    "TO:",
-                    student.email
-                )
-
-                print(
-                    "=============================="
-                )
-
-            except Exception as e:
-
-                print(
-                    "=============================="
-                )
-
-                print(
-                    "EMAIL ERROR:",
-                    e
-                )
-
-                print(
-                    "=============================="
-                )
+            db.session.rollback()
 
             print(
-                "=============================="
+                "================================"
             )
 
             print(
-                "STUDENT LOGIN CREATED"
+                "ADD STUDENT ERROR:"
             )
 
             print(
-                "EMAIL:",
-                student.email
+                repr(e)
             )
 
             print(
-                "PASSWORD:",
-                plain_password
+                "================================"
             )
 
-            print(
-                "=============================="
+            flash(
+                f"Unable to add student: {str(e)}",
+                "danger"
             )
 
-        # ==========================================================
-        # INITIAL PAYMENT
-        # ==========================================================
-
-        if student.paid_amount > 0:
-
-            receipt_number = (
-                "RR"
-                +
-                datetime.now().strftime(
-                    "%Y%m%d%H%M%S"
+            return redirect(
+                url_for(
+                    "admin.add_student",
+                    lead_id=lead_id
+                ) if lead_id else url_for(
+                    "admin.add_student"
                 )
             )
-
-            payment = Payment(
-
-                student_id=student.id,
-
-                amount=student.paid_amount,
-
-                payment_mode=student.payment_mode,
-
-                transaction_id="",
-
-                receipt_number=receipt_number,
-
-                received_by="Admin",
-
-                remarks="Admission Payment"
-            )
-
-            db.session.add(payment)
-
-            db.session.commit()
-
-            generate_receipt(
-                student,
-                payment
-            )
-
-            # ======================================================
-            # INITIAL PAYMENT NOTIFICATION
-            # ======================================================
-
-            if student.user_id:
-
-                create_notification(
-
-                    "payment",
-
-                    "Payment Received 💰",
-
-                    f"₹{student.paid_amount:,.2f} "
-                    f"payment received for "
-                    f"{student.course}. "
-                    f"Your remaining balance is "
-                    f"₹{student.balance_amount:,.2f}.",
-
-                    user_id=student.user_id
-                )
-
-        # ==========================================================
-        # SUCCESS MESSAGE
-        # ==========================================================
-
-        flash(
-            "Student added successfully!",
-            "success"
-        )
-
-        return redirect(
-            url_for(
-                "admin.students"
-            )
-        )
 
     # ==========================================================
-    # DISPLAY ADD STUDENT PAGE
+    # DISPLAY PAGE
     # ==========================================================
 
     return render_template(
+
         "admin/add_student.html",
+
         courses=courses,
+
         faculties=faculties,
+
         lead=lead
-        
     )
 ## ==========================================================
 # Edit Student
@@ -1374,6 +1772,10 @@ def batch_students(id):
 # ADD PAYMENT
 # ==============================
 
+# ==========================================================
+# ADD PAYMENT
+# ==========================================================
+
 @admin.route("/students/<int:id>/payment", methods=["POST"])
 def add_payment(id):
 
@@ -1381,21 +1783,53 @@ def add_payment(id):
 
     try:
 
-        # --------------------------------------------------
-        # Remaining Balance Check
-        # --------------------------------------------------
+        # ==================================================
+        # GET COURSE FEE
+        # ==================================================
 
-        remaining = (
-            (student.course_fee or 0)
-            - (student.paid_amount or 0)
+        course_fee = Decimal(
+            str(student.course_fee or 0)
         )
 
-        # Already Fully Paid
+        # ==================================================
+        # GET ALL PREVIOUS PAYMENTS
+        # Payment table is the SOURCE OF TRUTH
+        # ==================================================
 
-        if remaining <= 0:
+        previous_payments = Payment.query.filter_by(
+            student_id=student.id
+        ).all()
+
+        total_paid_before = sum(
+            (
+                Decimal(str(payment.amount or 0))
+                for payment in previous_payments
+            ),
+            Decimal("0.00")
+        )
+
+        # ==================================================
+        # REMAINING BALANCE BEFORE NEW PAYMENT
+        # ==================================================
+
+        remaining = (
+            course_fee - total_paid_before
+        )
+
+        # Prevent negative balance
+
+        if remaining < Decimal("0.00"):
+            remaining = Decimal("0.00")
+
+        # ==================================================
+        # ALREADY FULLY PAID
+        # ==================================================
+
+        if remaining <= Decimal("0.00"):
 
             flash(
-                "Course fee is already fully paid. No more payments are allowed.",
+                "Course fee is already fully paid. "
+                "No more payments are allowed.",
                 "warning"
             )
 
@@ -1406,15 +1840,42 @@ def add_payment(id):
                 )
             )
 
-        amount = float(
-            request.form.get("amount") or 0
-        )
+        # ==================================================
+        # GET NEW PAYMENT AMOUNT
+        # ==================================================
 
-        # --------------------------------------------------
-        # Invalid Amount
-        # --------------------------------------------------
+        amount_string = request.form.get(
+            "amount",
+            "0"
+        ).strip()
 
-        if amount <= 0:
+        try:
+
+            amount = Decimal(
+                amount_string
+            ).quantize(
+                Decimal("0.01")
+            )
+
+        except Exception:
+
+            flash(
+                "Please enter a valid payment amount.",
+                "danger"
+            )
+
+            return redirect(
+                url_for(
+                    "admin.edit_student",
+                    id=id
+                )
+            )
+
+        # ==================================================
+        # INVALID PAYMENT
+        # ==================================================
+
+        if amount <= Decimal("0.00"):
 
             flash(
                 "Enter a valid payment amount.",
@@ -1428,14 +1889,14 @@ def add_payment(id):
                 )
             )
 
-        # --------------------------------------------------
-        # Prevent Over Payment
-        # --------------------------------------------------
+        # ==================================================
+        # PREVENT OVER PAYMENT
+        # ==================================================
 
         if amount > remaining:
 
             flash(
-                f"Only Rs. {remaining:,.2f} is remaining. "
+                f"Only ₹{remaining:,.2f} is remaining. "
                 f"Please enter a valid amount.",
                 "danger"
             )
@@ -1447,7 +1908,13 @@ def add_payment(id):
                 )
             )
 
-        payment_mode = request.form.get("payment_mode")
+        # ==================================================
+        # PAYMENT DETAILS
+        # ==================================================
+
+        payment_mode = request.form.get(
+            "payment_mode"
+        )
 
         transaction_id = request.form.get(
             "transaction_id"
@@ -1457,26 +1924,26 @@ def add_payment(id):
             "remarks"
         )
 
-        # --------------------------------------------------
-        # Receipt Number
-        # --------------------------------------------------
+        # ==================================================
+        # RECEIPT NUMBER
+        # ==================================================
 
         receipt_number = (
             "RR"
             + datetime.now().strftime(
-                "%Y%m%d%H%M%S"
+                "%Y%m%d%H%M%S%f"
             )
         )
 
-        # --------------------------------------------------
-        # Create Payment
-        # --------------------------------------------------
+        # ==================================================
+        # CREATE PAYMENT
+        # ==================================================
 
         payment = Payment(
 
             student_id=student.id,
 
-            amount=amount,
+            amount=float(amount),
 
             payment_mode=payment_mode,
 
@@ -1491,24 +1958,48 @@ def add_payment(id):
 
         db.session.add(payment)
 
-        # --------------------------------------------------
-        # Update Student Fee Details
-        # --------------------------------------------------
+        # ==================================================
+        # CALCULATE NEW TOTAL
+        # ==================================================
 
-        student.paid_amount += amount
-
-        student.balance_amount = (
-            student.course_fee
-            - student.paid_amount
+        total_paid_after = (
+            total_paid_before + amount
         )
 
-        if student.balance_amount <= 0:
+        # ==================================================
+        # CALCULATE NEW BALANCE
+        # ==================================================
 
-            student.balance_amount = 0
+        new_balance = (
+            course_fee - total_paid_after
+        )
+
+        # Prevent tiny negative values
+
+        if new_balance < Decimal("0.00"):
+            new_balance = Decimal("0.00")
+
+        # ==================================================
+        # UPDATE STUDENT FEE DETAILS
+        # ==================================================
+
+        student.paid_amount = float(
+            total_paid_after
+        )
+
+        student.balance_amount = float(
+            new_balance
+        )
+
+        # ==================================================
+        # UPDATE PAYMENT STATUS
+        # ==================================================
+
+        if new_balance <= Decimal("0.00"):
 
             student.status = "Paid"
 
-        elif student.paid_amount > 0:
+        elif total_paid_after > Decimal("0.00"):
 
             student.status = "Partially Paid"
 
@@ -1516,14 +2007,32 @@ def add_payment(id):
 
             student.status = "Unpaid"
 
-        # --------------------------------------------------
-        # Save Payment
-        # --------------------------------------------------
+        # ==================================================
+        # SAVE EVERYTHING
+        # ==================================================
 
         db.session.commit()
 
         # ==================================================
-        # PAYMENT NOTIFICATION
+        # ADMIN NOTIFICATION
+        # ==================================================
+
+        create_notification(
+
+            "payment",
+
+            "Payment Received 💰",
+
+            f"₹{amount:,.2f} payment received from "
+            f"{student.name} for {student.course}. "
+            f"Total paid: ₹{total_paid_after:,.2f}. "
+            f"Remaining balance: ₹{new_balance:,.2f}.",
+
+            user_id=None
+        )
+
+        # ==================================================
+        # STUDENT NOTIFICATION
         # ==================================================
 
         if student.user_id:
@@ -1536,24 +2045,26 @@ def add_payment(id):
 
                 f"₹{amount:,.2f} payment received for "
                 f"{student.course}. "
+                f"Your total paid amount is "
+                f"₹{total_paid_after:,.2f}. "
                 f"Your remaining balance is "
-                f"₹{student.balance_amount:,.2f}.",
+                f"₹{new_balance:,.2f}.",
 
                 user_id=student.user_id
             )
 
-        # --------------------------------------------------
-        # Generate Receipt
-        # --------------------------------------------------
+        # ==================================================
+        # GENERATE RECEIPT
+        # ==================================================
 
         generate_receipt(
             student,
             payment
         )
 
-        # --------------------------------------------------
-        # Success Message
-        # --------------------------------------------------
+        # ==================================================
+        # SUCCESS MESSAGE
+        # ==================================================
 
         flash(
             "Payment Added Successfully",
@@ -1565,14 +2076,18 @@ def add_payment(id):
         db.session.rollback()
 
         print(
-            "ERROR:",
+            "PAYMENT ERROR:",
             e
         )
 
         flash(
-            str(e),
+            f"Unable to add payment: {str(e)}",
             "danger"
         )
+
+    # ==================================================
+    # RETURN TO STUDENT
+    # ==================================================
 
     return redirect(
         url_for(
@@ -1625,11 +2140,51 @@ def courses():
 # ==========================================================
 # Add Course
 # ==========================================================
+# ==========================================================
+# Add Course
+# ==========================================================
 
 @admin.route("/courses/add", methods=["GET", "POST"])
 def add_course():
 
     if request.method == "POST":
+
+        # ==========================================
+        # COURSE IMAGE
+        # ==========================================
+
+        image = request.files.get("image")
+
+        image_name = None
+
+        if image and image.filename != "":
+
+            image_name = secure_filename(
+                image.filename
+            )
+
+            # Create courses folder if it does not exist
+            courses_folder = os.path.join(
+                UPLOAD_FOLDER,
+                "courses"
+            )
+
+            os.makedirs(
+                courses_folder,
+                exist_ok=True
+            )
+
+            # Save image
+            image.save(
+                os.path.join(
+                    courses_folder,
+                    image_name
+                )
+            )
+
+        # ==========================================
+        # CREATE COURSE
+        # ==========================================
 
         course = Course(
 
@@ -1643,14 +2198,22 @@ def add_course():
 
             trainer=request.form.get("trainer"),
 
-            price=float(
-                request.form.get("price") or 0
-            ),
+            price=request.form.get("price") or "0",
 
-            featured=True if request.form.get("featured") else False
+            featured=True
+            if request.form.get("featured")
+            else False,
+
+            image=image_name
+
         )
 
+        # ==========================================
+        # SAVE DATABASE
+        # ==========================================
+
         db.session.add(course)
+
         db.session.commit()
 
         flash(
@@ -1665,8 +2228,6 @@ def add_course():
     return render_template(
         "admin/add_course.html"
     )
-
-
 # ==========================================================
 # Edit Course
 # ==========================================================
@@ -1691,13 +2252,12 @@ def edit_course(id):
         course.featured = (
             "featured" in request.form
         )
-
         price = request.form.get("price")
 
         if price:
-            course.price = float(price)
+            course.price = Decimal(price)
         else:
-            course.price = 0
+            course.price = Decimal("0")
 
         # ==========================================
         # COURSE IMAGE
@@ -1972,26 +2532,78 @@ def add_placement(student_id):
 
         db.session.commit()
 
+
         # ================================
-        # STUDENT PLACEMENT NOTIFICATION
+        # PLACEMENT NOTIFICATIONS
         # ================================
 
+        # ------------------------------------------------
+        # 1. STUDENT PLACEMENT NOTIFICATION
+        # ------------------------------------------------
+
         if student.user_id:
+
+            try:
+
+                create_notification(
+
+                    "placement",
+
+                    "Congratulations! 🎉",
+
+                    f"Congratulations {student.name}! "
+                    f"You have been placed at {company} "
+                    f"as {designation} "
+                    f"with a package of "
+                    f"₹{placement.package:,.2f}.",
+
+                    user_id=student.user_id
+                )
+
+                print(
+                    "STUDENT PLACEMENT NOTIFICATION CREATED:",
+                    student.user_id
+                )
+
+            except Exception as e:
+
+                print(
+                    "STUDENT PLACEMENT NOTIFICATION ERROR:",
+                    repr(e)
+                )
+
+
+        # ------------------------------------------------
+        # 2. ADMIN PLACEMENT NOTIFICATION
+        # ------------------------------------------------
+
+        try:
 
             create_notification(
 
                 "placement",
 
-                "Congratulations! 🎉",
+                "New Student Placement 🎉",
 
-                f"Congratulations {student.name}! "
-                f"You have been placed at {company} "
-                f"as {designation} "
+                f"{student.name} has been placed at "
+                f"{company} as {designation} "
                 f"with a package of "
                 f"₹{placement.package:,.2f}.",
 
-                user_id=student.user_id
+                user_id=None
             )
+
+            print(
+                "ADMIN PLACEMENT NOTIFICATION CREATED"
+            )
+
+        except Exception as e:
+
+            print(
+                "ADMIN PLACEMENT NOTIFICATION ERROR:",
+                repr(e)
+            )
+
 
         flash(
             "Placement Added Successfully",
@@ -2001,6 +2613,7 @@ def add_placement(student_id):
         return redirect(
             url_for("admin.placements")
         )
+
 
     return render_template(
         "admin/add_placement.html",

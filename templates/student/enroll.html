@@ -1622,17 +1622,13 @@ textarea.input-field {
                 Courses
             </a>
 
-            <a href="{{ url_for('student.placement') }}">
+            <a href="{{ url_for('student.placement_statistics') }}">
                 Results
             </a>
 
-            <a href="{{ url_for('student.profile') }}">
-                Profile
-            </a>
+         
 
-            <a href="{{ url_for('student.notifications') }}">
-                🔔 Notifications
-            </a>
+         
 
             <a href="{{ url_for('auth.logout') }}"
                class="nav-demo">
@@ -1755,7 +1751,7 @@ textarea.input-field {
                 {% if course.image %}
 
                 <img
-                    src="{{ url_for('static', filename='uploads/' + course.image) }}"
+                    src="{{ url_for('static', filename='uploads/courses/' + course.image) }}"
                     class="course-image"
                     alt="{{ course.title }}"
                 >
@@ -2070,7 +2066,7 @@ textarea.input-field {
                     {% if course.image %}
 
                     <img
-                        src="{{ url_for('static', filename='uploads/' + course.image) }}"
+                        src="{{ url_for('static', filename='uploads/courses/' + course.image) }}"
                         class="summary-image"
                         alt="{{ course.title }}"
                     >

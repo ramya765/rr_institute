@@ -1,0 +1,522 @@
+/* =========================================================
+   RR IT ORIGIN
+   GLOBAL ADMIN RESPONSIVE SYSTEM
+========================================================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   GLOBAL CONTAINER
+========================================================= */
+
+.admin-content {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   IMAGES
+========================================================= */
+
+.admin-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+
+/* =========================================================
+   TABLES
+========================================================= */
+
+.admin-content table {
+    max-width: 100%;
+}
+
+.table-scroll,
+.table-responsive,
+.overflow-x-auto {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+
+/* =========================================================
+   FORMS
+========================================================= */
+
+.admin-content input,
+.admin-content select,
+.admin-content textarea {
+    max-width: 100%;
+}
+
+.admin-content input,
+.admin-content select,
+.admin-content textarea,
+.admin-content button {
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   1600px+
+========================================================= */
+
+@media (min-width: 1600px) {
+
+    .admin-content {
+        max-width: 1700px;
+        padding-left: 35px;
+        padding-right: 35px;
+    }
+
+}
+
+
+/* =========================================================
+   DESKTOP / LAPTOP
+   1200px - 1599px
+========================================================= */
+
+@media (max-width: 1400px) {
+
+    .admin-content {
+        max-width: 100%;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL LAPTOP
+   901px - 1199px
+========================================================= */
+
+@media (max-width: 1199px) {
+
+    .admin-sidebar {
+        width: 245px;
+    }
+
+    .admin-main {
+        margin-left: 245px;
+    }
+
+    .admin-content {
+        padding: 25px;
+    }
+
+    .admin-topbar {
+        padding-left: 22px;
+        padding-right: 22px;
+    }
+
+
+    /* Common grids */
+
+    .grid-cols-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+
+    /* Large headings */
+
+    .students-title,
+    .hero-title {
+        font-size: 32px;
+    }
+
+}
+
+
+/* =========================================================
+   TABLET
+   <= 900px
+========================================================= */
+
+@media (max-width: 900px) {
+
+    /* SIDEBAR */
+
+    .admin-sidebar {
+        width: 280px;
+        transform: translateX(-100%);
+        box-shadow: 20px 0 50px rgba(0,0,0,.35);
+    }
+
+    .admin-sidebar.open {
+        transform: translateX(0);
+    }
+
+
+    /* MAIN */
+
+    .admin-main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+
+    /* TOPBAR */
+
+    .admin-topbar {
+        height: 70px;
+        padding: 0 20px;
+    }
+
+
+    /* CONTENT */
+
+    .admin-content {
+        padding: 20px;
+        width: 100%;
+    }
+
+
+    /* MOBILE MENU */
+
+    .admin-mobile-button {
+        display: flex;
+    }
+
+
+    /* Generic grids */
+
+    .grid-cols-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .grid-cols-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+
+    /* Custom grids used in your pages */
+
+    .form-grid-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .form-grid-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+
+    /* Hero */
+
+    .students-hero,
+    .admission-hero {
+        padding: 25px;
+    }
+
+
+    /* Stats */
+
+    .student-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+
+    /* Summary */
+
+    .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+
+    /* Filter */
+
+    .filter-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   <= 600px
+========================================================= */
+
+@media (max-width: 600px) {
+
+    /* CONTENT */
+
+    .admin-content {
+        padding: 15px;
+    }
+
+
+    /* TOPBAR */
+
+    .admin-topbar {
+        height: 64px;
+        padding: 0 15px;
+    }
+
+    .admin-page-label {
+        display: none;
+    }
+
+    .admin-user-info {
+        display: none;
+    }
+
+
+    /* SIDEBAR */
+
+    .admin-sidebar {
+        width: min(85vw, 300px);
+    }
+
+
+    /* ALL COMMON GRIDS */
+
+    .grid-cols-2,
+    .grid-cols-3,
+    .grid-cols-4 {
+        grid-template-columns: 1fr !important;
+    }
+
+
+    /* CUSTOM FORM GRIDS */
+
+    .form-grid-2,
+    .form-grid-3,
+    .form-grid-4 {
+        grid-template-columns: 1fr !important;
+    }
+
+
+    /* STUDENT PAGE */
+
+    .student-stats {
+        grid-template-columns: 1fr !important;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+
+    /* SEARCH FILTER */
+
+    .filter-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .search-btn {
+        width: 100%;
+    }
+
+
+    /* HERO */
+
+    .students-title {
+        font-size: 28px !important;
+        line-height: 1.2;
+    }
+
+    .hero-title {
+        font-size: 28px !important;
+        line-height: 1.2;
+    }
+
+    .students-description,
+    .hero-description {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+
+    /* HERO TOP */
+
+    .hero-top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .back-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+
+    /* STUDENT TABLE */
+
+    .student-table {
+        min-width: 850px;
+    }
+
+
+    /* TABLE HEADING */
+
+    .table-heading {
+        padding: 18px;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+
+    /* FORM SECTIONS */
+
+    .section-body {
+        padding: 18px;
+    }
+
+    .section-header {
+        padding: 17px;
+    }
+
+
+    /* FORM BUTTONS */
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .reset-btn,
+    .cancel-btn,
+    .save-btn {
+        width: 100%;
+    }
+
+
+    /* ADMISSION STRIP */
+
+    .admission-strip {
+        grid-template-columns: 1fr !important;
+    }
+
+
+    /* PAGINATION */
+
+    .pagination-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .pagination-buttons {
+        justify-content: center;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   <= 480px
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .admin-content {
+        padding: 12px;
+    }
+
+
+    .admin-mobile-button,
+    .admin-notification {
+        width: 38px;
+        height: 38px;
+    }
+
+
+    /* Logo */
+
+    .admin-logo {
+        padding: 20px 15px;
+    }
+
+    .admin-logo-image {
+        width: 50px;
+        height: 50px;
+    }
+
+    .admin-logo-title {
+        font-size: 18px;
+    }
+
+
+    /* Cards */
+
+    .student-stat,
+    .summary-card {
+        padding: 18px;
+    }
+
+
+    /* Tables */
+
+    .student-table {
+        min-width: 800px;
+    }
+
+
+    /* Headings */
+
+    .students-title,
+    .hero-title {
+        font-size: 25px !important;
+    }
+
+
+    /* Buttons */
+
+    .add-student-btn,
+    .search-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+
+    /* Section */
+
+    .section-heading {
+        font-size: 16px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   <= 360px
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .admin-content {
+        padding: 10px;
+    }
+
+    .admin-sidebar {
+        width: 90vw;
+    }
+
+    .students-title,
+    .hero-title {
+        font-size: 23px !important;
+    }
+
+    .student-stat-number {
+        font-size: 27px;
+    }
+
+    .table-heading h2 {
+        font-size: 17px;
+    }
+
+}
