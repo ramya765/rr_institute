@@ -709,6 +709,252 @@
     box-shadow:
         0 8px 18px rgba(239,68,68,.20);
 }
+/* =========================================================
+   DELETE MATERIAL MODAL
+========================================================= */
+
+.material-delete-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.82);
+    backdrop-filter: blur(8px);
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 99999;
+
+    padding: 20px;
+}
+
+.material-delete-overlay.show {
+    display: flex;
+}
+
+
+/* MODAL */
+
+.material-delete-modal {
+    width: 100%;
+    max-width: 420px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #111827,
+            #172033
+        );
+
+    border: 1px solid rgba(255,255,255,.12);
+
+    border-radius: 18px;
+
+    padding: 26px;
+
+    text-align: center;
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.55);
+
+    animation: materialDeletePopup .25s ease;
+}
+
+
+/* POPUP ANIMATION */
+
+@keyframes materialDeletePopup {
+
+    from {
+        opacity: 0;
+        transform: scale(.90) translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+
+}
+
+
+/* ICON */
+
+.material-delete-icon {
+
+    width: 52px;
+    height: 52px;
+
+    margin: 0 auto 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background:
+        rgba(239,68,68,.10);
+
+    border:
+        1px solid rgba(239,68,68,.35);
+
+    font-size: 25px;
+}
+
+
+/* TITLE */
+
+.material-delete-modal h2 {
+
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+
+/* MESSAGE */
+
+.material-delete-modal p {
+
+    margin-top: 10px;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+.material-delete-modal p strong {
+
+    color: #e2e8f0;
+
+}
+
+
+/* WARNING */
+
+.material-delete-warning {
+
+    margin-top: 10px;
+
+    color: #f87171;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+/* ACTIONS */
+
+.material-delete-actions {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 22px;
+}
+
+
+/* CANCEL */
+
+.material-cancel-btn {
+
+    min-width: 130px;
+
+    padding: 10px 18px;
+
+    border-radius: 9px;
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    background:
+        rgba(255,255,255,.06);
+
+    color: #cbd5e1;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+}
+
+.material-cancel-btn:hover {
+
+    background:
+        rgba(255,255,255,.10);
+
+    color: white;
+}
+
+
+/* DELETE */
+
+.material-confirm-delete-btn {
+
+    min-width: 130px;
+
+    padding: 10px 18px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #ef4444;
+
+    color: white;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+}
+
+.material-confirm-delete-btn:hover {
+
+    background: #dc2626;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(239,68,68,.25);
+}
+
+
+/* MOBILE */
+
+@media(max-width:500px) {
+
+    .material-delete-modal {
+        padding: 22px;
+    }
+
+    .material-delete-actions {
+        flex-direction: column;
+    }
+
+    .material-cancel-btn,
+    .material-confirm-delete-btn {
+        width: 100%;
+    }
+
+}
 
 
 /* =========================================================
@@ -1279,24 +1525,22 @@
                     </a>
 
 
-                    <form
-                        method="POST"
-                        action="{{ url_for(
-                            'admin.delete_study_material',
-                            id=material.id
-                        ) }}"
-                        style="display:inline;">
-
-                        <button
-                            type="submit"
-                            onclick="return confirm('Delete this material?')"
-                            class="action-btn delete-btn">
-
-                            🗑 Delete
-
-                        </button>
-
-                    </form>
+                   <form
+    method="POST"
+    action="{{ url_for('admin.delete_study_material', id=material.id) }}"
+    style="display:inline;"
+>
+    <button
+        type="button"
+        class="action-btn delete-btn"
+        onclick="openMaterialDeleteModal(
+            '{{ url_for('admin.delete_study_material', id=material.id) }}',
+            '{{ material.title|e }}'
+        )"
+    >
+        🗑 Delete
+    </button>
+</form>
 
                 </div>
 
@@ -1351,5 +1595,124 @@
     </div>
 
 </div>
+<!-- =========================================================
+     DELETE STUDY MATERIAL MODAL
+========================================================= -->
+
+<div id="materialDeleteModal" class="material-delete-overlay">
+
+    <div class="material-delete-modal">
+
+        <!-- ICON -->
+        <div class="material-delete-icon">
+            🗑️
+        </div>
+
+        <!-- TITLE -->
+        <h2>Delete Material?</h2>
+
+        <!-- MESSAGE -->
+        <p>
+            Are you sure you want to delete
+            <strong id="deleteMaterialName"></strong>?
+        </p>
+
+        <div class="material-delete-warning">
+            This action cannot be undone.
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="material-delete-actions">
+
+            <button
+                type="button"
+                class="material-cancel-btn"
+                onclick="closeMaterialDeleteModal()"
+            >
+                Cancel
+            </button>
+
+            <form
+                id="materialDeleteForm"
+                method="POST"
+            >
+                <button
+                    type="submit"
+                    class="material-confirm-delete-btn"
+                >
+                    🗑 Delete
+                </button>
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+<script>
+
+function openMaterialDeleteModal(deleteUrl, materialName) {
+
+    const modal = document.getElementById("materialDeleteModal");
+
+    const materialNameElement =
+        document.getElementById("deleteMaterialName");
+
+    const deleteForm =
+        document.getElementById("materialDeleteForm");
+
+    // Show material name
+    materialNameElement.textContent = materialName;
+
+    // Set the actual DELETE URL
+    deleteForm.action = deleteUrl;
+
+    // Show popup
+    modal.classList.add("show");
+
+    // Stop background scrolling
+    document.body.style.overflow = "hidden";
+}
+
+
+function closeMaterialDeleteModal() {
+
+    const modal =
+        document.getElementById("materialDeleteModal");
+
+    // Hide popup
+    modal.classList.remove("show");
+
+    // Enable scrolling again
+    document.body.style.overflow = "";
+}
+
+
+/* Close when clicking outside popup */
+
+document
+    .getElementById("materialDeleteModal")
+    .addEventListener("click", function(event) {
+
+        if (event.target === this) {
+            closeMaterialDeleteModal();
+        }
+
+    });
+
+
+/* Close popup with ESC key */
+
+document.addEventListener("keydown", function(event) {
+
+    if (event.key === "Escape") {
+        closeMaterialDeleteModal();
+    }
+
+});
+
+</script>
+
+
 
 {% endblock %}

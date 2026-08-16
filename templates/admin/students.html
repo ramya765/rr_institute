@@ -793,7 +793,276 @@
     transform: translateY(-2px);
 
 }
+/* ==========================================================
+   DELETE CONFIRMATION MODAL
+========================================================== */
 
+.delete-modal {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+}
+
+
+/* DARK BACKGROUND */
+
+.delete-modal-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        rgba(2, 6, 23, .78);
+
+    backdrop-filter:
+        blur(8px);
+
+}
+
+
+/* MODAL CARD */
+
+.delete-modal-card {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    max-width: 430px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #111c35,
+            #0b162d
+        );
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    border-radius: 22px;
+
+    padding: 32px;
+
+    text-align: center;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.55);
+
+    animation:
+        deleteModalIn .25s ease;
+}
+
+
+/* ICON */
+
+.delete-modal-icon {
+
+    width: 65px;
+
+    height: 65px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background:
+        rgba(239,68,68,.12);
+
+    border:
+        1px solid rgba(239,68,68,.30);
+
+    font-size: 28px;
+}
+
+
+/* TITLE */
+
+.delete-modal-card h2 {
+
+    margin: 0;
+
+    color: white;
+
+    font-size: 24px;
+
+    font-weight: 800;
+}
+
+
+/* DESCRIPTION */
+
+.delete-modal-card p {
+
+    margin-top: 10px;
+
+    color: #94a3b8;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* WARNING */
+
+.delete-modal-card .delete-warning {
+
+    color: #f87171;
+
+    font-size: 13px;
+
+    margin-top: 5px;
+}
+
+
+/* BUTTON CONTAINER */
+
+.delete-modal-actions {
+
+    display: flex;
+
+    gap: 12px;
+
+    margin-top: 25px;
+}
+
+
+/* CANCEL */
+
+.modal-cancel-btn {
+
+    flex: 1;
+
+    padding: 12px 18px;
+
+    border-radius: 10px;
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    background:
+        rgba(255,255,255,.06);
+
+    color: #cbd5e1;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+}
+
+
+.modal-cancel-btn:hover {
+
+    background:
+        rgba(255,255,255,.12);
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* DELETE */
+
+.modal-delete-btn {
+
+    flex: 1;
+
+    padding: 12px 18px;
+
+    border-radius: 10px;
+
+    border: none;
+
+    background:
+        #ef4444;
+
+    color: white;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+}
+
+
+.modal-delete-btn:hover {
+
+    background:
+        #dc2626;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(239,68,68,.25);
+}
+
+
+/* ANIMATION */
+
+@keyframes deleteModalIn {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(15px)
+            scale(.96);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* MOBILE */
+
+@media(max-width:500px) {
+
+    .delete-modal-card {
+
+        padding: 25px 20px;
+
+    }
+
+    .delete-modal-actions {
+
+        flex-direction: column;
+
+    }
+
+}
 
 /* ==========================================================
    EMPTY STATE
@@ -1085,812 +1354,957 @@
 
 </style>
 
-
 <div class="students-page">
 
+<!-- ======================================================
+     HERO
+======================================================= -->
 
-    <!-- ======================================================
-         HERO
-    ======================================================= -->
+<section class="students-hero">
 
-    <section class="students-hero">
+    <div class="students-hero-content">
 
-        <div class="students-hero-content">
+        <div class="page-tag">
+            RR IT ORIGIN • STUDENT MANAGEMENT
+        </div>
 
-            <div class="page-tag">
-                RR IT ORIGIN • STUDENT MANAGEMENT
+        <h1 class="students-title">
+            Student Management
+        </h1>
+
+        <p class="students-description">
+
+            Manage admissions, student profiles,
+            courses, batches, payments and placements
+            from one central dashboard.
+
+        </p>
+
+        <a
+            href="{{ url_for('admin.add_student') }}"
+            class="add-student-btn"
+        >
+
+            ➕ Add New Student
+
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     STATISTICS
+======================================================= -->
+
+<section class="student-stats">
+
+
+    <!-- TOTAL -->
+
+    <div class="student-stat">
+
+        <div class="student-stat-top">
+
+            <div>
+
+                <div class="student-stat-label">
+                    Total Students
+                </div>
+
+                <div class="student-stat-number">
+                    {{ total_students }}
+                </div>
+
             </div>
 
-            <h1 class="students-title">
-                Student Management
-            </h1>
+            <div class="student-stat-icon">
+                👨‍🎓
+            </div>
 
-            <p class="students-description">
+        </div>
 
-                Manage admissions, student profiles,
-                courses, batches, payments and placements
-                from one central dashboard.
+        <div class="student-stat-footer">
+            All registered students
+        </div>
 
-            </p>
+    </div>
 
-            <a
-                href="{{ url_for('admin.add_student') }}"
-                class="add-student-btn"
+
+    <!-- ACTIVE -->
+
+    <div class="student-stat">
+
+        <div class="student-stat-top">
+
+            <div>
+
+                <div class="student-stat-label">
+                    Active Students
+                </div>
+
+                <div class="student-stat-number">
+                    {{ active_students }}
+                </div>
+
+            </div>
+
+            <div class="student-stat-icon">
+                🟢
+            </div>
+
+        </div>
+
+        <div class="student-stat-footer">
+            Currently active
+        </div>
+
+    </div>
+
+
+    <!-- PLACED -->
+
+    <div class="student-stat">
+
+        <div class="student-stat-top">
+
+            <div>
+
+                <div class="student-stat-label">
+                    Placed Students
+                </div>
+
+                <div class="student-stat-number">
+                    {{ placed_students }}
+                </div>
+
+            </div>
+
+            <div class="student-stat-icon">
+                💼
+            </div>
+
+        </div>
+
+        <div class="student-stat-footer">
+            Successfully placed
+        </div>
+
+    </div>
+
+
+    <!-- FEES -->
+
+    <div class="student-stat">
+
+        <div class="student-stat-top">
+
+            <div>
+
+                <div class="student-stat-label">
+                    Pending Fees
+                </div>
+
+                <div class="student-stat-number">
+                    {{ pending_fees }}
+                </div>
+
+            </div>
+
+            <div class="student-stat-icon">
+                💰
+            </div>
+
+        </div>
+
+        <div class="student-stat-footer">
+            Students with pending fees
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- ======================================================
+     SEARCH / FILTER
+======================================================= -->
+
+<section class="student-filter">
+
+    <div class="filter-title">
+
+        🔎 Search & Filter Students
+
+    </div>
+
+
+    <form
+        method="GET"
+        action="{{ url_for('admin.students') }}"
+    >
+
+        <div class="filter-grid">
+
+
+            <!-- SEARCH -->
+
+            <input
+                type="text"
+                name="search"
+                value="{{ request.args.get('search','') }}"
+                placeholder="Search by name, email or mobile..."
+                class="filter-input"
             >
 
-                ➕ Add New Student
 
-            </a>
+            <!-- COURSE -->
 
-        </div>
+            <select
+                name="course"
+                class="filter-select"
+            >
 
-    </section>
+                <option value="">
+                    All Courses
+                </option>
 
+                {% for course in courses %}
 
-    <!-- ======================================================
-         STATISTICS
-    ======================================================= -->
-
-    <section class="student-stats">
-
-
-        <!-- TOTAL -->
-
-        <div class="student-stat">
-
-            <div class="student-stat-top">
-
-                <div>
-
-                    <div class="student-stat-label">
-                        Total Students
-                    </div>
-
-                    <div class="student-stat-number">
-                        {{ total_students }}
-                    </div>
-
-                </div>
-
-                <div class="student-stat-icon">
-                    👨‍🎓
-                </div>
-
-            </div>
-
-            <div class="student-stat-footer">
-                All registered students
-            </div>
-
-        </div>
-
-
-        <!-- ACTIVE -->
-
-        <div class="student-stat">
-
-            <div class="student-stat-top">
-
-                <div>
-
-                    <div class="student-stat-label">
-                        Active Students
-                    </div>
-
-                    <div class="student-stat-number">
-                        {{ active_students }}
-                    </div>
-
-                </div>
-
-                <div class="student-stat-icon">
-                    🟢
-                </div>
-
-            </div>
-
-            <div class="student-stat-footer">
-                Currently active
-            </div>
-
-        </div>
-
-
-        <!-- PLACED -->
-
-        <div class="student-stat">
-
-            <div class="student-stat-top">
-
-                <div>
-
-                    <div class="student-stat-label">
-                        Placed Students
-                    </div>
-
-                    <div class="student-stat-number">
-                        {{ placed_students }}
-                    </div>
-
-                </div>
-
-                <div class="student-stat-icon">
-                    💼
-                </div>
-
-            </div>
-
-            <div class="student-stat-footer">
-                Successfully placed
-            </div>
-
-        </div>
-
-
-        <!-- FEES -->
-
-        <div class="student-stat">
-
-            <div class="student-stat-top">
-
-                <div>
-
-                    <div class="student-stat-label">
-                        Pending Fees
-                    </div>
-
-                    <div class="student-stat-number">
-                        {{ pending_fees }}
-                    </div>
-
-                </div>
-
-                <div class="student-stat-icon">
-                    💰
-                </div>
-
-            </div>
-
-            <div class="student-stat-footer">
-                Students with pending fees
-            </div>
-
-        </div>
-
-
-    </section>
-
-
-    <!-- ======================================================
-         SEARCH / FILTER
-    ======================================================= -->
-
-    <section class="student-filter">
-
-        <div class="filter-title">
-
-            🔎 Search & Filter Students
-
-        </div>
-
-
-        <form
-            method="GET"
-            action="{{ url_for('admin.students') }}"
-        >
-
-            <div class="filter-grid">
-
-
-                <!-- SEARCH -->
-
-                <input
-                    type="text"
-                    name="search"
-                    value="{{ request.args.get('search','') }}"
-                    placeholder="Search by name, email or mobile..."
-                    class="filter-input"
+                <option
+                    value="{{ course.title }}"
+                    {% if request.args.get('course') == course.title %}
+                        selected
+                    {% endif %}
                 >
 
+                    {{ course.title }}
 
-                <!-- COURSE -->
-
-                <select
-                    name="course"
-                    class="filter-select"
-                >
-
-                    <option value="">
-                        All Courses
-                    </option>
-
-                    {% for course in courses %}
-
-                    <option
-                        value="{{ course.title }}"
-                        {% if request.args.get('course') == course.title %}
-                            selected
-                        {% endif %}
-                    >
-
-                        {{ course.title }}
-
-                    </option>
-
-                    {% endfor %}
-
-                </select>
-
-
-                <!-- BATCH -->
-
-                <select
-                    name="batch"
-                    class="filter-select"
-                >
-
-                    <option value="">
-                        All Batches
-                    </option>
-
-                    {% for batch in batches %}
-
-                    <option
-                        value="{{ batch }}"
-                        {% if request.args.get('batch') == batch %}
-                            selected
-                        {% endif %}
-                    >
-
-                        {{ batch }}
-
-                    </option>
-
-                    {% endfor %}
-
-                </select>
-
-
-                <!-- SEARCH -->
-
-                <button
-                    type="submit"
-                    class="search-btn"
-                >
-
-                    🔍 Search
-
-                </button>
-
-
-            </div>
-
-        </form>
-
-    </section>
-
-
-    <!-- ======================================================
-         STUDENT TABLE
-    ======================================================= -->
-
-    <section class="student-table-card">
-
-
-        <div class="table-heading">
-
-            <h2>
-                👨‍🎓 Student Records
-            </h2>
-
-            <span>
-                {{ students|length }} students displayed
-            </span>
-
-        </div>
-
-
-        <div class="table-scroll">
-
-            <table class="student-table">
-
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            ID
-                        </th>
-
-                        <th>
-                            Student
-                        </th>
-
-                        <th>
-                            Course
-                        </th>
-
-                        <th>
-                            Batch
-                        </th>
-
-                        <th>
-                            Phone
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
-                        <th>
-                            Actions
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-
-                {% for student in students %}
-
-
-                    <tr>
-
-
-                        <!-- ID -->
-
-                        <td>
-
-                            #{{ student.id }}
-
-                        </td>
-
-
-                        <!-- STUDENT -->
-
-                        <td>
-
-                            <div class="student-profile">
-
-
-                                <div class="student-avatar">
-
-                                    {{ student.name[:1]|upper }}
-
-                                </div>
-
-
-                                <div>
-
-                                    <div class="student-name">
-
-                                        {{ student.name }}
-
-                                    </div>
-
-                                    <div class="student-email">
-
-                                        {{ student.email }}
-
-                                    </div>
-
-                                </div>
-
-
-                            </div>
-
-                        </td>
-
-
-                        <!-- COURSE -->
-
-                        <td>
-
-                            <span class="course-badge">
-
-                                {{ student.course }}
-
-                            </span>
-
-                        </td>
-
-
-                        <!-- BATCH -->
-
-                        <td>
-
-                            <span class="batch-badge">
-
-                                {{ student.batch }}
-
-                            </span>
-
-                        </td>
-
-
-                        <!-- PHONE -->
-
-                        <td>
-
-                            {{ student.mobile }}
-
-                        </td>
-
-
-                        <!-- STATUS -->
-
-                        <!-- STATUS -->
-
-<td>
-
-    {% if student.payment_status == "Paid" %}
-
-        <span
-            class="status-badge"
-            style="background:rgba(34,197,94,.12);color:#4ade80;"
-        >
-
-            <span class="status-dot"></span>
-
-            Paid
-
-        </span>
-
-
-    {% elif student.payment_status == "Partially Paid" %}
-
-        <span
-            class="status-badge"
-            style="background:rgba(234,179,8,.12);color:#facc15;"
-        >
-
-            <span class="status-dot"></span>
-
-            Partially Paid
-
-        </span>
-
-
-    {% elif student.payment_status == "Unpaid" %}
-
-        <span
-            class="status-badge"
-            style="background:rgba(239,68,68,.12);color:#f87171;"
-        >
-
-            <span class="status-dot"></span>
-
-            Unpaid
-
-        </span>
-
-    {% endif %}
-
-</td>
-
-                        <!-- ACTIONS -->
-
-                        <td>
-
-
-                            <div class="action-group">
-
-
-                                <!-- EDIT -->
-
-                                <a
-                                    href="{{ url_for('admin.edit_student', id=student.id) }}"
-                                    class="action-btn edit-btn"
-                                >
-
-                                    ✏️ Edit
-
-                                </a>
-
-
-                                <!-- DELETE -->
-
-                                <form
-                                    action="{{ url_for('admin.delete_student', id=student.id) }}"
-                                    method="POST"
-                                    style="display:inline;"
-                                    onsubmit="return confirm('Are you sure you want to delete this student?');"
-                                >
-
-                                    <button
-                                        type="submit"
-                                        class="action-btn delete-btn"
-                                    >
-
-                                        🗑 Delete
-
-                                    </button>
-
-                                </form>
-
-
-                            </div>
-
-
-                        </td>
-
-
-                    </tr>
-
-
-                {% else %}
-
-
-                    <!-- EMPTY -->
-
-                    <tr>
-
-                        <td
-                            colspan="7"
-                            style="padding:0;"
-                        >
-
-                            <div class="empty-state">
-
-                                <div class="empty-icon">
-                                    👨‍🎓
-                                </div>
-
-                                <div class="empty-title">
-
-                                    No Students Found
-
-                                </div>
-
-                                <div class="empty-text">
-
-                                    No student records match your
-                                    current search or filters.
-
-                                </div>
-
-                                <a
-                                    href="{{ url_for('admin.add_student') }}"
-                                    class="add-student-btn"
-                                >
-
-                                    ➕ Add First Student
-
-                                </a>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
+                </option>
 
                 {% endfor %}
 
+            </select>
 
-                </tbody>
+
+            <!-- BATCH -->
+
+            <select
+                name="batch"
+                class="filter-select"
+            >
+
+                <option value="">
+                    All Batches
+                </option>
+
+                {% for batch in batches %}
+
+                <option
+                    value="{{ batch }}"
+                    {% if request.args.get('batch') == batch %}
+                        selected
+                    {% endif %}
+                >
+
+                    {{ batch }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
 
 
-            </table>
+            <!-- SEARCH -->
+
+            <button
+                type="submit"
+                class="search-btn"
+            >
+
+                🔍 Search
+
+            </button>
+
 
         </div>
 
+    </form>
 
-    </section>
+</section>
 
 
-    <!-- ======================================================
-         PAGINATION
-    ======================================================= -->
+<!-- ======================================================
+     STUDENT TABLE
+======================================================= -->
 
-    <!-- ======================================================
+<section class="student-table-card">
+
+
+    <div class="table-heading">
+
+        <h2>
+            👨‍🎓 Student Records
+        </h2>
+
+        <span>
+            {{ students|length }} students displayed
+        </span>
+
+    </div>
+
+
+    <div class="table-scroll">
+
+        <table class="student-table">
+
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        ID
+                    </th>
+
+                    <th>
+                        Student
+                    </th>
+
+                    <th>
+                        Course
+                    </th>
+
+                    <th>
+                        Batch
+                    </th>
+
+                    <th>
+                        Phone
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+            {% for student in students %}
+
+
+                <tr>
+
+
+                    <!-- ID -->
+
+                    <td>
+
+                        #{{ student.id }}
+
+                    </td>
+
+
+                    <!-- STUDENT -->
+
+                    <td>
+
+                        <div class="student-profile">
+
+
+                            <div class="student-avatar">
+
+                                {{ student.name[:1]|upper }}
+
+                            </div>
+
+
+                            <div>
+
+                                <div class="student-name">
+
+                                    {{ student.name }}
+
+                                </div>
+
+                                <div class="student-email">
+
+                                    {{ student.email }}
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- COURSE -->
+
+                    <td>
+
+                        <span class="course-badge">
+
+                            {{ student.course }}
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- BATCH -->
+
+                    <td>
+
+                        <span class="batch-badge">
+
+                            {{ student.batch }}
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- PHONE -->
+
+                    <td>
+
+                        {{ student.mobile }}
+
+                    </td>
+
+
+                    <!-- STATUS -->
+
+                    <!-- STATUS -->
+
+<td>
+
+{% if student.payment_status == "Paid" %}
+
+    <span
+        class="status-badge"
+        style="background:rgba(34,197,94,.12);color:#4ade80;"
+    >
+
+        <span class="status-dot"></span>
+
+        Paid
+
+    </span>
+
+
+{% elif student.payment_status == "Partially Paid" %}
+
+    <span
+        class="status-badge"
+        style="background:rgba(234,179,8,.12);color:#facc15;"
+    >
+
+        <span class="status-dot"></span>
+
+        Partially Paid
+
+    </span>
+
+
+{% elif student.payment_status == "Unpaid" %}
+
+    <span
+        class="status-badge"
+        style="background:rgba(239,68,68,.12);color:#f87171;"
+    >
+
+        <span class="status-dot"></span>
+
+        Unpaid
+
+    </span>
+
+{% endif %}
+
+</td>
+
+                    <!-- ACTIONS -->
+
+                    <td>
+
+
+                        <div class="action-group">
+
+
+                            <!-- EDIT -->
+
+                            <a
+                                href="{{ url_for('admin.edit_student', id=student.id) }}"
+                                class="action-btn edit-btn"
+                            >
+
+                                ✏️ Edit
+
+                            </a>
+
+
+                         <!-- DELETE -->
+
+<form
+    action="{{ url_for('admin.delete_student', id=student.id) }}"
+    method="POST"
+    style="display:inline;"
+    onsubmit="return openDeleteModal(this);"
+>
+
+<button
+    type="submit"
+    class="action-btn delete-btn"
+>
+    🗑 Delete
+</button>
+
+</form>
+
+                        </div>
+
+
+                    </td>
+
+
+                </tr>
+
+
+            {% else %}
+
+
+                <!-- EMPTY -->
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        style="padding:0;"
+                    >
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+                                👨‍🎓
+                            </div>
+
+                            <div class="empty-title">
+
+                                No Students Found
+
+                            </div>
+
+                            <div class="empty-text">
+
+                                No student records match your
+                                current search or filters.
+
+                            </div>
+
+                            <a
+                                href="{{ url_for('admin.add_student') }}"
+                                class="add-student-btn"
+                            >
+
+                                ➕ Add First Student
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+
+            {% endfor %}
+
+
+            </tbody>
+
+
+        </table>
+
+    </div>
+
+
+</section>
+
+
+<!-- ======================================================
      PAGINATION
+======================================================= -->
+
+<!-- ======================================================
+ PAGINATION
+
 ======================================================= -->
 
 <div class="pagination-card">
 
-    <div class="pagination-info">
+<div class="pagination-info">
 
-        Showing
+    Showing
 
-        <strong style="color:white;">
-            {{ students|length }}
-        </strong>
+    <strong style="color:white;">
+        {{ students|length }}
+    </strong>
 
-        students
+    students
 
-    </div>
-
-
-    <div class="pagination-buttons">
-
-        <!-- PREVIOUS -->
-
-        {% if pagination.has_prev %}
-
-            <a
-                href="{{ url_for(
-                    'admin.students',
-                    page=pagination.prev_num,
-                    search=request.args.get('search', ''),
-                    course=request.args.get('course', ''),
-                    batch=request.args.get('batch', '')
-                ) }}"
-                class="pagination-btn"
-            >
-                ←
-            </a>
-
-        {% else %}
-
-            <button
-                type="button"
-                class="pagination-btn"
-                disabled
-                style="opacity:0.4; cursor:not-allowed;"
-            >
-                ←
-            </button>
-
-        {% endif %}
+</div>
 
 
-        <!-- PAGE NUMBERS -->
+<div class="pagination-buttons">
 
-        {% for page_num in pagination.iter_pages() %}
+    <!-- PREVIOUS -->
 
-            {% if page_num %}
+    {% if pagination.has_prev %}
 
-                {% if page_num == pagination.page %}
+        <a
+            href="{{ url_for(
+                'admin.students',
+                page=pagination.prev_num,
+                search=request.args.get('search', ''),
+                course=request.args.get('course', ''),
+                batch=request.args.get('batch', '')
+            ) }}"
+            class="pagination-btn"
+        >
+            ←
+        </a>
 
-                    <span
-                        class="pagination-btn pagination-active"
-                    >
-                        {{ page_num }}
-                    </span>
+    {% else %}
 
-                {% else %}
+        <button
+            type="button"
+            class="pagination-btn"
+            disabled
+            style="opacity:0.4; cursor:not-allowed;"
+        >
+            ←
+        </button>
 
-                    <a
-                        href="{{ url_for(
-                            'admin.students',
-                            page=page_num,
-                            search=request.args.get('search', ''),
-                            course=request.args.get('course', ''),
-                            batch=request.args.get('batch', '')
-                        ) }}"
-                        class="pagination-btn"
-                    >
-                        {{ page_num }}
-                    </a>
+    {% endif %}
 
-                {% endif %}
+
+    <!-- PAGE NUMBERS -->
+
+    {% for page_num in pagination.iter_pages() %}
+
+        {% if page_num %}
+
+            {% if page_num == pagination.page %}
+
+                <span
+                    class="pagination-btn pagination-active"
+                >
+                    {{ page_num }}
+                </span>
+
+            {% else %}
+
+                <a
+                    href="{{ url_for(
+                        'admin.students',
+                        page=page_num,
+                        search=request.args.get('search', ''),
+                        course=request.args.get('course', ''),
+                        batch=request.args.get('batch', '')
+                    ) }}"
+                    class="pagination-btn"
+                >
+                    {{ page_num }}
+                </a>
 
             {% endif %}
 
-        {% endfor %}
-
-
-        <!-- NEXT -->
-
-        {% if pagination.has_next %}
-
-            <a
-                href="{{ url_for(
-                    'admin.students',
-                    page=pagination.next_num,
-                    search=request.args.get('search', ''),
-                    course=request.args.get('course', ''),
-                    batch=request.args.get('batch', '')
-                ) }}"
-                class="pagination-btn"
-            >
-                →
-            </a>
-
-        {% else %}
-
-            <button
-                type="button"
-                class="pagination-btn"
-                disabled
-                style="opacity:0.4; cursor:not-allowed;"
-            >
-                →
-            </button>
-
         {% endif %}
+
+    {% endfor %}
+
+
+    <!-- NEXT -->
+
+    {% if pagination.has_next %}
+
+        <a
+            href="{{ url_for(
+                'admin.students',
+                page=pagination.next_num,
+                search=request.args.get('search', ''),
+                course=request.args.get('course', ''),
+                batch=request.args.get('batch', '')
+            ) }}"
+            class="pagination-btn"
+        >
+            →
+        </a>
+
+    {% else %}
+
+        <button
+            type="button"
+            class="pagination-btn"
+            disabled
+            style="opacity:0.4; cursor:not-allowed;"
+        >
+            →
+        </button>
+
+    {% endif %}
+
+</div>
+
+</div>
+
+<!-- ======================================================
+     QUICK SUMMARY
+======================================================= -->
+
+<section class="summary-grid">
+
+
+    <div class="summary-card">
+
+        <div class="summary-title">
+            Total Admissions
+        </div>
+
+        <div class="summary-value">
+
+            {{ total_students }}
+
+        </div>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <div class="summary-title">
+            Active Students
+        </div>
+
+        <div class="summary-value">
+
+            {{ active_students }}
+
+        </div>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <div class="summary-title">
+            Placement Success
+        </div>
+
+        <div class="summary-value">
+
+            {{ placed_students }}
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- ======================================================
+     FOOTER
+======================================================= -->
+
+<footer class="students-footer">
+
+    <p>
+
+        © {{ current_year }}
+        RR Institute Management System
+
+    </p>
+
+    <p style="margin-top:6px;">
+
+        Learn
+        <span>•</span>
+        Grow
+        <span>•</span>
+        Succeed
+
+    </p>
+
+</footer>
+
+</div>
+<!-- ==========================================================
+     DELETE CONFIRMATION MODAL
+========================================================== -->
+
+<div id="deleteModal" class="delete-modal">
+
+<div class="delete-modal-overlay"
+     onclick="closeDeleteModal()">
+</div>
+
+<div class="delete-modal-card">
+
+    <div class="delete-modal-icon">
+        🗑️
+    </div>
+
+    <h2>
+        Delete Student?
+    </h2>
+
+    <p>
+        Are you sure you want to delete this student?
+    </p>
+
+    <p class="delete-warning">
+        This action cannot be undone.
+    </p>
+
+    <div class="delete-modal-actions">
+
+        <button
+            type="button"
+            class="modal-cancel-btn"
+            onclick="closeDeleteModal()"
+        >
+            Cancel
+        </button>
+
+        <button
+            type="button"
+            class="modal-delete-btn"
+            onclick="confirmDelete()"
+        >
+            🗑 Delete
+        </button>
 
     </div>
 
 </div>
 
-
-    <!-- ======================================================
-         QUICK SUMMARY
-    ======================================================= -->
-
-    <section class="summary-grid">
-
-
-        <div class="summary-card">
-
-            <div class="summary-title">
-                Total Admissions
-            </div>
-
-            <div class="summary-value">
-
-                {{ total_students }}
-
-            </div>
-
-        </div>
-
-
-        <div class="summary-card">
-
-            <div class="summary-title">
-                Active Students
-            </div>
-
-            <div class="summary-value">
-
-                {{ active_students }}
-
-            </div>
-
-        </div>
-
-
-        <div class="summary-card">
-
-            <div class="summary-title">
-                Placement Success
-            </div>
-
-            <div class="summary-value">
-
-                {{ placed_students }}
-
-            </div>
-
-        </div>
-
-
-    </section>
-
-
-    <!-- ======================================================
-         FOOTER
-    ======================================================= -->
-
-    <footer class="students-footer">
-
-        <p>
-
-            © {{ current_year }}
-            RR Institute Management System
-
-        </p>
-
-        <p style="margin-top:6px;">
-
-            Learn
-            <span>•</span>
-            Grow
-            <span>•</span>
-            Succeed
-
-        </p>
-
-    </footer>
-
-
 </div>
+<script>
+
+    let deleteForm = null;
+
+    // ==========================================
+    // OPEN DELETE MODAL
+    // ==========================================
+
+    function openDeleteModal(form) {
+
+        deleteForm = form;
+
+        const modal = document.getElementById("deleteModal");
+
+        if (!modal) {
+            console.error("Delete modal not found!");
+            return true;
+        }
+
+        modal.style.display = "flex";
+
+        document.body.style.overflow = "hidden";
+
+        // Stop the form from submitting immediately
+        return false;
+    }
+
+
+    // ==========================================
+    // CLOSE DELETE MODAL
+    // ==========================================
+
+    function closeDeleteModal() {
+
+        const modal = document.getElementById("deleteModal");
+
+        if (!modal) {
+            return;
+        }
+
+        modal.style.display = "none";
+
+        document.body.style.overflow = "";
+
+        deleteForm = null;
+    }
+
+
+    // ==========================================
+    // CONFIRM DELETE
+    // ==========================================
+
+    function confirmDelete() {
+
+        if (!deleteForm) {
+
+            console.error(
+                "Delete form is not available."
+            );
+
+            return;
+        }
+
+        // Prevent double click
+        const deleteButton =
+            document.querySelector(
+                ".modal-delete-btn"
+            );
+
+        if (deleteButton) {
+
+            deleteButton.disabled = true;
+
+            deleteButton.innerHTML =
+                "Deleting...";
+        }
+
+        // Submit the original form
+        deleteForm.submit();
+    }
+
+
+    // ==========================================
+    // CLOSE MODAL WITH ESC
+    // ==========================================
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Escape") {
+
+                closeDeleteModal();
+
+            }
+
+        }
+    );
+
+</script>
 
 {% endblock %}

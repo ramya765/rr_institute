@@ -7,7 +7,7 @@ from flask import (
     flash,
     session
 )
-from models import Course, Student, Payment, Placement, Company, Lead, User
+from models import Course, Student, Payment, Placement, Company, Lead, User,Enrollment
 from models import Course, Faculty,  StudyMaterial
 from models import InstituteSettings,Notification
 from sqlalchemy.exc import IntegrityError
@@ -157,7 +157,7 @@ def generate_receipt(student, payment):
     # Logo
     # ------------------------------------------------------
 
-    logo_path = "static/logo.jpeg"
+    logo_path = "static/images/logo.jpeg"
 
     if os.path.exists(logo_path):
         logo = ImageReader(logo_path)
@@ -176,7 +176,7 @@ def generate_receipt(student, payment):
 
     c.setFont("Helvetica-Bold", 22)
     c.setFillColor(HexColor("#C59D2A"))
-    c.drawString(130, height - 60, "RR ORIGIN")
+    c.drawString(130, height - 60, "RR IT ORIGIN")
 
     c.setFont("Helvetica", 12)
     c.setFillColor(HexColor("#555555"))
@@ -2114,25 +2114,68 @@ def add_payment(id):
 # Delete Student
 # ==========================================================
 
+# ==========================================================
+# DELETE STUDENT - COMPLETE CASCADE DELETE
+# ==========================================================
+
 @admin.route("/students/delete/<int:id>", methods=["POST"])
 def delete_student(id):
 
     student = Student.query.get_or_404(id)
 
-    # Delete user account
-    if student.user_id:
-        user = User.query.get(student.user_id)
-        if user:
-            db.session.delete(user)
+    try:
 
-    # Delete student
-    db.session.delete(student)
+        # 1. Placements
+        for placement in Placement.query.filter_by(
+            student_id=student.id
+        ).all():
+            db.session.delete(placement)
 
-    db.session.commit()
+        # 2. Payments
+        for payment in Payment.query.filter_by(
+            student_id=student.id
+        ).all():
+            db.session.delete(payment)
 
-    flash("Student and user account deleted successfully.", "success")
+        # 3. Enrollments
+        for enrollment in Enrollment.query.filter_by(
+            student_id=student.id
+        ).all():
+            db.session.delete(enrollment)
 
-    return redirect(url_for("admin.students"))
+        # 4. User
+        if student.user_id:
+
+            user = User.query.get(student.user_id)
+
+            if user:
+                db.session.delete(user)
+
+        # 5. Student
+        db.session.delete(student)
+
+        # 6. Commit
+        db.session.commit()
+
+        flash(
+            "Student and all related records deleted successfully.",
+            "success"
+        )
+
+    except Exception as e:
+
+        db.session.rollback()
+
+        print("DELETE STUDENT ERROR:", e)
+
+        flash(
+            f"Delete failed: {str(e)}",
+            "danger"
+        )
+
+    return redirect(
+        url_for("admin.students")
+    )
 # ==========================================================
 # Courses
 # ==========================================================
@@ -2331,17 +2374,42 @@ def edit_course(id):
         course=course
     )
     
-@admin.route('/course/delete/<int:id>')
+@admin.route(
+    "/course/delete/<int:id>",
+    methods=["POST"]
+)
 def delete_course(id):
 
     course = Course.query.get_or_404(id)
 
-    db.session.delete(course)
-    db.session.commit()
+    try:
 
-    flash("Course deleted successfully","success")
+        db.session.delete(course)
 
-    return redirect(url_for('admin.courses'))
+        db.session.commit()
+
+        flash(
+            "Course deleted successfully!",
+            "success"
+        )
+
+    except Exception as e:
+
+        db.session.rollback()
+
+        print(
+            "DELETE COURSE ERROR:",
+            repr(e)
+        )
+
+        flash(
+            f"Course deletion failed: {str(e)}",
+            "danger"
+        )
+
+    return redirect(
+        url_for("admin.courses")
+    )
 # ==========================================================
 # Companies
 # ==========================================================

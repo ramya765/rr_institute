@@ -3,7 +3,12 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from database import db, bcrypt
 from models import User, Student, InstituteSettings,PasswordResetToken
 import hashlib
-from datetime import datetime
+import secrets
+
+from datetime import datetime, timedelta
+
+from flask_mail import Message
+from mail_config import mail
 
 
 
@@ -369,19 +374,23 @@ def logout():
 
     session.clear()
 
-    flash(
-    "Logged out successfully.",
-    "logout_success"
-)
 
     return redirect(url_for("main.home"))
-@auth.route("/forgot-password", methods=["GET","POST"])
+# ==========================================================
+# FORGOT PASSWORD
+# ==========================================================
+
+@auth.route("/forgot-password", methods=["GET", "POST"])
 def forgot_password():
 
     if request.method == "POST":
 
-        email = request.form["email"]
+        email = request.form.get(
+            "email",
+            ""
+        ).strip().lower()
 
+        # Find registered user
         user = User.query.filter_by(
             email=email
         ).first()
@@ -389,25 +398,116 @@ def forgot_password():
         if not user:
 
             flash(
-                "Email not found",
-                 "forgot_error"
+                "Email not found.",
+                "forgot_error"
             )
 
             return redirect(
                 url_for("auth.forgot_password")
             )
 
-        return redirect(
-            url_for(
-                "auth.reset_password",
-                email=email
-            )
+        # ==================================================
+        # CREATE SECURE RESET TOKEN
+        # ==================================================
+
+        raw_token = secrets.token_urlsafe(48)
+
+        token_hash = hashlib.sha256(
+            raw_token.encode()
+        ).hexdigest()
+
+        # Token valid for 20 minutes
+        expires_at = datetime.utcnow() + timedelta(
+            minutes=20
         )
+
+        # ==================================================
+        # SAVE TOKEN IN DATABASE
+        # ==================================================
+
+        reset_record = PasswordResetToken(
+            user_id=user.id,
+            token_hash=token_hash,
+            expires_at=expires_at,
+            used=False
+        )
+
+        db.session.add(reset_record)
+        db.session.commit()
+
+        # ==================================================
+        # CREATE RESET LINK
+        # ==================================================
+
+        reset_link = url_for(
+            "auth.reset_password",
+            token=raw_token,
+            _external=True
+        )
+
+        # ==================================================
+        # SEND EMAIL
+        # ==================================================
+
+        try:
+
+            msg = Message(
+                subject="RR IT Origin - Password Reset",
+                recipients=[user.email]
+            )
+
+            msg.body = f"""
+Hello {user.name},
+
+We received a request to reset your RR IT Origin password.
+
+Click the link below to reset your password:
+
+{reset_link}
+
+This link will expire in 20 minutes.
+
+If you did not request this password reset,
+please ignore this email.
+
+Regards,
+RR IT Origin
+"""
+
+            mail.send(msg)
+
+            flash(
+                "Password reset link has been sent to your email.",
+                "forgot_success"
+            )
+
+            return redirect(
+                url_for("auth.forgot_password")
+            )
+
+        except Exception as e:
+
+            print(
+                "PASSWORD RESET EMAIL ERROR:",
+                e
+            )
+
+            # Remove token if email failed
+            db.session.delete(reset_record)
+            db.session.commit()
+
+            flash(
+                "Unable to send reset email. Please try again.",
+                "forgot_error"
+            )
+
+            return redirect(
+                url_for("auth.forgot_password")
+            )
 
     return render_template(
         "forgot_password.html"
     )
-
 @auth.route("/reset-password", methods=["GET", "POST"])
 def reset_password():
 
