@@ -167,7 +167,7 @@ def register():
 
         flash(
             "Registration Successful. Please Login.",
-            "success"
+             "register_success"
         )
 
 
@@ -214,7 +214,7 @@ def login():
 
             flash(
                 "Invalid Email.",
-                "danger"
+                 "login_error"
             )
 
             return redirect(
@@ -233,7 +233,7 @@ def login():
 
             flash(
                 "Invalid Password.",
-                "danger"
+                "login_error"
             )
 
             return redirect(
@@ -303,7 +303,7 @@ def login():
 
         flash(
             "Login Successful.",
-            "success"
+             "login_success"
         )
 
 
@@ -369,7 +369,10 @@ def logout():
 
     session.clear()
 
-    flash("Logged out successfully.", "success")
+    flash(
+    "Logged out successfully.",
+    "logout_success"
+)
 
     return redirect(url_for("main.home"))
 @auth.route("/forgot-password", methods=["GET","POST"])
@@ -387,7 +390,7 @@ def forgot_password():
 
             flash(
                 "Email not found",
-                "danger"
+                 "forgot_error"
             )
 
             return redirect(
@@ -415,7 +418,7 @@ def reset_password():
     if not token:
         flash(
             "Invalid password reset link.",
-            "danger"
+            "reset_error"
         )
         return redirect(url_for("auth.login"))
 
@@ -432,7 +435,7 @@ def reset_password():
 
         flash(
             "This password reset link is invalid or has already been used.",
-            "danger"
+             "reset_error"
         )
 
         return redirect(
@@ -443,7 +446,8 @@ def reset_password():
 
         flash(
             "This password reset link has expired. Please request a new one.",
-            "danger"
+              
+    "reset_error"
         )
 
         return redirect(
@@ -466,7 +470,7 @@ def reset_password():
 
         flash(
             "Passwords do not match.",
-            "danger"
+             "reset_error"
         )
 
         return render_template(
@@ -478,7 +482,7 @@ def reset_password():
 
         flash(
             "Password must contain at least 8 characters.",
-            "danger"
+            "reset_error"
         )
 
         return render_template(
@@ -499,7 +503,7 @@ def reset_password():
 
     flash(
         "Your password has been updated successfully.",
-        "success"
+           "password_reset_success"
     )
 
     return redirect(

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 
-from models import InstituteSettings, Company
+from models import InstituteSettings, Company,Course
 
 
 # ==========================================================
@@ -51,8 +51,13 @@ def about():
 @main.route("/courses")
 def courses():
 
+    courses = Course.query.order_by(
+        Course.id.desc()
+    ).all()
+
     return render_template(
-        "courses.html"
+        "student/courses.html",
+        courses=courses
     )
 
 

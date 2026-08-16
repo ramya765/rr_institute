@@ -1570,6 +1570,75 @@ document
 
     });
 
+    
+
+    /* =====================================================
+       SHOW ONLY LAST 15 DAYS NOTIFICATIONS
+       Older notifications are hidden from the page
+       Database notifications are NOT deleted
+    ===================================================== */
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const items =
+            document.querySelectorAll(".notification-item");
+
+        const now = new Date();
+
+        const fifteenDaysAgo =
+            new Date(
+                now.getTime() - (15 * 24 * 60 * 60 * 1000)
+            );
+
+        let visibleCount = 0;
+
+        items.forEach(function (item) {
+
+            const timeElement =
+                item.querySelector(".notification-time");
+
+            if (!timeElement) {
+                return;
+            }
+
+            const notificationDate =
+                new Date(timeElement.dataset.time);
+
+            if (isNaN(notificationDate)) {
+                return;
+            }
+
+            if (notificationDate >= fifteenDaysAgo) {
+
+                item.style.display = "";
+
+                visibleCount++;
+
+            } else {
+
+                item.style.display = "none";
+
+            }
+
+        });
+
+        const noResults =
+            document.getElementById("noResults");
+
+        if (visibleCount === 0 && items.length > 0) {
+
+            noResults.classList.remove("hidden");
+
+            noResults.querySelector("h2").innerText =
+                "No Recent Notifications";
+
+            noResults.querySelector("p").innerText =
+                "There are no notifications from the last 15 days.";
+
+        }
+
+    });
+
 </script>
 
 

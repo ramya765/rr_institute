@@ -502,29 +502,34 @@
 
             <!-- FLASH MESSAGES -->
 
-           {% with messages = get_flashed_messages(with_categories=true) %}
 
-    {% if messages %}
+   <!-- FLASH MESSAGES -->
 
-        {% for category, message in messages %}
+{% with messages = get_flashed_messages(with_categories=true) %}
 
-            {% if category == "login_error" %}
+    {% for category, message in messages %}
 
-                <div class="flash-message flash-danger">
-                    {{ message }}
-                </div>
+        {% if category == "login_error" %}
 
-            {% elif category == "login_success" %}
+            <div class="flash-message flash-danger">
+                {{ message }}
+            </div>
 
-                <div class="flash-message flash-success">
-                    {{ message }}
-                </div>
+        {% elif category == "login_success" %}
 
-            {% endif %}
+            <div class="flash-message flash-success">
+                {{ message }}
+            </div>
 
-        {% endfor %}
+        {% elif category == "password_reset_success" %}
 
-    {% endif %}
+            <div class="flash-message flash-success">
+                {{ message }}
+            </div>
+
+        {% endif %}
+
+    {% endfor %}
 
 {% endwith %}
 

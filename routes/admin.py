@@ -421,9 +421,23 @@ def students():
         query = query.filter(
             Student.batch == batch_filter
         )
+# ==========================================================
+# PAGINATION
+# ==========================================================
 
+    page = request.args.get("page", 1, type=int)
 
-    students = query.all()
+    per_page = 10
+
+    pagination = query.paginate(
+    page=page,
+    per_page=per_page,
+    error_out=False
+)
+
+    students = pagination.items
+
+    
     # ==========================================================
 # PAYMENT STATUS FOR STUDENTS PAGE
 # ==========================================================
@@ -497,6 +511,7 @@ def students():
         pending_fees=pending_fees,
 
         courses=courses,
+        pagination=pagination,
 
         batches=[b[0] for b in batches]
     )
@@ -2127,13 +2142,15 @@ def courses():
 
     courses = Course.query.all()
 
-    print("COURSE PAGE")
-    print(courses)
-    print(len(courses))
+    # Get actual active trainers/faculty
+    faculties = Faculty.query.filter_by(
+        status="Active"
+    ).all()
 
     return render_template(
         "admin/courses.html",
-        courses=courses
+        courses=courses,
+        faculties=faculties
     )
 
 

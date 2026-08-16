@@ -1021,6 +1021,9 @@
                         <th>
                             Status
                         </th>
+                        <th>
+    Actions
+</th>
 
                     </tr>
 
@@ -1128,52 +1131,67 @@
                             </span>
 
                         </td>
-                        <th>
-    Status
-</th>
-<th>
-    Actions
-</th>
+  
 
 
-                        <!-- STATUS -->
+        <!-- STATUS -->
 <td>
 
     {% if faculty.status == "Active" %}
 
-        <a
-            href="{{ url_for('admin.change_faculty_status', id=faculty.id, status='Inactive') }}"
-            onclick="return confirm('Are you sure you want to mark {{ faculty.name }} as inactive?')"
-            class="inline-flex items-center gap-2 px-3 py-2 rounded-lg
-                   bg-red-500/10 text-red-400
-                   border border-red-500/20
-                   hover:bg-red-500 hover:text-white
-                   transition-all duration-300">
-
-            🔴 Mark Inactive
-
-        </a>
+        <span class="status-active">
+            <span class="status-dot"></span>
+            Active
+        </span>
 
     {% else %}
 
-        <a
-            href="{{ url_for('admin.change_faculty_status', id=faculty.id, status='Active') }}"
-            onclick="return confirm('Do you want to activate {{ faculty.name }} again?')"
-            class="inline-flex items-center gap-2 px-3 py-2 rounded-lg
-                   bg-green-500/10 text-green-400
-                   border border-green-500/20
-                   hover:bg-green-500 hover:text-white
-                   transition-all duration-300">
-
-            🟢 Activate
-
-        </a>
+        <span class="status-inactive">
+            <span class="status-dot"></span>
+            Inactive
+        </span>
 
     {% endif %}
 
 </td>
 
 
+<!-- ACTIONS -->
+<td>
+
+   {% if faculty.status == "Active" %}
+
+<a
+    href="{{ url_for('admin.change_faculty_status', id=faculty.id, status='Inactive') }}"
+    onclick="return confirm('Are you sure you want to mark {{ faculty.name }} as inactive?')"
+    class="inline-flex items-center gap-2 px-3 py-2 rounded-lg
+           bg-red-500/10 text-red-400
+           border border-red-500/20
+           hover:bg-red-500 hover:text-white
+           transition-all duration-300">
+
+    🔴 Mark Inactive
+
+</a>
+
+{% else %}
+
+<a
+    href="{{ url_for('admin.change_faculty_status', id=faculty.id, status='Active') }}"
+    onclick="return confirm('Do you want to activate {{ faculty.name }} again?')"
+    class="inline-flex items-center gap-2 px-3 py-2 rounded-lg
+           bg-green-500/10 text-green-400
+           border border-green-500/20
+           hover:bg-green-500 hover:text-white
+           transition-all duration-300">
+
+    🟢 Activate
+
+</a>
+
+{% endif %}
+
+</td>
                     </tr>
 
 
@@ -1224,7 +1242,199 @@
     </div>
 
 
+<!-- =========================================================
+     FACULTY STATUS CONFIRMATION MODAL
+========================================================= -->
+
+<div id="statusModal"
+     class="fixed inset-0 bg-black/70 backdrop-blur-sm
+            hidden items-center justify-center z-50">
+
+    <div class="bg-[#111d36]
+                border border-white/10
+                rounded-2xl
+                shadow-2xl
+                w-full max-w-md
+                mx-4 p-7">
+
+        <!-- ICON -->
+
+        <div id="statusModalIcon"
+             class="w-14 h-14 rounded-xl
+                    flex items-center justify-center
+                    text-2xl mb-5">
+            ⚠️
+        </div>
+
+
+        <!-- TITLE -->
+
+        <h2 id="statusModalTitle"
+            class="text-2xl font-bold text-white">
+
+            Confirm Status Change
+
+        </h2>
+
+
+        <!-- MESSAGE -->
+
+        <p class="text-gray-400 mt-3 leading-6">
+
+            Are you sure you want to change
+
+            <span id="statusFacultyName"
+                  class="text-white font-semibold">
+            </span>
+
+            status?
+
+        </p>
+
+
+        <!-- BUTTONS -->
+
+        <div class="flex justify-end gap-3 mt-7">
+
+            <button
+                type="button"
+                onclick="closeStatusModal()"
+                class="px-5 py-2.5 rounded-lg
+                       bg-gray-700 hover:bg-gray-600
+                       text-white font-semibold
+                       transition">
+
+                Cancel
+
+            </button>
+
+
+            <a
+                id="statusConfirmButton"
+                href="#"
+                class="px-5 py-2.5 rounded-lg
+                       font-semibold
+                       text-white
+                       transition">
+
+                Confirm
+
+            </a>
+
+        </div>
+
+    </div>
+
 </div>
+
+
+<script>
+
+function openInactiveModal(facultyId, facultyName, actionUrl) {
+
+    document.getElementById("statusFacultyName").textContent =
+        facultyName;
+
+    document.getElementById("statusModalTitle").textContent =
+        "Mark Faculty Inactive?";
+
+    document.getElementById("statusModalIcon").textContent =
+        "⚠️";
+
+    document.getElementById("statusModalIcon").className =
+        "w-14 h-14 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-2xl mb-5";
+
+    const confirmButton =
+        document.getElementById("statusConfirmButton");
+
+    /*
+       IMPORTANT:
+       Use the URL generated by Flask url_for()
+       instead of manually creating the URL.
+    */
+    confirmButton.href = actionUrl;
+
+    confirmButton.textContent =
+        "Mark Inactive";
+
+    confirmButton.className =
+        "px-5 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold transition";
+
+
+    const modal =
+        document.getElementById("statusModal");
+
+    modal.classList.remove("hidden");
+
+    modal.classList.add("flex");
+}
+
+
+function openActiveModal(facultyId, facultyName, actionUrl) {
+
+    document.getElementById("statusFacultyName").textContent =
+        facultyName;
+
+    document.getElementById("statusModalTitle").textContent =
+        "Activate Faculty?";
+
+    document.getElementById("statusModalIcon").textContent =
+        "✅";
+
+    document.getElementById("statusModalIcon").className =
+        "w-14 h-14 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center text-2xl mb-5";
+
+    const confirmButton =
+        document.getElementById("statusConfirmButton");
+
+    /*
+       Use Flask-generated URL.
+    */
+    confirmButton.href = actionUrl;
+
+    confirmButton.textContent =
+        "Activate";
+
+    confirmButton.className =
+        "px-5 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold transition";
+
+
+    const modal =
+        document.getElementById("statusModal");
+
+    modal.classList.remove("hidden");
+
+    modal.classList.add("flex");
+}
+
+
+function closeStatusModal() {
+
+    const modal =
+        document.getElementById("statusModal");
+
+    modal.classList.add("hidden");
+
+    modal.classList.remove("flex");
+}
+
+
+/* Close modal when clicking outside */
+
+document.getElementById("statusModal").addEventListener(
+    "click",
+    function(event) {
+
+        if (event.target === this) {
+
+            closeStatusModal();
+
+        }
+
+    }
+);
+
+</script>
 
 
 {% endblock %}

@@ -1511,10 +1511,8 @@
             </div>
 
             <div class="stat-number red">
-
-                {{ courses|length }}
-
-            </div>
+       {{ faculties|length }}
+    </div>
 
         </div>
 
@@ -1971,51 +1969,16 @@
 
     <div class="pagination-card">
 
+    <p class="pagination-text" id="paginationText">
+        Showing 0 Course(s)
+    </p>
 
-        <p class="pagination-text">
-
-            Showing {{ courses|length }} Course(s)
-
-        </p>
-
-
-        <div class="pagination-buttons">
-
-
-            <button
-                type="button"
-                class="pagination-btn"
-            >
-
-                Previous
-
-            </button>
-
-
-            <button
-                type="button"
-                class="pagination-btn active"
-            >
-
-                1
-
-            </button>
-
-
-            <button
-                type="button"
-                class="pagination-btn"
-            >
-
-                Next
-
-            </button>
-
-
-        </div>
-
-
+    <div
+        class="pagination-buttons"
+        id="paginationButtons">
     </div>
+
+</div>
 
 
     <!-- =====================================================
@@ -2127,85 +2090,395 @@
 
 <script>
 
-const searchButton =
-    document.getElementById("searchButton");
+document.addEventListener("DOMContentLoaded", function () {
 
-const modeSelect =
-    document.getElementById("courseMode");
+    const searchButton =
+        document.getElementById("searchButton");
 
-const courseSelect =
-    document.getElementById("courseName");
+    const modeSelect =
+        document.getElementById("courseMode");
 
+    const courseSelect =
+        document.getElementById("courseName");
 
-function searchCourses() {
+    const rows =
+        Array.from(
+            document.querySelectorAll(".course-row")
+        );
 
+    const paginationButtons =
+        document.getElementById("paginationButtons");
 
-    let selectedCourse =
-        courseSelect.value.toLowerCase();
-
-
-    let modeValue =
-        modeSelect.value.toLowerCase();
-
-
-    let rows =
-        document.querySelectorAll(".course-row");
+    const paginationText =
+        document.getElementById("paginationText");
 
 
-    rows.forEach(function(row) {
+    /* =====================================================
+       PAGINATION SETTINGS
+       Show only 5 courses per page
+    ===================================================== */
+
+    const coursesPerPage = 5;
+
+    let currentPage = 1;
+
+    let filteredRows = [...rows];
 
 
-        let rowText =
-            row.innerText.toLowerCase();
+    /* =====================================================
+       DISPLAY COURSES
+    ===================================================== */
+
+    function displayCourses() {
+
+        const totalCourses =
+            filteredRows.length;
+
+        const totalPages =
+            Math.ceil(
+                totalCourses / coursesPerPage
+            );
 
 
-        let courseMatch =
-            selectedCourse === "" ||
-            rowText.includes(selectedCourse);
-
-
-        let modeMatch =
-            modeValue === "" ||
-            rowText.includes(modeValue);
-
+        /* If current page becomes invalid */
 
         if (
-            courseMatch &&
-            modeMatch
+            currentPage > totalPages &&
+            totalPages > 0
         ) {
 
-            row.style.display = "";
+            currentPage = totalPages;
 
         }
-        else {
+
+
+        /* Hide all rows first */
+
+        rows.forEach(function (row) {
 
             row.style.display = "none";
 
+        });
+
+
+        /* Calculate start and end */
+
+        const start =
+            (currentPage - 1) *
+            coursesPerPage;
+
+        const end =
+            start + coursesPerPage;
+
+
+        /* Show only current page rows */
+
+        filteredRows
+            .slice(start, end)
+            .forEach(function (row) {
+
+                row.style.display = "";
+
+            });
+
+
+        /* =================================================
+           PAGINATION TEXT
+        ================================================= */
+
+        if (totalCourses === 0) {
+
+            paginationText.innerText =
+                "Showing 0 Course(s)";
+
+        }
+
+        else {
+
+            const showingStart =
+                start + 1;
+
+            const showingEnd =
+                Math.min(
+                    end,
+                    totalCourses
+                );
+
+            paginationText.innerText =
+                "Showing " +
+                showingStart +
+                "-" +
+                showingEnd +
+                " of " +
+                totalCourses +
+                " Course(s)";
+
         }
 
 
-    });
+        /* =================================================
+           CREATE PAGINATION BUTTONS
+        ================================================= */
+
+        paginationButtons.innerHTML = "";
 
 
-}
+        /* No pagination if no courses */
+
+        if (totalPages <= 1) {
+
+            return;
+
+        }
 
 
-searchButton.addEventListener(
-    "click",
-    searchCourses
-);
+        /* =================================================
+           PREVIOUS BUTTON
+        ================================================= */
+
+        const previousButton =
+            document.createElement("button");
+
+        previousButton.type = "button";
+
+        previousButton.className =
+            "pagination-btn";
+
+        previousButton.innerText =
+            "←";
 
 
-courseSelect.addEventListener(
-    "change",
-    searchCourses
-);
+        if (currentPage === 1) {
+
+            previousButton.disabled = true;
+
+            previousButton.style.opacity = "0.4";
+
+            previousButton.style.cursor =
+                "not-allowed";
+
+        }
 
 
-modeSelect.addEventListener(
-    "change",
-    searchCourses
-);
+        previousButton.addEventListener(
+            "click",
+            function () {
+
+                if (currentPage > 1) {
+
+                    currentPage--;
+
+                    displayCourses();
+
+                }
+
+            }
+        );
+
+
+        paginationButtons.appendChild(
+            previousButton
+        );
+
+
+        /* =================================================
+           PAGE NUMBER BUTTONS
+        ================================================= */
+
+        for (
+            let page = 1;
+            page <= totalPages;
+            page++
+        ) {
+
+            const pageButton =
+                document.createElement("button");
+
+            pageButton.type = "button";
+
+            pageButton.className =
+                "pagination-btn";
+
+
+            pageButton.innerText =
+                page;
+
+
+            /* Active page */
+
+            if (page === currentPage) {
+
+                pageButton.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            pageButton.addEventListener(
+                "click",
+                function () {
+
+                    currentPage = page;
+
+                    displayCourses();
+
+                }
+            );
+
+
+            paginationButtons.appendChild(
+                pageButton
+            );
+
+        }
+
+
+        /* =================================================
+           NEXT BUTTON
+        ================================================= */
+
+        const nextButton =
+            document.createElement("button");
+
+        nextButton.type = "button";
+
+        nextButton.className =
+            "pagination-btn";
+
+        nextButton.innerText =
+            "→";
+
+
+        if (
+            currentPage === totalPages
+        ) {
+
+            nextButton.disabled = true;
+
+            nextButton.style.opacity = "0.4";
+
+            nextButton.style.cursor =
+                "not-allowed";
+
+        }
+
+
+        nextButton.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    currentPage < totalPages
+                ) {
+
+                    currentPage++;
+
+                    displayCourses();
+
+                }
+
+            }
+        );
+
+
+        paginationButtons.appendChild(
+            nextButton
+        );
+
+    }
+
+
+    /* =====================================================
+       SEARCH / FILTER COURSES
+    ===================================================== */
+
+    function searchCourses() {
+
+        const selectedCourse =
+            courseSelect.value.toLowerCase();
+
+        const modeValue =
+            modeSelect.value.toLowerCase();
+
+
+        filteredRows = rows.filter(
+            function (row) {
+
+                const rowText =
+                    row.innerText.toLowerCase();
+
+
+                const courseMatch =
+                    selectedCourse === "" ||
+                    rowText.includes(
+                        selectedCourse
+                    );
+
+
+                const modeMatch =
+                    modeValue === "" ||
+                    rowText.includes(
+                        modeValue
+                    );
+
+
+                return (
+                    courseMatch &&
+                    modeMatch
+                );
+
+            }
+        );
+
+
+        /* Start from page 1 after search */
+
+        currentPage = 1;
+
+
+        displayCourses();
+
+    }
+
+
+    /* =====================================================
+       SEARCH BUTTON
+    ===================================================== */
+
+    searchButton.addEventListener(
+        "click",
+        searchCourses
+    );
+
+
+    /* =====================================================
+       COURSE FILTER
+    ===================================================== */
+
+    courseSelect.addEventListener(
+        "change",
+        searchCourses
+    );
+
+
+    /* =====================================================
+       MODE FILTER
+    ===================================================== */
+
+    modeSelect.addEventListener(
+        "change",
+        searchCourses
+    );
+
+
+    /* =====================================================
+       INITIAL LOAD
+    ===================================================== */
+
+    displayCourses();
+
+});
 
 </script>
 

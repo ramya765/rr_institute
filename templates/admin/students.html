@@ -1687,78 +1687,127 @@
          PAGINATION
     ======================================================= -->
 
-    <div class="pagination-card">
+    <!-- ======================================================
+     PAGINATION
+======================================================= -->
 
+<div class="pagination-card">
 
-        <div class="pagination-info">
+    <div class="pagination-info">
 
-            Showing
-            <strong style="color:white;">
-                {{ students|length }}
-            </strong>
+        Showing
 
-            students
+        <strong style="color:white;">
+            {{ students|length }}
+        </strong>
 
-        </div>
-
-
-        <div class="pagination-buttons">
-
-
-            <button
-                type="button"
-                class="pagination-btn"
-            >
-
-                ←
-
-            </button>
-
-
-            <button
-                type="button"
-                class="pagination-btn pagination-active"
-            >
-
-                1
-
-            </button>
-
-
-            <button
-                type="button"
-                class="pagination-btn"
-            >
-
-                2
-
-            </button>
-
-
-            <button
-                type="button"
-                class="pagination-btn"
-            >
-
-                3
-
-            </button>
-
-
-            <button
-                type="button"
-                class="pagination-btn"
-            >
-
-                →
-
-            </button>
-
-
-        </div>
-
+        students
 
     </div>
+
+
+    <div class="pagination-buttons">
+
+        <!-- PREVIOUS -->
+
+        {% if pagination.has_prev %}
+
+            <a
+                href="{{ url_for(
+                    'admin.students',
+                    page=pagination.prev_num,
+                    search=request.args.get('search', ''),
+                    course=request.args.get('course', ''),
+                    batch=request.args.get('batch', '')
+                ) }}"
+                class="pagination-btn"
+            >
+                ←
+            </a>
+
+        {% else %}
+
+            <button
+                type="button"
+                class="pagination-btn"
+                disabled
+                style="opacity:0.4; cursor:not-allowed;"
+            >
+                ←
+            </button>
+
+        {% endif %}
+
+
+        <!-- PAGE NUMBERS -->
+
+        {% for page_num in pagination.iter_pages() %}
+
+            {% if page_num %}
+
+                {% if page_num == pagination.page %}
+
+                    <span
+                        class="pagination-btn pagination-active"
+                    >
+                        {{ page_num }}
+                    </span>
+
+                {% else %}
+
+                    <a
+                        href="{{ url_for(
+                            'admin.students',
+                            page=page_num,
+                            search=request.args.get('search', ''),
+                            course=request.args.get('course', ''),
+                            batch=request.args.get('batch', '')
+                        ) }}"
+                        class="pagination-btn"
+                    >
+                        {{ page_num }}
+                    </a>
+
+                {% endif %}
+
+            {% endif %}
+
+        {% endfor %}
+
+
+        <!-- NEXT -->
+
+        {% if pagination.has_next %}
+
+            <a
+                href="{{ url_for(
+                    'admin.students',
+                    page=pagination.next_num,
+                    search=request.args.get('search', ''),
+                    course=request.args.get('course', ''),
+                    batch=request.args.get('batch', '')
+                ) }}"
+                class="pagination-btn"
+            >
+                →
+            </a>
+
+        {% else %}
+
+            <button
+                type="button"
+                class="pagination-btn"
+                disabled
+                style="opacity:0.4; cursor:not-allowed;"
+            >
+                →
+            </button>
+
+        {% endif %}
+
+    </div>
+
+</div>
 
 
     <!-- ======================================================

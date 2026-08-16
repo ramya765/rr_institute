@@ -1739,6 +1739,7 @@
                     📍 {{ settings.address or 'India' }}
 
                 </p>
+                
 
             </div>
 
@@ -2579,10 +2580,10 @@
             </p>
 
             <a
-                href="tel:9876567890"
+                href="tel:{{ settings.phone }}"
                 class="block text-3xl font-bold text-yellow-400 mt-2">
 
-                9876567890
+                {{settings.phone}}
 
             </a>
 
@@ -2594,7 +2595,7 @@
         <div class="flex gap-4 mt-7">
 
             <a
-                href="tel:9876567890"
+                href="tel:{{ settings.phone }}"
                 class="gold-button flex-1 py-3 rounded-lg font-bold text-center">
 
                 📞 Call Now
@@ -2602,7 +2603,7 @@
             </a>
 
             <a
-                href="https://wa.me/919876567890"
+                href="https://wa.me/{{ settings.whatsapp|replace('+','')|replace(' ','') }}"
                 target="_blank"
                 class="outline-button flex-1 py-3 rounded-lg font-bold text-center">
 
